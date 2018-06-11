@@ -21,6 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
+import com.zb.wyd.R;
 import com.zb.wyd.listener.MyItemClickListener;
 import com.zb.wyd.listener.MyOnClickListener;
 import com.zb.wyd.widget.NoScrollListView;
@@ -277,55 +278,6 @@ public class DialogUtils
     }
 
 
-    /**
-     * 价格
-     *
-     * @return
-     */
-    public static void showPriceDetailDialog(final Context mContext, List<OrderInfo> orderInfoList)
-    {
-        final Dialog dialog = new Dialog(mContext);
-        dialog.setCancelable(false);
-        View v = LayoutInflater.from(mContext).inflate(R.layout.dialog_order_detail, null);
-        dialog.setContentView(v);
-
-        TextView tvDays = (TextView) v.findViewById(R.id.tv_days);
-        TextView tvPrice = (TextView) v.findViewById(R.id.tv_price);
-        TextView tvTotalPrice = (TextView) v.findViewById(R.id.tv_total_price);
-        RecyclerView mRecyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
-        mRecyclerView.setLayoutManager(new FullyLinearLayoutManager(mContext));
-        mRecyclerView.addItemDecoration(new EmptyDecoration(mContext, ""));
-        mRecyclerView.setAdapter(new PriceDetailAdapter(orderInfoList));
-        tvDays.setText(orderInfoList.size() + "晚总价");
-        int allPrice = 0;
-
-        for (int i = 0; i < orderInfoList.size(); i++)
-        {
-            allPrice += Integer.parseInt(orderInfoList.get(i).getPrice()) * Integer.parseInt(orderInfoList.get(i).getBuynum());
-        }
-
-        tvPrice.setText("￥" + allPrice);
-        tvTotalPrice.setText("￥" + allPrice);
-
-        v.findViewById(R.id.iv_back).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                dialog.dismiss();
-            }
-        });
-        //Dialog部分
-        Window mWindow = dialog.getWindow();
-        WindowManager.LayoutParams lp = mWindow.getAttributes();
-        lp.alpha = 0.7f;
-        mWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        mWindow.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        mWindow.setAttributes(lp);
-        dialog.show();
-
-
-    }
 
 
     /**
@@ -380,143 +332,7 @@ public class DialogUtils
         dialog.show();
     }
 
-    /**
-     * @return
-     */
-    public static void showRoomPriceDialog(String startTime, String endTime, final RoomPriceDetailActivity mRoomPriceDetailActivity, final
-    MyOnClickListener.OnSubmitListener listener)
-    {
 
-        int days = StringUtils.differentDaysByMillisecond(startTime, endTime);
-
-        final Dialog dialog = new Dialog(mRoomPriceDetailActivity);
-        dialog.setCancelable(true);
-        View v = LayoutInflater.from(mRoomPriceDetailActivity).inflate(R.layout.dialog_modify_room_price_list, null);
-        dialog.setContentView(v);
-
-        TextView mStartTimeTv = (TextView) v.findViewById(R.id.tv_start_date);
-        TextView mEndTimeTv = (TextView) v.findViewById(R.id.tv_end_date);
-        TextView mWeekTv1 = (TextView) v.findViewById(R.id.tv_week_1);
-        TextView mWeekTv2 = (TextView) v.findViewById(R.id.tv_week_2);
-        TextView mWeekTv3 = (TextView) v.findViewById(R.id.tv_week_3);
-        TextView mWeekTv4 = (TextView) v.findViewById(R.id.tv_week_4);
-        TextView mWeekTv5 = (TextView) v.findViewById(R.id.tv_week_5);
-        TextView mWeekTv6 = (TextView) v.findViewById(R.id.tv_week_6);
-        TextView mWeekTv7 = (TextView) v.findViewById(R.id.tv_week_7);
-
-        EditText mWzPriceEt = (EditText) v.findViewById(R.id.et_wz);
-        EditText mDzPriceEt = (EditText) v.findViewById(R.id.et_dz);
-        EditText mSzPriceEt = (EditText) v.findViewById(R.id.et_sz);
-        LinearLayout mWeekLayout = (LinearLayout) v.findViewById(R.id.ll_week);
-
-
-        mStartTimeTv.setText("开始时间:" + startTime);
-        mEndTimeTv.setText("结束时间:" + endTime);
-
-        if (days < 2)
-        {
-            mWeekLayout.setVisibility(View.GONE);
-        }
-        else
-        {
-            mWeekLayout.setVisibility(View.VISIBLE);
-        }
-
-
-        final List<TextView> mWeekViewList = new ArrayList<>();
-
-        mWeekViewList.add(mWeekTv1);
-        mWeekViewList.add(mWeekTv2);
-        mWeekViewList.add(mWeekTv3);
-        mWeekViewList.add(mWeekTv4);
-        mWeekViewList.add(mWeekTv5);
-        mWeekViewList.add(mWeekTv6);
-        mWeekViewList.add(mWeekTv7);
-
-        for (int i = 0; i < mWeekViewList.size(); i++)
-        {
-            final TextView mWeekView = mWeekViewList.get(i);
-            mWeekViewList.get(i).setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    if (mWeekView.isSelected())
-                    {
-                        mWeekView.setSelected(false);
-                    }
-                    else
-                    {
-                        mWeekView.setSelected(true);
-                    }
-                }
-            });
-        }
-
-
-        v.findViewById(R.id.btn_save).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                listener.onSubmit("");
-                dialog.dismiss();
-            }
-        });
-
-        //Dialog部分
-        Window mWindow = dialog.getWindow();
-        WindowManager.LayoutParams lp = mWindow.getAttributes();
-        lp.gravity = Gravity.BOTTOM;
-        mWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        mWindow.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        mWindow.setAttributes(lp);
-        dialog.show();
-    }
-
-
-    /**
-     * 价格
-     *
-     * @return
-     */
-    public static void showReplyDialog(final Context mContext, final MyOnClickListener.OnSubmitListener listener)
-    {
-        final Dialog dialog = new Dialog(mContext);
-        dialog.setCancelable(true);
-        View v = LayoutInflater.from(mContext).inflate(R.layout.dialog_reply, null);
-        dialog.setContentView(v);
-
-        final EditText mContentEt = (EditText) v.findViewById(R.id.et_content);
-
-        v.findViewById(R.id.btn_submit).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                String content = mContentEt.getText().toString();
-
-                if (StringUtils.stringIsEmpty(content))
-                {
-                    ToastUtil.show(mContext, "请输入回复内容");
-                    return;
-                }
-
-                listener.onSubmit(content);
-                dialog.dismiss();
-            }
-        });
-
-
-        //Dialog部分
-        Window mWindow = dialog.getWindow();
-        WindowManager.LayoutParams lp = mWindow.getAttributes();
-        lp.gravity = Gravity.BOTTOM;
-        mWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        mWindow.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        mWindow.setAttributes(lp);
-        dialog.show();
-    }
 
 
 }

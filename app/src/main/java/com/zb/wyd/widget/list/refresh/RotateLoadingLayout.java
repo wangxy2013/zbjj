@@ -13,7 +13,7 @@ import android.widget.ImageView.ScaleType;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.twlrg.twsl.R;
+import com.zb.wyd.R;
 
 
 /**

@@ -12,6 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 
+import com.zb.wyd.R;
+import com.zb.wyd.utils.DialogUtils;
+import com.zb.wyd.utils.LogUtil;
 import com.zb.wyd.utils.StatusBarUtil;
 
 import butterknife.ButterKnife;

@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 
-import com.twlrg.twsl.R;
+import com.zb.wyd.R;
 
 
 /**

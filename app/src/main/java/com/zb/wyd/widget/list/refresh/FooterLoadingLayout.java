@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.twlrg.twsl.R;
+import com.zb.wyd.R;
 
 
 /**

@@ -14,7 +14,7 @@ import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import com.twlrg.twsl.widget.list.refresh.ILoadingLayout.State;
+import com.zb.wyd.widget.list.refresh.ILoadingLayout.State;
 
 
 /**

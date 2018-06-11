@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 import com.nostra13.universalimageloader.core.assist.LoadedFrom;
 import com.nostra13.universalimageloader.core.display.BitmapDisplayer;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;
-import com.twlrg.twsl.utils.ImageUtils;
+import com.zb.wyd.utils.ImageUtils;
 
 public class RoundDisplayer implements BitmapDisplayer
 {

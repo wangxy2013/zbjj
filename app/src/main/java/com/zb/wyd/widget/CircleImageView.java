@@ -5,6 +5,7 @@ package com.zb.wyd.widget;
  * 邮箱：wangxianyun1@163.com
  * 描述：一句话简单描述(圆角)
  */
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -21,9 +22,10 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-import com.twlrg.twsl.R;
+import com.zb.wyd.R;
 
 
+@SuppressLint("AppCompatCustomView")
 public class CircleImageView extends ImageView {
 
     private static final ScaleType SCALE_TYPE = ScaleType.CENTER_CROP;

@@ -1,5 +1,6 @@
 package com.zb.wyd.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
@@ -8,11 +9,13 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.EditText;
 
-import com.twlrg.twsl.R;
+import com.zb.wyd.R;
+
 
 /**
  */
 
+@SuppressLint("AppCompatCustomView")
 public class ClearEditText extends EditText
 {
     private Drawable mClearDrawable;

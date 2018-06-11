@@ -15,13 +15,14 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
 
-import com.twlrg.twsl.R;
-import com.twlrg.twsl.entity.VersionInfo;
-import com.twlrg.twsl.http.DataRequest;
-import com.twlrg.twsl.http.HttpRequest;
-import com.twlrg.twsl.http.IRequestListener;
-import com.twlrg.twsl.json.VersionInfoHandler;
-import com.twlrg.twsl.listener.MyOnClickListener;
+
+import com.zb.wyd.R;
+import com.zb.wyd.entity.VersionInfo;
+import com.zb.wyd.http.DataRequest;
+import com.zb.wyd.http.HttpRequest;
+import com.zb.wyd.http.IRequestListener;
+import com.zb.wyd.json.VersionInfoHandler;
+import com.zb.wyd.listener.MyOnClickListener;
 
 import java.io.File;
 import java.io.FileOutputStream;

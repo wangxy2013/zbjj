@@ -52,4 +52,9 @@ dependencies {
     compile 'com.shuyu:gsyVideoPlayer-x64:5.0.0-beta'
     compile 'com.shuyu:gsyVideoPlayer-x86:5.0.0-beta'
 
+    compile 'com.github.donkingliang:CustomBanner:1.1.2'
+
+
+
+
 }

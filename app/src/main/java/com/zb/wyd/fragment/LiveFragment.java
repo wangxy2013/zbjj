@@ -99,7 +99,7 @@ public class LiveFragment extends BaseFragment
                 holder = new ViewHolder(tab.getCustomView());
                 holder.tvTabName.setSelected(true);
                 //选中后字体变大
-                holder.tvTabName.setTextSize(18);
+                holder.tvTabName.setTextSize(20);
                 //让Viewpager跟随TabLayout的标签切换
                 mViewPager.setCurrentItem(tab.getPosition());
             }
@@ -142,7 +142,7 @@ public class LiveFragment extends BaseFragment
             if (i == 0)
             {
                 holder.tvTabName.setSelected(true);
-                holder.tvTabName.setTextSize(18);
+                holder.tvTabName.setTextSize(20);
             }
         }
     }

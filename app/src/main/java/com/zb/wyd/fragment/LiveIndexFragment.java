@@ -3,6 +3,7 @@ package com.zb.wyd.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,12 +16,14 @@ import android.widget.RelativeLayout;
 import com.donkingliang.banner.CustomBanner;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zb.wyd.R;
+import com.zb.wyd.adapter.NewAdapter;
 import com.zb.wyd.adapter.RecommendAdapter;
 import com.zb.wyd.entity.UserInfo;
 import com.zb.wyd.listener.MyItemClickListener;
 import com.zb.wyd.utils.APPUtils;
-import com.zb.wyd.widget.EmptyDecoration;
-import com.zb.wyd.widget.SpacesItemDecoration;
+import com.zb.wyd.widget.FullyGridLayoutManager;
+import com.zb.wyd.widget.MaxRecyclerView;
+import com.zb.wyd.widget.VerticalSwipeRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,26 +37,29 @@ import butterknife.Unbinder;
  * 邮箱：wangxianyun1@163.com
  * 描述：一句话简单描述
  */
-public class LiveIndexFragment extends BaseFragment
+public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener
 {
 
     @BindView(R.id.banner)
-    CustomBanner   mBanner;
+    CustomBanner               mBanner;
     @BindView(R.id.rl_all_recommend)
-    RelativeLayout rlAllRecommend;
+    RelativeLayout             rlAllRecommend;
     @BindView(R.id.rv_recommend)
-    RecyclerView   rvRecommend;
+    MaxRecyclerView            rvRecommend;
     @BindView(R.id.rl_all_new)
-    RelativeLayout rlAllNew;
+    RelativeLayout             rlAllNew;
     @BindView(R.id.rv_new)
-    RecyclerView   rvNew;
+    MaxRecyclerView            rvNew;
+    @BindView(R.id.swipeRefresh)
+    VerticalSwipeRefreshLayout mSwipeRefreshLayout;
     private View rootView = null;
     private Unbinder unbinder;
-    private List<String>   picList      = new ArrayList<>();
-    private List<UserInfo> userInfoList = new ArrayList<>();
-
+    private List<String>   picList       = new ArrayList<>();
+    private List<UserInfo> recommendList = new ArrayList<>();
+    private List<UserInfo> newList       = new ArrayList<>();
     private RecommendAdapter mRecommendAdapter;
 
+    private NewAdapter mNewAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -96,16 +102,28 @@ public class LiveIndexFragment extends BaseFragment
         picList.add("https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2869447915,2118394790&fm=27&gp=0.jpg");
         picList.add("https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2869447915,2118394790&fm=27&gp=0.jpg");
         picList.add("https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2869447915,2118394790&fm=27&gp=0.jpg");
-        userInfoList.add(new UserInfo());
-        userInfoList.add(new UserInfo());
-        userInfoList.add(new UserInfo());
-        userInfoList.add(new UserInfo());
-        userInfoList.add(new UserInfo());
-        userInfoList.add(new UserInfo());
-        userInfoList.add(new UserInfo());
-        userInfoList.add(new UserInfo());
-        userInfoList.add(new UserInfo());
+        newList.add(new UserInfo());
+        newList.add(new UserInfo());
+        newList.add(new UserInfo());
+        newList.add(new UserInfo());
+        newList.add(new UserInfo());
+        newList.add(new UserInfo());
+        newList.add(new UserInfo());
+        newList.add(new UserInfo());
+        newList.add(new UserInfo());
+        newList.add(new UserInfo());
+        newList.add(new UserInfo());
+        newList.add(new UserInfo());
+        newList.add(new UserInfo());
+        newList.add(new UserInfo());
+        newList.add(new UserInfo());
+        newList.add(new UserInfo());
+        newList.add(new UserInfo());
+        newList.add(new UserInfo());
 
+        recommendList.add(new UserInfo());
+        recommendList.add(new UserInfo());
+        recommendList.add(new UserInfo());
     }
 
     @Override
@@ -117,7 +135,7 @@ public class LiveIndexFragment extends BaseFragment
     @Override
     protected void initEvent()
     {
-
+        mSwipeRefreshLayout.setOnRefreshListener(this);
     }
 
     @Override
@@ -189,7 +207,7 @@ public class LiveIndexFragment extends BaseFragment
             }
         });
 
-        mRecommendAdapter = new RecommendAdapter(userInfoList, getContext(), new MyItemClickListener()
+        mRecommendAdapter = new RecommendAdapter(recommendList, getContext(), new MyItemClickListener()
         {
             @Override
             public void onItemClick(View view, int position)
@@ -199,10 +217,38 @@ public class LiveIndexFragment extends BaseFragment
         });
 
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.dm_5);
-        rvRecommend.setLayoutManager(new GridLayoutManager(getActivity(), 3));
-        rvRecommend.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
+        rvRecommend.setLayoutManager(new FullyGridLayoutManager(getActivity(), 3));
+        // rvRecommend.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
         rvRecommend.setAdapter(mRecommendAdapter);
 
+
+        mNewAdapter = new NewAdapter(newList, getActivity(), new MyItemClickListener()
+        {
+            @Override
+            public void onItemClick(View view, int position)
+            {
+
+            }
+        });
+        rvNew.setLayoutManager(new FullyGridLayoutManager(getActivity(), 2));
+        rvNew.setAdapter(mNewAdapter);
+
+        loadData();
+    }
+
+    private void loadData()
+    {
+
+    }
+
+    @Override
+    public void onRefresh()
+    {
+        if (mSwipeRefreshLayout != null)
+        {
+            loadData();
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
     }
 
     @Override

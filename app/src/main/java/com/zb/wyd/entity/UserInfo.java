@@ -1,5 +1,7 @@
 package com.zb.wyd.entity;
 
+import org.json.JSONObject;
+
 /**
  * 作者：王先云 on 2018/6/15 15:51
  * 邮箱：wangxianyun1@163.com
@@ -7,4 +9,29 @@ package com.zb.wyd.entity;
  */
 public class UserInfo
 {
+    private String id;//12570;//
+    private String nick;//晓宝宝;//
+    private String face;//http:\/\/img2.inke.cn\/MTUxMzUxNTM3MDU2NSM1MjQjanBn.jpg;//
+    private String uri;//http:\/\/alsource.pull.inke.cn\/live\/1529036907860561.flv?ikDnsOp=1&ikHost=ali&ikOp=0&codecInfo=8192&ikLog=0&dpSrcG=-1&ikMinBuf
+    // =3800&ikMaxBuf=4800&ikSlowRate=1.0&ikFastRate=1.0;//
+    private String favour_count;//0;//
+    private String update_time;//1529037601;//
+    private String online;//12345,
+    private String is_live;//1
+
+
+    public UserInfo() {}
+
+    public UserInfo(JSONObject obj)
+    {
+        this.id = obj.optString("id");
+        this.nick = obj.optString("nick");
+        this.face = obj.optString("face");
+        this.uri = obj.optString("id");
+        this.favour_count = obj.optString("favour_count");
+        this.update_time = obj.optString("update_time");
+        this.online = obj.optString("online");
+        this.is_live = obj.optString("is_live");
+
+    }
 }

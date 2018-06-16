@@ -1,12 +1,8 @@
 package com.zb.wyd.holder;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,7 +17,7 @@ import com.zb.wyd.widget.RoundAngleImageView;
 
 /**
  */
-public class RecommendHolder extends RecyclerView.ViewHolder
+public class NewHolder extends RecyclerView.ViewHolder
 {
     private TextView            mTitleTv;
     private TextView            mIndexTv;
@@ -32,7 +28,7 @@ public class RecommendHolder extends RecyclerView.ViewHolder
     private MyItemClickListener listener;
     private Context             context;
 
-    public RecommendHolder(View rootView, Context context, MyItemClickListener listener)
+    public NewHolder(View rootView, Context context, MyItemClickListener listener)
     {
         super(rootView);
         this.listener = listener;
@@ -45,9 +41,9 @@ public class RecommendHolder extends RecyclerView.ViewHolder
 
     public void setUserInfo(UserInfo mUserInfo)
     {
-        int spacingInPixels = context.getResources().getDimensionPixelSize(R.dimen.dm_10) * 4;
-        int width = (APPUtils.getScreenWidth(context) - spacingInPixels) / 3;
-        mItemLayout.setLayoutParams(new LinearLayout.LayoutParams(width, width));
+        int spacingInPixels = context.getResources().getDimensionPixelSize(R.dimen.dm_10) * 3;
+        int width = (APPUtils.getScreenWidth(context) - spacingInPixels) / 2;
+        mItemLayout.setLayoutParams(new LinearLayout.LayoutParams(width, width * 13 / 20));
         ImageLoader.getInstance().displayImage("http://img3.imgtn.bdimg.com/it/u=3326312922,67097319&fm=27&gp=0.jpg", mImgIv);
     }
 

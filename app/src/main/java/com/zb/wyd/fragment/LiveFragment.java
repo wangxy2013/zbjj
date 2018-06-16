@@ -7,17 +7,21 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.zb.wyd.R;
 import com.zb.wyd.adapter.MyViewPagerAdapter;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+
+import static com.zb.wyd.utils.APPUtils.dip2px;
 
 /**
  * 作者：王先云 on 2018/6/14 14:59
@@ -91,6 +95,7 @@ public class LiveFragment extends BaseFragment
         mTabLayout.addTab(mTabLayout.newTab().setText("直播平台"));
         mTabLayout.setupWithViewPager(mViewPager);//给TabLayout设置关联ViewPager，如果设置了ViewPager，那么ViewPagerAdapter中的getPageTitle()方法返回的就是Tab上的标题
         setTabView();
+        reflex(mTabLayout);
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener()
         {
             @Override
@@ -156,6 +161,65 @@ public class LiveFragment extends BaseFragment
         {
             tvTabName = (TextView) tabView.findViewById(R.id.tv_tab_name);
         }
+    }
+
+
+    public void reflex(final TabLayout tabLayout)
+    {
+        //了解源码得知 线的宽度是根据 tabView的宽度来设置的
+        tabLayout.post(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                try
+                {
+                    //拿到tabLayout的mTabStrip属性
+                    LinearLayout mTabStrip = (LinearLayout) tabLayout.getChildAt(0);
+
+                    int dp10 = dip2px(tabLayout.getContext(), 10);
+
+                    for (int i = 0; i < mTabStrip.getChildCount(); i++)
+                    {
+                        View tabView = mTabStrip.getChildAt(i);
+
+                        //拿到tabView的mTextView属性  tab的字数不固定一定用反射取mTextView
+                        Field mTextViewField = tabView.getClass().getDeclaredField("mTextView");
+                        mTextViewField.setAccessible(true);
+
+                        TextView mTextView = (TextView) mTextViewField.get(tabView);
+
+                        tabView.setPadding(0, 0, 0, 0);
+
+                        //因为我想要的效果是   字多宽线就多宽，所以测量mTextView的宽度
+                        int width = 0;
+                        width = mTextView.getWidth();
+                        if (width == 0)
+                        {
+                            mTextView.measure(0, 0);
+                            width = mTextView.getMeasuredWidth();
+                        }
+
+                        //设置tab左右间距为10dp  注意这里不能使用Padding 因为源码中线的宽度是根据 tabView的宽度来设置的
+                        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) tabView.getLayoutParams();
+                        params.width = width;
+                        params.leftMargin = dp10;
+                        params.rightMargin = dp10;
+                        tabView.setLayoutParams(params);
+
+                        tabView.invalidate();
+                    }
+
+                } catch (NoSuchFieldException e)
+                {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
+
     }
 
     @Override

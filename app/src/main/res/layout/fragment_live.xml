@@ -18,7 +18,7 @@
             android:layout_marginTop="@dimen/dm_2"
             android:layout_toLeftOf="@+id/iv_search"
             android:background="@color/white"
-            app:tabGravity="fill"
+            app:tabGravity="center"
             app:tabIndicatorColor="@color/orange"
             app:tabMode="fixed"
             app:tabSelectedTextColor="@color/orange"

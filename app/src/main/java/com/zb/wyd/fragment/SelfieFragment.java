@@ -5,20 +5,31 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
+import com.donkingliang.banner.CustomBanner;
 import com.zb.wyd.R;
+import com.zb.wyd.widget.MaxRecyclerView;
+import com.zb.wyd.widget.VerticalSwipeRefreshLayout;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
- * 作者：王先云 on 2018/6/14 14:59
- * 邮箱：wangxianyun1@163.com
  * 描述：一句话简单描述
  */
-public class PhotoFragment extends BaseFragment
+public class SelfieFragment extends BaseFragment
 {
 
+    @BindView(R.id.banner)
+    CustomBanner               banner;
+    @BindView(R.id.rl_all_photo)
+    RelativeLayout             rlAllPhoto;
+    @BindView(R.id.rv_photo)
+    MaxRecyclerView            rvPhoto;
+    @BindView(R.id.swipeRefresh)
+    VerticalSwipeRefreshLayout mSwipeRefreshLayout;
     private View rootView = null;
     private Unbinder unbinder;
 
@@ -28,7 +39,7 @@ public class PhotoFragment extends BaseFragment
 
         if (rootView == null)
         {
-            rootView = inflater.inflate(R.layout.fragment_photo, null);
+            rootView = inflater.inflate(R.layout.fragment_selfie, null);
             unbinder = ButterKnife.bind(this, rootView);
             initData();
             initViews();
@@ -77,4 +88,5 @@ public class PhotoFragment extends BaseFragment
             unbinder = null;
         }
     }
+
 }

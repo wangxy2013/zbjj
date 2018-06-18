@@ -5,7 +5,7 @@ import org.json.JSONObject;
 /**
  * 描述：一句话简单描述
  */
-public class UserInfo
+public class VideoInfo
 {
     private String id;//12570;//
     private String nick;//晓宝宝;//
@@ -18,9 +18,9 @@ public class UserInfo
     private String is_live;//1
 
 
-    public UserInfo() {}
+    public VideoInfo() {}
 
-    public UserInfo(JSONObject obj)
+    public VideoInfo(JSONObject obj)
     {
         this.id = obj.optString("id");
         this.nick = obj.optString("nick");

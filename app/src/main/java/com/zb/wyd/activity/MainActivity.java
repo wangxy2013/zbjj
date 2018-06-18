@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTabHost;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -12,13 +11,12 @@ import android.widget.TextView;
 import com.zb.wyd.R;
 import com.zb.wyd.fragment.LiveFragment;
 import com.zb.wyd.fragment.MemberFragment;
-import com.zb.wyd.fragment.PhotoFragment;
+import com.zb.wyd.fragment.SelfieFragment;
 import com.zb.wyd.fragment.TaskFragment;
 import com.zb.wyd.fragment.VideoFragment;
 import com.zb.wyd.utils.DialogUtils;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 
 public class MainActivity extends BaseActivity
@@ -34,7 +32,7 @@ public class MainActivity extends BaseActivity
             R.drawable.ic_photo_selector, R.drawable.ic_task_selector, R.drawable.ic_member_selector};
 
 
-    private Class fragmentArray[] = {LiveFragment.class, VideoFragment.class, PhotoFragment.class, TaskFragment.class, MemberFragment.class};
+    private Class fragmentArray[] = {LiveFragment.class, VideoFragment.class, SelfieFragment.class, TaskFragment.class, MemberFragment.class};
 
     @Override
     protected void initData()

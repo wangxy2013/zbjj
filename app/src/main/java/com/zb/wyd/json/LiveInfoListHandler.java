@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  */
-public class UserInfoListHandler extends JsonHandler
+public class LiveInfoListHandler extends JsonHandler
 {
     private List<LiveInfo> userInfoList = new ArrayList<>();
 

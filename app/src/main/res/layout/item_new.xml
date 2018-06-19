@@ -14,8 +14,8 @@
         <com.zb.wyd.widget.RoundAngleImageView
             android:id="@+id/iv_user_pic"
             android:layout_width="match_parent"
-            android:scaleType="centerCrop"
             android:layout_height="match_parent"
+            android:scaleType="centerCrop"
             android:src="@color/text_blue1"/>
 
         <TextView

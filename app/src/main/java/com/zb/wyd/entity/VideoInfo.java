@@ -7,29 +7,95 @@ import org.json.JSONObject;
  */
 public class VideoInfo
 {
-    private String id;//12570;//
-    private String nick;//晓宝宝;//
-    private String face;//http:\/\/img2.inke.cn\/MTUxMzUxNTM3MDU2NSM1MjQjanBn.jpg;//
-    private String uri;//http:\/\/alsource.pull.inke.cn\/live\/1529036907860561.flv?ikDnsOp=1&ikHost=ali&ikOp=0&codecInfo=8192&ikLog=0&dpSrcG=-1&ikMinBuf
-    // =3800&ikMaxBuf=4800&ikSlowRate=1.0&ikFastRate=1.0;//
-    private String favour_count;//0;//
-    private String update_time;//1529037601;//
-    private String online;//12345,
-    private String is_live;//1
-
+    private String id;//5
+    private String cata_id;//10
+    private String v_name;//Caribbean)(122912-222)元芸能人のリアルアクメ 優希まこと
+    private String cover;//https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg
+    private String favour_count;//0
+    private String fee_cfg;//0
+    private String fee;//3 private String
 
     public VideoInfo() {}
 
     public VideoInfo(JSONObject obj)
     {
         this.id = obj.optString("id");
-        this.nick = obj.optString("nick");
-        this.face = obj.optString("face");
-        this.uri = obj.optString("id");
+        this.cata_id = obj.optString("cata_id");
+        this.v_name = obj.optString("v_name");
+        this.cover = obj.optString("cover");
         this.favour_count = obj.optString("favour_count");
-        this.update_time = obj.optString("update_time");
-        this.online = obj.optString("online");
-        this.is_live = obj.optString("is_live");
+        this.fee_cfg = obj.optString("fee_cfg");
+        this.fee = obj.optString("fee");
 
+    }
+
+    public String getId()
+    {
+        return id;
+    }
+
+    public void setId(String id)
+    {
+        this.id = id;
+    }
+
+    public String getCata_id()
+    {
+        return cata_id;
+    }
+
+    public void setCata_id(String cata_id)
+    {
+        this.cata_id = cata_id;
+    }
+
+    public String getV_name()
+    {
+        return v_name;
+    }
+
+    public void setV_name(String v_name)
+    {
+        this.v_name = v_name;
+    }
+
+    public String getCover()
+    {
+        return cover;
+    }
+
+    public void setCover(String cover)
+    {
+        this.cover = cover;
+    }
+
+    public String getFavour_count()
+    {
+        return favour_count;
+    }
+
+    public void setFavour_count(String favour_count)
+    {
+        this.favour_count = favour_count;
+    }
+
+    public String getFee_cfg()
+    {
+        return fee_cfg;
+    }
+
+    public void setFee_cfg(String fee_cfg)
+    {
+        this.fee_cfg = fee_cfg;
+    }
+
+    public String getFee()
+    {
+        return fee;
+    }
+
+    public void setFee(String fee)
+    {
+        this.fee = fee;
     }
 }

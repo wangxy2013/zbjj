@@ -1,8 +1,10 @@
 package com.zb.wyd.fragment;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,17 +16,27 @@ import android.widget.RelativeLayout;
 import com.donkingliang.banner.CustomBanner;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zb.wyd.R;
+import com.zb.wyd.activity.BaseHandler;
 import com.zb.wyd.adapter.FreeTimeAdapter;
 import com.zb.wyd.adapter.IntegerAreaAdapter;
 import com.zb.wyd.entity.VideoInfo;
+import com.zb.wyd.http.DataRequest;
+import com.zb.wyd.http.HttpRequest;
+import com.zb.wyd.http.IRequestListener;
+import com.zb.wyd.json.LiveInfoListHandler;
+import com.zb.wyd.json.VideoInfoListHandler;
 import com.zb.wyd.listener.MyItemClickListener;
 import com.zb.wyd.utils.APPUtils;
+import com.zb.wyd.utils.ConstantUtil;
+import com.zb.wyd.utils.Urls;
 import com.zb.wyd.widget.FullyGridLayoutManager;
 import com.zb.wyd.widget.MaxRecyclerView;
 import com.zb.wyd.widget.VerticalSwipeRefreshLayout;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,7 +45,7 @@ import butterknife.Unbinder;
 /**
  * 描述：一句话简单描述
  */
-public class VideoChildFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener
+public class VideoChildFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, IRequestListener
 {
 
     @BindView(R.id.banner)
@@ -56,6 +68,50 @@ public class VideoChildFragment extends BaseFragment implements SwipeRefreshLayo
     private List<VideoInfo> integerAreaList = new ArrayList<>();
     private FreeTimeAdapter    mFreeTimeAdapter;
     private IntegerAreaAdapter mIntegerAreaAdapter;
+
+
+    private static final String      GET_FREE_LIVE          = "get_free_live";
+    private static final String      GET_VIDEO_LIST         = "get_video_list";
+    private static final int         GET_FREE_LIVE_SUCCESS  = 0x01;
+    private static final int         REQUEST_FAIL           = 0x02;
+    private static final int         GET_VIDEO_LIST_SUCCESS = 0x03;
+    private static final int         GET_FREE_LIVE_CODE     = 0X11;
+    private static final int         GET_VIDEO_LIST_CODE    = 0X12;
+    @SuppressLint("HandlerLeak")
+    private              BaseHandler mHandler               = new BaseHandler(getActivity())
+    {
+        @Override
+        public void handleMessage(Message msg)
+        {
+            super.handleMessage(msg);
+            switch (msg.what)
+            {
+                case GET_FREE_LIVE_SUCCESS:
+
+                    break;
+
+
+                case GET_VIDEO_LIST_SUCCESS:
+                    VideoInfoListHandler mVideoInfoListHandler = (VideoInfoListHandler) msg.obj;
+                    integerAreaList.clear();
+                    integerAreaList.addAll(mVideoInfoListHandler.getVideoInfoList());
+                    mIntegerAreaAdapter.notifyDataSetChanged();
+
+
+                    break;
+
+                case REQUEST_FAIL:
+                    break;
+
+                case GET_FREE_LIVE_CODE:
+                    break;
+
+                case GET_VIDEO_LIST_CODE:
+                    getVideoList();
+                    break;
+            }
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -103,24 +159,6 @@ public class VideoChildFragment extends BaseFragment implements SwipeRefreshLayo
         freeTimeList.add(new VideoInfo());
         freeTimeList.add(new VideoInfo());
         freeTimeList.add(new VideoInfo());
-
-        integerAreaList.add(new VideoInfo());
-        integerAreaList.add(new VideoInfo());
-        integerAreaList.add(new VideoInfo());
-        integerAreaList.add(new VideoInfo());
-        integerAreaList.add(new VideoInfo());
-        integerAreaList.add(new VideoInfo());
-        integerAreaList.add(new VideoInfo());
-        integerAreaList.add(new VideoInfo());
-        integerAreaList.add(new VideoInfo());
-        integerAreaList.add(new VideoInfo());
-        integerAreaList.add(new VideoInfo());
-        integerAreaList.add(new VideoInfo());
-        integerAreaList.add(new VideoInfo());
-        integerAreaList.add(new VideoInfo());
-        integerAreaList.add(new VideoInfo());
-        integerAreaList.add(new VideoInfo());
-
     }
 
     @Override
@@ -234,7 +272,29 @@ public class VideoChildFragment extends BaseFragment implements SwipeRefreshLayo
 
     private void loadData()
     {
+        mHandler.sendEmptyMessage(GET_FREE_LIVE_CODE);
+        mHandler.sendEmptyMessage(GET_VIDEO_LIST_CODE);
+    }
 
+    private void getFreeLive()
+    {
+        Map<String, String> valuePairs = new HashMap<>();
+
+        valuePairs.put("sort", "new");
+        valuePairs.put("pn", "1");
+        valuePairs.put("cta_id", "0");
+        DataRequest.instance().request(getActivity(), Urls.getVideoLive(), this, HttpRequest.POST, GET_FREE_LIVE, valuePairs,
+                new LiveInfoListHandler());
+    }
+
+    private void getVideoList()
+    {
+        Map<String, String> valuePairs = new HashMap<>();
+        valuePairs.put("sort", "new");
+        valuePairs.put("pn", "1");
+        valuePairs.put("cta_id", "0");
+        DataRequest.instance().request(getActivity(), Urls.getVideoLive(), this, HttpRequest.POST, GET_VIDEO_LIST, valuePairs,
+                new VideoInfoListHandler());
     }
 
     @Override
@@ -259,4 +319,19 @@ public class VideoChildFragment extends BaseFragment implements SwipeRefreshLayo
         }
     }
 
+    @Override
+    public void notify(String action, String resultCode, String resultMsg, Object obj)
+    {
+        if (GET_VIDEO_LIST.equals(action))
+        {
+            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(GET_VIDEO_LIST_SUCCESS, obj));
+            }
+            else
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
+            }
+        }
+    }
 }

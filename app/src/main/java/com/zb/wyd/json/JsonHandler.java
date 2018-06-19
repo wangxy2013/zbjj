@@ -2,6 +2,7 @@ package com.zb.wyd.json;
 
 
 import android.content.Context;
+import android.content.Intent;
 
 
 import com.zb.wyd.utils.ConstantUtil;
@@ -29,28 +30,18 @@ public abstract class JsonHandler
             {
                 JSONObject jsonObject = new JSONObject(jsonString);
 
-                String ret = jsonObject.optString("ret");
-                String msg = jsonObject.optString("msg");
-                if (ret.endsWith("01") || msg.contains("成功"))
+
+                if ("true".equals(jsonObject.optString("status")))
                 {
                     setResultCode(ConstantUtil.RESULT_SUCCESS);
                 }
                 else
                 {
+                    setResultCode(jsonObject.optString("code"));
 
-                    if (ret.endsWith("02") && ret.startsWith("20"))
-                    {
-                        setResultCode(ConstantUtil.RESULT_SUCCESS);
-                    }
-                    else
-                    {
-                        setResultCode(ConstantUtil.RESULT_FAIL);
-
-                    }
-                    setResultMsg(jsonObject.optString("msg"));
                 }
-
-                if (null != jsonObject) parseJson(jsonObject);
+                setResultMsg(jsonObject.optString("message"));
+                parseJson(jsonObject);
             }
         } catch (Exception e)
         {

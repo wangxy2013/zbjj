@@ -3,6 +3,7 @@ package com.zb.wyd.holder;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -19,10 +20,9 @@ import com.zb.wyd.widget.RoundAngleImageView;
  */
 public class NewHolder extends RecyclerView.ViewHolder
 {
-    private TextView            mTitleTv;
-    private TextView            mIndexTv;
+    private TextView            mFollowTv;
+    private TextView            mPopularityTv;
     private TextView            mNameTv;
-    private TextView            mBrowseTv;
     private RoundAngleImageView mImgIv;
     private RelativeLayout      mItemLayout;
     private MyItemClickListener listener;
@@ -33,18 +33,32 @@ public class NewHolder extends RecyclerView.ViewHolder
         super(rootView);
         this.listener = listener;
         this.context = context;
+        mFollowTv = (TextView) rootView.findViewById(R.id.tv_follow);
+        mPopularityTv = (TextView) rootView.findViewById(R.id.tv_popularity);
+        mNameTv = (TextView) rootView.findViewById(R.id.tv_name);
         mImgIv = (RoundAngleImageView) rootView.findViewById(R.id.iv_user_pic);
         mItemLayout = (RelativeLayout) rootView.findViewById(R.id.rl_item);
+        int spacingInPixels = context.getResources().getDimensionPixelSize(R.dimen.dm_10) * 3;
+        int width = (APPUtils.getScreenWidth(context) - spacingInPixels) / 2;
+        mItemLayout.setLayoutParams(new LinearLayout.LayoutParams(width, width * 13 / 20));
+
+        RelativeLayout.LayoutParams imgLayoutParams = new RelativeLayout.LayoutParams(width, width * 13 / 20);
+        mImgIv.setLayoutParams(imgLayoutParams);
+        mImgIv.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
 
     }
 
 
-    public void setUserInfo(LiveInfo mUserInfo)
+    public void setLiveInfo(LiveInfo mLiveInfo)
     {
-        int spacingInPixels = context.getResources().getDimensionPixelSize(R.dimen.dm_10) * 3;
-        int width = (APPUtils.getScreenWidth(context) - spacingInPixels) / 2;
-        mItemLayout.setLayoutParams(new LinearLayout.LayoutParams(width, width * 13 / 20));
-        ImageLoader.getInstance().displayImage("http://img3.imgtn.bdimg.com/it/u=3326312922,67097319&fm=27&gp=0.jpg", mImgIv);
+
+        ImageLoader.getInstance().displayImage(mLiveInfo.getFace(), mImgIv);
+
+
+        mFollowTv.setText(mLiveInfo.getFavour_count());
+        mPopularityTv.setText(mLiveInfo.getOnline());
+        mNameTv.setText(mLiveInfo.getNick());
     }
 
 

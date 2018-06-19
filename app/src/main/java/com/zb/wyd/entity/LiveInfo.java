@@ -32,4 +32,84 @@ public class LiveInfo
         this.is_live = obj.optString("is_live");
 
     }
+
+    public String getId()
+    {
+        return id;
+    }
+
+    public void setId(String id)
+    {
+        this.id = id;
+    }
+
+    public String getNick()
+    {
+        return nick;
+    }
+
+    public void setNick(String nick)
+    {
+        this.nick = nick;
+    }
+
+    public String getFace()
+    {
+        return face;
+    }
+
+    public void setFace(String face)
+    {
+        this.face = face;
+    }
+
+    public String getUri()
+    {
+        return uri;
+    }
+
+    public void setUri(String uri)
+    {
+        this.uri = uri;
+    }
+
+    public String getFavour_count()
+    {
+        return favour_count;
+    }
+
+    public void setFavour_count(String favour_count)
+    {
+        this.favour_count = favour_count;
+    }
+
+    public String getUpdate_time()
+    {
+        return update_time;
+    }
+
+    public void setUpdate_time(String update_time)
+    {
+        this.update_time = update_time;
+    }
+
+    public String getOnline()
+    {
+        return online;
+    }
+
+    public void setOnline(String online)
+    {
+        this.online = online;
+    }
+
+    public String getIs_live()
+    {
+        return is_live;
+    }
+
+    public void setIs_live(String is_live)
+    {
+        this.is_live = is_live;
+    }
 }

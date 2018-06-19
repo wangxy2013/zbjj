@@ -17,7 +17,7 @@ import com.zb.wyd.activity.BaseHandler;
 import com.zb.wyd.adapter.AnchorAdapter;
 import com.zb.wyd.entity.LiveInfo;
 import com.zb.wyd.http.IRequestListener;
-import com.zb.wyd.json.UserInfoListHandler;
+import com.zb.wyd.json.LiveInfoListHandler;
 import com.zb.wyd.listener.MyItemClickListener;
 import com.zb.wyd.utils.ConstantUtil;
 import com.zb.wyd.utils.ToastUtil;
@@ -74,7 +74,7 @@ public class AnchorListFragment extends BaseFragment implements PullToRefreshBas
             switch (msg.what)
             {
                 case REQUEST_SUCCESS:
-                    UserInfoListHandler mOrderListHandler = (UserInfoListHandler) msg.obj;
+                    LiveInfoListHandler mOrderListHandler = (LiveInfoListHandler) msg.obj;
 
                     if (pn == 1)
                     {

@@ -10,9 +10,9 @@ package com.zb.wyd.utils;
 public class Urls
 {
     //http://api.crap.cn/project.do#/152894835244607000287/interface/list/152894841894709000288
-    public static final String HTTP_IP = "http://www.shanglvbuluo.com";
+    public static final String HTTP_IP = "http://www.883974.com/";
 
-    public static final String BASE_URL = HTTP_IP + "/api/";
+    public static final String BASE_URL = HTTP_IP;
 
     //获取版本信息
     public static String getVersionUrl()
@@ -20,10 +20,6 @@ public class Urls
         return BASE_URL + "merchant/search";
     }
 
-    public static String getImgUrl(String url)
-    {
-        return HTTP_IP + url;
-    }
 
     //用戶登录
     public static String getLoginUrl()
@@ -32,7 +28,30 @@ public class Urls
     }
 
 
+    //用戶注册
+    public static String getRegisterUrl()
+    {
+        return BASE_URL + "user/register";
+    }
 
+
+    //限时免费
+    public static String getFreeLive()
+    {
+        return BASE_URL + "live/free";
+    }
+
+    //新晋主播
+    public static String getNewLive()
+    {
+        return BASE_URL + "live/index";
+    }
+
+    //点播
+    public static String getVideoLive()
+    {
+        return BASE_URL + "video/list";
+    }
 
 
 }

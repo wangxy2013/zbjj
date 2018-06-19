@@ -1,8 +1,10 @@
 package com.zb.wyd.fragment;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,28 +16,35 @@ import android.widget.RelativeLayout;
 import com.donkingliang.banner.CustomBanner;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zb.wyd.R;
+import com.zb.wyd.activity.BaseHandler;
 import com.zb.wyd.adapter.NewAdapter;
 import com.zb.wyd.adapter.RecommendAdapter;
 import com.zb.wyd.entity.LiveInfo;
+import com.zb.wyd.http.DataRequest;
+import com.zb.wyd.http.HttpRequest;
+import com.zb.wyd.http.IRequestListener;
+import com.zb.wyd.json.LiveInfoListHandler;
 import com.zb.wyd.listener.MyItemClickListener;
 import com.zb.wyd.utils.APPUtils;
+import com.zb.wyd.utils.ConstantUtil;
+import com.zb.wyd.utils.Urls;
 import com.zb.wyd.widget.FullyGridLayoutManager;
 import com.zb.wyd.widget.MaxRecyclerView;
 import com.zb.wyd.widget.VerticalSwipeRefreshLayout;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
- * 作者：王先云 on 2018/6/14 14:59
- * 邮箱：wangxianyun1@163.com
  * 描述：一句话简单描述
  */
-public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener
+public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, IRequestListener
 {
 
     @BindView(R.id.banner)
@@ -53,11 +62,59 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
     private View rootView = null;
     private Unbinder unbinder;
     private List<String>   picList       = new ArrayList<>();
-    private List<LiveInfo> recommendList = new ArrayList<>();
-    private List<LiveInfo> newList       = new ArrayList<>();
+    private List<LiveInfo> freeLiveList = new ArrayList<>();
+    private List<LiveInfo> newLiveList       = new ArrayList<>();
     private RecommendAdapter mRecommendAdapter;
 
     private NewAdapter mNewAdapter;
+
+
+    private static final String GET_FREE_LIVE = "get_free_live";
+    private static final String GET_NEW_LIVE = "get_new_live";
+    private static final int GET_FREE_LIVE_SUCCESS = 0x01;
+    private static final int REQUEST_FAIL          = 0x02;
+    private static final int GET_NEW_LIVE_SUCCESS = 0x03;
+    private static final int         GET_FREE_LIVE_CODE = 0X11;
+    private static final int         GET_NEW_LIVE_CODE = 0X12;
+    @SuppressLint("HandlerLeak")
+    private              BaseHandler mHandler           = new BaseHandler(getActivity())
+    {
+        @Override
+        public void handleMessage(Message msg)
+        {
+            super.handleMessage(msg);
+            switch (msg.what)
+            {
+                case GET_FREE_LIVE_SUCCESS:
+
+                    LiveInfoListHandler mLiveInfoListHandler = (LiveInfoListHandler)msg.obj;
+                    freeLiveList.clear();
+                    freeLiveList.addAll(mLiveInfoListHandler.getUserInfoList());
+                    mRecommendAdapter.notifyDataSetChanged();
+                    break;
+
+
+                case GET_NEW_LIVE_SUCCESS:
+                    LiveInfoListHandler mLiveInfoListHandler1 = (LiveInfoListHandler)msg.obj;
+                    newLiveList.clear();
+                    newLiveList.addAll(mLiveInfoListHandler1.getUserInfoList());
+                    mNewAdapter.notifyDataSetChanged();
+                    break;
+
+                case REQUEST_FAIL:
+                    break;
+
+                case GET_FREE_LIVE_CODE:
+                    getFreeLive();
+                    break;
+
+                case GET_NEW_LIVE_CODE:
+                    getNewLive();
+                    break;
+            }
+        }
+    };
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -100,28 +157,7 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
         picList.add("https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2869447915,2118394790&fm=27&gp=0.jpg");
         picList.add("https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2869447915,2118394790&fm=27&gp=0.jpg");
         picList.add("https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2869447915,2118394790&fm=27&gp=0.jpg");
-        newList.add(new LiveInfo());
-        newList.add(new LiveInfo());
-        newList.add(new LiveInfo());
-        newList.add(new LiveInfo());
-        newList.add(new LiveInfo());
-        newList.add(new LiveInfo());
-        newList.add(new LiveInfo());
-        newList.add(new LiveInfo());
-        newList.add(new LiveInfo());
-        newList.add(new LiveInfo());
-        newList.add(new LiveInfo());
-        newList.add(new LiveInfo());
-        newList.add(new LiveInfo());
-        newList.add(new LiveInfo());
-        newList.add(new LiveInfo());
-        newList.add(new LiveInfo());
-        newList.add(new LiveInfo());
-        newList.add(new LiveInfo());
 
-        recommendList.add(new LiveInfo());
-        recommendList.add(new LiveInfo());
-        recommendList.add(new LiveInfo());
     }
 
     @Override
@@ -205,7 +241,7 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
             }
         });
 
-        mRecommendAdapter = new RecommendAdapter(recommendList, getContext(), new MyItemClickListener()
+        mRecommendAdapter = new RecommendAdapter(freeLiveList, getContext(), new MyItemClickListener()
         {
             @Override
             public void onItemClick(View view, int position)
@@ -220,7 +256,7 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
         rvRecommend.setAdapter(mRecommendAdapter);
 
 
-        mNewAdapter = new NewAdapter(newList, getActivity(), new MyItemClickListener()
+        mNewAdapter = new NewAdapter(newLiveList, getActivity(), new MyItemClickListener()
         {
             @Override
             public void onItemClick(View view, int position)
@@ -236,7 +272,21 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
 
     private void loadData()
     {
+        mHandler.sendEmptyMessage(GET_FREE_LIVE_CODE);
+        mHandler.sendEmptyMessage(GET_NEW_LIVE_CODE);
+    }
 
+    private void getFreeLive()
+    {
+        Map<String, String> valuePairs = new HashMap<>();
+        DataRequest.instance().request(getActivity(), Urls.getFreeLive(), this, HttpRequest.POST, GET_FREE_LIVE, valuePairs,
+                new LiveInfoListHandler());
+    }
+    private void getNewLive()
+    {
+        Map<String, String> valuePairs = new HashMap<>();
+        DataRequest.instance().request(getActivity(), Urls.getNewLive(), this, HttpRequest.POST, GET_NEW_LIVE, valuePairs,
+                new LiveInfoListHandler());
     }
 
     @Override
@@ -261,4 +311,30 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
     }
 
 
+    @Override
+    public void notify(String action, String resultCode, String resultMsg, Object obj)
+    {
+        if (GET_FREE_LIVE.equals(action))
+        {
+            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(GET_FREE_LIVE_SUCCESS, obj));
+            }
+            else
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
+            }
+        }
+        else if (GET_NEW_LIVE.equals(action))
+        {
+            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(GET_NEW_LIVE_SUCCESS, obj));
+            }
+            else
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
+            }
+        }
+    }
 }

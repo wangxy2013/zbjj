@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,13 +15,12 @@ import android.widget.TextView;
 import com.zb.wyd.R;
 import com.zb.wyd.activity.BaseHandler;
 import com.zb.wyd.adapter.AnchorAdapter;
-import com.zb.wyd.entity.UserInfo;
+import com.zb.wyd.entity.LiveInfo;
 import com.zb.wyd.http.IRequestListener;
 import com.zb.wyd.json.UserInfoListHandler;
 import com.zb.wyd.listener.MyItemClickListener;
 import com.zb.wyd.utils.ConstantUtil;
 import com.zb.wyd.utils.ToastUtil;
-import com.zb.wyd.widget.FullyGridLayoutManager;
 import com.zb.wyd.widget.list.refresh.PullToRefreshBase;
 import com.zb.wyd.widget.list.refresh.PullToRefreshRecyclerView;
 
@@ -57,7 +55,7 @@ public class AnchorListFragment extends BaseFragment implements PullToRefreshBas
     private int pn = 1;
     private int mRefreshStatus;
 
-    private List<UserInfo> userInfoList = new ArrayList<>();
+    private List<LiveInfo> userInfoList = new ArrayList<>();
     private AnchorAdapter mAnchorAdapter;
     private View rootView = null;
     private Unbinder unbinder;
@@ -157,7 +155,7 @@ public class AnchorListFragment extends BaseFragment implements PullToRefreshBas
     {
         for (int i = 0; i < 30; i++)
         {
-            userInfoList.add(new UserInfo());
+            userInfoList.add(new LiveInfo());
         }
 
 

@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.zb.wyd.R;
-import com.zb.wyd.entity.UserInfo;
+import com.zb.wyd.entity.LiveInfo;
 import com.zb.wyd.holder.RecommendHolder;
 import com.zb.wyd.listener.MyItemClickListener;
 
@@ -20,10 +20,10 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendHolder>
 {
 
     private MyItemClickListener listener;
-    private List<UserInfo>      list;
+    private List<LiveInfo>      list;
     private Context             mContext;
 
-    public RecommendAdapter(List<UserInfo> list, Context mContext, MyItemClickListener listener)
+    public RecommendAdapter(List<LiveInfo> list, Context mContext, MyItemClickListener listener)
     {
         this.list = list;
         this.mContext = mContext;
@@ -42,7 +42,7 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendHolder>
     @Override
     public void onBindViewHolder(RecommendHolder holder, int position)
     {
-        UserInfo mUserInfo = list.get(position);
+        LiveInfo mUserInfo = list.get(position);
         holder.setUserInfo(mUserInfo);
     }
 

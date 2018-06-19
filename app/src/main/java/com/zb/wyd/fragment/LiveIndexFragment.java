@@ -4,8 +4,6 @@ package com.zb.wyd.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +16,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zb.wyd.R;
 import com.zb.wyd.adapter.NewAdapter;
 import com.zb.wyd.adapter.RecommendAdapter;
-import com.zb.wyd.entity.UserInfo;
+import com.zb.wyd.entity.LiveInfo;
 import com.zb.wyd.listener.MyItemClickListener;
 import com.zb.wyd.utils.APPUtils;
 import com.zb.wyd.widget.FullyGridLayoutManager;
@@ -55,8 +53,8 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
     private View rootView = null;
     private Unbinder unbinder;
     private List<String>   picList       = new ArrayList<>();
-    private List<UserInfo> recommendList = new ArrayList<>();
-    private List<UserInfo> newList       = new ArrayList<>();
+    private List<LiveInfo> recommendList = new ArrayList<>();
+    private List<LiveInfo> newList       = new ArrayList<>();
     private RecommendAdapter mRecommendAdapter;
 
     private NewAdapter mNewAdapter;
@@ -102,28 +100,28 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
         picList.add("https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2869447915,2118394790&fm=27&gp=0.jpg");
         picList.add("https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2869447915,2118394790&fm=27&gp=0.jpg");
         picList.add("https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2869447915,2118394790&fm=27&gp=0.jpg");
-        newList.add(new UserInfo());
-        newList.add(new UserInfo());
-        newList.add(new UserInfo());
-        newList.add(new UserInfo());
-        newList.add(new UserInfo());
-        newList.add(new UserInfo());
-        newList.add(new UserInfo());
-        newList.add(new UserInfo());
-        newList.add(new UserInfo());
-        newList.add(new UserInfo());
-        newList.add(new UserInfo());
-        newList.add(new UserInfo());
-        newList.add(new UserInfo());
-        newList.add(new UserInfo());
-        newList.add(new UserInfo());
-        newList.add(new UserInfo());
-        newList.add(new UserInfo());
-        newList.add(new UserInfo());
+        newList.add(new LiveInfo());
+        newList.add(new LiveInfo());
+        newList.add(new LiveInfo());
+        newList.add(new LiveInfo());
+        newList.add(new LiveInfo());
+        newList.add(new LiveInfo());
+        newList.add(new LiveInfo());
+        newList.add(new LiveInfo());
+        newList.add(new LiveInfo());
+        newList.add(new LiveInfo());
+        newList.add(new LiveInfo());
+        newList.add(new LiveInfo());
+        newList.add(new LiveInfo());
+        newList.add(new LiveInfo());
+        newList.add(new LiveInfo());
+        newList.add(new LiveInfo());
+        newList.add(new LiveInfo());
+        newList.add(new LiveInfo());
 
-        recommendList.add(new UserInfo());
-        recommendList.add(new UserInfo());
-        recommendList.add(new UserInfo());
+        recommendList.add(new LiveInfo());
+        recommendList.add(new LiveInfo());
+        recommendList.add(new LiveInfo());
     }
 
     @Override

@@ -1,19 +1,15 @@
 package com.zb.wyd.holder;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zb.wyd.R;
-import com.zb.wyd.entity.UserInfo;
+import com.zb.wyd.entity.LiveInfo;
 import com.zb.wyd.listener.MyItemClickListener;
 import com.zb.wyd.utils.APPUtils;
 import com.zb.wyd.widget.RoundAngleImageView;
@@ -43,7 +39,7 @@ public class RecommendHolder extends RecyclerView.ViewHolder
     }
 
 
-    public void setUserInfo(UserInfo mUserInfo)
+    public void setUserInfo(LiveInfo mUserInfo)
     {
         int spacingInPixels = context.getResources().getDimensionPixelSize(R.dimen.dm_10) * 4;
         int width = (APPUtils.getScreenWidth(context) - spacingInPixels) / 3;

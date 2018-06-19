@@ -1,7 +1,7 @@
 package com.zb.wyd.json;
 
 
-import com.zb.wyd.entity.UserInfo;
+import com.zb.wyd.entity.LiveInfo;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -13,9 +13,9 @@ import java.util.List;
  */
 public class UserInfoListHandler extends JsonHandler
 {
-    private List<UserInfo> userInfoList = new ArrayList<>();
+    private List<LiveInfo> userInfoList = new ArrayList<>();
 
-    public List<UserInfo> getUserInfoList()
+    public List<LiveInfo> getUserInfoList()
     {
         return userInfoList;
     }
@@ -32,7 +32,7 @@ public class UserInfoListHandler extends JsonHandler
             {
                 for (int i = 0; i < arr.length(); i++)
                 {
-                    UserInfo mBillInfo = new UserInfo(arr.optJSONObject(i));
+                    LiveInfo mBillInfo = new LiveInfo(arr.optJSONObject(i));
                     userInfoList.add(mBillInfo);
                 }
             }

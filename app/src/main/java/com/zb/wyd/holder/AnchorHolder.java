@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zb.wyd.R;
-import com.zb.wyd.entity.UserInfo;
+import com.zb.wyd.entity.LiveInfo;
 import com.zb.wyd.listener.MyItemClickListener;
 import com.zb.wyd.utils.APPUtils;
 import com.zb.wyd.widget.RoundAngleImageView;
@@ -39,7 +39,7 @@ public class AnchorHolder extends RecyclerView.ViewHolder
     }
 
 
-    public void setUserInfo(UserInfo mUserInfo)
+    public void setUserInfo(LiveInfo mUserInfo)
     {
         int spacingInPixels = context.getResources().getDimensionPixelSize(R.dimen.dm_10) * 3;
         int width = (APPUtils.getScreenWidth(context) - spacingInPixels) / 2;

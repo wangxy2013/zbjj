@@ -7,10 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.zb.wyd.R;
-import com.zb.wyd.entity.UserInfo;
 import com.zb.wyd.entity.VideoInfo;
 import com.zb.wyd.holder.IntegerAreaHolder;
-import com.zb.wyd.holder.NewHolder;
 import com.zb.wyd.listener.MyItemClickListener;
 
 import java.util.List;

@@ -1,12 +1,14 @@
 package com.zb.wyd.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.zb.wyd.R;
+import com.zb.wyd.activity.LoginActivity;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -64,7 +66,7 @@ public class MemberFragment extends BaseFragment
     @Override
     protected void initViewData()
     {
-
+        startActivity(new Intent(getActivity(), LoginActivity.class));
     }
 
     @Override

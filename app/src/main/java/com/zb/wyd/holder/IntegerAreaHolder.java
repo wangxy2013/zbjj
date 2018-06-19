@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zb.wyd.R;
-import com.zb.wyd.entity.UserInfo;
 import com.zb.wyd.entity.VideoInfo;
 import com.zb.wyd.listener.MyItemClickListener;
 import com.zb.wyd.utils.APPUtils;

@@ -7,9 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.zb.wyd.R;
-import com.zb.wyd.entity.UserInfo;
+import com.zb.wyd.entity.LiveInfo;
 import com.zb.wyd.holder.AnchorHolder;
-import com.zb.wyd.holder.NewHolder;
 import com.zb.wyd.listener.MyItemClickListener;
 
 import java.util.List;
@@ -20,10 +19,10 @@ public class AnchorAdapter extends RecyclerView.Adapter<AnchorHolder>
 {
 
     private MyItemClickListener listener;
-    private List<UserInfo>      list;
+    private List<LiveInfo>      list;
     private Context             mContext;
 
-    public AnchorAdapter(List<UserInfo> list, Context mContext, MyItemClickListener listener)
+    public AnchorAdapter(List<LiveInfo> list, Context mContext, MyItemClickListener listener)
     {
         this.list = list;
         this.mContext = mContext;
@@ -42,7 +41,7 @@ public class AnchorAdapter extends RecyclerView.Adapter<AnchorHolder>
     @Override
     public void onBindViewHolder(AnchorHolder holder, int position)
     {
-        UserInfo mUserInfo = list.get(position);
+        LiveInfo mUserInfo = list.get(position);
         holder.setUserInfo(mUserInfo);
     }
 

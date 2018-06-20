@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +23,7 @@ import com.zb.wyd.utils.ConfigManager;
 import com.zb.wyd.utils.ConstantUtil;
 import com.zb.wyd.utils.ToastUtil;
 import com.zb.wyd.utils.Urls;
+import com.zb.wyd.widget.statusbar.StatusBarUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -55,7 +57,7 @@ public class LoginActivity extends BaseActivity implements IRequestListener
 
     private String account;
     private String pwd;
-    private static final String      USER_LOGIN   = "user_login";
+    private static final String      USER_LOGIN      = "user_login";
     private static final int         REQUEST_SUCCESS = 0x01;
     private static final int         REQUEST_FAIL    = 0x02;
     @SuppressLint("HandlerLeak")
@@ -82,6 +84,7 @@ public class LoginActivity extends BaseActivity implements IRequestListener
             }
         }
     };
+
     @Override
     protected void initData()
     {
@@ -92,7 +95,8 @@ public class LoginActivity extends BaseActivity implements IRequestListener
     protected void initViews(Bundle savedInstanceState)
     {
         setContentView(R.layout.activity_login);
-        setTranslucentStatusPadding();
+        StatusBarUtil.transparencyBar(LoginActivity.this);
+        StatusBarUtil.StatusBarLightMode(LoginActivity.this, false);
     }
 
     @Override
@@ -124,7 +128,7 @@ public class LoginActivity extends BaseActivity implements IRequestListener
     @Override
     protected void initViewData()
     {
-        setStatusBarTextDeep(true);
+
     }
 
     @Override
@@ -145,7 +149,7 @@ public class LoginActivity extends BaseActivity implements IRequestListener
 
 
             account = etAccount.getText().toString();
-             pwd = etPwd.getText().toString();
+            pwd = etPwd.getText().toString();
 
 
             if (TextUtils.isEmpty(account) || account.length() < 6)
@@ -174,7 +178,6 @@ public class LoginActivity extends BaseActivity implements IRequestListener
             valuePairs.put("password", pwd);
             DataRequest.instance().request(LoginActivity.this, Urls.getLoginUrl(), this, HttpRequest.POST, USER_LOGIN, valuePairs,
                     new LoginHandler());
-
 
 
         }

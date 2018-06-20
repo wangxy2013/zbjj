@@ -42,7 +42,7 @@ public class NewAdapter extends RecyclerView.Adapter<NewHolder>
     public void onBindViewHolder(NewHolder holder, int position)
     {
         LiveInfo mLiveInfo = list.get(position);
-        holder.setLiveInfo(mLiveInfo);
+        holder.setLiveInfo(mLiveInfo,position);
     }
 
     @Override

@@ -50,7 +50,7 @@ public class NewHolder extends RecyclerView.ViewHolder
     }
 
 
-    public void setLiveInfo(LiveInfo mLiveInfo)
+    public void setLiveInfo(LiveInfo mLiveInfo ,final  int p)
     {
 
         ImageLoader.getInstance().displayImage(mLiveInfo.getFace(), mImgIv);
@@ -59,6 +59,13 @@ public class NewHolder extends RecyclerView.ViewHolder
         mFollowTv.setText(mLiveInfo.getFavour_count());
         mPopularityTv.setText(mLiveInfo.getOnline());
         mNameTv.setText(mLiveInfo.getNick());
+        mItemLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                listener.onItemClick(v,p);
+            }
+        });
     }
 
 

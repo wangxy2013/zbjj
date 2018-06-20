@@ -44,53 +44,6 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         initViewData();
     }
 
-    /**
-     * 设置状态栏文字高亮显示
-     *
-     * @param isDark
-     */
-    public void setStatusBarTextDeep(boolean isDark)
-    {
-        if (isDark == true)
-        {
-            StatusBarUtil.setStatusBarTextColor(this, true);
-        }
-        else
-        {
-            StatusBarUtil.setStatusBarTextColor(this, false);
-        }
-
-    }
-
-    /**
-     * 设置状态栏颜色
-     *
-     * @param color
-     */
-
-    public void setStatusColor(int color)
-    {
-
-        //getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.windowTitleBackground));
-        StatusBarUtil.setColor(this, color);
-
-    }
-
-    /**
-     * 设置全屏模式透明
-     */
-    public void setTranslucentStatus()
-    {
-        StatusBarUtil.setTranslucentStatus(this, true);
-    }
-
-    /**
-     * 设置全屏模式透明内容padding
-     */
-    public void setTranslucentStatusPadding()
-    {
-        StatusBarUtil.setTransparent(this);
-    }
 
     /**
      * 从intent中获取数据

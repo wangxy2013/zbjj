@@ -3,6 +3,7 @@ package com.zb.wyd.fragment;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -104,7 +105,7 @@ public class LiveFragment extends BaseFragment
                 holder = new ViewHolder(tab.getCustomView());
                 holder.tvTabName.setSelected(true);
                 //选中后字体变大
-                holder.tvTabName.setTextSize(20);
+                holder.tvTabName.setTextSize(18);
                 //让Viewpager跟随TabLayout的标签切换
                 mViewPager.setCurrentItem(tab.getPosition());
             }
@@ -147,7 +148,7 @@ public class LiveFragment extends BaseFragment
             if (i == 0)
             {
                 holder.tvTabName.setSelected(true);
-                holder.tvTabName.setTextSize(20);
+                holder.tvTabName.setTextSize(18);
             }
         }
     }

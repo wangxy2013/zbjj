@@ -3,6 +3,7 @@ package com.zb.wyd.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -17,6 +18,7 @@ import com.donkingliang.banner.CustomBanner;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zb.wyd.R;
 import com.zb.wyd.activity.BaseHandler;
+import com.zb.wyd.activity.LiveActivity;
 import com.zb.wyd.adapter.NewAdapter;
 import com.zb.wyd.adapter.RecommendAdapter;
 import com.zb.wyd.entity.LiveInfo;
@@ -61,23 +63,23 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
     VerticalSwipeRefreshLayout mSwipeRefreshLayout;
     private View rootView = null;
     private Unbinder unbinder;
-    private List<String>   picList       = new ArrayList<>();
+    private List<String>   picList      = new ArrayList<>();
     private List<LiveInfo> freeLiveList = new ArrayList<>();
-    private List<LiveInfo> newLiveList       = new ArrayList<>();
+    private List<LiveInfo> newLiveList  = new ArrayList<>();
     private RecommendAdapter mRecommendAdapter;
 
     private NewAdapter mNewAdapter;
 
 
-    private static final String GET_FREE_LIVE = "get_free_live";
-    private static final String GET_NEW_LIVE = "get_new_live";
-    private static final int GET_FREE_LIVE_SUCCESS = 0x01;
-    private static final int REQUEST_FAIL          = 0x02;
-    private static final int GET_NEW_LIVE_SUCCESS = 0x03;
-    private static final int         GET_FREE_LIVE_CODE = 0X11;
-    private static final int         GET_NEW_LIVE_CODE = 0X12;
+    private static final String      GET_FREE_LIVE         = "get_free_live";
+    private static final String      GET_NEW_LIVE          = "get_new_live";
+    private static final int         GET_FREE_LIVE_SUCCESS = 0x01;
+    private static final int         REQUEST_FAIL          = 0x02;
+    private static final int         GET_NEW_LIVE_SUCCESS  = 0x03;
+    private static final int         GET_FREE_LIVE_CODE    = 0X11;
+    private static final int         GET_NEW_LIVE_CODE     = 0X12;
     @SuppressLint("HandlerLeak")
-    private              BaseHandler mHandler           = new BaseHandler(getActivity())
+    private              BaseHandler mHandler              = new BaseHandler(getActivity())
     {
         @Override
         public void handleMessage(Message msg)
@@ -87,7 +89,7 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
             {
                 case GET_FREE_LIVE_SUCCESS:
 
-                    LiveInfoListHandler mLiveInfoListHandler = (LiveInfoListHandler)msg.obj;
+                    LiveInfoListHandler mLiveInfoListHandler = (LiveInfoListHandler) msg.obj;
                     freeLiveList.clear();
                     freeLiveList.addAll(mLiveInfoListHandler.getUserInfoList());
                     mRecommendAdapter.notifyDataSetChanged();
@@ -95,7 +97,7 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
 
 
                 case GET_NEW_LIVE_SUCCESS:
-                    LiveInfoListHandler mLiveInfoListHandler1 = (LiveInfoListHandler)msg.obj;
+                    LiveInfoListHandler mLiveInfoListHandler1 = (LiveInfoListHandler) msg.obj;
                     newLiveList.clear();
                     newLiveList.addAll(mLiveInfoListHandler1.getUserInfoList());
                     mNewAdapter.notifyDataSetChanged();
@@ -261,7 +263,8 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
             @Override
             public void onItemClick(View view, int position)
             {
-
+                LiveInfo mLiveInfo = newLiveList.get(position);
+                startActivity(new Intent(getActivity(), LiveActivity.class).putExtra("biz_id",mLiveInfo.getId()));
             }
         });
         rvNew.setLayoutManager(new FullyGridLayoutManager(getActivity(), 2));
@@ -282,6 +285,7 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
         DataRequest.instance().request(getActivity(), Urls.getFreeLive(), this, HttpRequest.POST, GET_FREE_LIVE, valuePairs,
                 new LiveInfoListHandler());
     }
+
     private void getNewLive()
     {
         Map<String, String> valuePairs = new HashMap<>();

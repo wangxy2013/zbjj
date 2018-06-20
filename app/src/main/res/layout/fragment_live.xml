@@ -9,21 +9,20 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white">
+        android:background="@color/yellow">
         <android.support.design.widget.TabLayout
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_centerVertical="true"
-            android:layout_marginTop="@dimen/dm_2"
+            android:layout_marginRight="@dimen/dm_20"
             android:layout_toLeftOf="@+id/iv_search"
-            android:background="@color/white"
             app:tabGravity="center"
-            app:tabIndicatorColor="@color/orange"
+            app:tabIndicatorColor="@color/blackC"
             app:tabMode="fixed"
-            app:tabSelectedTextColor="@color/orange"
+            app:tabSelectedTextColor="@color/blackC"
             app:tabTextAppearance="@style/MyTabLayoutTextAppearance"
-            app:tabTextColor="@color/blackA"/>
+            app:tabTextColor="@color/blackB"/>
 
         <ImageView
             android:id="@+id/iv_search"
@@ -32,7 +31,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:padding="@dimen/dm_10"
-            android:src="@drawable/ic_search"/>
+            android:src="@drawable/ic_black_search"/>
 
     </RelativeLayout>
     <android.support.v4.view.ViewPager

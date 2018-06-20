@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.zb.wyd.R;
+import com.zb.wyd.widget.statusbar.StatusBarUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,7 +59,8 @@ public class RecoveryPwdActivity extends BaseActivity
     protected void initViews(Bundle savedInstanceState)
     {
         setContentView(R.layout.activity_recovery_pwd);
-        setTranslucentStatusPadding();
+        StatusBarUtil.transparencyBar(this);
+        StatusBarUtil.StatusBarLightMode(this, false);
     }
 
     @Override
@@ -70,14 +72,7 @@ public class RecoveryPwdActivity extends BaseActivity
     @Override
     protected void initViewData()
     {
-        setStatusBarTextDeep(true);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
+
 }

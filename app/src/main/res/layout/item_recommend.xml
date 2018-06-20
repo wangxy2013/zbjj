@@ -30,7 +30,7 @@
             android:paddingRight="@dimen/dm_8"
             android:paddingTop="@dimen/dm_3"
             android:text="LIVE"
-            android:textColor="@color/white"
+            android:textColor="@color/blackC"
             android:textSize="@dimen/t10"/>
 
 
@@ -87,6 +87,6 @@
         android:maxLength="1"
         android:layout_marginLeft="@dimen/dm_5"
         android:text="宝宝"
-        android:textColor="@color/blackA"
+        android:textColor="@color/blackB"
         android:textSize="@dimen/t14"/>
 </LinearLayout>

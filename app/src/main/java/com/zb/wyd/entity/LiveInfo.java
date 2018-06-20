@@ -25,7 +25,7 @@ public class LiveInfo
         this.id = obj.optString("id");
         this.nick = obj.optString("nick");
         this.face = obj.optString("face");
-        this.uri = obj.optString("id");
+        this.uri = obj.optString("uri");
         this.favour_count = obj.optString("favour_count");
         this.update_time = obj.optString("update_time");
         this.online = obj.optString("online");

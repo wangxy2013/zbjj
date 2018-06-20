@@ -15,6 +15,7 @@ import com.zb.wyd.fragment.SelfieFragment;
 import com.zb.wyd.fragment.TaskFragment;
 import com.zb.wyd.fragment.VideoFragment;
 import com.zb.wyd.utils.DialogUtils;
+import com.zb.wyd.widget.statusbar.StatusBarUtil;
 
 import butterknife.BindView;
 
@@ -44,11 +45,14 @@ public class MainActivity extends BaseActivity
     protected void initViews(Bundle savedInstanceState)
     {
         setContentView(R.layout.activity_main);
+        StatusBarUtil.setStatusBarColor(this, getResources().getColor(R.color.yellow));
+        StatusBarUtil.StatusBarLightMode(MainActivity.this, false);
     }
 
     @Override
     protected void initEvent()
     {
+
     }
 
     @Override

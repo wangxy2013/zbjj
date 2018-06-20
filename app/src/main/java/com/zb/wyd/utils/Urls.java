@@ -53,6 +53,11 @@ public class Urls
         return BASE_URL + "video/list";
     }
 
+    //获取真实的直播地址
+    public static String getLiveStream()
+    {
+        return BASE_URL + "live/stream";
+    }
 
 }
 

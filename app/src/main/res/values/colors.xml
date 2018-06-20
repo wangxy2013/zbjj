@@ -28,13 +28,14 @@
     <color name="green">#2aa515</color>
     <color name="windowTitleBackground">#f35556</color>
     <color name="windowBackground">#F6F6F6</color>
-    <color name="blackA">#666666</color>
-    <color name="blackB">#999999</color>
+    <color name="blackA">#9B9B9B</color>
+    <color name="blackB">#4A4A4A</color>
+    <color name="blackC">#111111</color>
     <color name="blackD">#333333</color>
-
+    <color name="blackE">#222222</color>
     <color name="transparent1">#AAffffff</color>
-    <color name="blackC">#666666</color>
-    <color name="hint_edit" >#818181</color>
+
+    <color name="hint_edit">#818181</color>
     <!-- not used-->
     <color name="grayB">#bababa</color>
     <color name="textColorBlack">#3a3a3a</color>
@@ -43,7 +44,7 @@
     <color name="titleRedText">#fdbec6</color>
     <color name="emoji_bg">#eaeded</color>
     <color name="item_sign">#4f4665</color>
-    <color name="yellow">#FCDC00</color>
+    <color name="yellow">#FFD000</color>
     <color name="orange">#F58E20</color>
     <color name="line">#D9D9D9</color>
 

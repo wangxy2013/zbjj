@@ -22,6 +22,7 @@ import com.zb.wyd.utils.ConfigManager;
 import com.zb.wyd.utils.ConstantUtil;
 import com.zb.wyd.utils.ToastUtil;
 import com.zb.wyd.utils.Urls;
+import com.zb.wyd.widget.statusbar.StatusBarUtil;
 
 import org.checkerframework.common.value.qual.StringVal;
 
@@ -98,7 +99,8 @@ public class RegisterActivity extends BaseActivity implements IRequestListener
     protected void initViews(Bundle savedInstanceState)
     {
         setContentView(R.layout.activity_register);
-        setTranslucentStatusPadding();
+        StatusBarUtil.transparencyBar(this);
+        StatusBarUtil.StatusBarLightMode(this, false);
     }
 
     @Override
@@ -137,7 +139,6 @@ public class RegisterActivity extends BaseActivity implements IRequestListener
     @Override
     protected void initViewData()
     {
-        setStatusBarTextDeep(true);
     }
 
 
@@ -179,7 +180,7 @@ public class RegisterActivity extends BaseActivity implements IRequestListener
             }
 
             Map<String, String> valuePairs = new HashMap<>();
-            valuePairs.put("mobile_id", APPUtils.getDeviceId(RegisterActivity.this)+"001");
+            valuePairs.put("mobile_id", APPUtils.getDeviceId(RegisterActivity.this) + "001");
             valuePairs.put("device", "and");
             valuePairs.put("user_name", account);
             valuePairs.put("password", pwd);

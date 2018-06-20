@@ -53,7 +53,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="@dimen/dm_5"
                         android:layout_toRightOf="@+id/iv_recommend"
-                        android:text="每日限免"
+                        android:text="限时免费"
                         android:textColor="@color/blackA"
                         android:textSize="@dimen/t14"/>
                     <RelativeLayout

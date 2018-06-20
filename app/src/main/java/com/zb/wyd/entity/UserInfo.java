@@ -2,12 +2,10 @@ package com.zb.wyd.entity;
 
 import org.json.JSONObject;
 
-import java.io.Serializable;
-
 /**
  * 描述：一句话简单描述
  */
-public class LiveInfo implements Serializable
+public class UserInfo
 {
     private String id;//12570;//
     private String nick;//晓宝宝;//
@@ -20,9 +18,9 @@ public class LiveInfo implements Serializable
     private String is_live;//1
 
 
-    public LiveInfo() {}
+    public UserInfo() {}
 
-    public LiveInfo(JSONObject obj)
+    public UserInfo(JSONObject obj)
     {
         this.id = obj.optString("id");
         this.nick = obj.optString("nick");
@@ -114,4 +112,5 @@ public class LiveInfo implements Serializable
     {
         this.is_live = is_live;
     }
+
 }

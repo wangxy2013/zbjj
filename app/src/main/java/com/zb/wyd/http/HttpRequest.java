@@ -5,6 +5,7 @@ import android.util.Log;
 
 
 import com.zb.wyd.json.JsonHandler;
+import com.zb.wyd.utils.ConfigManager;
 import com.zb.wyd.utils.LogUtil;
 
 import java.io.File;
@@ -56,7 +57,7 @@ public class HttpRequest implements Runnable
         //        valuePair.put("os_version", APPUtils.getCurrentapiVersion() + "");
         //        valuePair.put("os", "android");
         //valuePair.put("channel", ConstantUtil.CHANNEL_NO);
-        //        valuePair.put("version", APPUtils.getVersionName(mContext));
+        valuePair.put("auth", ConfigManager.instance().getUniqueCode());
         if (valuePair == null)
         {
             valuePair = new HashMap<>();

@@ -3,31 +3,43 @@ package com.zb.wyd.activity;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.VideoAllCallBack;
-import com.shuyu.gsyvideoplayer.video.NormalGSYVideoPlayer;
-import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.zb.wyd.R;
+import com.zb.wyd.adapter.OnlineAdapter;
 import com.zb.wyd.entity.LiveInfo;
+import com.zb.wyd.entity.LivePriceInfo;
+import com.zb.wyd.entity.UserInfo;
 import com.zb.wyd.http.DataRequest;
 import com.zb.wyd.http.HttpRequest;
 import com.zb.wyd.http.IRequestListener;
 import com.zb.wyd.json.LiveInfoHandler;
+import com.zb.wyd.json.LivePriceInfoHandler;
+import com.zb.wyd.json.ResultHandler;
+import com.zb.wyd.listener.MyItemClickListener;
+import com.zb.wyd.listener.MyOnClickListener;
 import com.zb.wyd.utils.ConstantUtil;
+import com.zb.wyd.utils.DialogUtils;
 import com.zb.wyd.utils.LogUtil;
 import com.zb.wyd.utils.Urls;
+import com.zb.wyd.widget.CircleImageView;
 import com.zb.wyd.widget.LiveVideoPlayer;
 
+import java.util.List;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * 描述：一句话简单描述
@@ -36,15 +48,36 @@ public class LiveActivity extends BaseActivity implements IRequestListener
 {
     @BindView(R.id.detail_player)
     LiveVideoPlayer videoPlayer;
+    @BindView(R.id.iv_user_pic)
+    CircleImageView ivUserPic;
+    @BindView(R.id.tv_user_name)
+    TextView        tvUserName;
+    @BindView(R.id.tv_favour_count)
+    TextView        tvFavourCount;
+    @BindView(R.id.tv_follow)
+    TextView        tvFollow;
+    @BindView(R.id.rv_online)
+    RecyclerView    rvOnline;
 
-    //private OrientationUtils orientationUtils;
+    private String   biz_id;
+    private LiveInfo mLiveInfo;
+    private long     startTime, endTime;
 
 
-    private static final String      GET_LIVE_STREAM = "get_live_stream";
-    private static final int         REQUEST_SUCCESS = 0x01;
-    private static final int         REQUEST_FAIL    = 0x02;
+    private List<UserInfo> userInfoList = new ArrayList<>();
+    private OnlineAdapter mOnlineAdapter;
+
+
+    private static final String      GET_LIVE_PRICE         = "get_live_price";
+    private static final String      GET_LIVE_STREAM        = "get_live_stream";
+    private static final String      BUY_LIVE               = "buy_live";
+    private static final int         REQUEST_SUCCESS        = 0x01;
+    private static final int         REQUEST_FAIL           = 0x02;
+    private static final int         GET_LIVE_PRICE_SUCCESS = 0x03;
+    private static final int         BUY_LIVE_SUCCESS       = 0x05;
+    private static final int         SET_STATISTICS         = 0x06;
     @SuppressLint("HandlerLeak")
-    private              BaseHandler mHandler        = new BaseHandler(LiveActivity.this)
+    private              BaseHandler mHandler               = new BaseHandler(LiveActivity.this)
     {
         @Override
         public void handleMessage(Message msg)
@@ -57,24 +90,67 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                     LiveInfo mLiveInfo = mLiveInfoHandler.getLiveInfo();
                     if (null != mLiveInfo)
                     {
-                        String source1 = "http://vod3.vxinda.com/20180523/1381/playlist.m3u8";
-
-                        String source2 = "rtmp://live.hkstv.hk.lxdns.com/live/hks";
-
-                        String rtsp = "rtsp://184.72.239.149/vod/mp4://BigBuckBunny_175k.mov";
-
-                        String flv = "rtmp://stream.pull.dianxunba.com/vod/cdb485af5d15e049ab86fac38d6d83a4";
                         String uri = mLiveInfo.getUri();
                         LogUtil.e("TAG", uri);
-                        videoPlayer.setUp(uri, false, "测试视频");
+                        videoPlayer.setUp(uri, false, "");
                         videoPlayer.startPlayLogic();
                     }
                     break;
 
 
                 case REQUEST_FAIL:
+                    DialogUtils.showPromptDialog(LiveActivity.this, "当前主播不在线", new MyItemClickListener()
+                    {
+                        @Override
+                        public void onItemClick(View view, int position)
+                        {
+                            finish();
+                        }
+                    });
                     break;
 
+                case GET_LIVE_PRICE_SUCCESS:
+                    LivePriceInfoHandler mLivePriceInfoHandler = (LivePriceInfoHandler) msg.obj;
+
+                    LivePriceInfo mLivePriceInfo = mLivePriceInfoHandler.getLivePriceInfo();
+
+                    if (null != mLivePriceInfo)
+                    {
+                        DialogUtils.showLivePriceDialog(LiveActivity.this, mLivePriceInfo, new View.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(View v)
+                            {
+                                finish();
+                            }
+                        }, new MyOnClickListener.OnSubmitListener()
+                        {
+                            @Override
+                            public void onSubmit(String content)
+                            {
+                                if ("1".equals(content))//兑换
+                                {
+
+                                    buyLive(mLivePriceInfo.getFinger());
+
+
+                                }
+                                else//去做任务
+                                {
+
+                                }
+                            }
+                        }).show();
+                    }
+                    break;
+
+                case BUY_LIVE_SUCCESS:
+                    getLiveStream();
+                    break;
+
+                case SET_STATISTICS:
+                    setStatistics(0);
+                    break;
             }
         }
     };
@@ -82,6 +158,16 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     @Override
     protected void initData()
     {
+        mLiveInfo = (LiveInfo) getIntent().getSerializableExtra("LiveInfo");
+        if (null != mLiveInfo)
+        {
+            biz_id = mLiveInfo.getId();
+        }
+
+        for (int i = 0; i < 20; i++)
+        {
+            userInfoList.add(new UserInfo());
+        }
 
     }
 
@@ -102,20 +188,19 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     @Override
     protected void initViewData()
     {
-
-        //增加封面
-        //        ImageView imageView = new ImageView(this);
-        //        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        //        imageView.setImageResource(R.drawable.ic_launcher);
-        //        videoPlayer.setThumbImageView(imageView);
-        //增加title
-//        videoPlayer.getTitleTextView().setVisibility(View.GONE);
-//        //设置返回键
-//        videoPlayer.getBackButton().setVisibility(View.GONE);
-//        videoPlayer.getFullscreenButton().setVisibility(View.GONE);
-        videoPlayer.setIsTouchWigetFull(true);
+        if (null != mLiveInfo)
+        {
+            ImageLoader.getInstance().displayImage(mLiveInfo.getFace(), ivUserPic);
+            tvUserName.setText(mLiveInfo.getNick());
+            tvFavourCount.setText(mLiveInfo.getFavour_count());
+        }
 
 
+        LinearLayoutManager layoutmanager = new LinearLayoutManager(this);
+        layoutmanager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        rvOnline.setLayoutManager(layoutmanager);
+        mOnlineAdapter = new OnlineAdapter(userInfoList);
+        rvOnline.setAdapter(mOnlineAdapter);
         //是否可以滑动调整
         videoPlayer.setIsTouchWiget(false);
         videoPlayer.setVideoAllCallBack(new VideoAllCallBack()
@@ -253,6 +338,15 @@ public class LiveActivity extends BaseActivity implements IRequestListener
             public void onPlayError(String s, Object... objects)
             {
                 LogUtil.e("TAG", "播放错误111111111111111111111111111111111111111111111111111");
+
+                DialogUtils.showPromptDialog(LiveActivity.this, "当前主播不在线", new MyItemClickListener()
+                {
+                    @Override
+                    public void onItemClick(View view, int position)
+                    {
+                        finish();
+                    }
+                });
             }
 
             //点击了空白区域开始播放，objects[0]是title，object[1]是当前所处播放器（全屏或非全屏）
@@ -276,17 +370,56 @@ public class LiveActivity extends BaseActivity implements IRequestListener
 
             }
         });
-        loadData();
+        startTime = System.currentTimeMillis();
+        getLiveStream();
     }
 
 
-    private void loadData()
+    private void getLivePrice()
     {
         Map<String, String> valuePairs = new HashMap<>();
-        valuePairs.put("biz_id", getIntent().getStringExtra("biz_id"));
-        DataRequest.instance().request(LiveActivity.this, Urls.getLiveStream(), this, HttpRequest.POST, GET_LIVE_STREAM, valuePairs,
+        valuePairs.put("biz_id", biz_id);
+        valuePairs.put("co_biz", "live");
+        DataRequest.instance().request(LiveActivity.this, Urls.getLivePriceUrl(), this, HttpRequest.POST, GET_LIVE_PRICE, valuePairs,
+                new LivePriceInfoHandler());
+
+    }
+
+    //获取直播地址
+    private void getLiveStream()
+    {
+        showProgressDialog();
+        Map<String, String> valuePairs = new HashMap<>();
+        valuePairs.put("biz_id", biz_id);
+        DataRequest.instance().request(LiveActivity.this, Urls.getLiveStreamUrl(), this, HttpRequest.POST, GET_LIVE_STREAM, valuePairs,
                 new LiveInfoHandler());
     }
+
+    //兑换
+    private void buyLive(String finger)
+    {
+        showProgressDialog();
+        Map<String, String> valuePairs = new HashMap<>();
+        valuePairs.put("biz_id", biz_id);
+        valuePairs.put("co_biz", "live");
+        valuePairs.put("finger", finger);
+        DataRequest.instance().request(LiveActivity.this, Urls.getBuyLiveUrl(), this, HttpRequest.POST, BUY_LIVE, valuePairs,
+                new ResultHandler());
+    }
+
+
+    //通知单服务器
+    private void setStatistics(long duration)
+    {
+        showProgressDialog();
+        Map<String, String> valuePairs = new HashMap<>();
+        valuePairs.put("biz_id", biz_id);
+        valuePairs.put("co_biz", "live");
+        valuePairs.put("duration", String.valueOf(duration));
+        DataRequest.instance().request(LiveActivity.this, Urls.getStatisticsUrl(), this, HttpRequest.POST, "SET_STATISTICS", valuePairs,
+                new ResultHandler());
+    }
+
 
     @Override
     protected void onPause()
@@ -307,6 +440,12 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     {
         super.onDestroy();
         GSYVideoManager.releaseAllVideos();
+        endTime = System.currentTimeMillis();
+
+        long duration = (endTime - startTime) / 100;
+
+        setStatistics(duration);
+
     }
 
     @Override
@@ -320,16 +459,52 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     @Override
     public void notify(String action, String resultCode, String resultMsg, Object obj)
     {
+        hideProgressDialog();
         if (GET_LIVE_STREAM.equals(action))
         {
             if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
             {
                 mHandler.sendMessage(mHandler.obtainMessage(REQUEST_SUCCESS, obj));
             }
+            else if ("1502".endsWith(resultCode))
+            {
+                getLivePrice();
+            }
+            else
+            {
+
+                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
+            }
+        }
+        else if (GET_LIVE_PRICE.equals(action))
+        {
+            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(GET_LIVE_PRICE_SUCCESS, obj));
+            }
             else
             {
                 mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
             }
         }
+        else if (BUY_LIVE.equals(action))
+        {
+            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(BUY_LIVE_SUCCESS, obj));
+            }
+            else
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
+            }
+        }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
     }
 }

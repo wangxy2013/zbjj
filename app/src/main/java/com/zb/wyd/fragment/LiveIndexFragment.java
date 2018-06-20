@@ -16,9 +16,11 @@ import android.widget.RelativeLayout;
 
 import com.donkingliang.banner.CustomBanner;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.zb.wyd.MyApplication;
 import com.zb.wyd.R;
 import com.zb.wyd.activity.BaseHandler;
 import com.zb.wyd.activity.LiveActivity;
+import com.zb.wyd.activity.LoginActivity;
 import com.zb.wyd.adapter.NewAdapter;
 import com.zb.wyd.adapter.RecommendAdapter;
 import com.zb.wyd.entity.LiveInfo;
@@ -248,13 +250,22 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
             @Override
             public void onItemClick(View view, int position)
             {
+                if (MyApplication.getInstance().isLogin())
+                {
+                    LiveInfo mLiveInfo = freeLiveList.get(position);
+                    Bundle b = new Bundle();
+                    b.putSerializable("LiveInfo",mLiveInfo);
+                    startActivity(new Intent(getActivity(), LiveActivity.class).putExtras(b));
 
+                }
+                else
+                {
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                }
             }
         });
 
-        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.dm_5);
         rvRecommend.setLayoutManager(new FullyGridLayoutManager(getActivity(), 3));
-        // rvRecommend.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
         rvRecommend.setAdapter(mRecommendAdapter);
 
 
@@ -263,8 +274,19 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
             @Override
             public void onItemClick(View view, int position)
             {
-                LiveInfo mLiveInfo = newLiveList.get(position);
-                startActivity(new Intent(getActivity(), LiveActivity.class).putExtra("biz_id",mLiveInfo.getId()));
+                if (MyApplication.getInstance().isLogin())
+                {
+                    LiveInfo mLiveInfo = newLiveList.get(position);
+
+                    Bundle b = new Bundle();
+                    b.putSerializable("LiveInfo",mLiveInfo);
+                    startActivity(new Intent(getActivity(), LiveActivity.class).putExtras(b));
+
+                }
+                else
+                {
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                }
             }
         });
         rvNew.setLayoutManager(new FullyGridLayoutManager(getActivity(), 2));

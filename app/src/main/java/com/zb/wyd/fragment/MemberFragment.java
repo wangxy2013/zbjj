@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.zb.wyd.MyApplication;
 import com.zb.wyd.R;
 import com.zb.wyd.activity.LoginActivity;
 
@@ -66,7 +67,22 @@ public class MemberFragment extends BaseFragment
     @Override
     protected void initViewData()
     {
-        startActivity(new Intent(getActivity(), LoginActivity.class));
+
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        if(MyApplication.getInstance().isLogin())
+        {
+
+        }
+        else
+        {
+            startActivity(new Intent(getActivity(), LoginActivity.class));
+        }
+
     }
 
     @Override

@@ -434,49 +434,7 @@ public class StringUtils
     }
 
 
-    public static float getRating(String starLevel)
-    {
-        float mRating = 3;
 
-        if ("1".equals(starLevel))
-        {
-            mRating = 1;
-        }
-        else if ("2".equals(starLevel))
-        {
-            mRating = (float) 1.5;
-        }
-        else if ("3".equals(starLevel))
-        {
-            mRating = (float) 2;
-        }
-        else if ("4".equals(starLevel))
-        {
-            mRating = (float) 2.5;
-        }
-        else if ("5".equals(starLevel))
-        {
-            mRating = (float) 3;
-        }
-        else if ("6".equals(starLevel))
-        {
-            mRating = (float) 3.5;
-        }
-        else if ("7".equals(starLevel))
-        {
-            mRating = (float) 4;
-        }
-        else if ("8".equals(starLevel))
-        {
-            mRating = (float) 4.5;
-        }
-        else if ("9".equals(starLevel))
-        {
-            mRating = (float) 5;
-        }
-
-        return mRating;
-    }
 
     public static String formatString(String str)
     {

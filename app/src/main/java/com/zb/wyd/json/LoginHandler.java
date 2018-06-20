@@ -10,21 +10,15 @@ import org.json.JSONObject;
 public class LoginHandler extends JsonHandler
 {
 
-    private String need_bind;//0:正常登录 1：需要绑定手机号
-
-    public String getNeed_bind()
-    {
-        return need_bind;
-    }
 
     @Override
-    protected void parseJson(JSONObject obj) throws Exception
+    protected void parseJson(JSONObject jsonObject) throws Exception
     {
         try
         {
-            need_bind = obj.optString("need_bind");
-            String uniqueCode = obj.optString("uniqueCode");
-            String uid = obj.optString("uid");
+            JSONObject obj = jsonObject.optJSONObject("data");
+            String uniqueCode = obj.optString("auth");
+            String uid = obj.optString("id");
             String mobile = obj.optString("mobile");
             String unick = obj.optString("unick");
             ConfigManager.instance().setUniqueCode(uniqueCode);

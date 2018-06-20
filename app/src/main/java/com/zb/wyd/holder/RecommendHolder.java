@@ -32,16 +32,16 @@ public class RecommendHolder extends RecyclerView.ViewHolder
         super(rootView);
         this.listener = listener;
         this.context = context;
-        mFollowTv = (TextView)rootView.findViewById(R.id.tv_follow);
-        mPopularityTv = (TextView)rootView.findViewById(R.id.tv_popularity);
-        mNameTv=(TextView) rootView.findViewById(R.id.tv_name);
+        mFollowTv = (TextView) rootView.findViewById(R.id.tv_follow);
+        mPopularityTv = (TextView) rootView.findViewById(R.id.tv_popularity);
+        mNameTv = (TextView) rootView.findViewById(R.id.tv_name);
         mImgIv = (RoundAngleImageView) rootView.findViewById(R.id.iv_user_pic);
         mItemLayout = (RelativeLayout) rootView.findViewById(R.id.rl_item);
 
     }
 
 
-    public void setUserInfo(LiveInfo mLiveInfo)
+    public void setLiveInfo(LiveInfo mLiveInfo, final int p)
     {
         int spacingInPixels = context.getResources().getDimensionPixelSize(R.dimen.dm_10) * 4;
         int width = (APPUtils.getScreenWidth(context) - spacingInPixels) / 3;
@@ -50,6 +50,14 @@ public class RecommendHolder extends RecyclerView.ViewHolder
         mFollowTv.setText(mLiveInfo.getFavour_count());
         mPopularityTv.setText(mLiveInfo.getOnline());
         mNameTv.setText(mLiveInfo.getNick());
+        mItemLayout.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                listener.onItemClick(v, p);
+            }
+        });
     }
 
 

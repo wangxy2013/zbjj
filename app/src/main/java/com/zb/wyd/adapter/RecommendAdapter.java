@@ -42,8 +42,8 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendHolder>
     @Override
     public void onBindViewHolder(RecommendHolder holder, int position)
     {
-        LiveInfo mUserInfo = list.get(position);
-        holder.setUserInfo(mUserInfo);
+        LiveInfo mLiveInfo = list.get(position);
+        holder.setLiveInfo(mLiveInfo,position);
     }
 
     @Override

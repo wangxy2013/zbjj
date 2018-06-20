@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 
 import com.zb.wyd.R;
+import com.zb.wyd.entity.LivePriceInfo;
 import com.zb.wyd.listener.MyItemClickListener;
 import com.zb.wyd.listener.MyOnClickListener;
 import com.zb.wyd.widget.NoScrollListView;
@@ -225,114 +226,78 @@ public class DialogUtils
         return dialog;
     }
 
+
     /**
-     * 房间数
+     * 温馨提示
      *
      * @return
      */
-    public static void showRoomCountDialog(final Context mContext, final MyOnClickListener.OnSubmitListener listener)
+    public static Dialog showLivePriceDialog(Context mContext, LivePriceInfo mLivePriceInfo, final View.OnClickListener cancelListener,final MyOnClickListener.OnSubmitListener listener)
     {
         final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
         dialog.setCancelable(false);
-        View v = LayoutInflater.from(mContext).inflate(R.layout.dialog_room_count, null);
+        View v = LayoutInflater.from(mContext).inflate(R.layout.dialog_live_price, null);
         dialog.setContentView(v);
-        final EditText etRoom = (EditText) v.findViewById(R.id.et_room);
-        ((RelativeLayout) v.findViewById(R.id.rl_confirm)).setOnClickListener(new View.OnClickListener()
+        TextView priceTv = (TextView) v.findViewById(R.id.tv_price);
+        TextView userMoneyTv = (TextView) v.findViewById(R.id.tv_user_money);
+
+        TextView cancelTv = (TextView) v.findViewById(R.id.tv_cancel);
+        TextView submitTv = (TextView) v.findViewById(R.id.tv_submit);
+        Double userMoney = Double.parseDouble(mLivePriceInfo.getUser_money());
+        int price = mLivePriceInfo.getOff_amount();
+
+
+        priceTv.setText(price+"积分");
+
+        if(userMoney>=price)
         {
-            @Override
-            public void onClick(View v)
-            {
-
-                String roomCount = etRoom.getText().toString();
-
-                if (StringUtils.stringIsEmpty(roomCount))
-                {
-                    ToastUtil.show(mContext, "请输入房间数");
-                    return;
-                }
-                if (Integer.parseInt(roomCount) <= 10)
-                {
-                    ToastUtil.show(mContext, "请输入房间数大于10");
-                    return;
-                }
-                listener.onSubmit(roomCount);
-                dialog.dismiss();
-            }
-        });
-
-        v.findViewById(R.id.rl_cancel).setOnClickListener(new View.OnClickListener()
+            userMoneyTv.setText("剩余积分:" +mLivePriceInfo.getUser_money() );
+            submitTv.setText("确认兑换");
+        }
+        else
         {
+            userMoneyTv.setText("您的积分不足!");
+            submitTv.setText("去做任务");
+        }
+
+
+        cancelTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
                 dialog.dismiss();
+                cancelListener.onClick(v);
             }
         });
+
+
+        submitTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+
+                if(userMoney>=price)
+                {
+                    listener.onSubmit("1");
+                }
+                else
+                {
+                    listener.onSubmit("2");
+                }
+
+            }
+        });
+
+
         //Dialog部分
         Window mWindow = dialog.getWindow();
         WindowManager.LayoutParams lp = mWindow.getAttributes();
         lp.gravity = Gravity.CENTER;
         lp.width = APPUtils.getScreenWidth(mContext) * 7 / 8;
         mWindow.setAttributes(lp);
-        dialog.show();
+        return dialog;
     }
-
-
-
-
-    /**
-     * 价格
-     *
-     * @return
-     */
-    public static void showPayDialog(final Context mContext, final MyItemClickListener listener)
-    {
-        final Dialog dialog = new Dialog(mContext);
-        dialog.setCancelable(true);
-        View v = LayoutInflater.from(mContext).inflate(R.layout.dialog_pay, null);
-        dialog.setContentView(v);
-
-
-        v.findViewById(R.id.rl_wechat).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                listener.onItemClick(v, 0);
-                dialog.dismiss();
-            }
-        });
-
-
-        v.findViewById(R.id.rl_alipay).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                listener.onItemClick(v, 1);
-                dialog.dismiss();
-            }
-        });
-
-        v.findViewById(R.id.tv_cancel).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                dialog.dismiss();
-            }
-        });
-        //Dialog部分
-        Window mWindow = dialog.getWindow();
-        WindowManager.LayoutParams lp = mWindow.getAttributes();
-        lp.gravity = Gravity.BOTTOM;
-        mWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        mWindow.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        mWindow.setAttributes(lp);
-        dialog.show();
-    }
-
-
 
 
 }

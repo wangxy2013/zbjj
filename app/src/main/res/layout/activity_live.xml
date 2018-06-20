@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:orientation="vertical">
 
 
     <com.zb.wyd.widget.LiveVideoPlayer
@@ -11,4 +11,83 @@
         android:layout_height="match_parent"/>
 
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_marginTop="@dimen/dm_20"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dm_36"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dm_36"
+                android:layout_marginLeft="@dimen/dm_15"
+                android:background="@drawable/login_frame_45dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+
+                <com.zb.wyd.widget.CircleImageView
+                    android:id="@+id/iv_user_pic"
+                    android:layout_width="@dimen/dm_36"
+                    android:layout_height="@dimen/dm_36"
+                    android:src="@color/white"/>
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dm_10"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_user_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxLength="8"
+                        android:maxLines="1"
+                        android:text="1111111111111111"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/t14"/>
+
+                    <TextView
+                        android:id="@+id/tv_favour_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1111"
+                        android:textColor="@color/blackA"
+                        android:textSize="@dimen/t12"/>
+
+
+                </LinearLayout>
+
+
+                <TextView
+                    android:id="@+id/tv_follow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dm_10"
+                    android:layout_marginRight="@dimen/dm_3"
+                    android:background="@drawable/btn_login_frame_45dp"
+                    android:paddingBottom="@dimen/dm_8"
+                    android:paddingLeft="@dimen/dm_15"
+                    android:paddingRight="@dimen/dm_15"
+                    android:paddingTop="@dimen/dm_8"
+                    android:text="关注"
+                    android:textColor="@color/blackC"
+                    android:textSize="@dimen/t12"/>
+
+
+            </LinearLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_online"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </RelativeLayout>
 </FrameLayout>

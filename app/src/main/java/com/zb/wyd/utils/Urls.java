@@ -9,6 +9,7 @@ package com.zb.wyd.utils;
  */
 public class Urls
 {
+    //UI https://lanhuapp.com/url/RzWd2
     //http://api.crap.cn/project.do#/152894835244607000287/interface/list/152894841894709000288
     public static final String HTTP_IP = "http://www.883974.com/";
 
@@ -54,9 +55,27 @@ public class Urls
     }
 
     //获取真实的直播地址
-    public static String getLiveStream()
+    public static String getLiveStreamUrl()
     {
         return BASE_URL + "live/stream";
+    }
+
+    //获取直播价格
+    public static String getLivePriceUrl()
+    {
+        return BASE_URL + "live/get_price";
+    }
+
+    //购买直播
+    public static String getBuyLiveUrl()
+    {
+        return BASE_URL + "fortune/buy";
+    }
+
+    //统计时长
+    public static String getStatisticsUrl()
+    {
+        return BASE_URL + "data/statistics";
     }
 
 }

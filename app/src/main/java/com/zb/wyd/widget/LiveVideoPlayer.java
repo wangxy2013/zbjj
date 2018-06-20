@@ -22,6 +22,7 @@ import com.shuyu.gsyvideoplayer.utils.NetworkUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
+import com.zb.wyd.R;
 
 import java.io.File;
 
@@ -119,7 +120,7 @@ public class LiveVideoPlayer  extends GSYVideoPlayer {
      */
     @Override
     public int getLayoutId() {
-        return com.shuyu.gsyvideoplayer.R.layout.video_layout_standard;
+        return R.layout.my_live_layout;
     }
 
     /**

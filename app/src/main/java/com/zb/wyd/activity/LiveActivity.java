@@ -22,6 +22,7 @@ import com.zb.wyd.json.LiveInfoHandler;
 import com.zb.wyd.utils.ConstantUtil;
 import com.zb.wyd.utils.LogUtil;
 import com.zb.wyd.utils.Urls;
+import com.zb.wyd.widget.LiveVideoPlayer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +35,7 @@ import butterknife.BindView;
 public class LiveActivity extends BaseActivity implements IRequestListener
 {
     @BindView(R.id.detail_player)
-    NormalGSYVideoPlayer videoPlayer;
+    LiveVideoPlayer videoPlayer;
 
     //private OrientationUtils orientationUtils;
 
@@ -108,16 +109,13 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         //        imageView.setImageResource(R.drawable.ic_launcher);
         //        videoPlayer.setThumbImageView(imageView);
         //增加title
-        videoPlayer.getTitleTextView().setVisibility(View.GONE);
-        //设置返回键
-        videoPlayer.getBackButton().setVisibility(View.GONE);
-        videoPlayer.getFullscreenButton().setVisibility(View.GONE);
+//        videoPlayer.getTitleTextView().setVisibility(View.GONE);
+//        //设置返回键
+//        videoPlayer.getBackButton().setVisibility(View.GONE);
+//        videoPlayer.getFullscreenButton().setVisibility(View.GONE);
         videoPlayer.setIsTouchWigetFull(true);
 
 
-
-
-        videoPlayer.findViewById(R.id.layout_bottom).setVisibility(View.INVISIBLE);
         //是否可以滑动调整
         videoPlayer.setIsTouchWiget(false);
         videoPlayer.setVideoAllCallBack(new VideoAllCallBack()

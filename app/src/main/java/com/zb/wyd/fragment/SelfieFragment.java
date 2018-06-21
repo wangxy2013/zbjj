@@ -10,16 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.donkingliang.banner.CustomBanner;
 import com.zb.wyd.R;
 import com.zb.wyd.activity.BaseHandler;
-import com.zb.wyd.adapter.AnchorAdapter;
 import com.zb.wyd.adapter.CataAdapter;
 import com.zb.wyd.entity.CataInfo;
-import com.zb.wyd.entity.LiveInfo;
 import com.zb.wyd.http.DataRequest;
 import com.zb.wyd.http.HttpRequest;
 import com.zb.wyd.http.IRequestListener;
@@ -29,6 +26,7 @@ import com.zb.wyd.listener.MyItemClickListener;
 import com.zb.wyd.utils.ConstantUtil;
 import com.zb.wyd.utils.ToastUtil;
 import com.zb.wyd.utils.Urls;
+import com.zb.wyd.widget.CataPopupWindow;
 import com.zb.wyd.widget.MaxRecyclerView;
 
 import java.util.ArrayList;
@@ -43,7 +41,7 @@ import butterknife.Unbinder;
 /**
  * 描述：自拍
  */
-public class SelfieFragment extends BaseFragment implements IRequestListener
+public class SelfieFragment extends BaseFragment implements IRequestListener, View.OnClickListener
 {
 
     @BindView(R.id.banner)
@@ -51,7 +49,7 @@ public class SelfieFragment extends BaseFragment implements IRequestListener
     @BindView(R.id.rv_photo)
     MaxRecyclerView rvPhoto;
     @BindView(R.id.iv_show)
-    ImageView       ivShow;
+    ImageView       ivMore;
     @BindView(R.id.rv_cata)
     RecyclerView    rvCata;
     @BindView(R.id.tv_new)
@@ -60,6 +58,9 @@ public class SelfieFragment extends BaseFragment implements IRequestListener
     TextView        tvFav;
     @BindView(R.id.tv_add)
     TextView        tvAdd;
+    @BindView(R.id.topView)
+    View            topView;
+    Unbinder unbinder1;
     private List<CataInfo> cataInfoList = new ArrayList<>();
     private CataAdapter mCataAdapter;
     private View rootView = null;
@@ -123,6 +124,7 @@ public class SelfieFragment extends BaseFragment implements IRequestListener
         {
             parent.removeView(rootView);
         }
+        unbinder1 = ButterKnife.bind(this, rootView);
         return rootView;
     }
 
@@ -141,7 +143,7 @@ public class SelfieFragment extends BaseFragment implements IRequestListener
     @Override
     protected void initEvent()
     {
-
+        ivMore.setOnClickListener(this);
     }
 
     @Override
@@ -212,4 +214,43 @@ public class SelfieFragment extends BaseFragment implements IRequestListener
             }
         }
     }
+
+    private CataPopupWindow mCataPopupWindow;
+
+    @Override
+    public void onClick(View v)
+    {
+        if (v == ivMore)
+        {
+            if (null == mCataPopupWindow)
+            {
+                mCataPopupWindow = new CataPopupWindow(getActivity(), cataInfoList, new MyItemClickListener()
+                {
+                    @Override
+                    public void onItemClick(View view, int position)
+                    {
+                        for (int i = 0; i < cataInfoList.size(); i++)
+                        {
+                            if (i == position)
+                            {
+                                cataInfoList.get(position).setSelected(true);
+                            }
+                            else
+                            {
+                                cataInfoList.get(i).setSelected(false);
+                            }
+                        }
+                        mCataAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
+
+            if (!cataInfoList.isEmpty())
+            {
+                mCataPopupWindow.showAsDropDown(topView);
+            }
+        }
+    }
+
+
 }

@@ -13,6 +13,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+            <View
+                android:id="@+id/topView"
+                android:background="@color/yellow"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dm_1"/>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

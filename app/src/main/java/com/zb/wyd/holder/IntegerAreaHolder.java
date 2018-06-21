@@ -47,10 +47,20 @@ public class IntegerAreaHolder extends RecyclerView.ViewHolder
     }
 
 
-    public void setVideoInfo(VideoInfo mVideoInfo)
+    public void setVideoInfo(VideoInfo mVideoInfo,final int p)
     {
 
         ImageLoader.getInstance().displayImage(mVideoInfo.getCover(), mImgIv);
+        mFollowTv.setText(mVideoInfo.getFavour_count());
+        mPopularityTv.setText(mVideoInfo.getCoupon());
+        mNameTv.setText(mVideoInfo.getV_name());
+        mItemLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                listener.onItemClick(v,p);
+            }
+        });
     }
 
 

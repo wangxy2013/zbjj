@@ -3,6 +3,7 @@ package com.zb.wyd.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -17,12 +18,15 @@ import com.donkingliang.banner.CustomBanner;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zb.wyd.R;
 import com.zb.wyd.activity.BaseHandler;
+import com.zb.wyd.activity.VideoPlayActivity;
 import com.zb.wyd.adapter.FreeTimeAdapter;
 import com.zb.wyd.adapter.IntegerAreaAdapter;
+import com.zb.wyd.entity.AdInfo;
 import com.zb.wyd.entity.VideoInfo;
 import com.zb.wyd.http.DataRequest;
 import com.zb.wyd.http.HttpRequest;
 import com.zb.wyd.http.IRequestListener;
+import com.zb.wyd.json.AdInfoListHandler;
 import com.zb.wyd.json.LiveInfoListHandler;
 import com.zb.wyd.json.VideoInfoListHandler;
 import com.zb.wyd.listener.MyItemClickListener;
@@ -63,22 +67,34 @@ public class VideoChildFragment extends BaseFragment implements SwipeRefreshLayo
     private View rootView = null;
     private Unbinder unbinder;
 
-    private List<String>    picList         = new ArrayList<>();
-    private List<VideoInfo> freeTimeList    = new ArrayList<>();
-    private List<VideoInfo> integerAreaList = new ArrayList<>();
-    private FreeTimeAdapter    mFreeTimeAdapter;
-    private IntegerAreaAdapter mIntegerAreaAdapter;
+    //Fragment的View加载完毕的标记
+    private boolean isViewCreated;
+    //Fragment对用户可见的标记
+    private boolean isUIVisible;
+
+    private List<String>    picList      = new ArrayList<>();
+    private List<VideoInfo> newVideoList = new ArrayList<>();
+    private List<VideoInfo> favVideoList = new ArrayList<>();
+    private List<AdInfo>    adInfoList   = new ArrayList<>();
 
 
-    private static final String      GET_FREE_LIVE          = "get_free_live";
-    private static final String      GET_VIDEO_LIST         = "get_video_list";
-    private static final int         GET_FREE_LIVE_SUCCESS  = 0x01;
-    private static final int         REQUEST_FAIL           = 0x02;
-    private static final int         GET_VIDEO_LIST_SUCCESS = 0x03;
-    private static final int         GET_FREE_LIVE_CODE     = 0X11;
-    private static final int         GET_VIDEO_LIST_CODE    = 0X12;
+    private IntegerAreaAdapter mNewVideoAdapter;
+    private IntegerAreaAdapter mFavVideoAdapter;
+
+
+    private static final String GET_NEW_VIDEO          = "get_new_video";
+    private static final String GET_FAV_VIDEO          = "get_fav_video";
+    private static final String GET_AD_LIST            = "get_ad_list";
+    private static final int    GET_NEW_LIVE_SUCCESS   = 0x01;
+    private static final int    REQUEST_FAIL           = 0x02;
+    private static final int    GET_VIDEO_LIST_SUCCESS = 0x03;
+    private static final int    GET_AD_LIST_SUCCESS    = 0x04;
+
+    private static final int         GET_NEW_VIDEO_CODE = 0X11;
+    private static final int         GET_FAV_VIDEO_CODE = 0X12;
+    private static final int         GET_AD_lIST_CODE   = 0X13;
     @SuppressLint("HandlerLeak")
-    private              BaseHandler mHandler               = new BaseHandler(getActivity())
+    private              BaseHandler mHandler           = new BaseHandler(getActivity())
     {
         @Override
         public void handleMessage(Message msg)
@@ -86,16 +102,19 @@ public class VideoChildFragment extends BaseFragment implements SwipeRefreshLayo
             super.handleMessage(msg);
             switch (msg.what)
             {
-                case GET_FREE_LIVE_SUCCESS:
-
+                case GET_NEW_LIVE_SUCCESS:
+                    VideoInfoListHandler mVideoInfoListHandler = (VideoInfoListHandler) msg.obj;
+                    newVideoList.clear();
+                    newVideoList.addAll(mVideoInfoListHandler.getVideoInfoList());
+                    mNewVideoAdapter.notifyDataSetChanged();
                     break;
 
 
                 case GET_VIDEO_LIST_SUCCESS:
-                    VideoInfoListHandler mVideoInfoListHandler = (VideoInfoListHandler) msg.obj;
-                    integerAreaList.clear();
-                    integerAreaList.addAll(mVideoInfoListHandler.getVideoInfoList());
-                    mIntegerAreaAdapter.notifyDataSetChanged();
+                    VideoInfoListHandler mVideoInfoListHandler1 = (VideoInfoListHandler) msg.obj;
+                    favVideoList.clear();
+                    favVideoList.addAll(mVideoInfoListHandler1.getVideoInfoList());
+                    mFavVideoAdapter.notifyDataSetChanged();
 
 
                     break;
@@ -103,11 +122,28 @@ public class VideoChildFragment extends BaseFragment implements SwipeRefreshLayo
                 case REQUEST_FAIL:
                     break;
 
-                case GET_FREE_LIVE_CODE:
+                case GET_NEW_VIDEO_CODE:
+                    getNewLive();
                     break;
 
-                case GET_VIDEO_LIST_CODE:
+                case GET_FAV_VIDEO_CODE:
                     getVideoList();
+                    break;
+                case GET_AD_LIST_SUCCESS:
+                    AdInfoListHandler mAdInfoListHandler = (AdInfoListHandler) msg.obj;
+                    adInfoList.clear();
+                    adInfoList.addAll(mAdInfoListHandler.getAdInfoList());
+
+                    picList.clear();
+
+                    for (int i = 0; i < adInfoList.size(); i++)
+                    {
+                        picList.add(adInfoList.get(i).getImage());
+                    }
+                    initAd();
+                    break;
+                case GET_AD_lIST_CODE:
+                    getAdList();
                     break;
             }
         }
@@ -151,14 +187,6 @@ public class VideoChildFragment extends BaseFragment implements SwipeRefreshLayo
     @Override
     protected void initData()
     {
-        picList.add("https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2869447915,2118394790&fm=27&gp=0.jpg");
-        picList.add("https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2869447915,2118394790&fm=27&gp=0.jpg");
-        picList.add("https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2869447915,2118394790&fm=27&gp=0.jpg");
-        picList.add("https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2869447915,2118394790&fm=27&gp=0.jpg");
-        picList.add("https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2869447915,2118394790&fm=27&gp=0.jpg");
-        freeTimeList.add(new VideoInfo());
-        freeTimeList.add(new VideoInfo());
-        freeTimeList.add(new VideoInfo());
     }
 
     @Override
@@ -175,6 +203,98 @@ public class VideoChildFragment extends BaseFragment implements SwipeRefreshLayo
 
     @Override
     protected void initViewData()
+    {
+
+        mNewVideoAdapter = new IntegerAreaAdapter(newVideoList, getContext(), new MyItemClickListener()
+        {
+            @Override
+            public void onItemClick(View view, int position)
+            {
+                Bundle b = new Bundle();
+                b.putSerializable("VideoInfo",newVideoList.get(position));
+                startActivity(new Intent(getActivity(), VideoPlayActivity.class).putExtras(b));
+            }
+        });
+
+        rvFreeTime.setLayoutManager(new FullyGridLayoutManager(getActivity(), 2));
+        // rvRecommend.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
+        rvFreeTime.setAdapter(mNewVideoAdapter);
+
+
+        mFavVideoAdapter = new IntegerAreaAdapter(favVideoList, getActivity(), new MyItemClickListener()
+        {
+            @Override
+            public void onItemClick(View view, int position)
+            {
+                Bundle b = new Bundle();
+                b.putSerializable("VideoInfo",favVideoList.get(position));
+                startActivity(new Intent(getActivity(), VideoPlayActivity.class).putExtras(b));
+            }
+        });
+        rvIntegerArea.setLayoutManager(new FullyGridLayoutManager(getActivity(), 2));
+        rvIntegerArea.setAdapter(mFavVideoAdapter);
+        isViewCreated = true;
+        loadData();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser)
+    {
+        super.setUserVisibleHint(isVisibleToUser);
+        //isVisibleToUser这个boolean值表示:该Fragment的UI 用户是否可见
+        if (isVisibleToUser)
+        {
+            isUIVisible = true;
+            loadData();
+        }
+        else
+        {
+            isUIVisible = false;
+        }
+    }
+
+    private void loadData()
+    {
+        if (isViewCreated && isUIVisible)
+        {
+            mHandler.sendEmptyMessage(GET_NEW_VIDEO_CODE);
+            mHandler.sendEmptyMessage(GET_FAV_VIDEO_CODE);
+            mHandler.sendEmptyMessage(GET_AD_lIST_CODE);
+            isViewCreated = false;
+            isUIVisible = false;
+        }
+    }
+
+    private void getNewLive()
+    {
+        Map<String, String> valuePairs = new HashMap<>();
+
+        valuePairs.put("sort", "new");
+        valuePairs.put("pn", "1");
+        valuePairs.put("cta_id", "0");
+        DataRequest.instance().request(getActivity(), Urls.getVideoLive(), this, HttpRequest.POST, GET_NEW_VIDEO, valuePairs,
+                new VideoInfoListHandler());
+    }
+
+    private void getVideoList()
+    {
+        Map<String, String> valuePairs = new HashMap<>();
+        valuePairs.put("sort", "fav");
+        valuePairs.put("pn", "1");
+        valuePairs.put("cta_id", "0");
+        DataRequest.instance().request(getActivity(), Urls.getVideoLive(), this, HttpRequest.POST, GET_FAV_VIDEO, valuePairs,
+                new VideoInfoListHandler());
+    }
+
+    private void getAdList()
+    {
+        Map<String, String> valuePairs = new HashMap<>();
+        valuePairs.put("pos_id", "1");
+        DataRequest.instance().request(getActivity(), Urls.getAdListUrl(), this, HttpRequest.POST, GET_AD_LIST, valuePairs,
+                new AdInfoListHandler());
+    }
+
+    private void initAd()
     {
         int width = APPUtils.getScreenWidth(getActivity());
         int height = (int) (width * 0.4);
@@ -242,59 +362,6 @@ public class VideoChildFragment extends BaseFragment implements SwipeRefreshLayo
             }
         });
 
-        mFreeTimeAdapter = new FreeTimeAdapter(freeTimeList, getContext(), new MyItemClickListener()
-        {
-            @Override
-            public void onItemClick(View view, int position)
-            {
-
-            }
-        });
-
-        rvFreeTime.setLayoutManager(new FullyGridLayoutManager(getActivity(), 3));
-        // rvRecommend.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
-        rvFreeTime.setAdapter(mFreeTimeAdapter);
-
-
-        mIntegerAreaAdapter = new IntegerAreaAdapter(integerAreaList, getActivity(), new MyItemClickListener()
-        {
-            @Override
-            public void onItemClick(View view, int position)
-            {
-
-            }
-        });
-        rvIntegerArea.setLayoutManager(new FullyGridLayoutManager(getActivity(), 2));
-        rvIntegerArea.setAdapter(mIntegerAreaAdapter);
-
-        loadData();
-    }
-
-    private void loadData()
-    {
-        mHandler.sendEmptyMessage(GET_FREE_LIVE_CODE);
-        mHandler.sendEmptyMessage(GET_VIDEO_LIST_CODE);
-    }
-
-    private void getFreeLive()
-    {
-        Map<String, String> valuePairs = new HashMap<>();
-
-        valuePairs.put("sort", "new");
-        valuePairs.put("pn", "1");
-        valuePairs.put("cta_id", "0");
-        DataRequest.instance().request(getActivity(), Urls.getVideoLive(), this, HttpRequest.POST, GET_FREE_LIVE, valuePairs,
-                new LiveInfoListHandler());
-    }
-
-    private void getVideoList()
-    {
-        Map<String, String> valuePairs = new HashMap<>();
-        valuePairs.put("sort", "new");
-        valuePairs.put("pn", "1");
-        valuePairs.put("cta_id", "0");
-        DataRequest.instance().request(getActivity(), Urls.getVideoLive(), this, HttpRequest.POST, GET_VIDEO_LIST, valuePairs,
-                new VideoInfoListHandler());
     }
 
     @Override
@@ -302,6 +369,8 @@ public class VideoChildFragment extends BaseFragment implements SwipeRefreshLayo
     {
         if (mSwipeRefreshLayout != null)
         {
+            isViewCreated = true;
+            isUIVisible = true;
             loadData();
             mSwipeRefreshLayout.setRefreshing(false);
         }
@@ -320,13 +389,45 @@ public class VideoChildFragment extends BaseFragment implements SwipeRefreshLayo
     }
 
     @Override
+    public void onDestroyView()
+    {
+        super.onDestroyView();
+        //页面销毁,恢复标记
+        isViewCreated = false;
+        isUIVisible = false;
+
+    }
+
+    @Override
     public void notify(String action, String resultCode, String resultMsg, Object obj)
     {
-        if (GET_VIDEO_LIST.equals(action))
+        if (GET_FAV_VIDEO.equals(action))
         {
             if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
             {
                 mHandler.sendMessage(mHandler.obtainMessage(GET_VIDEO_LIST_SUCCESS, obj));
+            }
+            else
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
+            }
+        }
+        else if (GET_NEW_VIDEO.equals(action))
+        {
+            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(GET_NEW_LIVE_SUCCESS, obj));
+            }
+            else
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
+            }
+        }
+        else if (GET_AD_LIST.equals(action))
+        {
+            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(GET_AD_LIST_SUCCESS, obj));
             }
             else
             {

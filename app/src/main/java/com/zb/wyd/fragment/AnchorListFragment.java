@@ -2,6 +2,7 @@ package com.zb.wyd.fragment;
 
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
@@ -14,18 +15,24 @@ import android.widget.TextView;
 
 import com.zb.wyd.R;
 import com.zb.wyd.activity.BaseHandler;
+import com.zb.wyd.activity.LiveActivity;
 import com.zb.wyd.adapter.AnchorAdapter;
 import com.zb.wyd.entity.LiveInfo;
+import com.zb.wyd.http.DataRequest;
+import com.zb.wyd.http.HttpRequest;
 import com.zb.wyd.http.IRequestListener;
 import com.zb.wyd.json.LiveInfoListHandler;
 import com.zb.wyd.listener.MyItemClickListener;
 import com.zb.wyd.utils.ConstantUtil;
 import com.zb.wyd.utils.ToastUtil;
+import com.zb.wyd.utils.Urls;
 import com.zb.wyd.widget.list.refresh.PullToRefreshBase;
 import com.zb.wyd.widget.list.refresh.PullToRefreshRecyclerView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,16 +53,14 @@ public class AnchorListFragment extends BaseFragment implements PullToRefreshBas
     ImageView                 ivNew;
     @BindView(R.id.refreshRecyclerView)
     PullToRefreshRecyclerView mPullToRefreshRecyclerView;
-
-
     private List<TextView> tabList = new ArrayList<>();
-
-
     private RecyclerView mRecyclerView;
     private int pn = 1;
     private int mRefreshStatus;
 
-    private List<LiveInfo> userInfoList = new ArrayList<>();
+    private String sort = "hot";
+
+    private List<LiveInfo> liveInfoList = new ArrayList<>();
     private AnchorAdapter mAnchorAdapter;
     private View rootView = null;
     private Unbinder unbinder;
@@ -78,10 +83,10 @@ public class AnchorListFragment extends BaseFragment implements PullToRefreshBas
 
                     if (pn == 1)
                     {
-                        userInfoList.clear();
+                        liveInfoList.clear();
                     }
 
-                    userInfoList.addAll(mOrderListHandler.getUserInfoList());
+                    liveInfoList.addAll(mOrderListHandler.getUserInfoList());
                     mAnchorAdapter.notifyDataSetChanged();
 
                     break;
@@ -153,12 +158,6 @@ public class AnchorListFragment extends BaseFragment implements PullToRefreshBas
     @Override
     protected void initViewData()
     {
-        for (int i = 0; i < 30; i++)
-        {
-            userInfoList.add(new LiveInfo());
-        }
-
-
         tabList.add(tvRecommend);
         tabList.add(tvNew);
         tabList.add(tvCasual);
@@ -168,12 +167,16 @@ public class AnchorListFragment extends BaseFragment implements PullToRefreshBas
         mPullToRefreshRecyclerView.setOnRefreshListener(this);
         mPullToRefreshRecyclerView.setPullRefreshEnabled(true);
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        mAnchorAdapter = new AnchorAdapter(userInfoList, getActivity(), new MyItemClickListener()
+        mAnchorAdapter = new AnchorAdapter(liveInfoList, getActivity(), new MyItemClickListener()
         {
             @Override
             public void onItemClick(View view, int position)
             {
+                LiveInfo mLiveInfo = liveInfoList.get(position);
 
+                Bundle b = new Bundle();
+                b.putSerializable("LiveInfo", mLiveInfo);
+                startActivity(new Intent(getActivity(), LiveActivity.class).putExtras(b));
 
             }
         });
@@ -184,12 +187,18 @@ public class AnchorListFragment extends BaseFragment implements PullToRefreshBas
 
     private void loadData()
     {
-
+        Map<String, String> valuePairs = new HashMap<>();
+        valuePairs.put("pn", String.valueOf(pn));
+        valuePairs.put("num", "10");
+        valuePairs.put("sort", sort);
+        DataRequest.instance().request(getActivity(), Urls.getNewLive(), this, HttpRequest.GET, GET_ANCHOR_LIST, valuePairs,
+                new LiveInfoListHandler());
     }
 
 
     private void setTabSelected(int p)
     {
+
         for (int i = 0; i < tabList.size(); i++)
         {
             if (i == p)
@@ -201,6 +210,24 @@ public class AnchorListFragment extends BaseFragment implements PullToRefreshBas
                 tabList.get(i).setSelected(false);
             }
         }
+
+
+        switch (p)
+        {
+            case 0:
+                sort = "hot";
+                break;
+            case 1:
+                sort = "fav";
+                break;
+            case 2:
+                sort = "rand";
+                break;
+        }
+        liveInfoList.clear();
+        pn = 1;
+        mRefreshStatus = 0;
+        loadData();
     }
 
     @Override
@@ -242,7 +269,7 @@ public class AnchorListFragment extends BaseFragment implements PullToRefreshBas
     @Override
     public void onPullDownToRefresh(PullToRefreshBase<RecyclerView> refreshView)
     {
-        userInfoList.clear();
+        liveInfoList.clear();
         pn = 1;
         mRefreshStatus = 0;
         loadData();

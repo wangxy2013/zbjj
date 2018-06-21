@@ -42,7 +42,7 @@ public class IntegerAreaAdapter extends RecyclerView.Adapter<IntegerAreaHolder>
     public void onBindViewHolder(IntegerAreaHolder holder, int position)
     {
         VideoInfo mVideoInfo = list.get(position);
-        holder.setVideoInfo(mVideoInfo);
+        holder.setVideoInfo(mVideoInfo,position);
     }
 
     @Override

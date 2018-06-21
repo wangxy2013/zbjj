@@ -23,6 +23,12 @@ public class UserInfo
     public UserInfo(JSONObject obj)
     {
         this.id = obj.optString("id");
+
+
+
+
+
+
         this.nick = obj.optString("nick");
         this.face = obj.optString("face");
         this.uri = obj.optString("uri");

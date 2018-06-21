@@ -78,5 +78,32 @@ public class Urls
         return BASE_URL + "data/statistics";
     }
 
+    //获取广告
+    public static String getAdListUrl()
+    {
+        return BASE_URL + "position/get_ad";
+    }
+
+    //获取在线人数
+    public static String getOnlinerUrl()
+    {
+        return BASE_URL + "data/get_onliner";
+    }
+
+
+    //获取点播流
+    public static String getVideoStreamUrl()
+    {
+        return BASE_URL + "video/stream";
+    }
+
+
+    //获取点播分类
+    public static String getVideoCataUrl()
+    {
+        return BASE_URL + "video/get_cata";
+    }
+
+
 }
 

@@ -3,6 +3,8 @@ package com.zb.wyd.activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -11,49 +13,43 @@ import com.shuyu.gsyvideoplayer.listener.VideoAllCallBack;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.zb.wyd.R;
+import com.zb.wyd.entity.VideoInfo;
+import com.zb.wyd.http.IRequestListener;
 import com.zb.wyd.utils.LogUtil;
 
 import butterknife.BindView;
 
 /**
- * 作者：王先云 on 2018/6/14 14:34
- * 邮箱：wangxianyun1@163.com
  * 描述：一句话简单描述
  */
-public class VideoPlayActivity extends BaseActivity
+public class VideoPlayActivity extends BaseActivity implements IRequestListener
 {
     @BindView(R.id.detail_player)
     StandardGSYVideoPlayer videoPlayer;
-    @BindView(R.id.btn_skip)
-    Button                 btnSkip;
 
-    private OrientationUtils orientationUtils;
+    //   private OrientationUtils orientationUtils;
+
+    private VideoInfo mVideoInfo;
 
     @Override
     protected void initData()
     {
-
+        mVideoInfo = (VideoInfo)getIntent().getSerializableExtra("VideoInfo");
     }
 
     @Override
     protected void initViews(Bundle savedInstanceState)
     {
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_video_play);
     }
 
     @Override
     protected void initEvent()
     {
-        btnSkip.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                videoPlayer.setUp("http://vod3.vxinda.com/20180523/1381/playlist.m3u8", true, "测试视频");
-                videoPlayer.startPlayLogic();
-            }
-        });
-        btnSkip.setVisibility(View.GONE);
+
     }
 
     @Override
@@ -66,7 +62,7 @@ public class VideoPlayActivity extends BaseActivity
         String rtsp = "rtsp://184.72.239.149/vod/mp4://BigBuckBunny_175k.mov";
 
         String flv = "rtmp://stream.pull.dianxunba.com/vod/cdb485af5d15e049ab86fac38d6d83a4";
-        videoPlayer.setUp(flv, true, "测试视频");
+        videoPlayer.setUp(source1, true, "测试视频");
         //增加封面
         ImageView imageView = new ImageView(this);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -80,29 +76,29 @@ public class VideoPlayActivity extends BaseActivity
 
         videoPlayer.getFullscreenButton().setVisibility(View.GONE);
 
-        //设置旋转
-        orientationUtils = new OrientationUtils(this, videoPlayer);
-        //设置全屏按键功能,这是使用的是选择屏幕，而不是全屏
-        videoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                orientationUtils.resolveByClick();
-            }
-        });
+        //        //设置旋转
+        //       、、 orientationUtils = new OrientationUtils(this, videoPlayer);
+        //        //设置全屏按键功能,这是使用的是选择屏幕，而不是全屏
+        //        videoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener()
+        //        {
+        //            @Override
+        //            public void onClick(View view)
+        //            {
+        //                orientationUtils.resolveByClick();
+        //            }
+        //        });
         //是否可以滑动调整
         videoPlayer.setIsTouchWiget(true);
 
-        //设置返回按键功能
-        videoPlayer.getBackButton().setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                onBackPressed();
-            }
-        });
+        //        //设置返回按键功能
+        //        videoPlayer.getBackButton().setOnClickListener(new View.OnClickListener()
+        //        {
+        //            @Override
+        //            public void onClick(View v)
+        //            {
+        //                onBackPressed();
+        //            }
+        //        });
         videoPlayer.startPlayLogic();
 
 
@@ -267,6 +263,13 @@ public class VideoPlayActivity extends BaseActivity
     }
 
 
+
+    private void  getVideoStearm()
+    {
+
+    }
+
+
     @Override
     protected void onPause()
     {
@@ -286,22 +289,27 @@ public class VideoPlayActivity extends BaseActivity
     {
         super.onDestroy();
         GSYVideoManager.releaseAllVideos();
-        if (orientationUtils != null)
-            orientationUtils.releaseListener();
+        //        if (orientationUtils != null)
+        //            orientationUtils.releaseListener();
     }
 
     @Override
     public void onBackPressed()
     {
-        //先返回正常状态
-        if (orientationUtils.getScreenType() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
-        {
-            videoPlayer.getFullscreenButton().performClick();
-            return;
-        }
+        //        //先返回正常状态
+        //        if (orientationUtils.getScreenType() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
+        //        {
+        //            videoPlayer.getFullscreenButton().performClick();
+        //            return;
+        //        }
         //释放所有
         videoPlayer.setVideoAllCallBack(null);
         super.onBackPressed();
     }
 
+    @Override
+    public void notify(String action, String resultCode, String resultMsg, Object obj)
+    {
+
+    }
 }

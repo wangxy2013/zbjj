@@ -111,7 +111,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="@dimen/dm_5"
                         android:layout_toRightOf="@+id/iv_new"
-                        android:text="新晋主播"
+                        android:text="热门主播"
                         android:textColor="@color/blackA"
                         android:textSize="@dimen/t14"/>
 

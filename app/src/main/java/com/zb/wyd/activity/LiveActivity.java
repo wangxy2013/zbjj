@@ -23,6 +23,7 @@ import com.zb.wyd.http.HttpRequest;
 import com.zb.wyd.http.IRequestListener;
 import com.zb.wyd.json.LiveInfoHandler;
 import com.zb.wyd.json.LivePriceInfoHandler;
+import com.zb.wyd.json.OnlinerListHandler;
 import com.zb.wyd.json.ResultHandler;
 import com.zb.wyd.listener.MyItemClickListener;
 import com.zb.wyd.listener.MyOnClickListener;
@@ -64,18 +65,22 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     private long     startTime, endTime;
 
 
-    private List<UserInfo> userInfoList = new ArrayList<>();
+    private List<UserInfo> onlineList = new ArrayList<>();
     private OnlineAdapter mOnlineAdapter;
 
 
     private static final String      GET_LIVE_PRICE         = "get_live_price";
     private static final String      GET_LIVE_STREAM        = "get_live_stream";
+    private static final String      GET_ONLINER            = "get_onliner";
     private static final String      BUY_LIVE               = "buy_live";
     private static final int         REQUEST_SUCCESS        = 0x01;
     private static final int         REQUEST_FAIL           = 0x02;
     private static final int         GET_LIVE_PRICE_SUCCESS = 0x03;
     private static final int         BUY_LIVE_SUCCESS       = 0x05;
     private static final int         SET_STATISTICS         = 0x06;
+    private static final int         GET_ONLINER_SUCCESS    = 0x07;
+    private static final int         GET_ONLINER_REQUEST    = 0x08;
+    private static final int         GET_STREAM_REQUEST     = 0x09;
     @SuppressLint("HandlerLeak")
     private              BaseHandler mHandler               = new BaseHandler(LiveActivity.this)
     {
@@ -151,6 +156,22 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                 case SET_STATISTICS:
                     setStatistics(0);
                     break;
+
+                case GET_ONLINER_SUCCESS:
+                    OnlinerListHandler mOnlinerListHandler = (OnlinerListHandler) msg.obj;
+                    onlineList.clear();
+                    onlineList.addAll(mOnlinerListHandler.getUserInfoList());
+                    mOnlineAdapter.notifyDataSetChanged();
+
+                    break;
+
+                case GET_ONLINER_REQUEST:
+                    getOnLiner();
+                    break;
+
+                case GET_STREAM_REQUEST:
+                    getLiveStream();
+                    break;
             }
         }
     };
@@ -164,10 +185,6 @@ public class LiveActivity extends BaseActivity implements IRequestListener
             biz_id = mLiveInfo.getId();
         }
 
-        for (int i = 0; i < 20; i++)
-        {
-            userInfoList.add(new UserInfo());
-        }
 
     }
 
@@ -199,7 +216,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         LinearLayoutManager layoutmanager = new LinearLayoutManager(this);
         layoutmanager.setOrientation(LinearLayoutManager.HORIZONTAL);
         rvOnline.setLayoutManager(layoutmanager);
-        mOnlineAdapter = new OnlineAdapter(userInfoList);
+        mOnlineAdapter = new OnlineAdapter(onlineList);
         rvOnline.setAdapter(mOnlineAdapter);
         //是否可以滑动调整
         videoPlayer.setIsTouchWiget(false);
@@ -371,7 +388,8 @@ public class LiveActivity extends BaseActivity implements IRequestListener
             }
         });
         startTime = System.currentTimeMillis();
-        getLiveStream();
+        mHandler.sendEmptyMessage(GET_STREAM_REQUEST);
+        mHandler.sendEmptyMessage(GET_ONLINER_REQUEST);
     }
 
 
@@ -420,6 +438,18 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                 new ResultHandler());
     }
 
+
+    private void getOnLiner()
+    {
+
+        Map<String, String> valuePairs = new HashMap<>();
+        valuePairs.put("biz_id", biz_id);
+        valuePairs.put("co_biz", "live");
+        DataRequest.instance().request(LiveActivity.this, Urls.getOnlinerUrl(), this, HttpRequest.GET, GET_ONLINER, valuePairs,
+                new OnlinerListHandler());
+
+
+    }
 
     @Override
     protected void onPause()
@@ -498,13 +528,18 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                 mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
             }
         }
+        else if (GET_ONLINER.equals(action))
+        {
+            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(GET_ONLINER_SUCCESS, obj));
+            }
+            else
+            {
+                // mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
+            }
+        }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
+
 }

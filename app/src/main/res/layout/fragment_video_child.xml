@@ -53,7 +53,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="@dimen/dm_5"
                         android:layout_toRightOf="@+id/iv_free_time"
-                        android:text="限时免费"
+                        android:text="最近更新"
                         android:textColor="@color/blackA"
                         android:textSize="@dimen/t14"/>
                     <RelativeLayout
@@ -111,7 +111,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="@dimen/dm_5"
                         android:layout_toRightOf="@+id/iv_integer_area"
-                        android:text="积分对换专区"
+                        android:text="最多收藏"
                         android:textColor="@color/blackA"
                         android:textSize="@dimen/t14"/>
 

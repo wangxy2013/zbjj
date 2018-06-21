@@ -153,6 +153,11 @@ public class LiveFragment extends BaseFragment
         }
     }
 
+    public void setTabIndex(int p)
+    {
+        mViewPager.setCurrentItem(p);
+    }
+
 
     class ViewHolder
     {

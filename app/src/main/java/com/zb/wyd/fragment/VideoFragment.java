@@ -13,10 +13,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.zb.wyd.R;
+import com.zb.wyd.activity.LiveActivity;
+import com.zb.wyd.http.DataRequest;
+import com.zb.wyd.http.HttpRequest;
+import com.zb.wyd.http.IRequestListener;
+import com.zb.wyd.json.LiveInfoHandler;
+import com.zb.wyd.utils.Urls;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,7 +35,7 @@ import static com.zb.wyd.utils.APPUtils.dip2px;
 /**
  * 描述：一句话简单描述
  */
-public class VideoFragment extends BaseFragment
+public class VideoFragment extends BaseFragment implements IRequestListener
 {
 
     @BindView(R.id.tab)
@@ -80,6 +88,16 @@ public class VideoFragment extends BaseFragment
     @Override
     protected void initViewData()
     {
+//        Map<String, String> valuePairs = new HashMap<>();
+//        DataRequest.instance().request(VideoFragment.this, Urls.getVideoCataUrl(), this, HttpRequest.POST, GET_LIVE_STREAM, valuePairs,
+//                new LiveInfoHandler());
+        initTab();
+    }
+
+
+
+    private  void  initTab()
+    {
         List<Fragment> fragments = new ArrayList<>();
         for (int i = 0; i < tabTitle.length; i++)
         {
@@ -118,6 +136,7 @@ public class VideoFragment extends BaseFragment
 
         reflex(tabLayout);
     }
+
     public void reflex(final TabLayout tabLayout)
     {
         //了解源码得知 线的宽度是根据 tabView的宽度来设置的
@@ -187,4 +206,9 @@ public class VideoFragment extends BaseFragment
     }
 
 
+    @Override
+    public void notify(String action, String resultCode, String resultMsg, Object obj)
+    {
+
+    }
 }

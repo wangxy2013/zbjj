@@ -2,10 +2,12 @@ package com.zb.wyd.entity;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * 描述：一句话简单描述
  */
-public class VideoInfo
+public class VideoInfo implements Serializable
 {
     private String id;//5
     private String cata_id;//10
@@ -14,7 +16,9 @@ public class VideoInfo
     private String favour_count;//0
     private String fee_cfg;//0
     private String fee;//3 private String
-
+    private String  coupon;
+    private String finger;
+    private String vip_free;
     public VideoInfo() {}
 
     public VideoInfo(JSONObject obj)
@@ -26,6 +30,9 @@ public class VideoInfo
         this.favour_count = obj.optString("favour_count");
         this.fee_cfg = obj.optString("fee_cfg");
         this.fee = obj.optString("fee");
+        this.coupon = obj.optString("coupon");
+        this.finger = obj.optString("finger");
+        this.vip_free = obj.optString("vip_free");
 
     }
 
@@ -97,5 +104,35 @@ public class VideoInfo
     public void setFee(String fee)
     {
         this.fee = fee;
+    }
+
+    public String getCoupon()
+    {
+        return coupon;
+    }
+
+    public void setCoupon(String coupon)
+    {
+        this.coupon = coupon;
+    }
+
+    public String getFinger()
+    {
+        return finger;
+    }
+
+    public void setFinger(String finger)
+    {
+        this.finger = finger;
+    }
+
+    public String getVip_free()
+    {
+        return vip_free;
+    }
+
+    public void setVip_free(String vip_free)
+    {
+        this.vip_free = vip_free;
     }
 }

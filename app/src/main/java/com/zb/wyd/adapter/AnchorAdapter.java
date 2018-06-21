@@ -33,7 +33,7 @@ public class AnchorAdapter extends RecyclerView.Adapter<AnchorHolder>
     public AnchorHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_anchor, parent, false);
-        AnchorHolder mHolder = new AnchorHolder(itemView, parent.getContext(),listener);
+        AnchorHolder mHolder = new AnchorHolder(itemView, parent.getContext(), listener);
         return mHolder;
     }
 
@@ -41,8 +41,8 @@ public class AnchorAdapter extends RecyclerView.Adapter<AnchorHolder>
     @Override
     public void onBindViewHolder(AnchorHolder holder, int position)
     {
-        LiveInfo mUserInfo = list.get(position);
-        holder.setUserInfo(mUserInfo);
+        LiveInfo mLiveInfo = list.get(position);
+        holder.setLiveInfo(mLiveInfo, position);
     }
 
     @Override

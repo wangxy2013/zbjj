@@ -35,8 +35,7 @@ public class OnlinHolder extends RecyclerView.ViewHolder
 
     public void setUserInfo(UserInfo mUserInfo)
     {
-        String pic="http:\\/\\/os.tanzhelang.com\\/public\\/attachment\\/201806\\/20\\/10\\/origin\\/1529434583745452.jpg?x-oss-process=image\\/resize,m_mfit,h_260,w_260";
-        ImageLoader.getInstance().displayImage(pic, mUserPicIv);
+        ImageLoader.getInstance().displayImage(mUserInfo.getFace(), mUserPicIv);
     }
 
 

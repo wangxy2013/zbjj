@@ -14,6 +14,7 @@ import com.zb.wyd.fragment.MemberFragment;
 import com.zb.wyd.fragment.SelfieFragment;
 import com.zb.wyd.fragment.TaskFragment;
 import com.zb.wyd.fragment.VideoFragment;
+import com.zb.wyd.fragment.VideoFragment1;
 import com.zb.wyd.utils.DialogUtils;
 import com.zb.wyd.widget.statusbar.StatusBarUtil;
 
@@ -33,7 +34,7 @@ public class MainActivity extends BaseActivity
             R.drawable.ic_photo_selector, R.drawable.ic_task_selector, R.drawable.ic_member_selector};
 
 
-    private Class fragmentArray[] = {LiveFragment.class, VideoFragment.class, SelfieFragment.class, TaskFragment.class, MemberFragment.class};
+    private Class fragmentArray[] = {LiveFragment.class, VideoFragment1.class, SelfieFragment.class, TaskFragment.class, MemberFragment.class};
 
     @Override
     protected void initData()

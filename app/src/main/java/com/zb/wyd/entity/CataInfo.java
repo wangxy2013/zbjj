@@ -1,26 +1,12 @@
 package com.zb.wyd.entity;
 
-<<<<<<< HEAD
-/**
- * 作者：王先云 on 2018/6/21 16:53
- * 邮箱：wangxianyun1@163.com
-=======
 import org.json.JSONObject;
 
 /**
->>>>>>> a0cb36f1436cd3569b15b90ab071979961148208
  * 描述：一句话简单描述
  */
 public class CataInfo
 {
-<<<<<<< HEAD
-    private String pid;
-    private String name;
-
-
-
-
-=======
     private String id;
 
     private String  name;
@@ -29,7 +15,7 @@ public class CataInfo
 
     public  CataInfo(JSONObject obj)
     {
-        this.id = obj.optString("id");
+        this.id = obj.optString("pid");
         this.name = obj.optString("name");
     }
 
@@ -63,5 +49,4 @@ public class CataInfo
     {
         isSelected = selected;
     }
->>>>>>> a0cb36f1436cd3569b15b90ab071979961148208
 }

@@ -16,7 +16,7 @@ public class UserInfo
     private String update_time;//1529037601;//
     private String online;//12345,
     private String is_live;//1
-
+    private String uface;//1
 
     public UserInfo() {}
 
@@ -24,11 +24,7 @@ public class UserInfo
     {
         this.id = obj.optString("id");
 
-
-
-
-
-
+        this.uface = obj.optString("uface");
         this.nick = obj.optString("nick");
         this.face = obj.optString("face");
         this.uri = obj.optString("uri");
@@ -119,4 +115,13 @@ public class UserInfo
         this.is_live = is_live;
     }
 
+    public String getUface()
+    {
+        return uface;
+    }
+
+    public void setUface(String uface)
+    {
+        this.uface = uface;
+    }
 }

@@ -22,6 +22,7 @@ import com.zb.wyd.http.HttpRequest;
 import com.zb.wyd.http.IRequestListener;
 import com.zb.wyd.json.CataInfoListHandler;
 import com.zb.wyd.json.LiveInfoListHandler;
+import com.zb.wyd.json.ResultHandler;
 import com.zb.wyd.listener.MyItemClickListener;
 import com.zb.wyd.utils.ConstantUtil;
 import com.zb.wyd.utils.ToastUtil;
@@ -60,20 +61,25 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
     TextView        tvAdd;
     @BindView(R.id.topView)
     View            topView;
-    Unbinder unbinder1;
     private List<CataInfo> cataInfoList = new ArrayList<>();
     private CataAdapter mCataAdapter;
     private View rootView = null;
     private Unbinder unbinder;
-    private static final String GET_CATA_LIST = "get_cata_list";
 
-    private static final int REQUEST_SUCCESS       = 0x01;
-    private static final int REQUEST_FAIL          = 0x02;
-    private static final int GET_CATA_LIST_SUCCESS = 0x04;
 
-    private static final int         GET_CATA_LIST_CODE = 0x10;
+    private String cta_id = "0";
+    private String sort   = "new";
+
+    private static final String GET_CATA_LIST         = "get_cata_list";
+    private static final String GET_PHPTO_LIST        = "get_phpto_list";
+    private static final int    REQUEST_SUCCESS       = 0x01;
+    private static final int    REQUEST_FAIL          = 0x02;
+    private static final int    GET_CATA_LIST_SUCCESS = 0x04;
+
+    private static final int         GET_CATA_LIST_CODE  = 0x10;
+    private static final int         GET_PHOTO_LIST_CODE = 0x11;
     @SuppressLint("HandlerLeak")
-    private              BaseHandler mHandler           = new BaseHandler(getActivity())
+    private              BaseHandler mHandler            = new BaseHandler(getActivity())
     {
         @Override
         public void handleMessage(Message msg)
@@ -82,7 +88,6 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
             switch (msg.what)
             {
                 case REQUEST_SUCCESS:
-                    LiveInfoListHandler mOrderListHandler = (LiveInfoListHandler) msg.obj;
 
                     break;
 
@@ -95,10 +100,20 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
                     cataInfoList.clear();
                     cataInfoList.addAll(mCataInfoListHandler.getCataInfoList());
                     mCataAdapter.notifyDataSetChanged();
+                    if (!cataInfoList.isEmpty())
+                    {
+                        cta_id = cataInfoList.get(0).getId();
+                    }
+                    mHandler.sendEmptyMessage(GET_PHOTO_LIST_CODE);
+
                     break;
 
                 case GET_CATA_LIST_CODE:
                     getPhotoCata();
+                    break;
+
+                case GET_PHOTO_LIST_CODE:
+                    getPhotoList();
                     break;
 
             }
@@ -124,7 +139,6 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
         {
             parent.removeView(rootView);
         }
-        unbinder1 = ButterKnife.bind(this, rootView);
         return rootView;
     }
 
@@ -144,11 +158,19 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
     protected void initEvent()
     {
         ivMore.setOnClickListener(this);
+        tvNew.setOnClickListener(this);
+        tvFav.setOnClickListener(this);
+        tvAdd.setOnClickListener(this);
+
+
     }
 
     @Override
     protected void initViewData()
     {
+        tvNew.setSelected(true);
+        tvFav.setSelected(false);
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         rvCata.setLayoutManager(linearLayoutManager);
@@ -186,6 +208,17 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
                 new CataInfoListHandler());
     }
 
+
+    private void getPhotoList()
+    {
+        Map<String, String> valuePairs = new HashMap<>();
+        valuePairs.put("pn", "1");
+        valuePairs.put("cta_id", cta_id);
+        valuePairs.put("sort", sort);
+        DataRequest.instance().request(getActivity(), Urls.getPhotoListUrl(), this, HttpRequest.POST, GET_PHPTO_LIST, valuePairs,
+                new ResultHandler());
+    }
+
     @Override
     public void onDestroy()
     {
@@ -207,6 +240,17 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
             if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
             {
                 mHandler.sendMessage(mHandler.obtainMessage(GET_CATA_LIST_SUCCESS, obj));
+            }
+            else
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
+            }
+        }
+        else if (GET_PHPTO_LIST.equals(action))
+        {
+            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_SUCCESS, obj));
             }
             else
             {
@@ -241,6 +285,10 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
                             }
                         }
                         mCataAdapter.notifyDataSetChanged();
+
+
+                        cta_id = cataInfoList.get(position).getId();
+                        mHandler.sendEmptyMessage(GET_PHOTO_LIST_CODE);
                     }
                 });
             }
@@ -249,6 +297,24 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
             {
                 mCataPopupWindow.showAsDropDown(topView);
             }
+        }
+        else if (v == tvNew)
+        {
+            sort = "new";
+            tvNew.setSelected(true);
+            tvFav.setSelected(false);
+            mHandler.sendEmptyMessage(GET_PHOTO_LIST_CODE);
+        }
+        else if (v == tvFav)
+        {
+            sort = "fav";
+            tvNew.setSelected(false);
+            tvFav.setSelected(true);
+            mHandler.sendEmptyMessage(GET_PHOTO_LIST_CODE);
+        }
+        else if (v == tvAdd)
+        {
+
         }
     }
 

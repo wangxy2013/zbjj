@@ -232,7 +232,8 @@ public class DialogUtils
      *
      * @return
      */
-    public static Dialog showLivePriceDialog(Context mContext, LivePriceInfo mLivePriceInfo, final View.OnClickListener cancelListener,final MyOnClickListener.OnSubmitListener listener)
+    public static Dialog showLivePriceDialog(Context mContext, LivePriceInfo mLivePriceInfo, final View.OnClickListener cancelListener, final
+    MyOnClickListener.OnSubmitListener listener)
     {
         final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
         dialog.setCancelable(false);
@@ -247,11 +248,11 @@ public class DialogUtils
         int price = mLivePriceInfo.getOff_amount();
 
 
-        priceTv.setText(price+"积分");
+        priceTv.setText(price + "积分");
 
-        if(userMoney>=price)
+        if (userMoney >= price)
         {
-            userMoneyTv.setText("剩余积分:" +mLivePriceInfo.getUser_money() );
+            userMoneyTv.setText("剩余积分:" + mLivePriceInfo.getUser_money());
             submitTv.setText("确认兑换");
         }
         else
@@ -261,7 +262,8 @@ public class DialogUtils
         }
 
 
-        cancelTv.setOnClickListener(new View.OnClickListener() {
+        cancelTv.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View v)
             {
@@ -271,13 +273,14 @@ public class DialogUtils
         });
 
 
-        submitTv.setOnClickListener(new View.OnClickListener() {
+        submitTv.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View v)
             {
                 dialog.dismiss();
 
-                if(userMoney>=price)
+                if (userMoney >= price)
                 {
                     listener.onSubmit("1");
                 }
@@ -297,6 +300,155 @@ public class DialogUtils
         lp.width = APPUtils.getScreenWidth(mContext) * 7 / 8;
         mWindow.setAttributes(lp);
         return dialog;
+    }
+
+
+    /**
+     * 温馨提示
+     *
+     * @return
+     */
+    public static Dialog showVideoPriceDialog(Context mContext, LivePriceInfo mLivePriceInfo, final View.OnClickListener cancelListener, final
+    MyOnClickListener.OnSubmitListener listener)
+    {
+        final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
+        dialog.setCancelable(false);
+        View v = LayoutInflater.from(mContext).inflate(R.layout.dialog_live_price, null);
+        dialog.setContentView(v);
+        TextView priceTv = (TextView) v.findViewById(R.id.tv_price);
+        TextView userMoneyTv = (TextView) v.findViewById(R.id.tv_user_money);
+
+        TextView cancelTv = (TextView) v.findViewById(R.id.tv_cancel);
+        TextView submitTv = (TextView) v.findViewById(R.id.tv_submit);
+        Double userMoney = Double.parseDouble(mLivePriceInfo.getUser_money());
+        int price = mLivePriceInfo.getOff_amount();
+
+
+        priceTv.setText(price + "积分");
+
+        if (userMoney >= price)
+        {
+            userMoneyTv.setText("剩余积分:" + mLivePriceInfo.getUser_money());
+            submitTv.setText("确认兑换");
+        }
+        else
+        {
+            userMoneyTv.setText("您的积分不足!");
+            submitTv.setText("去做任务");
+        }
+
+
+        cancelTv.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+                cancelListener.onClick(v);
+            }
+        });
+
+
+        submitTv.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+
+                if (userMoney >= price)
+                {
+                    listener.onSubmit("1");
+                }
+                else
+                {
+                    listener.onSubmit("2");
+                }
+
+            }
+        });
+
+
+        //Dialog部分
+        Window mWindow = dialog.getWindow();
+        WindowManager.LayoutParams lp = mWindow.getAttributes();
+        lp.gravity = Gravity.CENTER;
+        lp.width = APPUtils.getScreenWidth(mContext) * 1 / 2;
+        mWindow.setAttributes(lp);
+        return dialog;
+    }
+
+
+    /**
+     * 提示框
+     *
+     * @return
+     */
+    public static void showChannelDialog(Context mContext, final MyItemClickListener listener)
+    {
+        final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
+        dialog.setCancelable(true);
+        View v = LayoutInflater.from(mContext).inflate(R.layout.dialog_change_channel, null);
+        dialog.setContentView(v);
+
+
+        Button btnYd = (Button) v.findViewById(R.id.btn_yd);
+        Button btnDx = (Button) v.findViewById(R.id.btn_dx);
+        Button btnCm = (Button) v.findViewById(R.id.btn_cm);
+        Button btnOut = (Button) v.findViewById(R.id.btn_out);
+
+        btnYd.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+                listener.onItemClick(v, 1);
+            }
+        });
+
+
+        btnDx.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+                listener.onItemClick(v, 2);
+            }
+        });
+
+
+        btnCm.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+                listener.onItemClick(v, 3);
+            }
+        });
+
+
+        btnOut.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+                listener.onItemClick(v, 4);
+            }
+        });
+
+
+        //Dialog部分
+        Window mWindow = dialog.getWindow();
+        WindowManager.LayoutParams lp = mWindow.getAttributes();
+        lp.gravity = Gravity.CENTER;
+        lp.width = APPUtils.getScreenWidth(mContext) * 1 / 2;
+        mWindow.setAttributes(lp);
+        dialog.setCancelable(false);
+        dialog.show();
     }
 
 

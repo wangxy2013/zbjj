@@ -111,6 +111,18 @@ public class Urls
         return BASE_URL + "photo/get_cata";
     }
 
+    //获取图集
+    public static String getPhotoListUrl()
+    {
+        return BASE_URL + "photo/list";
+    }
+
+
+    //获取图集
+    public static String getVideoPriceUrl()
+    {
+        return BASE_URL + "video/get_price";
+    }
 
 
 

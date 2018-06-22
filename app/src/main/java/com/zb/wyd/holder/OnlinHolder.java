@@ -35,7 +35,7 @@ public class OnlinHolder extends RecyclerView.ViewHolder
 
     public void setUserInfo(UserInfo mUserInfo)
     {
-        ImageLoader.getInstance().displayImage(mUserInfo.getFace(), mUserPicIv);
+        ImageLoader.getInstance().displayImage(mUserInfo.getUface(), mUserPicIv);
     }
 
 

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white"
+              android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <View
+                android:id="@+id/topView"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dm_1"
+                android:background="@color/yellow"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/yellow">
+
+                <ImageView
+                    android:id="@+id/iv_show"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="@dimen/dm_10"
+                    android:layout_marginRight="@dimen/dm_10"
+                    android:layout_marginTop="@dimen/dm_5"
+                    android:background="@drawable/ic_more"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_cata"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/iv_show">
+
+                </android.support.v7.widget.RecyclerView>
+            </RelativeLayout>
+
+            <com.donkingliang.banner.CustomBanner
+                android:id="@+id/banner"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dm_5"
+                android:visibility="gone"
+                app:indicatorGravity="CENTER"
+                app:indicatorInterval="5dp"
+                app:indicatorSelectRes="@drawable/shape_point_unselect"
+                app:indicatorStyle="ORDINARY"
+                app:indicatorUnSelectRes="@drawable/shape_point_select"
+                />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dm_10">
+
+                <ImageView
+                    android:id="@+id/iv_free_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_recommend"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dm_5"
+                    android:layout_toRightOf="@+id/iv_free_time"
+                    android:text="最近更新"
+                    android:textColor="@color/blackA"
+                    android:textSize="@dimen/t14"/>
+                <RelativeLayout
+                    android:id="@+id/rl_all_free"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true">
+                    <ImageView
+                        android:id="@+id/iv_recommend_right"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_arrow_right"/>
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/dm_5"
+                        android:layout_toLeftOf="@+id/iv_recommend_right"
+                        android:text="全部"
+                        android:textColor="@color/grayA"
+                        android:textSize="@dimen/t14"/>
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <com.zb.wyd.widget.MaxRecyclerView
+                android:id="@+id/rv_free_time"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/dm_5"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dm_10"
+                android:background="@color/grayE"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dm_10">
+
+                <ImageView
+                    android:id="@+id/iv_integer_area"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_new"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dm_5"
+                    android:layout_toRightOf="@+id/iv_integer_area"
+                    android:text="最多收藏"
+                    android:textColor="@color/blackA"
+                    android:textSize="@dimen/t14"/>
+
+                <RelativeLayout
+                    android:id="@+id/rl_all_integer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true">
+
+
+                    <ImageView
+                        android:id="@+id/iv_new_right"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_arrow_right"/>
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/dm_5"
+                        android:layout_toLeftOf="@+id/iv_new_right"
+                        android:text="全部"
+                        android:textColor="@color/grayA"
+                        android:textSize="@dimen/t14"/>
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <com.zb.wyd.widget.MaxRecyclerView
+                android:id="@+id/rv_integer_area"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/dm_5"/>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

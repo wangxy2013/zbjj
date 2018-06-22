@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/dm_15">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="请切换线路"
+        android:textColor="@color/redA"/>
+    <Button
+        android:id="@+id/btn_yd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dm_15"
+        android:background="@drawable/common_yellow_5dp"
+        android:text="切换到移动线路"
+        android:textColor="@color/blackC"
+        android:textSize="@dimen/t14"/>
+
+    <Button
+        android:id="@+id/btn_dx"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dm_15"
+        android:background="@drawable/common_yellow_5dp"
+        android:text="切换到电信线路"
+        android:textColor="@color/blackC"
+        android:textSize="@dimen/t14"/>
+    <Button
+        android:id="@+id/btn_cm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dm_15"
+        android:background="@drawable/common_yellow_5dp"
+        android:text="切换到联通线路"
+        android:textColor="@color/blackC"
+        android:textSize="@dimen/t14"/>
+
+
+    <Button
+        android:id="@+id/btn_out"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dm_25"
+        android:background="@drawable/common_green_5dp"
+        android:text="退出播放"
+        android:textColor="@color/blackC"
+        android:textSize="@dimen/t14"/>
+</LinearLayout>

@@ -105,5 +105,14 @@ public class Urls
     }
 
 
+    //图片分类
+    public static String getPhotoCataUrl()
+    {
+        return BASE_URL + "photo/get_cata";
+    }
+
+
+
+
 }
 

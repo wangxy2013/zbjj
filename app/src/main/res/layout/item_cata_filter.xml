@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/ll_item"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="@dimen/dm_5"
+              android:layout_marginRight="@dimen/dm_5"
+              android:layout_marginTop="@dimen/dm_10"
+              android:gravity="center"
+              android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/cat_frame_45dp"
+        android:gravity="center"
+        android:paddingBottom="@dimen/dm_5"
+        android:paddingTop="@dimen/dm_5"
+        android:text="游戏"
+        android:textColor="@color/blackB"
+        android:textSize="14sp"/>
+
+</LinearLayout>

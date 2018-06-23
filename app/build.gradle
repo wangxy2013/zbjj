@@ -42,7 +42,7 @@ dependencies {
     compile 'com.github.donkingliang:CustomBanner:1.1.2'
     compile files('libs/okio-1.6.0.jar')
     compile files('libs/okhttp-3.2.0.jar')
-
+    compile 'com.commit451:PhotoView:1.2.4'
     compile 'com.shuyu:gsyVideoPlayer-java:5.0.0-beta'
 
 //根据你的需求

@@ -16,7 +16,7 @@ import com.shuyu.gsyvideoplayer.listener.VideoAllCallBack;
 import com.zb.wyd.R;
 import com.zb.wyd.adapter.OnlineAdapter;
 import com.zb.wyd.entity.LiveInfo;
-import com.zb.wyd.entity.LivePriceInfo;
+import com.zb.wyd.entity.PriceInfo;
 import com.zb.wyd.entity.UserInfo;
 import com.zb.wyd.http.DataRequest;
 import com.zb.wyd.http.HttpRequest;
@@ -40,7 +40,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * 描述：一句话简单描述
@@ -117,7 +116,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                 case GET_LIVE_PRICE_SUCCESS:
                     LivePriceInfoHandler mLivePriceInfoHandler = (LivePriceInfoHandler) msg.obj;
 
-                    LivePriceInfo mLivePriceInfo = mLivePriceInfoHandler.getLivePriceInfo();
+                    PriceInfo mLivePriceInfo = mLivePriceInfoHandler.getLivePriceInfo();
 
                     if (null != mLivePriceInfo)
                     {

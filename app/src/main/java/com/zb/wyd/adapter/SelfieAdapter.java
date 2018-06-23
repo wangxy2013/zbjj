@@ -44,7 +44,7 @@ public class SelfieAdapter extends RecyclerView.Adapter<SelfieHolder>
     public void onBindViewHolder(SelfieHolder holder, int position)
     {
         SelfieInfo mSelfieInfo = list.get(position);
-        holder.setSelfieInfo(mSelfieInfo);
+        holder.setSelfieInfo(mSelfieInfo,position);
     }
 
     @Override

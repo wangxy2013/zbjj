@@ -83,7 +83,7 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
     private static final int    REQUEST_FAIL          = 0x02;
     private static final int    GET_NEW_LIVE_SUCCESS  = 0x03;
 
-    private static final int GET_AD_lIST_CODE   = 0X10;
+    private static final int GET_AD_LIST_CODE   = 0X10;
     private static final int GET_FREE_LIVE_CODE = 0X11;
     private static final int GET_NEW_LIVE_CODE  = 0X12;
 
@@ -139,7 +139,7 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
                     initAd();
                     break;
 
-                case GET_AD_lIST_CODE:
+                case GET_AD_LIST_CODE:
                     getAdList();
                     break;
             }
@@ -254,7 +254,7 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
 
     private void loadData()
     {
-        mHandler.sendEmptyMessage(GET_AD_lIST_CODE);
+        mHandler.sendEmptyMessage(GET_AD_LIST_CODE);
         mHandler.sendEmptyMessage(GET_FREE_LIVE_CODE);
         mHandler.sendEmptyMessage(GET_NEW_LIVE_CODE);
     }

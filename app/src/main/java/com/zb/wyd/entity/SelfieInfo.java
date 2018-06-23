@@ -7,29 +7,94 @@ import org.json.JSONObject;
  */
 public class SelfieInfo
 {
-    private String id;//12570;//
-    private String nick;//晓宝宝;//
-    private String face;//http:\/\/img2.inke.cn\/MTUxMzUxNTM3MDU2NSM1MjQjanBn.jpg;//
-    private String uri;//http:\/\/alsource.pull.inke.cn\/live\/1529036907860561.flv?ikDnsOp=1&ikHost=ali&ikOp=0&codecInfo=8192&ikLog=0&dpSrcG=-1&ikMinBuf
-    // =3800&ikMaxBuf=4800&ikSlowRate=1.0&ikFastRate=1.0;//
-    private String favour_count;//0;//
-    private String update_time;//1529037601;//
-    private String online;//12345,
-    private String is_live;//1
-
+    private String id;//11  
+    private String pname;//
+    private String pdesc;//
+    private String location;//--
+    private String cover;//
+    private String favour_count;//0
+    private String add_time;//1529655463"
 
     public SelfieInfo() {}
 
     public SelfieInfo(JSONObject obj)
     {
         this.id = obj.optString("id");
-        this.nick = obj.optString("nick");
-        this.face = obj.optString("face");
-        this.uri = obj.optString("id");
+        this.pname = obj.optString("pname");
+        this.pdesc = obj.optString("pdesc");
+        this.location = obj.optString("location");
         this.favour_count = obj.optString("favour_count");
-        this.update_time = obj.optString("update_time");
-        this.online = obj.optString("online");
-        this.is_live = obj.optString("is_live");
+        this.cover = obj.optString("cover");
+        this.add_time = obj.optString("add_time");
+    }
 
+    public String getId()
+    {
+        return id;
+    }
+
+    public void setId(String id)
+    {
+        this.id = id;
+    }
+
+    public String getPname()
+    {
+        return pname;
+    }
+
+    public void setPname(String pname)
+    {
+        this.pname = pname;
+    }
+
+    public String getPdesc()
+    {
+        return pdesc;
+    }
+
+    public void setPdesc(String pdesc)
+    {
+        this.pdesc = pdesc;
+    }
+
+    public String getLocation()
+    {
+        return location;
+    }
+
+    public void setLocation(String location)
+    {
+        this.location = location;
+    }
+
+    public String getCover()
+    {
+        return cover;
+    }
+
+    public void setCover(String cover)
+    {
+        this.cover = cover;
+    }
+
+    public String getFavour_count()
+    {
+        return favour_count;
+    }
+
+    public void setFavour_count(String favour_count)
+    {
+        this.favour_count = favour_count;
+    }
+
+    public String getAdd_time()
+    {
+        return add_time;
+    }
+
+    public void setAdd_time(String add_time)
+    {
+        this.add_time = add_time;
     }
 }

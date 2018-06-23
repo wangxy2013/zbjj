@@ -124,6 +124,22 @@ public class Urls
         return BASE_URL + "video/get_price";
     }
 
+    //获取自拍详情
+    public static String getPhotoDetailUrl()
+    {
+        return BASE_URL + "photo/show";
+    }
+
+    //获取自拍详情
+    public static String getPhotoUploadUrl()
+    {
+        return BASE_URL + "photo/upload";
+    }
+    //获取自拍详情
+    public static String getAddPhotoUrl()
+    {
+        return BASE_URL + "photo/create";
+    }
 
 
 }

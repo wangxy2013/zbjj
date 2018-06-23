@@ -1,30 +1,24 @@
 package com.zb.wyd.activity;
 
 import android.annotation.SuppressLint;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Message;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.VideoAllCallBack;
-import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.zb.wyd.R;
 import com.zb.wyd.entity.ChannelInfo;
-import com.zb.wyd.entity.LiveInfo;
-import com.zb.wyd.entity.LivePriceInfo;
+import com.zb.wyd.entity.PriceInfo;
 import com.zb.wyd.entity.VideoInfo;
 import com.zb.wyd.http.DataRequest;
 import com.zb.wyd.http.HttpRequest;
 import com.zb.wyd.http.IRequestListener;
-import com.zb.wyd.json.LiveInfoHandler;
 import com.zb.wyd.json.LivePriceInfoHandler;
-import com.zb.wyd.json.OnlinerListHandler;
 import com.zb.wyd.json.ResultHandler;
 import com.zb.wyd.json.VideoStreamHandler;
 import com.zb.wyd.listener.MyItemClickListener;
@@ -92,7 +86,7 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
                 case GET_VIDEO_PRICE_SUCCESS:
                     LivePriceInfoHandler mLivePriceInfoHandler = (LivePriceInfoHandler) msg.obj;
 
-                    LivePriceInfo mLivePriceInfo = mLivePriceInfoHandler.getLivePriceInfo();
+                    PriceInfo mLivePriceInfo = mLivePriceInfoHandler.getLivePriceInfo();
 
                     if (null != mLivePriceInfo)
                     {

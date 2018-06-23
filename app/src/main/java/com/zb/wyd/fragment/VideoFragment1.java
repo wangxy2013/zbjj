@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -40,6 +41,7 @@ import com.zb.wyd.utils.Urls;
 import com.zb.wyd.widget.CataPopupWindow;
 import com.zb.wyd.widget.FullyGridLayoutManager;
 import com.zb.wyd.widget.MaxRecyclerView;
+import com.zb.wyd.widget.VerticalSwipeRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,26 +55,27 @@ import butterknife.Unbinder;
 /**
  * 描述：自拍
  */
-public class VideoFragment1 extends BaseFragment implements IRequestListener, View.OnClickListener
+public class VideoFragment1 extends BaseFragment implements IRequestListener, View.OnClickListener,SwipeRefreshLayout.OnRefreshListener
 {
 
     @BindView(R.id.banner)
-    CustomBanner    mBanner;
+    CustomBanner               mBanner;
     @BindView(R.id.iv_show)
-    ImageView       ivMore;
+    ImageView                  ivMore;
     @BindView(R.id.rv_cata)
-    RecyclerView    rvCata;
+    RecyclerView               rvCata;
     @BindView(R.id.topView)
-    View            topView;
+    View                       topView;
     @BindView(R.id.rl_all_free)
-    RelativeLayout  rlAllFree;
+    RelativeLayout             rlAllFree;
     @BindView(R.id.rv_free_time)
-    MaxRecyclerView rvFreeTime;
+    MaxRecyclerView            rvFreeTime;
     @BindView(R.id.rl_all_integer)
-    RelativeLayout  rlAllInteger;
+    RelativeLayout             rlAllInteger;
     @BindView(R.id.rv_integer_area)
-    MaxRecyclerView rvIntegerArea;
-
+    MaxRecyclerView            rvIntegerArea;
+    @BindView(R.id.swipeRefresh)
+    VerticalSwipeRefreshLayout mSwipeRefreshLayout;
 
     private List<CataInfo> cataInfoList = new ArrayList<>();
     private CataAdapter mCataAdapter;
@@ -226,6 +229,7 @@ public class VideoFragment1 extends BaseFragment implements IRequestListener, Vi
     protected void initEvent()
     {
         ivMore.setOnClickListener(this);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
     }
 
     @Override
@@ -291,11 +295,15 @@ public class VideoFragment1 extends BaseFragment implements IRequestListener, Vi
         });
         rvIntegerArea.setLayoutManager(new FullyGridLayoutManager(getActivity(), 2));
         rvIntegerArea.setAdapter(mFavVideoAdapter);
+        loadData();
 
+    }
+
+    private void    loadData()
+    {
         mHandler.sendEmptyMessage(GET_CATA_LIST_CODE);
         mHandler.sendEmptyMessage(GET_AD_lIST_CODE);
     }
-
 
     private void getVideoCata()
     {
@@ -506,4 +514,13 @@ public class VideoFragment1 extends BaseFragment implements IRequestListener, Vi
     }
 
 
+    @Override
+    public void onRefresh()
+    {
+        if (mSwipeRefreshLayout != null)
+        {
+            loadData();
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+    }
 }

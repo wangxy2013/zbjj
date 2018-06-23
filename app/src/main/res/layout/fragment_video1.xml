@@ -4,7 +4,10 @@
               android:layout_height="match_parent"
               android:background="@color/white"
               android:orientation="vertical">
-
+    <com.zb.wyd.widget.VerticalSwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -174,4 +177,5 @@
 
         </LinearLayout>
     </ScrollView>
+    </com.zb.wyd.widget.VerticalSwipeRefreshLayout>
 </LinearLayout>

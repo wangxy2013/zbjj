@@ -1,8 +1,7 @@
 package com.zb.wyd.json;
 
 
-import com.zb.wyd.entity.LiveInfo;
-import com.zb.wyd.entity.LivePriceInfo;
+import com.zb.wyd.entity.PriceInfo;
 
 import org.json.JSONObject;
 
@@ -10,9 +9,9 @@ import org.json.JSONObject;
  */
 public class LivePriceInfoHandler extends JsonHandler
 {
-    private LivePriceInfo livePriceInfo;
+    private PriceInfo livePriceInfo;
 
-    public LivePriceInfo getLivePriceInfo()
+    public PriceInfo getLivePriceInfo()
     {
         return livePriceInfo;
     }
@@ -24,7 +23,7 @@ public class LivePriceInfoHandler extends JsonHandler
         {
 
 
-            livePriceInfo = new LivePriceInfo(jsonObj.optJSONObject("data"));
+            livePriceInfo = new PriceInfo(jsonObj.optJSONObject("data"));
 
 
         } catch (Exception e)

@@ -15,15 +15,16 @@ import com.zb.wyd.listener.MyItemClickListener;
 import com.zb.wyd.utils.APPUtils;
 import com.zb.wyd.widget.RoundAngleImageView;
 
+import java.util.Random;
+
 
 /**
  */
 public class SelfieHolder extends RecyclerView.ViewHolder
 {
-    private TextView            mTitleTv;
-    private TextView            mIndexTv;
+    private TextView            mTimeTv;
     private TextView            mNameTv;
-    private TextView            mBrowseTv;
+    private TextView            mFavTv;
     private RoundAngleImageView mImgIv;
     private RelativeLayout      mItemLayout;
     private MyItemClickListener listener;
@@ -36,16 +37,31 @@ public class SelfieHolder extends RecyclerView.ViewHolder
         this.context = context;
         mImgIv = (RoundAngleImageView) rootView.findViewById(R.id.iv_user_pic);
         mItemLayout = (RelativeLayout) rootView.findViewById(R.id.rl_item);
-
+        mTimeTv = (TextView) rootView.findViewById(R.id.tv_time);
+        mNameTv= (TextView) rootView.findViewById(R.id.tv_name);
+        mFavTv= (TextView) rootView.findViewById(R.id.tv_fav);
     }
 
 
-    public void setSelfieInfo(SelfieInfo mSelfieInfo)
+    public void setSelfieInfo(SelfieInfo mSelfieInfo,final  int p)
     {
         int spacingInPixels = context.getResources().getDimensionPixelSize(R.dimen.dm_10) * 3;
         int width = (APPUtils.getScreenWidth(context) - spacingInPixels) / 2;
-        mItemLayout.setLayoutParams(new LinearLayout.LayoutParams(width, width * 13 / 20));
-        ImageLoader.getInstance().displayImage("http://img3.imgtn.bdimg.com/it/u=3326312922,67097319&fm=27&gp=0.jpg", mImgIv);
+        int height = width + (int)(Math.random()*200);
+        mItemLayout.setLayoutParams(new LinearLayout.LayoutParams(width, height));
+        ImageLoader.getInstance().displayImage(mSelfieInfo.getCover(), mImgIv);
+
+        mNameTv.setText(mSelfieInfo.getPname());
+        mTimeTv.setText(mSelfieInfo.getAdd_time());
+        mFavTv.setText(mSelfieInfo.getFavour_count());
+
+        mItemLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                listener.onItemClick(v,p);
+            }
+        });
     }
 
 

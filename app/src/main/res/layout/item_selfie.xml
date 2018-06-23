@@ -14,78 +14,58 @@
         <com.zb.wyd.widget.RoundAngleImageView
             android:id="@+id/iv_user_pic"
             android:layout_width="match_parent"
-            android:scaleType="centerCrop"
             android:layout_height="match_parent"
+            android:scaleType="centerCrop"
             android:src="@color/text_blue1"/>
-
-        <TextView
-            android:id="@+id/tv_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_margin="@dimen/dm_5"
-            android:background="@drawable/common_orange_3dp"
-            android:paddingBottom="@dimen/dm_3"
-            android:paddingLeft="@dimen/dm_8"
-            android:paddingRight="@dimen/dm_8"
-            android:paddingTop="@dimen/dm_3"
-            android:text="LIVE"
-            android:textColor="@color/blackC"
-            android:textSize="@dimen/t10"/>
 
 
         <RelativeLayout
+            android:id="@+id/ll_bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_margin="@dimen/dm_5">
-
-
-            <ImageView
-                android:id="@+id/iv_follow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_follow"/>
-
+            android:layout_margin="@dimen/dm_10">
 
             <TextView
-                android:id="@+id/tv_follow"
+                android:id="@+id/tv_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/dm_5"
-                android:layout_toRightOf="@+id/iv_follow"
-                android:text="1111"
-                android:textColor="@color/white"
-                android:textSize="@dimen/t10"/>
-
-            <TextView
-                android:id="@+id/tv_popularity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/dm_5"
                 android:text="1111"
                 android:textColor="@color/white"
                 android:textSize="@dimen/t10"/>
 
             <ImageView
+                android:id="@+id/iv_fav"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toLeftOf="@+id/tv_popularity"
+                android:layout_marginLeft="@dimen/dm_25"
+                android:layout_toRightOf="@+id/tv_time"
                 android:src="@drawable/ic_popularity"/>
+            <TextView
+                android:id="@+id/tv_fav"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dm_5"
+                android:layout_toRightOf="@+id/iv_fav"
+                android:text="1111"
+                android:textColor="@color/white"
+                android:textSize="@dimen/t10"/>
+
 
         </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/ll_bottom"
+            android:layout_margin="@dimen/dm_10"
+            android:text="111111111"
+            android:textColor="@color/white"
+            android:textSize="@dimen/t14"/>
     </RelativeLayout>
-    <TextView
-        android:id="@+id/tv_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dm_5"
-        android:text="宝宝"
-        android:textColor="@color/blackB"
-        android:textSize="@dimen/t14"/>
+
 </LinearLayout>

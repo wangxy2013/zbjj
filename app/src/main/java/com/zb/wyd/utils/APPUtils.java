@@ -179,7 +179,6 @@ public class APPUtils
     public static String getDeviceId(Context mContext)
     {
         TelephonyManager tm = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
-        StringBuilder sb = new StringBuilder();
         String mDeviceId = tm.getDeviceId();
         if (StringUtils.stringIsEmpty(mDeviceId))
         {

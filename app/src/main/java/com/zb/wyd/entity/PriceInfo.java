@@ -5,7 +5,7 @@ import org.json.JSONObject;
 /**
  * 描述：一句话简单描述
  */
-public class LivePriceInfo
+public class PriceInfo
 {
     private String finger;//安全指纹，提交支付的时候需要带上该参数
     private String  user_money;//用户余额
@@ -14,7 +14,7 @@ public class LivePriceInfo
     private int    off_amount;//折扣
     private int    old_amount;//原价
 
-    public LivePriceInfo(JSONObject obj)
+    public PriceInfo(JSONObject obj)
     {
         this.finger = obj.optString("finger");
         this.user_money = obj.optString("user_money");

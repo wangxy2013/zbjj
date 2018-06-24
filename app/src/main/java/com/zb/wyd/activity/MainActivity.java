@@ -16,6 +16,7 @@ import com.zb.wyd.fragment.TaskFragment;
 import com.zb.wyd.fragment.VideoFragment;
 import com.zb.wyd.fragment.VideoFragment1;
 import com.zb.wyd.utils.DialogUtils;
+import com.zb.wyd.utils.VersionManager;
 import com.zb.wyd.widget.statusbar.StatusBarUtil;
 
 import butterknife.BindView;
@@ -72,6 +73,8 @@ public class MainActivity extends BaseActivity
             // fragmentTabHost.getTabWidget().getChildAt(i).setBackgroundResource(R.drawable.main_tab_selector);
         }
         fragmentTabHost.getTabWidget().setDividerDrawable(R.color.transparent);
+
+        new VersionManager(this).init();
 
     }
 

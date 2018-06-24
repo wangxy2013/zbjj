@@ -15,6 +15,7 @@ import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -25,11 +26,13 @@ import android.widget.TextView;
 
 import com.zb.wyd.R;
 import com.zb.wyd.adapter.AddPhotoAdapter;
+import com.zb.wyd.entity.LocationInfo;
 import com.zb.wyd.entity.PhotoInfo;
 import com.zb.wyd.entity.PicInfo;
 import com.zb.wyd.http.DataRequest;
 import com.zb.wyd.http.HttpRequest;
 import com.zb.wyd.http.IRequestListener;
+import com.zb.wyd.json.LocationInfoHandler;
 import com.zb.wyd.json.PhotoInfoHandler;
 import com.zb.wyd.json.ResultHandler;
 import com.zb.wyd.listener.MyItemClickListener;
@@ -59,16 +62,15 @@ import butterknife.BindView;
 public class AddPhotoActivity extends BaseActivity implements IRequestListener
 {
     @BindView(R.id.iv_back)
-    ImageView ivBack;
+    ImageView       ivBack;
     @BindView(R.id.tv_title)
-    TextView  tvTitle;
+    TextView        tvTitle;
     @BindView(R.id.tv_submit)
-    TextView  tvSubmit;
+    TextView        tvSubmit;
     @BindView(R.id.tv_name)
-    EditText  tvName;
+    EditText        tvName;
     @BindView(R.id.tv_num)
-    TextView  tvNum;
-
+    TextView        tvNum;
     @BindView(R.id.et_desc)
     EditText        etDesc;
     @BindView(R.id.tv_free)
@@ -89,11 +91,13 @@ public class AddPhotoActivity extends BaseActivity implements IRequestListener
     LinearLayout    llLocation;
     @BindView(R.id.et_contact)
     EditText        etContact;
+    @BindView(R.id.tv_location)
+    TextView        tvLocation;
 
 
     private int index;
-
     private String host;
+    private String location;
     private List<PicInfo> freePicList   = new ArrayList<>();
     private List<PicInfo> chargePicList = new ArrayList<>();
 
@@ -108,14 +112,16 @@ public class AddPhotoActivity extends BaseActivity implements IRequestListener
     private static final   int GALLERY_REQUEST_CODE                    = 9001;    // 相册选图标记
     private static final   int CAMERA_REQUEST_CODE                     = 9002;    // 相机拍照标记
 
+    private static final String GET_LOCATION         = "get_location";
+    private static final String ADD_PHOTO            = "add_photo";
+    private static final String UPLOAD_USER_PIC      = "upload_user_pic";
+    private static final int    REQUEST_SUCCESS      = 0x01;
+    private static final int    REQUEST_FAIL         = 0x02;
+    private static final int    ADD_PHOTO_SUCCESS    = 0x03;
+    private static final int    GET_LOCATION_SUCCESS = 0x04;
 
-    private static final String      ADD_PHOTO         = "add_photo";
-    private static final String      UPLOAD_USER_PIC   = "upload_user_pic";
-    private static final int         REQUEST_SUCCESS   = 0x01;
-    private static final int         REQUEST_FAIL      = 0x02;
-    private static final int         ADD_PHOTO_SUCCESS = 0x03;
     @SuppressLint("HandlerLeak")
-    private              BaseHandler mHandler          = new BaseHandler(AddPhotoActivity.this)
+    private BaseHandler mHandler = new BaseHandler(AddPhotoActivity.this)
     {
         @Override
         public void handleMessage(Message msg)
@@ -159,6 +165,18 @@ public class AddPhotoActivity extends BaseActivity implements IRequestListener
                     ToastUtil.show(AddPhotoActivity.this, "图集上传成功");
                     finish();
                     break;
+
+                case GET_LOCATION_SUCCESS:
+                    LocationInfoHandler mLocationInfoHandler = (LocationInfoHandler) msg.obj;
+                    LocationInfo locationInfo = mLocationInfoHandler.getLocationInfo();
+
+                    if (null != locationInfo)
+                    {
+                        location = locationInfo.getProv() +"," + locationInfo.getCity()+","+locationInfo.getDistrict();
+                        tvLocation.setText("地点:" + locationInfo.getCity());
+                        tvLocation.setTextColor(ContextCompat.getColor(AddPhotoActivity.this, R.color.yellow));
+                    }
+                    break;
             }
         }
     };
@@ -186,6 +204,7 @@ public class AddPhotoActivity extends BaseActivity implements IRequestListener
         tvFree.setOnClickListener(this);
         tvCharge.setOnClickListener(this);
         tvSubmit.setOnClickListener(this);
+        llLocation.setOnClickListener(this);
         etDesc.addTextChangedListener(new TextWatcher()
         {
             @Override
@@ -397,7 +416,7 @@ public class AddPhotoActivity extends BaseActivity implements IRequestListener
             valuePairs.put("title", title);
             valuePairs.put("desc", etDesc.getText().toString());
             valuePairs.put("tags", "5");
-            valuePairs.put("location", "中国南京市白下区");
+            valuePairs.put("location", location);
             valuePairs.put("free_album", freeSb.toString());
             valuePairs.put("contact", etContact.getText().toString());
             valuePairs.put("charge_album", chargeSb.toString());
@@ -416,6 +435,13 @@ public class AddPhotoActivity extends BaseActivity implements IRequestListener
         else if (v == tvCharge)
         {
             setTab(1);
+        }
+        else if (v == llLocation)
+        {
+            showProgressDialog();
+            Map<String, String> valuePairs = new HashMap<>();
+            DataRequest.instance().request(AddPhotoActivity.this, Urls.getIplookupUrl(), this, HttpRequest.POST, GET_LOCATION, valuePairs,
+                    new LocationInfoHandler());
         }
     }
 
@@ -597,6 +623,17 @@ public class AddPhotoActivity extends BaseActivity implements IRequestListener
             if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
             {
                 mHandler.sendMessage(mHandler.obtainMessage(ADD_PHOTO_SUCCESS, obj));
+            }
+            else
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
+            }
+        }
+        else if (GET_LOCATION.equals(action))
+        {
+            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(GET_LOCATION_SUCCESS, obj));
             }
             else
             {

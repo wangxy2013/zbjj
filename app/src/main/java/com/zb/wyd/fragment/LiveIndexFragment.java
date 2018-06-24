@@ -136,7 +136,11 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
                     {
                         picList.add(adInfoList.get(i).getImage());
                     }
-                    initAd();
+
+                    if(!picList.isEmpty())
+                    {
+                        initAd();
+                    }
                     break;
 
                 case GET_AD_LIST_CODE:

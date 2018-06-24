@@ -38,16 +38,14 @@ public class ConfigManager
     private static final String GUEST_ID        = "guest_id";
     private static final String USER_NICK_NAME  = "user_nick_name";
     private static final String USER_EMAIL      = "user_email";
-    private static final String CHEK_IN_DATE    = "chek_in_date";
-    private static final String CHEK_OUT_DATE   = "chek_out_date";
     private static final String TOKEN           = "TOKEN";
     private static final String USER_PIC        = "useer_pic";
     private static final String USER_SEX        = "user_sex";
 
-    private static final String CITY_VALUE = "city_value";
-    private static final String MERCHANT_ID = "merchant_id";
-
-
+    private static final String SYSTEM_EMAIL        = "system_email";
+    private static final String SYSTEM_QQ        = "system_qq";
+    private static final String BG_LOGIN        = "bg_login";
+    private static final String BG_STARTUP        = "bg_startup";
     /**
      * 返回实例
      *
@@ -235,46 +233,46 @@ public class ConfigManager
     }
 
 
-    public void setChekInDate(String chek_in_date)
+    public void setSystemEmail(String email)
     {
-        mSharedPreferences.edit().putString(CHEK_IN_DATE, chek_in_date).commit();
+        mSharedPreferences.edit().putString(SYSTEM_EMAIL, email).commit();
     }
 
-    public String getChekInDate()
+    public String getSystemEmail()
     {
-        return mSharedPreferences.getString(CHEK_IN_DATE, "");
+        return mSharedPreferences.getString(SYSTEM_EMAIL, "");
+    }
+
+    public void setSystemQq(String email)
+    {
+        mSharedPreferences.edit().putString(SYSTEM_QQ, email).commit();
+    }
+
+    public String getSystemQq()
+    {
+        return mSharedPreferences.getString(SYSTEM_QQ, "");
+    }
+
+    public void setBgLogin(String str)
+    {
+        mSharedPreferences.edit().putString(BG_LOGIN, str).commit();
+    }
+
+    public String getBgLogin()
+    {
+        return mSharedPreferences.getString(BG_LOGIN, "");
+    }
+
+    public void setBgStartup(String str)
+    {
+        mSharedPreferences.edit().putString(BG_STARTUP, str).commit();
+    }
+
+    public String getBgStartup()
+    {
+        return mSharedPreferences.getString(BG_STARTUP, "");
     }
 
 
-    public void setChekOutDate(String chek_out_date)
-    {
-        mSharedPreferences.edit().putString(CHEK_OUT_DATE, chek_out_date).commit();
-    }
-
-    public String getChekOutDate()
-    {
-        return mSharedPreferences.getString(CHEK_OUT_DATE, "");
-    }
-
-
-    public void setCityValue(String city_value)
-    {
-        mSharedPreferences.edit().putString(CITY_VALUE, city_value).commit();
-    }
-
-    public String getCityValue()
-    {
-        return mSharedPreferences.getString(CITY_VALUE, "2158");
-    }
-
-    public void setMerchantId(String merchantId)
-    {
-        mSharedPreferences.edit().putString(MERCHANT_ID, merchantId).commit();
-    }
-
-    public String getMerchantId()
-    {
-        return mSharedPreferences.getString(MERCHANT_ID, "");
-    }
 }
 

@@ -4,8 +4,9 @@
                 android:layout_height="match_parent"
                 android:background="@color/windowBackground"
                 android:orientation="vertical">
-
+    <include layout="@layout/layout_head"/>
     <ScrollView
+        android:layout_below="@+id/ll_head"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
@@ -13,7 +14,6 @@
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:orientation="vertical">
-            <include layout="@layout/layout_head"/>
 
             <EditText
                 android:id="@+id/tv_name"
@@ -173,6 +173,7 @@
                     android:paddingTop="@dimen/dm_5">
 
                     <TextView
+                        android:id="@+id/tv_location"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="添加地点"

@@ -18,8 +18,11 @@ import android.widget.RelativeLayout;
 
 import com.donkingliang.banner.CustomBanner;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.zb.wyd.MyApplication;
 import com.zb.wyd.R;
 import com.zb.wyd.activity.BaseHandler;
+import com.zb.wyd.activity.LoginActivity;
+import com.zb.wyd.activity.PhotoDetailActivity;
 import com.zb.wyd.activity.VideoPlayActivity;
 import com.zb.wyd.adapter.CataAdapter;
 import com.zb.wyd.adapter.IntegerAreaAdapter;
@@ -55,7 +58,7 @@ import butterknife.Unbinder;
 /**
  * 描述：自拍
  */
-public class VideoFragment1 extends BaseFragment implements IRequestListener, View.OnClickListener,SwipeRefreshLayout.OnRefreshListener
+public class VideoFragment1 extends BaseFragment implements IRequestListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener
 {
 
     @BindView(R.id.banner)
@@ -181,7 +184,11 @@ public class VideoFragment1 extends BaseFragment implements IRequestListener, Vi
                     {
                         picList.add(adInfoList.get(i).getImage());
                     }
-                    initAd();
+
+                    if (!picList.isEmpty())
+                    {
+                        initAd();
+                    }
                     break;
                 case GET_AD_lIST_CODE:
                     getAdList();
@@ -272,9 +279,18 @@ public class VideoFragment1 extends BaseFragment implements IRequestListener, Vi
             @Override
             public void onItemClick(View view, int position)
             {
-                Bundle b = new Bundle();
-                b.putSerializable("VideoInfo", newVideoList.get(position));
-                startActivity(new Intent(getActivity(), VideoPlayActivity.class).putExtras(b));
+                if (MyApplication.getInstance().isLogin())
+                {
+                    Bundle b = new Bundle();
+                    b.putSerializable("VideoInfo", newVideoList.get(position));
+                    startActivity(new Intent(getActivity(), VideoPlayActivity.class).putExtras(b));
+
+                }
+                else
+                {
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                }
+
             }
         });
 
@@ -299,7 +315,7 @@ public class VideoFragment1 extends BaseFragment implements IRequestListener, Vi
 
     }
 
-    private void    loadData()
+    private void loadData()
     {
         mHandler.sendEmptyMessage(GET_CATA_LIST_CODE);
         mHandler.sendEmptyMessage(GET_AD_lIST_CODE);

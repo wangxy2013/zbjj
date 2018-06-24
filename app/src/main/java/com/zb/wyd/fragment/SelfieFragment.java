@@ -23,12 +23,14 @@ import com.zb.wyd.MyApplication;
 import com.zb.wyd.R;
 import com.zb.wyd.activity.AddPhotoActivity;
 import com.zb.wyd.activity.BaseHandler;
+import com.zb.wyd.activity.LiveActivity;
 import com.zb.wyd.activity.LoginActivity;
 import com.zb.wyd.activity.PhotoDetailActivity;
 import com.zb.wyd.adapter.CataAdapter;
 import com.zb.wyd.adapter.SelfieAdapter;
 import com.zb.wyd.entity.AdInfo;
 import com.zb.wyd.entity.CataInfo;
+import com.zb.wyd.entity.LiveInfo;
 import com.zb.wyd.entity.SelfieInfo;
 import com.zb.wyd.http.DataRequest;
 import com.zb.wyd.http.HttpRequest;
@@ -159,7 +161,11 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
                     {
                         picList.add(adInfoList.get(i).getImage());
                     }
-                    initAd();
+
+                    if(!picList.isEmpty())
+                    {
+                        initAd();
+                    }
                     break;
 
                 case GET_AD_LIST_CODE:
@@ -253,7 +259,16 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
             @Override
             public void onItemClick(View view, int position)
             {
-                startActivity(new Intent(getActivity(), PhotoDetailActivity.class).putExtra("biz_id", selfieInfoList.get(position).getId()));
+                if (MyApplication.getInstance().isLogin())
+                {
+                    startActivity(new Intent(getActivity(), PhotoDetailActivity.class).putExtra("biz_id", selfieInfoList.get(position).getId()));
+
+                }
+                else
+                {
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                }
+
             }
         });
         rvPhoto.setNestedScrollingEnabled(false);

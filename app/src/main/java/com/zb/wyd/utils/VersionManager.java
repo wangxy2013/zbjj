@@ -1,5 +1,6 @@
 package com.zb.wyd.utils;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -43,7 +44,7 @@ public class VersionManager implements IRequestListener
 
     private Dialog downloadDialog;
     /* 下载包安装路径 */
-    private static final String savePath = "/sdcard/bangfu/";
+    private static final String savePath = "/sdcard/wyd/";
 
     private static final String saveFileName = savePath
             + "svmuu.apk";
@@ -63,6 +64,7 @@ public class VersionManager implements IRequestListener
 
     private boolean interceptFlag = false;
 
+    @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler()
     {
         public void handleMessage(Message msg)
@@ -83,8 +85,15 @@ public class VersionManager implements IRequestListener
 
                     VersionInfoHandler mVersionInfoHandler = (VersionInfoHandler) msg.obj;
                     VersionInfo mVersionInfo = mVersionInfoHandler.getVersionInfo();
+
+
                     if (null != mVersionInfo)
                     {
+                        ConfigManager.instance().setSystemEmail(mVersionInfo.getEmai());
+                        ConfigManager.instance().setSystemQq(mVersionInfo.getQq());
+                        ConfigManager.instance().setBgLogin(mVersionInfo.getBg_login());
+                        ConfigManager.instance().setBgStartup(mVersionInfo.getBg_startup());
+
                         showNoticeDialog(mVersionInfo);
                     }
 
@@ -113,7 +122,7 @@ public class VersionManager implements IRequestListener
     private void showNoticeDialog(final VersionInfo mVersionBean)
     {
 
-        if (mVersionBean.getVersion().compareTo(APPUtils.getVersionName(mContext))>0)
+        if (mVersionBean.getVersion().compareTo(APPUtils.getVersionName(mContext)) > 0)
         {
             apkUrl = mVersionBean.getLink();
             DialogUtils.showVersionUpdateDialog(mContext, mVersionBean.getVersion_desc(), new MyOnClickListener.OnSubmitListener()

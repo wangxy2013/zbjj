@@ -3,7 +3,6 @@ package com.zb.wyd.utils;
 /**
  * URL管理类
  *
- * @date 2014年9月16日 上午9:48:03
  * @since[产品/模块版本]
  * @seejlj
  */
@@ -18,7 +17,7 @@ public class Urls
     //获取版本信息
     public static String getVersionUrl()
     {
-        return BASE_URL + "merchant/search";
+        return BASE_URL + "index/config";
     }
 
 
@@ -135,10 +134,22 @@ public class Urls
     {
         return BASE_URL + "photo/upload";
     }
+
     //获取自拍详情
     public static String getAddPhotoUrl()
     {
         return BASE_URL + "photo/create";
+    }
+
+    //获取定位
+    public static String getIplookupUrl()
+    {
+        return "http://ip.ccydj.com/lbs/iplookup";
+    }
+
+    public static String getUserInfoUrl()
+    {
+        return BASE_URL + "user/index";
     }
 
 

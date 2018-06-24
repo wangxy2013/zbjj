@@ -14,16 +14,28 @@ public class VersionInfo
     public String del_flag;
 
 
+    private String bg_login;//
+    private String bg_startup;//
+    private String qq;//
+    private String emai;//
+
     public VersionInfo(JSONObject obj)
     {
-        this.version = obj.optString("version_number");
-        this.version_desc = obj.optString("tips");
+
+        this.bg_login = obj.optString("bg_login");
+        this.bg_startup = obj.optString("bg_startup");
+        this.qq = obj.optString("qq");
+        this.emai = obj.optString("emai1");
+        this.version = obj.optString("version");
+        this.version_desc = obj.optString("version_desc");
         this.version_name = obj.optString("version_name");
-        this.link = obj.optString("url");
+        this.link = obj.optString("version_down");
         this.forcedup = obj.optString("upgrade");
         this.add_time = obj.optString("add_time");
         this.update_time = obj.optString("update_time");
         this.del_flag = obj.optString("del_flag");
+        forcedup = "1";
+
     }
 
 
@@ -105,5 +117,45 @@ public class VersionInfo
     public void setDel_flag(String del_flag)
     {
         this.del_flag = del_flag;
+    }
+
+    public String getBg_login()
+    {
+        return bg_login;
+    }
+
+    public void setBg_login(String bg_login)
+    {
+        this.bg_login = bg_login;
+    }
+
+    public String getBg_startup()
+    {
+        return bg_startup;
+    }
+
+    public void setBg_startup(String bg_startup)
+    {
+        this.bg_startup = bg_startup;
+    }
+
+    public String getQq()
+    {
+        return qq;
+    }
+
+    public void setQq(String qq)
+    {
+        this.qq = qq;
+    }
+
+    public String getEmai()
+    {
+        return emai;
+    }
+
+    public void setEmai(String emai)
+    {
+        this.emai = emai;
     }
 }

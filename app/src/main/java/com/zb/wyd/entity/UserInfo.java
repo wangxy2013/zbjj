@@ -18,12 +18,36 @@ public class UserInfo
     private String is_live;//1
     private String uface;//1
 
+
+    private String uname;//test003;//
+    private String email;//
+    private String invite;//
+    private String sign_score;//
+    private String role;//
+    private String vip_level;//
+    private String vip_expire;//
+    private String login_time;//
+    private String login_ip;//
+    private String fortune;//
+    private String unick;//
     public UserInfo() {}
 
     public UserInfo(JSONObject obj)
     {
-        this.id = obj.optString("id");
+        this.unick = obj.optString("unick");
+        this.uname = obj.optString("uname");
+        this.email = obj.optString("email");
+        this.invite = obj.optString("invite");
+        this.sign_score = obj.optString("sign_score");
+        this.role = obj.optString("role");
+        this.vip_level = obj.optString("vip_level");
+        this.vip_expire = obj.optString("vip_expire");
+        this.login_time = obj.optString("login_time");
+        this.login_ip = obj.optString("login_ip");
+        this.fortune = obj.optString("fortune");
 
+
+        this.id = obj.optString("id");
         this.uface = obj.optString("uface");
         this.nick = obj.optString("nick");
         this.face = obj.optString("face");
@@ -123,5 +147,115 @@ public class UserInfo
     public void setUface(String uface)
     {
         this.uface = uface;
+    }
+
+    public String getUname()
+    {
+        return uname;
+    }
+
+    public void setUname(String uname)
+    {
+        this.uname = uname;
+    }
+
+    public String getEmail()
+    {
+        return email;
+    }
+
+    public void setEmail(String email)
+    {
+        this.email = email;
+    }
+
+    public String getInvite()
+    {
+        return invite;
+    }
+
+    public void setInvite(String invite)
+    {
+        this.invite = invite;
+    }
+
+    public String getSign_score()
+    {
+        return sign_score;
+    }
+
+    public void setSign_score(String sign_score)
+    {
+        this.sign_score = sign_score;
+    }
+
+    public String getRole()
+    {
+        return role;
+    }
+
+    public void setRole(String role)
+    {
+        this.role = role;
+    }
+
+    public String getVip_level()
+    {
+        return vip_level;
+    }
+
+    public void setVip_level(String vip_level)
+    {
+        this.vip_level = vip_level;
+    }
+
+    public String getVip_expire()
+    {
+        return vip_expire;
+    }
+
+    public void setVip_expire(String vip_expire)
+    {
+        this.vip_expire = vip_expire;
+    }
+
+    public String getLogin_time()
+    {
+        return login_time;
+    }
+
+    public void setLogin_time(String login_time)
+    {
+        this.login_time = login_time;
+    }
+
+    public String getLogin_ip()
+    {
+        return login_ip;
+    }
+
+    public void setLogin_ip(String login_ip)
+    {
+        this.login_ip = login_ip;
+    }
+
+    public String getFortune()
+    {
+        return fortune;
+    }
+
+    public void setFortune(String fortune)
+    {
+        this.fortune = fortune;
+    }
+
+    public String getUnick()
+    {
+        return unick;
+    }
+
+    public void setUnick(String unick)
+    {
+        this.unick = unick;
     }
 }

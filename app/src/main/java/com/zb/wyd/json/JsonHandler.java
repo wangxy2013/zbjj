@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 
+import com.zb.wyd.activity.LoginActivity;
 import com.zb.wyd.utils.ConstantUtil;
 
 import org.json.JSONObject;
@@ -30,15 +31,19 @@ public abstract class JsonHandler
             {
                 JSONObject jsonObject = new JSONObject(jsonString);
 
-
-                if ("true".equals(jsonObject.optString("status")))
+                if ("true".equals(jsonObject.optString("status"))||"true".equals(jsonObject.optString("count")))
                 {
                     setResultCode(ConstantUtil.RESULT_SUCCESS);
                 }
                 else
                 {
-                    setResultCode(jsonObject.optString("code"));
 
+                    if ("1904".equals(jsonObject.optString("code")))
+                    {
+                        mContext.startActivity(new Intent(mContext, LoginActivity.class));
+                    }
+
+                    setResultCode(jsonObject.optString("code"));
                 }
                 setResultMsg(jsonObject.optString("message"));
                 parseJson(jsonObject);

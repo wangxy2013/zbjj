@@ -346,7 +346,7 @@ public class AddPhotoActivity extends BaseActivity implements IRequestListener
             {
                 if (freePicList.size() < 6)
                 {
-                    ToastUtil.show(this, "免费图片数量必须大于5张");
+                    ToastUtil.show(this, "免费图片数量不少于5张");
                     return;
                 }
             }
@@ -354,13 +354,13 @@ public class AddPhotoActivity extends BaseActivity implements IRequestListener
             {
                 if (freePicList.size() < 4)
                 {
-                    ToastUtil.show(this, "免费图片数量必须大于3张");
+                    ToastUtil.show(this, "免费图片数量不少于3张");
                     return;
                 }
 
                 if (chargePicList.size() < 6)
                 {
-                    ToastUtil.show(this, "收费图片数量必须大于5张");
+                    ToastUtil.show(this, "收费图片数量不少于5张");
                     return;
                 }
 

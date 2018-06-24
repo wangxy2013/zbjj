@@ -56,7 +56,16 @@ public class PhotoInfo
             for (int i = 0; i < free.length; i++)
             {
                 if (!StringUtils.stringIsEmpty(free[i]))
-                    freePic.add(free[i]);
+
+                    if(free[i].startsWith("http"))
+                    {
+                        freePic.add(free[i]);
+                    }
+                    else
+                    {
+                        freePic.add(host+free[i]);
+                    }
+
             }
         }
 
@@ -67,7 +76,17 @@ public class PhotoInfo
             for (int i = 0; i < charge.length; i++)
             {
                 if (!StringUtils.stringIsEmpty(charge[i]))
-                    chargePic.add(charge[i]);
+                {
+                    if(charge[i].startsWith("http"))
+                    {
+                        chargePic.add(charge[i]);
+                    }
+                    else
+                    {
+                        freePic.add(host+charge[i]);
+                    }
+                }
+
             }
         }
     }

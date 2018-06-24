@@ -160,9 +160,15 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
         });
 
         rvPhoto.setAdapter(mPhotoAdapter);
-        loadData();
+
     }
 
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        loadData();
+    }
 
     @Override
     public void onClick(View v)

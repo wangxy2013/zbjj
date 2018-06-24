@@ -103,7 +103,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
 
 
                 case REQUEST_FAIL:
-                    DialogUtils.showPromptDialog(LiveActivity.this, "当前主播不在线", new MyItemClickListener()
+                    DialogUtils.showPromptDialog(LiveActivity.this, msg.obj.toString(), new MyItemClickListener()
                     {
                         @Override
                         public void onItemClick(View view, int position)

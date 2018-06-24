@@ -1,5 +1,6 @@
 package com.zb.wyd.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTabHost;
 import android.view.KeyEvent;
@@ -8,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
+import com.zb.wyd.MyApplication;
 import com.zb.wyd.R;
 import com.zb.wyd.fragment.LiveFragment;
 import com.zb.wyd.fragment.MemberFragment;
@@ -54,7 +56,26 @@ public class MainActivity extends BaseActivity
     @Override
     protected void initEvent()
     {
+        fragmentTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener()
+        {
+            @Override
+            public void onTabChanged(String tabId)
+            {
+                if ("会员".equals(tabId))
+                {
+                    if (!MyApplication.getInstance().isLogin())
+                    {
+                        fragmentTabHost.setCurrentTab(0);
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    }
+                }
+            }
+        });
+    }
 
+    public  void setTab(int p)
+    {
+        fragmentTabHost.setCurrentTab(p);
     }
 
     @Override
@@ -77,6 +98,7 @@ public class MainActivity extends BaseActivity
         new VersionManager(this).init();
 
     }
+
 
     private View getView(int i)
     {

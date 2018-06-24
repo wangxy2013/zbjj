@@ -96,7 +96,7 @@ public class LiveFragment extends BaseFragment
         mTabLayout.addTab(mTabLayout.newTab().setText("直播平台"));
         mTabLayout.setupWithViewPager(mViewPager);//给TabLayout设置关联ViewPager，如果设置了ViewPager，那么ViewPagerAdapter中的getPageTitle()方法返回的就是Tab上的标题
         setTabView();
-        reflex(mTabLayout);
+//        reflex(mTabLayout);
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener()
         {
             @Override

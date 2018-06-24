@@ -1,5 +1,18 @@
 apply plugin: 'com.android.application'
 android {
+    signingConfigs {
+        config {
+            keyAlias 'wyd'
+            keyPassword 'wyd2018'
+            storeFile file('F:/otherPro/WYD/app/wyd.jks')
+            storePassword 'wyd2018'
+        }
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
     compileSdkVersion 26
     buildToolsVersion '26.0.2'
     defaultConfig {
@@ -44,17 +57,11 @@ dependencies {
     compile files('libs/okhttp-3.2.0.jar')
     compile 'com.commit451:PhotoView:1.2.4'
     compile 'com.shuyu:gsyVideoPlayer-java:5.0.0-beta'
-
-//根据你的需求
+    //根据你的需求
     compile 'com.shuyu:gsyVideoPlayer-armv5:5.0.0-beta'
     compile 'com.shuyu:gsyVideoPlayer-armv7a:5.0.0-beta'
     compile 'com.shuyu:gsyVideoPlayer-arm64:5.0.0-beta'
     compile 'com.shuyu:gsyVideoPlayer-x64:5.0.0-beta'
     compile 'com.shuyu:gsyVideoPlayer-x86:5.0.0-beta'
-
     compile 'com.github.donkingliang:CustomBanner:1.1.2'
-
-
-
-
 }

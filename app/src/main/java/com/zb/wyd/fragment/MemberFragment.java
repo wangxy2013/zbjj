@@ -18,6 +18,7 @@ import com.zb.wyd.MyApplication;
 import com.zb.wyd.R;
 import com.zb.wyd.activity.BaseHandler;
 import com.zb.wyd.activity.LoginActivity;
+import com.zb.wyd.activity.MainActivity;
 import com.zb.wyd.entity.UserInfo;
 import com.zb.wyd.http.DataRequest;
 import com.zb.wyd.http.HttpRequest;
@@ -198,10 +199,6 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
             DataRequest.instance().request(getActivity(), Urls.getUserInfoUrl(), this, HttpRequest.POST, GET_USER_DETAIL, valuePairs,
                     new UserInfoHandler());
         }
-        else
-        {
-            startActivity(new Intent(getActivity(), LoginActivity.class));
-        }
 
     }
 
@@ -239,6 +236,7 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
         if (v == btnLogout)
         {
             ConfigManager.instance().setUserId("");
+            ((MainActivity) getActivity()).setTab(0);
             startActivity(new Intent(getActivity(), LoginActivity.class));
         }
     }

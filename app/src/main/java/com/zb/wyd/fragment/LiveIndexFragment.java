@@ -252,13 +252,12 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
         });
         rvHot.setLayoutManager(new FullyGridLayoutManager(getActivity(), 2));
         rvHot.setAdapter(mNewAdapter);
-
+        mHandler.sendEmptyMessage(GET_AD_LIST_CODE);
         loadData();
     }
 
     private void loadData()
     {
-        mHandler.sendEmptyMessage(GET_AD_LIST_CODE);
         mHandler.sendEmptyMessage(GET_FREE_LIVE_CODE);
         mHandler.sendEmptyMessage(GET_NEW_LIVE_CODE);
     }
@@ -365,7 +364,12 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
         if (mSwipeRefreshLayout != null)
         {
             loadData();
-            mSwipeRefreshLayout.setRefreshing(false);
+            mSwipeRefreshLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+            });
         }
     }
 

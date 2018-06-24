@@ -180,7 +180,7 @@ public class RegisterActivity extends BaseActivity implements IRequestListener
             }
 
             Map<String, String> valuePairs = new HashMap<>();
-            valuePairs.put("mobile_id", APPUtils.getDeviceId(RegisterActivity.this) + "001");
+            valuePairs.put("mobile_id", APPUtils.getUniqueId(RegisterActivity.this));
             valuePairs.put("device", "and");
             valuePairs.put("user_name", account);
             valuePairs.put("password", pwd);

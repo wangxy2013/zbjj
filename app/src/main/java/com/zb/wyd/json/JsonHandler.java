@@ -7,6 +7,7 @@ import android.content.Intent;
 
 import com.zb.wyd.activity.LoginActivity;
 import com.zb.wyd.utils.ConstantUtil;
+import com.zb.wyd.utils.ToastUtil;
 
 import org.json.JSONObject;
 
@@ -31,16 +32,16 @@ public abstract class JsonHandler
             {
                 JSONObject jsonObject = new JSONObject(jsonString);
 
-                if ("true".equals(jsonObject.optString("status"))||"true".equals(jsonObject.optString("count")))
+                if ("true".equals(jsonObject.optString("status")) || "true".equals(jsonObject.optString("count")))
                 {
                     setResultCode(ConstantUtil.RESULT_SUCCESS);
                 }
                 else
                 {
-
                     if ("1904".equals(jsonObject.optString("code")))
                     {
-                        mContext.startActivity(new Intent(mContext, LoginActivity.class));
+                        if (null != mContext)
+                            mContext.startActivity(new Intent(mContext, LoginActivity.class));
                     }
 
                     setResultCode(jsonObject.optString("code"));

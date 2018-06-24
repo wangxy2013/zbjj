@@ -311,6 +311,7 @@ public class VideoFragment1 extends BaseFragment implements IRequestListener, Vi
         });
         rvIntegerArea.setLayoutManager(new FullyGridLayoutManager(getActivity(), 2));
         rvIntegerArea.setAdapter(mFavVideoAdapter);
+        mHandler.sendEmptyMessage(GET_AD_lIST_CODE);
         loadData();
 
     }
@@ -318,7 +319,7 @@ public class VideoFragment1 extends BaseFragment implements IRequestListener, Vi
     private void loadData()
     {
         mHandler.sendEmptyMessage(GET_CATA_LIST_CODE);
-        mHandler.sendEmptyMessage(GET_AD_lIST_CODE);
+
     }
 
     private void getVideoCata()
@@ -536,7 +537,12 @@ public class VideoFragment1 extends BaseFragment implements IRequestListener, Vi
         if (mSwipeRefreshLayout != null)
         {
             loadData();
-            mSwipeRefreshLayout.setRefreshing(false);
+            mSwipeRefreshLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+            });
         }
     }
 }

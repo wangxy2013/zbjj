@@ -273,6 +273,7 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
         });
         rvPhoto.setNestedScrollingEnabled(false);
         rvPhoto.setAdapter(mSelfieAdapter);
+        mHandler.sendEmptyMessage(GET_AD_LIST_CODE);
         loadData();
 
     }
@@ -280,7 +281,6 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
     private void loadData()
     {
         mHandler.sendEmptyMessage(GET_CATA_LIST_CODE);
-        mHandler.sendEmptyMessage(GET_AD_LIST_CODE);
     }
 
     private void getPhotoCata()
@@ -504,7 +504,12 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
         if (mSwipeRefreshLayout != null)
         {
             loadData();
-            mSwipeRefreshLayout.setRefreshing(false);
+            mSwipeRefreshLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+            });
         }
     }
 }

@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -59,6 +60,8 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     @BindView(R.id.rv_online)
     RecyclerView    rvOnline;
 
+    @BindView(R.id.rl_content)
+    RelativeLayout mContentLayout;
     private String   biz_id;
     private LiveInfo mLiveInfo;
     private long     startTime, endTime;
@@ -199,6 +202,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     @Override
     protected void initEvent()
     {
+        mContentLayout.setOnClickListener(this);
     }
 
     @Override

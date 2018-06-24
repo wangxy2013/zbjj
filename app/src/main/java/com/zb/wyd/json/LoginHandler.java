@@ -1,6 +1,8 @@
 package com.zb.wyd.json;
 
+import com.zb.wyd.MyApplication;
 import com.zb.wyd.utils.ConfigManager;
+import com.zb.wyd.utils.ToastUtil;
 
 import org.json.JSONObject;
 
@@ -17,14 +19,15 @@ public class LoginHandler extends JsonHandler
         try
         {
             JSONObject obj = jsonObject.optJSONObject("data");
-            String uniqueCode = obj.optString("auth");
-            String uid = obj.optString("id");
-            String mobile = obj.optString("mobile");
-            String unick = obj.optString("unick");
-            ConfigManager.instance().setUniqueCode(uniqueCode);
-            ConfigManager.instance().setUserId(uid);
-            ConfigManager.instance().setMobile(mobile);
-            ConfigManager.instance().setUserNickName(unick);
+
+            if(null !=obj)
+            {
+                String uniqueCode = obj.optString("auth");
+                String uid = obj.optString("id");
+                ConfigManager.instance().setUniqueCode(uniqueCode);
+                ConfigManager.instance().setUserId(uid);
+            }
+
 
         } catch (Exception e)
         {

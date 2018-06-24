@@ -14,6 +14,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.telephony.TelephonyManager;
@@ -35,6 +36,8 @@ import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -176,35 +179,59 @@ public class APPUtils
      * @see [类、类#方法、类#成员]
      * @since [起始版本]
      */
-    public static String getDeviceId(Context mContext)
+    public static String getDeviceId(Context context)
     {
-        TelephonyManager tm = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
-        String mDeviceId = tm.getDeviceId();
-        if (StringUtils.stringIsEmpty(mDeviceId))
-        {
-            mDeviceId = StringUtils.getUUid().replace("-", "").substring(0, 15);
+
+        return UUID.randomUUID().toString().replace("-", "");
+        //        String id;
+        //        //android.telephony.TelephonyManager
+        //        TelephonyManager mTelephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        //        if (mTelephony.getDeviceId() != null)
+        //        {
+        //            id = mTelephony.getDeviceId();
+        //        }
+        //        else
+        //        {
+        //            //android.provider.Settings;
+        //            id = Settings.Secure.getString(context.getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        //        }
+        //        return id;
+    }
+
+    public static String getUniqueId(Context context){
+        String androidID = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+        String id = androidID + Build.SERIAL;
+        try {
+            return toMD5(id);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return id;
         }
-        return mDeviceId;
     }
 
-    /**
-     * 获取一个能唯一标识每台Android设备的序号与服务器通信
-     *
-     * @param mContext
-     * @return
-     */
-    public static String getuniqueId(Context mContext)
-    {
-        TelephonyManager tm = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
-        String imei = tm.getDeviceId();
-        String simSerialNumber = tm.getSimSerialNumber();
-        String androidId = android.provider.Settings.Secure
-                .getString(mContext.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
-        UUID deviceUuid = new UUID(androidId.hashCode(), ((long) imei.hashCode() << 32) | simSerialNumber.hashCode());
-        String uniqueId = deviceUuid.toString();
-        return uniqueId;
-    }
 
+    private static String toMD5(String text) throws NoSuchAlgorithmException {
+        //获取摘要器 MessageDigest
+        MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+        //通过摘要器对字符串的二进制字节数组进行hash计算
+        byte[] digest = messageDigest.digest(text.getBytes());
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < digest.length; i++) {
+            //循环每个字符 将计算结果转化为正整数;
+            int digestInt = digest[i] & 0xff;
+            //将10进制转化为较短的16进制
+            String hexString = Integer.toHexString(digestInt);
+            //转化结果如果是个位数会省略0,因此判断并补0
+            if (hexString.length() < 2) {
+                sb.append(0);
+            }
+            //将循环结果添加到缓冲区
+            sb.append(hexString);
+        }
+        //返回整个结果
+        return sb.toString();
+    }
     /**
      * 获取设备IMEI
      *

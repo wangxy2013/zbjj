@@ -172,7 +172,7 @@ public class LoginActivity extends BaseActivity implements IRequestListener
             }
 
             Map<String, String> valuePairs = new HashMap<>();
-            valuePairs.put("mobile_id", APPUtils.getDeviceId(LoginActivity.this));
+            valuePairs.put("mobile_id", APPUtils.getUniqueId(LoginActivity.this));
             valuePairs.put("device", "and");
             valuePairs.put("user_name", account);
             valuePairs.put("password", pwd);

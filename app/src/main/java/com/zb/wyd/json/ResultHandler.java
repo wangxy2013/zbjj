@@ -17,6 +17,6 @@ public class ResultHandler extends JsonHandler
     @Override
     protected void parseJson(JSONObject obj) throws Exception
     {
-        content = obj.optString("content");
+        content = obj.optString("data");
     }
 }

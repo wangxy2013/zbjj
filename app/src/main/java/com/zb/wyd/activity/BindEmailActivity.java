@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Message;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -42,11 +43,11 @@ public class BindEmailActivity extends BaseActivity implements IRequestListener
     @BindView(R.id.et_code)
     EditText  etCode;
     @BindView(R.id.btn_submit)
-    TextView  btnSubmit;
+    Button    btnSubmit;
 
     private int time = 60;
-    private int count;
-
+    private int    count;
+    private String token;
 
     private static final String BIND_EMAIL             = "bind_email";
     private static final String GET_EMAIL_CODE         = "get_email_code";
@@ -95,6 +96,8 @@ public class BindEmailActivity extends BaseActivity implements IRequestListener
 
                 case GET_EMAIL_CODE_SUCCESS:
                     ToastUtil.show(BindEmailActivity.this, "验证码已发送至邮箱");
+                    ResultHandler resultHandler = (ResultHandler) msg.obj;
+                    token = resultHandler.getContent();
                     break;
 
             }
@@ -158,6 +161,7 @@ public class BindEmailActivity extends BaseActivity implements IRequestListener
             Map<String, String> valuePairs = new HashMap<>();
             valuePairs.put("email", email);
             valuePairs.put("vcode", code);
+            valuePairs.put("token", token);
             DataRequest.instance().request(this, Urls.getTaskprofileUrl(), this, HttpRequest.POST, BIND_EMAIL, valuePairs,
                     new ResultHandler());
         }

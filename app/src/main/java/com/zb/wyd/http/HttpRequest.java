@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.zb.wyd.MyApplication;
 import com.zb.wyd.json.JsonHandler;
+import com.zb.wyd.utils.APPUtils;
 import com.zb.wyd.utils.ConfigManager;
 import com.zb.wyd.utils.LogUtil;
 import com.zb.wyd.utils.ToastUtil;
@@ -59,7 +60,8 @@ public class HttpRequest implements Runnable
         //        valuePair.put("os_version", APPUtils.getCurrentapiVersion() + "");
         //        valuePair.put("os", "android");
         //valuePair.put("channel", ConstantUtil.CHANNEL_NO);
-        valuePair.put("auth", ConfigManager.instance().getUniqueCode());
+        // valuePair.put("auth", ConfigManager.instance().getUniqueCode());
+        urlRequest = url + "?auth=" + ConfigManager.instance().getUniqueCode() + "&mobile_id=" + APPUtils.getUniqueId(mContext) + "&device=and";
         if (valuePair == null)
         {
             valuePair = new HashMap<>();
@@ -302,8 +304,16 @@ public class HttpRequest implements Runnable
     private String concatParams()
     {
         StringBuffer sb = new StringBuffer();
-        sb.append("?");
-        //  sb.append("&");
+
+        if (!urlRequest.contains("?"))
+        {
+            sb.append("?");
+        }
+        else
+        {
+            sb.append("&");
+        }
+
         for (Map.Entry<String, String> map : valuePair.entrySet())
         {
             String key = map.getKey().toString();

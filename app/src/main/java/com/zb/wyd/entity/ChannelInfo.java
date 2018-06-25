@@ -3,8 +3,6 @@ package com.zb.wyd.entity;
 import org.json.JSONObject;
 
 /**
- * 作者：王先云 on 2018/6/22 15:25
- * 邮箱：wangxianyun1@163.com
  * 描述：一句话简单描述
  */
 public class ChannelInfo

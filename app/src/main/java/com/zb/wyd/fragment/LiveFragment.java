@@ -25,8 +25,6 @@ import butterknife.Unbinder;
 import static com.zb.wyd.utils.APPUtils.dip2px;
 
 /**
- * 作者：王先云 on 2018/6/14 14:59
- * 邮箱：wangxianyun1@163.com
  * 描述：一句话简单描述
  */
 public class LiveFragment extends BaseFragment

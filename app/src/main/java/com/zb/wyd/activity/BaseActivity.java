@@ -22,8 +22,6 @@ import butterknife.Unbinder;
 
 
 /**
- * 作者：王先云 on 2016/7/1 10:23
- * 邮箱：wangxianyun1@163.com
  * 描述：一句话简单描述
  */
 public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener

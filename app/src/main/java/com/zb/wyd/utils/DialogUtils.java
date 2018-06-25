@@ -21,8 +21,6 @@ import com.zb.wyd.listener.MyItemClickListener;
 import com.zb.wyd.listener.MyOnClickListener;
 
 /**
- * 作者：王先云 on 2017/12/1 10:07
- * 邮箱：wangxianyun1@163.com
  * 描述：一句话简单描述
  */
 public class DialogUtils
@@ -441,5 +439,42 @@ public class DialogUtils
         dialog.show();
     }
 
+
+    /**
+     * 温馨提示
+     *
+     * @return
+     */
+    public static void showTaskDialog(Context mContext, String title, String desc,String task)
+    {
+        final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
+        dialog.setCancelable(false);
+        View v = LayoutInflater.from(mContext).inflate(R.layout.dialog_task, null);
+        dialog.setContentView(v);
+        TextView mTitleTv = (TextView) v.findViewById(R.id.tv_title);
+        TextView mDescTv = (TextView) v.findViewById(R.id.tv_desc);
+        TextView mTaskTv = (TextView) v.findViewById(R.id.tv_task);
+        Button mSubmitBtn = (Button) v.findViewById(R.id.btn_submit);
+        mTitleTv.setText(title);
+        mDescTv.setText(desc);
+        mTaskTv.setText(task);
+        mSubmitBtn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+            }
+        });
+
+
+        //Dialog部分
+        Window mWindow = dialog.getWindow();
+        WindowManager.LayoutParams lp = mWindow.getAttributes();
+        lp.gravity = Gravity.CENTER;
+        lp.width = APPUtils.getScreenWidth(mContext) * 7 / 8;
+        mWindow.setAttributes(lp);
+        dialog.show();
+    }
 
 }

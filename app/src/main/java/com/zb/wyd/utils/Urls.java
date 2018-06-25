@@ -152,6 +152,14 @@ public class Urls
         return BASE_URL + "user/index";
     }
 
+    public static String getUserSignUrl()
+    {
+        return BASE_URL + "task/sign";
+    }
+    public static String getTaskUrl()
+    {
+        return BASE_URL + "task/index";
+    }
 
 }
 

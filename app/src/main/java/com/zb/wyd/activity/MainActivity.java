@@ -15,7 +15,6 @@ import com.zb.wyd.fragment.LiveFragment;
 import com.zb.wyd.fragment.MemberFragment;
 import com.zb.wyd.fragment.SelfieFragment;
 import com.zb.wyd.fragment.TaskFragment;
-import com.zb.wyd.fragment.VideoFragment;
 import com.zb.wyd.fragment.VideoFragment1;
 import com.zb.wyd.utils.DialogUtils;
 import com.zb.wyd.utils.VersionManager;
@@ -61,7 +60,7 @@ public class MainActivity extends BaseActivity
             @Override
             public void onTabChanged(String tabId)
             {
-                if ("会员".equals(tabId))
+                if ("会员".equals(tabId) || "任务".equals(tabId))
                 {
                     if (!MyApplication.getInstance().isLogin())
                     {
@@ -73,7 +72,7 @@ public class MainActivity extends BaseActivity
         });
     }
 
-    public  void setTab(int p)
+    public void setTab(int p)
     {
         fragmentTabHost.setCurrentTab(p);
     }

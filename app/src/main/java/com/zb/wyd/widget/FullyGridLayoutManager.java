@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
- * 邮箱：wangxianyun1@163.com
  * 描述：一句话简单描述
  */
 public class FullyGridLayoutManager  extends GridLayoutManager {

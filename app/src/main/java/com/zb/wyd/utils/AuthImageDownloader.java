@@ -20,8 +20,6 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 
 /**
- * 作者：王先云 on 2016/10/21 10:15
- * 邮箱：wangxianyun1@163.com
  * 描述：一句话简单描述
  */
 public class AuthImageDownloader extends BaseImageDownloader

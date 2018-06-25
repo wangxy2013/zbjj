@@ -30,6 +30,8 @@ public class UserInfo
     private String login_ip;//
     private String fortune;//
     private String unick;//
+    private String total_score;
+
     public UserInfo() {}
 
     public UserInfo(JSONObject obj)
@@ -45,6 +47,7 @@ public class UserInfo
         this.login_time = obj.optString("login_time");
         this.login_ip = obj.optString("login_ip");
         this.fortune = obj.optString("fortune");
+        this.total_score = obj.optString("total_score");
 
 
         this.id = obj.optString("id");
@@ -257,5 +260,15 @@ public class UserInfo
     public void setUnick(String unick)
     {
         this.unick = unick;
+    }
+
+    public String getTotal_score()
+    {
+        return total_score;
+    }
+
+    public void setTotal_score(String total_score)
+    {
+        this.total_score = total_score;
     }
 }

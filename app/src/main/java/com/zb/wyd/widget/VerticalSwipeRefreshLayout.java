@@ -7,7 +7,6 @@ import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 
 /**
- * 邮箱：wangxianyun1@163.com
  * 描述：一句话简单描述
  */
 public class VerticalSwipeRefreshLayout extends SwipeRefreshLayout

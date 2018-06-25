@@ -8,8 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
- * 作者：王先云 on 2016/8/3 10:09
- * 邮箱：wangxianyun1@163.com
  * 描述：一句话简单描述
  */
 public class FullyLinearLayoutManager extends LinearLayoutManager

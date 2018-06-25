@@ -9,8 +9,6 @@ import android.util.TypedValue;
 import android.widget.TextView;
 
 /**
- * 作者：王先云 on 2018/3/19 10:03
- * 邮箱：wangxianyun1@163.com
  * 描述：自适应TextView 字体大小
  */
 public class AutoFitTextView extends TextView

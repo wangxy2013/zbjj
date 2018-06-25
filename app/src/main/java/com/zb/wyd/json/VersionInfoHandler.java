@@ -8,8 +8,6 @@ import com.zb.wyd.entity.VersionInfo;
 import org.json.JSONObject;
 
 /**
- * 作者：王先云 on 2016/11/1 13:48
- * 邮箱：wangxianyun1@163.com
  * 描述：版本更新
  */
 public class VersionInfoHandler extends JsonHandler

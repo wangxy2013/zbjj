@@ -5,8 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 /**
- * 作者：王先云 on 2018/4/23 22:17
- * 邮箱：wangxianyun1@163.com
  * 描述：一句话简单描述
  */
 public class SpaceItemDecoration extends RecyclerView.ItemDecoration {

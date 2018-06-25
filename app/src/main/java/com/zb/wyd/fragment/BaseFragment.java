@@ -1,10 +1,13 @@
 package com.zb.wyd.fragment;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.support.v4.app.Fragment;
 
+import com.zb.wyd.utils.DialogUtils;
+import com.zb.wyd.utils.LogUtil;
+
 /**
- * 作者：王先云 on 2016/7/1 10:30
- * 邮箱：wangxianyun1@163.com
  * 描述：一句话简单描述
  */
 public abstract class BaseFragment extends Fragment
@@ -40,6 +43,42 @@ public abstract class BaseFragment extends Fragment
     public void setTitle(String title)
     {
         this.title = title;
+    }
+
+    private Dialog mProgressDialog = null;
+
+    /**
+     * @return void
+     * @throws [异常类型] [异常说明]
+     * @see
+     */
+    public void showProgressDialog(Activity activity)
+    {
+
+        if (activity.isFinishing())
+        {
+            return;
+        }
+        LogUtil.e("TAG", "showProgressDialog");
+        if (mProgressDialog == null)
+        {
+            mProgressDialog = DialogUtils.createLoadingDialog(activity, "加载中...");
+        }
+        mProgressDialog.show();
+    }
+
+    public void hideProgressDialog(Activity activity)
+    {
+        if (activity.isFinishing())
+        {
+            return;
+        }
+        LogUtil.e("TAG", "hideProgressDialog");
+        if (null != mProgressDialog)
+        {
+            mProgressDialog.dismiss();
+            mProgressDialog = null;
+        }
     }
 
 }

@@ -37,7 +37,7 @@ public class CataAdapter extends RecyclerView.Adapter<CataHolder>
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_cata, parent, false);
         CataHolder mHolder = new CataHolder(itemView,listener);
         return mHolder;
-    }
+}
 
 
     @Override

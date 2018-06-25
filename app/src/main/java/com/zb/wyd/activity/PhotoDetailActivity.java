@@ -92,7 +92,7 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
                         chargePic.clear();
                         chargePic.addAll(photoInfo.getChargePic());
 
-                        if (chargePic.isEmpty())
+                        if (null != priceInfo)
                         {
                             btnBuy.setVisibility(View.VISIBLE);
                         }

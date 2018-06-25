@@ -156,10 +156,23 @@ public class Urls
     {
         return BASE_URL + "task/sign";
     }
+
     public static String getTaskUrl()
     {
         return BASE_URL + "task/index";
     }
+
+
+    public static String getEmailCodeUrl()
+    {
+        return BASE_URL + "task/vcode";
+    }
+
+    public static String getTaskprofileUrl()
+    {
+        return BASE_URL + "task/profile";
+    }
+
 
 }
 

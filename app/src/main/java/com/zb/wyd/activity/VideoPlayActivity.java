@@ -1,6 +1,7 @@
 package com.zb.wyd.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.view.View;
@@ -111,7 +112,8 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
                                 }
                                 else//去做任务
                                 {
-
+                                    sendBroadcast(new Intent(MainActivity.TAB_TASK));
+                                    finish();
                                 }
                             }
                         }).show();

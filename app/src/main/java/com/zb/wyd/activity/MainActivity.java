@@ -1,6 +1,9 @@
 package com.zb.wyd.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTabHost;
 import android.view.KeyEvent;
@@ -28,7 +31,7 @@ public class MainActivity extends BaseActivity
 
     @BindView(android.R.id.tabhost)
     FragmentTabHost fragmentTabHost;
-
+    public static final String TAB_TASK = "tab_task";
 
     private String texts[]       = {"直播", "视频", "自拍", "任务", "会员"};
     private int    imageButton[] = {
@@ -41,7 +44,10 @@ public class MainActivity extends BaseActivity
     @Override
     protected void initData()
     {
-
+        mMyBroadCastReceiver = new MyBroadCastReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(TAB_TASK);
+        registerReceiver(mMyBroadCastReceiver, intentFilter);
     }
 
     @Override
@@ -135,6 +141,43 @@ public class MainActivity extends BaseActivity
         else
         {
             return super.onKeyDown(keyCode, event);
+        }
+
+    }
+
+    private MyBroadCastReceiver mMyBroadCastReceiver;
+
+    class MyBroadCastReceiver extends BroadcastReceiver
+    {
+
+        @Override
+        public void onReceive(Context context, Intent intent)
+        {
+
+            if (TAB_TASK.contentEquals(intent.getAction()))
+            {
+                fragmentTabHost.postDelayed(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        fragmentTabHost.setCurrentTab(3);
+
+                    }
+                }, 100);
+
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+
+        if (null != mMyBroadCastReceiver)
+        {
+            unregisterReceiver(mMyBroadCastReceiver);
         }
 
     }

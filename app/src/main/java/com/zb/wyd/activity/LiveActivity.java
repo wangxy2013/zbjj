@@ -1,6 +1,7 @@
 package com.zb.wyd.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
@@ -145,6 +146,8 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                                 else//去做任务
                                 {
 
+                                    sendBroadcast(new Intent(MainActivity.TAB_TASK));
+                                    finish();
                                 }
                             }
                         }).show();

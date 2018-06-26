@@ -45,7 +45,7 @@ public class ModifyPwdActivity extends BaseActivity implements IRequestListener
     EditText  etAgingPwd;
     @BindView(R.id.btn_submit)
     Button    btnSubmit;
-    private static final String SAVE_PWD       = "save_pwd";
+    private static final String SAVE_PWD        = "save_pwd";
     private static final int    REQUEST_SUCCESS = 0x01;
     private static final int    REQUEST_FAIL    = 0x02;
 
@@ -72,6 +72,7 @@ public class ModifyPwdActivity extends BaseActivity implements IRequestListener
             }
         }
     };
+
     @Override
     protected void initData()
     {
@@ -135,16 +136,17 @@ public class ModifyPwdActivity extends BaseActivity implements IRequestListener
             }
 
 
-            if (!ConfigManager.instance().getUserPwd().equals(oldPwd))
-            {
-                ToastUtil.show(ModifyPwdActivity.this, "原输入不正确");
-                return;
-            }
+            //            if (!ConfigManager.instance().getUserPwd().equals(oldPwd))
+            //            {
+            //                ToastUtil.show(ModifyPwdActivity.this, "原输入不正确");
+            //                return;
+            //            }
 
             showProgressDialog();
             Map<String, String> valuePairs = new HashMap<>();
             valuePairs.put("passwd", newPwd);
             valuePairs.put("repasswd", agingPwd);
+            valuePairs.put("oldpasswd", oldPwd);
             DataRequest.instance().request(this, Urls.getTaskprofileUrl(), this, HttpRequest.POST, SAVE_PWD, valuePairs,
                     new ResultHandler());
         }

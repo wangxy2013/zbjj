@@ -17,8 +17,11 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zb.wyd.MyApplication;
 import com.zb.wyd.R;
 import com.zb.wyd.activity.BaseHandler;
+import com.zb.wyd.activity.BindEmailActivity;
 import com.zb.wyd.activity.LoginActivity;
 import com.zb.wyd.activity.MainActivity;
+import com.zb.wyd.activity.MessageListActivity;
+import com.zb.wyd.activity.UserDetailActivity;
 import com.zb.wyd.entity.UserInfo;
 import com.zb.wyd.http.DataRequest;
 import com.zb.wyd.http.HttpRequest;
@@ -86,7 +89,7 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
     Button          btnLogout;
     private View rootView = null;
     private Unbinder unbinder;
-
+    private String   role;
     private static final String      GET_USER_DETAIL = "get_user_detail";
     private static final int         REQUEST_SUCCESS = 0x01;
     private static final int         REQUEST_FAIL    = 0x02;
@@ -122,7 +125,8 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
                         tvUserLevel.setText("V" + vip_level);
                         tvWealth.setText(fortune);
 
-                        if ("0".equals(userInfo.getRole()))
+                        role = userInfo.getRole();
+                        if ("0".equals(role))
                         {
                             tvEmail.setText("未认证");
                         }
@@ -181,6 +185,9 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
     protected void initEvent()
     {
         btnLogout.setOnClickListener(this);
+        ivEdit.setOnClickListener(this);
+        rlEmail.setOnClickListener(this);
+        rlMessage.setOnClickListener(this);
     }
 
     @Override
@@ -238,6 +245,22 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
             ConfigManager.instance().setUserId("");
             ((MainActivity) getActivity()).setTab(0);
             startActivity(new Intent(getActivity(), LoginActivity.class));
+        }
+        else if (v == ivEdit)
+        {
+            startActivity(new Intent(getActivity(), UserDetailActivity.class));
+        }
+        else if (v == rlEmail)
+        {
+            if ("0".equals(role))
+            {
+                startActivity(new Intent(getActivity(), BindEmailActivity.class));
+            }
+        }
+        else if (v == rlMessage)
+        {
+            startActivity(new Intent(getActivity(), MessageListActivity.class));
+
         }
     }
 }

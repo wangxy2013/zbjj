@@ -43,7 +43,6 @@ public class TaskHolder extends RecyclerView.ViewHolder
 
     public void setTaskInfo(TaskInfo taskInfo, final int p)
     {
-        final String taskId = taskInfo.getId();
         mTitleTv.setText(taskInfo.getTname());
         mDescTv.setText(taskInfo.getDesc());
 
@@ -63,51 +62,7 @@ public class TaskHolder extends RecyclerView.ViewHolder
             @Override
             public void onClick(View v)
             {
-                switch (Integer.parseInt(taskId))
-                {
-                    //激活邮箱
-                    case 3:
-                        context.startActivity(new Intent(context, BindEmailActivity.class));
-                        break;
-                    //上传头像
-                    case 4:
-                        break;
-                    //观看直播
-                    case 5:
-                        break;
-                    //观看点播
-                    case 6:
-                        break;
-                    //分享给朋友
-                    case 7:
-                        break;
-                    //分享到朋友圈
-                    case 8:
-                        break;
-                    //发布自拍
-                    case 9:
-                        break;
-                    //邀请注册
-                    case 10:
-                        break;
-                    //推广APP
-                    case 11:
-                        break;
-                    //节日福利
-                    case 12:
-                        break;
-                    //举报
-                    case 13:
-                        break;
-                    //关注QQ、微信
-                    case 14:
-                        break;
-
-                    //"分享链接被访问
-                    case 15:
-                        break;
-
-                }
+               listener.onItemClick(v,p);
             }
         });
 

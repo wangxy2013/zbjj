@@ -11,23 +11,32 @@ import android.widget.TextView;
 
 import com.zb.wyd.R;
 import com.zb.wyd.adapter.MessageAdapter;
+import com.zb.wyd.adapter.RankingAdapter;
 import com.zb.wyd.entity.MessageInfo;
+import com.zb.wyd.entity.RankingInfo;
+import com.zb.wyd.http.DataRequest;
+import com.zb.wyd.http.HttpRequest;
 import com.zb.wyd.http.IRequestListener;
+import com.zb.wyd.json.RankingListHandler;
 import com.zb.wyd.utils.ConstantUtil;
 import com.zb.wyd.utils.ToastUtil;
+import com.zb.wyd.utils.Urls;
+import com.zb.wyd.widget.DividerDecoration;
 import com.zb.wyd.widget.list.refresh.PullToRefreshBase;
 import com.zb.wyd.widget.list.refresh.PullToRefreshRecyclerView;
 import com.zb.wyd.widget.statusbar.StatusBarUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
+ * 描述：积分排行
  */
-public class MessageListActivity extends BaseActivity implements PullToRefreshBase.OnRefreshListener<RecyclerView>, View.OnClickListener, IRequestListener
+public class RankingActivity extends BaseActivity implements PullToRefreshBase.OnRefreshListener<RecyclerView>, View.OnClickListener, IRequestListener
 {
     @BindView(R.id.iv_back)
     ImageView                 mBackIv;
@@ -37,13 +46,13 @@ public class MessageListActivity extends BaseActivity implements PullToRefreshBa
     PullToRefreshRecyclerView mPullToRefreshRecyclerView;
     private RecyclerView mRecyclerView; //
 
-    private MessageAdapter mMessageAdapter;
-    private List<MessageInfo> mMessageInfoList = new ArrayList<>();
+    private RankingAdapter mRankingAdapter;
+    private List<RankingInfo> mRankingList = new ArrayList<>();
 
     private int pn = 1;
     private int mRefreshStatus;
 
-    private static final String GET_MESSAGE_LIST = "get_message_list";
+    private static final String GET_RANKING_LIST = "get_ranking_list";
 
     private static final int REQUEST_SUCCESS = 0x01;
     private static final int REQUEST_FAIL    = 0x02;
@@ -58,11 +67,13 @@ public class MessageListActivity extends BaseActivity implements PullToRefreshBa
             switch (msg.what)
             {
                 case REQUEST_SUCCESS:
-
+                    RankingListHandler mRankingListHandler = (RankingListHandler) msg.obj;
+                    mRankingList.addAll(mRankingListHandler.getRankingInfoList());
+                    mRankingAdapter.notifyDataSetChanged();
                     break;
 
                 case REQUEST_FAIL:
-                    ToastUtil.show(MessageListActivity.this, msg.obj.toString());
+                    ToastUtil.show(RankingActivity.this, msg.obj.toString());
 
                     break;
 
@@ -81,7 +92,7 @@ public class MessageListActivity extends BaseActivity implements PullToRefreshBa
     {
         setContentView(R.layout.activity_message);
         StatusBarUtil.setStatusBarColor(this, getResources().getColor(R.color.yellow));
-        StatusBarUtil.StatusBarLightMode(MessageListActivity.this, false);
+        StatusBarUtil.StatusBarLightMode(RankingActivity.this, false);
     }
 
 
@@ -96,34 +107,34 @@ public class MessageListActivity extends BaseActivity implements PullToRefreshBa
     @Override
     protected void initViewData()
     {
-        tvTitle.setText("消息中心");
+        tvTitle.setText("积分排行");
         mRecyclerView = mPullToRefreshRecyclerView.getRefreshableView();
         mPullToRefreshRecyclerView.setPullLoadEnabled(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        mMessageAdapter = new MessageAdapter(mMessageInfoList);
-        mRecyclerView.setAdapter(mMessageAdapter);
-        getMessageList();
+        mRecyclerView.addItemDecoration(new DividerDecoration(this));
+        mRankingAdapter = new RankingAdapter(mRankingList);
+        mRecyclerView.setAdapter(mRankingAdapter);
+        getRangkingList();
 
     }
 
 
-    private void getMessageList()
+    private void getRangkingList()
     {
-        //        Map<String, String> valuePairs = new HashMap<>();
-        //        valuePairs.put("group_id", mGroupId);
-        //        valuePairs.put("pn", pn + "");
-        //        valuePairs.put("pagesize", "15");
-        //        DataRequest.instance().request(MessageListActivity.this, Urls.getBlogListUrl(), this, HttpRequest.GET, GET_BLOG_LIST, valuePairs,
-        //                new BlogListHandler());
+        Map<String, String> valuePairs = new HashMap<>();
+        valuePairs.put("pn", pn + "");
+        valuePairs.put("num", "15");
+        DataRequest.instance().request(RankingActivity.this, Urls.getRankingUrl(), this, HttpRequest.GET, GET_RANKING_LIST, valuePairs,
+                new RankingListHandler());
     }
 
     @Override
     public void onPullDownToRefresh(PullToRefreshBase<RecyclerView> refreshView)
     {
-        mMessageInfoList.clear();
+        mRankingList.clear();
         pn = 1;
         mRefreshStatus = 0;
-        getMessageList();
+        getRangkingList();
     }
 
     @Override
@@ -131,7 +142,7 @@ public class MessageListActivity extends BaseActivity implements PullToRefreshBa
     {
         pn += 1;
         mRefreshStatus = 1;
-        getMessageList();
+        getRangkingList();
     }
 
 
@@ -157,7 +168,7 @@ public class MessageListActivity extends BaseActivity implements PullToRefreshBa
             mPullToRefreshRecyclerView.onPullDownRefreshComplete();
         }
 
-        if (GET_MESSAGE_LIST.equals(action))
+        if (GET_RANKING_LIST.equals(action))
         {
             if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
             {

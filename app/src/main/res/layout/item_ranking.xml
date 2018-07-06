@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/ll_item"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:padding="@dimen/dm_10"
+    >
+
+    <com.zb.wyd.widget.CircleImageView
+        android:id="@+id/iv_user_pic"
+        android:layout_width="@dimen/dm_52"
+        android:layout_height="@dimen/dm_52"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/dm_10"
+        android:layout_toRightOf="@+id/iv_user_pic"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/blackC"
+            android:textSize="@dimen/t14"/>
+
+        <TextView
+            android:id="@+id/tv_num"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dm_5"
+            android:textColor="@color/blackC"
+            android:textSize="@dimen/t14"/>
+    </LinearLayout>
+</RelativeLayout>

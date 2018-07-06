@@ -24,6 +24,7 @@ import com.zb.wyd.activity.BaseHandler;
 import com.zb.wyd.activity.LoginActivity;
 import com.zb.wyd.activity.PhotoDetailActivity;
 import com.zb.wyd.activity.VideoPlayActivity;
+import com.zb.wyd.activity.VidoeListActivity;
 import com.zb.wyd.adapter.CataAdapter;
 import com.zb.wyd.adapter.IntegerAreaAdapter;
 import com.zb.wyd.entity.AdInfo;
@@ -56,7 +57,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
- * 描述：自拍
+ * 描述：
  */
 public class VideoFragment1 extends BaseFragment implements IRequestListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener
 {
@@ -237,6 +238,8 @@ public class VideoFragment1 extends BaseFragment implements IRequestListener, Vi
     {
         ivMore.setOnClickListener(this);
         mSwipeRefreshLayout.setOnRefreshListener(this);
+        rlAllFree.setOnClickListener(this);
+        rlAllInteger.setOnClickListener(this);
     }
 
     @Override
@@ -332,21 +335,22 @@ public class VideoFragment1 extends BaseFragment implements IRequestListener, Vi
     private void getNewLive()
     {
         Map<String, String> valuePairs = new HashMap<>();
-
         valuePairs.put("sort", "new");
         valuePairs.put("pn", "1");
+        valuePairs.put("num", "6");
         valuePairs.put("cta_id", cta_id);
-        DataRequest.instance().request(getActivity(), Urls.getVideoLive(), this, HttpRequest.POST, GET_NEW_VIDEO, valuePairs,
-                new VideoInfoListHandler());
-    }
+        DataRequest.instance().request(getActivity(), Urls.getVideoListUrl(), this, HttpRequest.GET, GET_NEW_VIDEO, valuePairs,
+        new VideoInfoListHandler());
+}
 
     private void getVideoList()
     {
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("sort", "fav");
         valuePairs.put("pn", "1");
+        valuePairs.put("num", "6");
         valuePairs.put("cta_id", cta_id);
-        DataRequest.instance().request(getActivity(), Urls.getVideoLive(), this, HttpRequest.POST, GET_FAV_VIDEO, valuePairs,
+        DataRequest.instance().request(getActivity(), Urls.getVideoListUrl(), this, HttpRequest.GET, GET_FAV_VIDEO, valuePairs,
                 new VideoInfoListHandler());
     }
 
@@ -527,6 +531,20 @@ public class VideoFragment1 extends BaseFragment implements IRequestListener, Vi
             {
                 mCataPopupWindow.showAsDropDown(topView);
             }
+        }
+        else if(v == rlAllFree)
+        {
+            startActivity(new Intent(getActivity(), VidoeListActivity.class)
+                    .putExtra("sort","new")
+                    .putExtra("cta_id", cta_id)
+            );
+        }
+        else if(v == rlAllInteger)
+        {
+            startActivity(new Intent(getActivity(), VidoeListActivity.class)
+                    .putExtra("sort","fav")
+                    .putExtra("cta_id", cta_id)
+            );
         }
     }
 

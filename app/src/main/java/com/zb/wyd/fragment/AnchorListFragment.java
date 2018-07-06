@@ -188,8 +188,8 @@ public class AnchorListFragment extends BaseFragment implements PullToRefreshBas
     private void loadData()
     {
         Map<String, String> valuePairs = new HashMap<>();
-        valuePairs.put("pn", String.valueOf(pn));
-        valuePairs.put("num", "10");
+        valuePairs.put("pn", pn + "");
+        valuePairs.put("num", "20");
         valuePairs.put("sort", sort);
         DataRequest.instance().request(getActivity(), Urls.getNewLive(), this, HttpRequest.GET, GET_ANCHOR_LIST, valuePairs,
                 new LiveInfoListHandler());
@@ -278,7 +278,7 @@ public class AnchorListFragment extends BaseFragment implements PullToRefreshBas
     @Override
     public void onPullUpToRefresh(PullToRefreshBase<RecyclerView> refreshView)
     {
-        pn = +1;
+        pn = pn + 1;
         mRefreshStatus = 1;
         loadData();
     }

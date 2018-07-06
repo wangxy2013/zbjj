@@ -26,6 +26,8 @@ import android.widget.TextView;
 
 import com.zb.wyd.R;
 import com.zb.wyd.adapter.AddPhotoAdapter;
+import com.zb.wyd.adapter.LabelChooseAdapter;
+import com.zb.wyd.entity.CataInfo;
 import com.zb.wyd.entity.LocationInfo;
 import com.zb.wyd.entity.PhotoInfo;
 import com.zb.wyd.entity.PicInfo;
@@ -55,6 +57,7 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * 描述：一句话简单描述
@@ -93,16 +96,20 @@ public class AddPhotoActivity extends BaseActivity implements IRequestListener
     EditText        etContact;
     @BindView(R.id.tv_location)
     TextView        tvLocation;
+    @BindView(R.id.rv_label)
+    MaxRecyclerView rvLabel;
 
 
-    private int index;
+    private int    index;
     private String host;
     private String location;
-    private List<PicInfo> freePicList   = new ArrayList<>();
-    private List<PicInfo> chargePicList = new ArrayList<>();
+    private List<PicInfo>  freePicList     = new ArrayList<>();
+    private List<PicInfo>  chargePicList   = new ArrayList<>();
+    private List<CataInfo> labelChooseList = new ArrayList<>();
 
-    private AddPhotoAdapter freeAdapter;
-    private AddPhotoAdapter chargeAdapter;
+    private AddPhotoAdapter    freeAdapter;
+    private AddPhotoAdapter    chargeAdapter;
+    private LabelChooseAdapter mLabelChooseAdapter;
 
     // 拍照临时图片
     private String                   mTempPhotoPath;
@@ -111,6 +118,7 @@ public class AddPhotoActivity extends BaseActivity implements IRequestListener
     protected static final int REQUEST_STORAGE_WRITE_ACCESS_PERMISSION = 102;
     private static final   int GALLERY_REQUEST_CODE                    = 9001;    // 相册选图标记
     private static final   int CAMERA_REQUEST_CODE                     = 9002;    // 相机拍照标记
+    private static final   int GET_LABEL_CODE                          = 9003;    // 相机拍照标记
 
     private static final String GET_LOCATION         = "get_location";
     private static final String ADD_PHOTO            = "add_photo";
@@ -119,6 +127,7 @@ public class AddPhotoActivity extends BaseActivity implements IRequestListener
     private static final int    REQUEST_FAIL         = 0x02;
     private static final int    ADD_PHOTO_SUCCESS    = 0x03;
     private static final int    GET_LOCATION_SUCCESS = 0x04;
+    private static final int    GET_LOCATION_CODE    = 0X05;
 
     @SuppressLint("HandlerLeak")
     private BaseHandler mHandler = new BaseHandler(AddPhotoActivity.this)
@@ -172,10 +181,17 @@ public class AddPhotoActivity extends BaseActivity implements IRequestListener
 
                     if (null != locationInfo)
                     {
-                        location = locationInfo.getProv() +"," + locationInfo.getCity()+","+locationInfo.getDistrict();
+                        location = locationInfo.getProv() + "," + locationInfo.getCity() + "," + locationInfo.getDistrict();
                         tvLocation.setText("地点:" + locationInfo.getCity());
                         tvLocation.setTextColor(ContextCompat.getColor(AddPhotoActivity.this, R.color.yellow));
                     }
+                    break;
+
+                case GET_LOCATION_CODE:
+                    Map<String, String> valuePairs = new HashMap<>();
+                    DataRequest.instance().request(AddPhotoActivity.this, Urls.getIplookupUrl(), AddPhotoActivity.this, HttpRequest.POST, GET_LOCATION,
+                            valuePairs,
+                            new LocationInfoHandler());
                     break;
             }
         }
@@ -205,6 +221,7 @@ public class AddPhotoActivity extends BaseActivity implements IRequestListener
         tvCharge.setOnClickListener(this);
         tvSubmit.setOnClickListener(this);
         llLocation.setOnClickListener(this);
+        llTags.setOnClickListener(this);
         etDesc.addTextChangedListener(new TextWatcher()
         {
             @Override
@@ -317,7 +334,16 @@ public class AddPhotoActivity extends BaseActivity implements IRequestListener
             }
         });
 
+
+        rvLabel.setLayoutManager(new FullyGridLayoutManager(AddPhotoActivity.this, 3));
+        mLabelChooseAdapter = new LabelChooseAdapter(labelChooseList);
+        rvLabel.setAdapter(mLabelChooseAdapter);
+
+
         mTempPhotoPath = Environment.getExternalStorageDirectory() + File.separator + "photo.jpeg";
+
+
+        mHandler.sendEmptyMessage(GET_LOCATION_CODE);
     }
 
 
@@ -332,9 +358,7 @@ public class AddPhotoActivity extends BaseActivity implements IRequestListener
         else if (v == tvSubmit)
         {
 
-
             String title = tvName.getText().toString();
-
 
             if (StringUtils.stringIsEmpty(title))
             {
@@ -415,7 +439,7 @@ public class AddPhotoActivity extends BaseActivity implements IRequestListener
             Map<String, String> valuePairs = new HashMap<>();
             valuePairs.put("title", title);
             valuePairs.put("desc", etDesc.getText().toString());
-            valuePairs.put("tags", "5");
+            valuePairs.put("tags", getLabel());
             valuePairs.put("location", location);
             valuePairs.put("free_album", freeSb.toString());
             valuePairs.put("contact", etContact.getText().toString());
@@ -438,10 +462,15 @@ public class AddPhotoActivity extends BaseActivity implements IRequestListener
         }
         else if (v == llLocation)
         {
-            showProgressDialog();
-            Map<String, String> valuePairs = new HashMap<>();
-            DataRequest.instance().request(AddPhotoActivity.this, Urls.getIplookupUrl(), this, HttpRequest.POST, GET_LOCATION, valuePairs,
-                    new LocationInfoHandler());
+            //            showProgressDialog();
+            //            Map<String, String> valuePairs = new HashMap<>();
+            //            DataRequest.instance().request(AddPhotoActivity.this, Urls.getIplookupUrl(), this, HttpRequest.POST, GET_LOCATION, valuePairs,
+            //                    new LocationInfoHandler());
+        }
+        else if (v == llTags)
+        {
+            startActivityForResult(new Intent(AddPhotoActivity.this, LabelActivity.class), GET_LABEL_CODE);
+
         }
     }
 
@@ -468,6 +497,21 @@ public class AddPhotoActivity extends BaseActivity implements IRequestListener
         }
     }
 
+
+    private String getLabel()
+    {
+        StringBuffer sb =new StringBuffer();
+        for (int i = 0; i <labelChooseList.size() ; i++)
+        {
+            sb.append(labelChooseList.get(i).getId());
+            if(i<labelChooseList.size()-1)
+            {
+                sb.append(",");
+            }
+        }
+
+        return  sb.toString();
+    }
     private void pickFromGallery()
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN // Permission was added in API Level 16
@@ -551,6 +595,13 @@ public class AddPhotoActivity extends BaseActivity implements IRequestListener
                     Uri uri = data.getData();
                     LogUtil.e("TAG", "URI--->" + uri);
                     uploadPic(uri);
+                    break;
+
+
+                case GET_LABEL_CODE:
+                    labelChooseList.clear();
+                    labelChooseList.addAll((List<CataInfo>) data.getSerializableExtra("LABEL_LIST"));
+                    mLabelChooseAdapter.notifyDataSetChanged();
                     break;
 
             }
@@ -641,4 +692,6 @@ public class AddPhotoActivity extends BaseActivity implements IRequestListener
             }
         }
     }
+
+
 }

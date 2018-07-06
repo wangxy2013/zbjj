@@ -6,9 +6,9 @@
                 android:orientation="vertical">
     <include layout="@layout/layout_head"/>
     <ScrollView
-        android:layout_below="@+id/ll_head"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_head">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -122,10 +122,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/transparent"
+                    android:digits="1234567890"
                     android:hint="输入您要收取的费用5-200积分"
                     android:inputType="number"
                     android:maxLength="3"
-                    android:digits="1234567890"
                     android:padding="@dimen/dm_10"
                     android:textColor="@color/blackC"
                     android:textSize="@dimen/t14"/>
@@ -136,7 +136,10 @@
                 android:layout_marginLeft="@dimen/dm_10"
                 android:layout_marginRight="@dimen/dm_10"
                 android:background="@color/windowBackground"/>
-
+            <com.zb.wyd.widget.MaxRecyclerView
+                android:id="@+id/rv_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -134,11 +134,15 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
                     CataInfoListHandler mCataInfoListHandler = (CataInfoListHandler) msg.obj;
                     cataInfoList.clear();
                     cataInfoList.addAll(mCataInfoListHandler.getCataInfoList());
-                    mCataAdapter.notifyDataSetChanged();
+
+
                     if (!cataInfoList.isEmpty())
                     {
                         cta_id = cataInfoList.get(0).getId();
+                        cataInfoList.get(0).setSelected(true);
                     }
+
+                    mCataAdapter.notifyDataSetChanged();
                     mHandler.sendEmptyMessage(GET_PHOTO_LIST_CODE);
 
                     break;
@@ -162,7 +166,7 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
                         picList.add(adInfoList.get(i).getImage());
                     }
 
-                    if(!picList.isEmpty())
+                    if (!picList.isEmpty())
                     {
                         initAd();
                     }
@@ -286,7 +290,9 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
     private void getPhotoCata()
     {
         Map<String, String> valuePairs = new HashMap<>();
-        DataRequest.instance().request(getActivity(), Urls.getPhotoCataUrl(), this, HttpRequest.POST, GET_CATA_LIST, valuePairs,
+        valuePairs.put("pn", "1");
+        valuePairs.put("num", "15");
+        DataRequest.instance().request(getActivity(), Urls.getPhotoCataUrl(), this, HttpRequest.GET, GET_CATA_LIST, valuePairs,
                 new CataInfoListHandler());
     }
 
@@ -504,9 +510,11 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
         if (mSwipeRefreshLayout != null)
         {
             loadData();
-            mSwipeRefreshLayout.post(new Runnable() {
+            mSwipeRefreshLayout.post(new Runnable()
+            {
                 @Override
-                public void run() {
+                public void run()
+                {
                     mSwipeRefreshLayout.setRefreshing(false);
                 }
             });

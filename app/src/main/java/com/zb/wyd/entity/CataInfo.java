@@ -2,10 +2,12 @@ package com.zb.wyd.entity;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * 描述：一句话简单描述
  */
-public class CataInfo
+public class CataInfo implements Serializable
 {
     private String id;
 

@@ -1,8 +1,8 @@
 package com.zb.wyd.json;
 
 
-import com.zb.wyd.entity.AdInfo;
-import com.zb.wyd.entity.WealthInfo;
+import com.zb.wyd.entity.CataInfo;
+import com.zb.wyd.entity.RankingInfo;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -12,13 +12,13 @@ import java.util.List;
 
 /**
  */
-public class WealthInfoListHandler extends JsonHandler
+public class RankingListHandler extends JsonHandler
 {
-    private List<WealthInfo> wealthInfoList = new ArrayList<>();
+    private List<RankingInfo> rankingInfoList = new ArrayList<>();
 
-    public List<WealthInfo> getWealthInfoList()
+    public List<RankingInfo> getRankingInfoList()
     {
-        return wealthInfoList;
+        return rankingInfoList;
     }
 
     @Override
@@ -33,8 +33,8 @@ public class WealthInfoListHandler extends JsonHandler
             {
                 for (int i = 0; i < arr.length(); i++)
                 {
-                    WealthInfo mWealthInfo = new WealthInfo(arr.optJSONObject(i));
-                    wealthInfoList.add(mWealthInfo);
+                    RankingInfo mRankingInfo = new RankingInfo(arr.optJSONObject(i));
+                    rankingInfoList.add(mRankingInfo);
                 }
             }
 

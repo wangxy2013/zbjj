@@ -34,11 +34,6 @@ public class CataInfoListHandler extends JsonHandler
                 for (int i = 0; i < arr.length(); i++)
                 {
                     CataInfo mCataInfo = new CataInfo(arr.optJSONObject(i));
-
-                    if (i == 0)
-                    {
-                        mCataInfo.setSelected(true);
-                    }
                     cataInfoList.add(mCataInfo);
                 }
             }

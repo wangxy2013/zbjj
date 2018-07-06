@@ -84,8 +84,8 @@
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxLength="1"
         android:layout_marginLeft="@dimen/dm_5"
+        android:maxLines="1"
         android:text="宝宝"
         android:textColor="@color/blackB"
         android:textSize="@dimen/t14"/>

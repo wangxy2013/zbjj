@@ -61,7 +61,7 @@ public class HttpRequest implements Runnable
         //        valuePair.put("os", "android");
         //valuePair.put("channel", ConstantUtil.CHANNEL_NO);
         // valuePair.put("auth", ConfigManager.instance().getUniqueCode());
-        urlRequest = url + "?auth=" + ConfigManager.instance().getUniqueCode() + "&mobile_id=" + APPUtils.getUniqueId(mContext) + "&device=and";
+        urlRequest = url + "?auth=" + ConfigManager.instance().getUniqueCode() + "&mobile_id=" + APPUtils.getDeviceId(mContext) + "&device=and";
         if (valuePair == null)
         {
             valuePair = new HashMap<>();

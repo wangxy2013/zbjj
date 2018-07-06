@@ -22,6 +22,7 @@ import com.zb.wyd.activity.LoginActivity;
 import com.zb.wyd.activity.MainActivity;
 import com.zb.wyd.activity.MessageListActivity;
 import com.zb.wyd.activity.UserDetailActivity;
+import com.zb.wyd.activity.WealthListActivity;
 import com.zb.wyd.entity.UserInfo;
 import com.zb.wyd.http.DataRequest;
 import com.zb.wyd.http.HttpRequest;
@@ -87,9 +88,13 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
     RelativeLayout  rlCustomer;
     @BindView(R.id.btn_logout)
     Button          btnLogout;
+
+    private boolean isClick;
+
     private View rootView = null;
     private Unbinder unbinder;
     private String   role;
+    private UserInfo userInfo;
     private static final String      GET_USER_DETAIL = "get_user_detail";
     private static final int         REQUEST_SUCCESS = 0x01;
     private static final int         REQUEST_FAIL    = 0x02;
@@ -104,15 +109,16 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
             {
                 case REQUEST_SUCCESS:
                     UserInfoHandler mUserInfoHandler = (UserInfoHandler) msg.obj;
-                    UserInfo userInfo = mUserInfoHandler.getUserInfo();
+                    userInfo = mUserInfoHandler.getUserInfo();
 
                     if (null != userInfo)
                     {
+                        isClick = true;
                         String unick = userInfo.getUnick();
                         String fortune = userInfo.getFortune();
                         String vip_level = userInfo.getVip_level();
 
-                        ImageLoader.getInstance().displayImage(userInfo.getFace(), ivUserPic);
+                        ImageLoader.getInstance().displayImage(userInfo.getUface(), ivUserPic);
                         if ("-".equals(unick) || StringUtils.stringIsEmpty(unick))
                         {
                             tvUserName.setText(userInfo.getUname());
@@ -188,6 +194,7 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
         ivEdit.setOnClickListener(this);
         rlEmail.setOnClickListener(this);
         rlMessage.setOnClickListener(this);
+        rlWealth.setOnClickListener(this);
     }
 
     @Override
@@ -202,6 +209,7 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
         super.onResume();
         if (MyApplication.getInstance().isLogin())
         {
+            isClick = false;
             Map<String, String> valuePairs = new HashMap<>();
             DataRequest.instance().request(getActivity(), Urls.getUserInfoUrl(), this, HttpRequest.POST, GET_USER_DETAIL, valuePairs,
                     new UserInfoHandler());
@@ -248,7 +256,9 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
         }
         else if (v == ivEdit)
         {
-            startActivity(new Intent(getActivity(), UserDetailActivity.class));
+            Bundle b = new Bundle();
+            b.putSerializable("USER_INFO", userInfo);
+            startActivity(new Intent(getActivity(), UserDetailActivity.class).putExtras(b));
         }
         else if (v == rlEmail)
         {
@@ -261,6 +271,12 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
         {
             startActivity(new Intent(getActivity(), MessageListActivity.class));
 
+        }
+
+        else if (v == rlWealth)
+        {
+            if (isClick)
+                startActivity(new Intent(getActivity(), WealthListActivity.class).putExtra("fortune", tvWealth.getText().toString()));
         }
     }
 }

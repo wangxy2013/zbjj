@@ -48,7 +48,7 @@ public class Urls
     }
 
     //点播
-    public static String getVideoLive()
+    public static String getVideoListUrl()
     {
         return BASE_URL + "video/list";
     }
@@ -171,6 +171,17 @@ public class Urls
     public static String getTaskprofileUrl()
     {
         return BASE_URL + "task/profile";
+    }
+
+    public static String getFortuneDetailUrl()
+    {
+        return BASE_URL + "fortune/order_log";
+    }
+
+
+    public static String getRankingUrl()
+    {
+        return BASE_URL + "fortune/rank";
     }
 
 

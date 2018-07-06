@@ -272,7 +272,7 @@ public class VideoChildFragment extends BaseFragment implements SwipeRefreshLayo
         valuePairs.put("sort", "new");
         valuePairs.put("pn", "1");
         valuePairs.put("cta_id", "0");
-        DataRequest.instance().request(getActivity(), Urls.getVideoLive(), this, HttpRequest.POST, GET_NEW_VIDEO, valuePairs,
+        DataRequest.instance().request(getActivity(), Urls.getVideoListUrl(), this, HttpRequest.POST, GET_NEW_VIDEO, valuePairs,
                 new VideoInfoListHandler());
     }
 
@@ -282,7 +282,7 @@ public class VideoChildFragment extends BaseFragment implements SwipeRefreshLayo
         valuePairs.put("sort", "fav");
         valuePairs.put("pn", "1");
         valuePairs.put("cta_id", "0");
-        DataRequest.instance().request(getActivity(), Urls.getVideoLive(), this, HttpRequest.POST, GET_FAV_VIDEO, valuePairs,
+        DataRequest.instance().request(getActivity(), Urls.getVideoListUrl(), this, HttpRequest.POST, GET_FAV_VIDEO, valuePairs,
                 new VideoInfoListHandler());
     }
 

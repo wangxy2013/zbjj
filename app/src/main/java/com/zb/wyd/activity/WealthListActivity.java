@@ -10,24 +10,30 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zb.wyd.R;
-import com.zb.wyd.adapter.MessageAdapter;
-import com.zb.wyd.entity.MessageInfo;
+import com.zb.wyd.adapter.WealthAdapter;
+import com.zb.wyd.entity.WealthInfo;
+import com.zb.wyd.http.DataRequest;
+import com.zb.wyd.http.HttpRequest;
 import com.zb.wyd.http.IRequestListener;
+import com.zb.wyd.json.WealthInfoListHandler;
 import com.zb.wyd.utils.ConstantUtil;
 import com.zb.wyd.utils.ToastUtil;
+import com.zb.wyd.utils.Urls;
 import com.zb.wyd.widget.list.refresh.PullToRefreshBase;
 import com.zb.wyd.widget.list.refresh.PullToRefreshRecyclerView;
 import com.zb.wyd.widget.statusbar.StatusBarUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
  */
-public class MessageListActivity extends BaseActivity implements PullToRefreshBase.OnRefreshListener<RecyclerView>, View.OnClickListener, IRequestListener
+public class WealthListActivity extends BaseActivity implements PullToRefreshBase.OnRefreshListener<RecyclerView>, View.OnClickListener, IRequestListener
 {
     @BindView(R.id.iv_back)
     ImageView                 mBackIv;
@@ -35,15 +41,17 @@ public class MessageListActivity extends BaseActivity implements PullToRefreshBa
     TextView                  tvTitle;
     @BindView(R.id.pullToRefreshRecyclerView)
     PullToRefreshRecyclerView mPullToRefreshRecyclerView;
+    @BindView(R.id.tv_fortune)
+    TextView                  tvFortune;
     private RecyclerView mRecyclerView; //
 
-    private MessageAdapter mMessageAdapter;
-    private List<MessageInfo> mMessageInfoList = new ArrayList<>();
+    private WealthAdapter mWealthAdapter;
+    private List<WealthInfo> mWealthInfoList = new ArrayList<>();
 
     private int pn = 1;
     private int mRefreshStatus;
 
-    private static final String GET_MESSAGE_LIST = "get_message_list";
+    private static final String GET_WEALTH_LIST = "get_wealth_list";
 
     private static final int REQUEST_SUCCESS = 0x01;
     private static final int REQUEST_FAIL    = 0x02;
@@ -58,11 +66,13 @@ public class MessageListActivity extends BaseActivity implements PullToRefreshBa
             switch (msg.what)
             {
                 case REQUEST_SUCCESS:
-
+                    WealthInfoListHandler mWealthInfoListHandler = (WealthInfoListHandler) msg.obj;
+                    mWealthInfoList.addAll(mWealthInfoListHandler.getWealthInfoList());
+                    mWealthAdapter.notifyDataSetChanged();
                     break;
 
                 case REQUEST_FAIL:
-                    ToastUtil.show(MessageListActivity.this, msg.obj.toString());
+                    ToastUtil.show(WealthListActivity.this, msg.obj.toString());
 
                     break;
 
@@ -79,9 +89,9 @@ public class MessageListActivity extends BaseActivity implements PullToRefreshBa
     @Override
     protected void initViews(Bundle savedInstanceState)
     {
-        setContentView(R.layout.activity_message);
+        setContentView(R.layout.activity_my_wealth);
         StatusBarUtil.setStatusBarColor(this, getResources().getColor(R.color.yellow));
-        StatusBarUtil.StatusBarLightMode(MessageListActivity.this, false);
+        StatusBarUtil.StatusBarLightMode(WealthListActivity.this, false);
     }
 
 
@@ -96,34 +106,35 @@ public class MessageListActivity extends BaseActivity implements PullToRefreshBa
     @Override
     protected void initViewData()
     {
-        tvTitle.setText("消息中心");
+        tvTitle.setText("我的财富");
+        tvFortune.setText(getIntent().getStringExtra("fortune"));
+
         mRecyclerView = mPullToRefreshRecyclerView.getRefreshableView();
         mPullToRefreshRecyclerView.setPullLoadEnabled(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        mMessageAdapter = new MessageAdapter(mMessageInfoList);
-        mRecyclerView.setAdapter(mMessageAdapter);
-        getMessageList();
+        mWealthAdapter = new WealthAdapter(mWealthInfoList);
+        mRecyclerView.setAdapter(mWealthAdapter);
+        getWealthList();
 
     }
 
 
-    private void getMessageList()
+    private void getWealthList()
     {
-        //        Map<String, String> valuePairs = new HashMap<>();
-        //        valuePairs.put("group_id", mGroupId);
-        //        valuePairs.put("pn", pn + "");
-        //        valuePairs.put("pagesize", "15");
-        //        DataRequest.instance().request(MessageListActivity.this, Urls.getBlogListUrl(), this, HttpRequest.GET, GET_BLOG_LIST, valuePairs,
-        //                new BlogListHandler());
+        Map<String, String> valuePairs = new HashMap<>();
+        valuePairs.put("pn", pn + "");
+        valuePairs.put("num", "15");
+        DataRequest.instance().request(WealthListActivity.this, Urls.getFortuneDetailUrl(), this, HttpRequest.GET, GET_WEALTH_LIST, valuePairs,
+                new WealthInfoListHandler());
     }
 
     @Override
     public void onPullDownToRefresh(PullToRefreshBase<RecyclerView> refreshView)
     {
-        mMessageInfoList.clear();
+        mWealthInfoList.clear();
         pn = 1;
         mRefreshStatus = 0;
-        getMessageList();
+        getWealthList();
     }
 
     @Override
@@ -131,7 +142,7 @@ public class MessageListActivity extends BaseActivity implements PullToRefreshBa
     {
         pn += 1;
         mRefreshStatus = 1;
-        getMessageList();
+        getWealthList();
     }
 
 
@@ -157,7 +168,7 @@ public class MessageListActivity extends BaseActivity implements PullToRefreshBa
             mPullToRefreshRecyclerView.onPullDownRefreshComplete();
         }
 
-        if (GET_MESSAGE_LIST.equals(action))
+        if (GET_WEALTH_LIST.equals(action))
         {
             if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
             {
@@ -170,4 +181,11 @@ public class MessageListActivity extends BaseActivity implements PullToRefreshBa
         }
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
 }

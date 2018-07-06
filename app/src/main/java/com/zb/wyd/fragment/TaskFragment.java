@@ -20,7 +20,9 @@ import com.zb.wyd.activity.AddPhotoActivity;
 import com.zb.wyd.activity.BaseHandler;
 import com.zb.wyd.activity.BindEmailActivity;
 import com.zb.wyd.activity.MainActivity;
+import com.zb.wyd.activity.RankingActivity;
 import com.zb.wyd.activity.UserDetailActivity;
+import com.zb.wyd.activity.WealthListActivity;
 import com.zb.wyd.adapter.TaskAdapter;
 import com.zb.wyd.entity.LocationInfo;
 import com.zb.wyd.entity.PhotoInfo;
@@ -218,6 +220,7 @@ public class TaskFragment extends BaseFragment implements IRequestListener, View
     protected void initEvent()
     {
         tvSignIn.setOnClickListener(this);
+        ivDetail.setOnClickListener(this);
     }
 
     @Override
@@ -328,6 +331,10 @@ public class TaskFragment extends BaseFragment implements IRequestListener, View
             Map<String, String> valuePairs = new HashMap<>();
             DataRequest.instance().request(getActivity(), Urls.getUserSignUrl(), this, HttpRequest.POST, USER_SIGN_REQUEST, valuePairs,
                     new SignInfoHandler());
+        }
+        else if(v == ivDetail)
+        {
+            startActivity(new Intent(getActivity(), RankingActivity.class));
         }
     }
 

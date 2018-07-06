@@ -31,7 +31,16 @@ public class WealthHolder extends RecyclerView.ViewHolder
 
         mTimeTv.setText(mWealthInfo.getTime());
         mTitleTv.setText(mWealthInfo.getTitle());
-        mDescTv.setText(mWealthInfo.getDesc());
+
+        if("-1".equals(mWealthInfo.getDirect()))
+        {
+            mDescTv.setText("-" + (mWealthInfo.getCash() +mWealthInfo.getCoupon()));
+        }
+        else
+        {
+            mDescTv.setText("+" + (mWealthInfo.getCash() +mWealthInfo.getCoupon()));
+        }
+
     }
 
 

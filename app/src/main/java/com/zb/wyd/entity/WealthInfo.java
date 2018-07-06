@@ -7,16 +7,19 @@ import org.json.JSONObject;
  */
 public class WealthInfo
 {
-    private String  title;
-    private String  time;
-    private  String  desc;
-
-
-    public  WealthInfo(JSONObject object)
+    private String title;
+    private String time;
+    private int coupon;
+    private String direct;
+    private int cash;
+    public WealthInfo(JSONObject object)
     {
-        this.title = object.optString("title");
-        this.time = object.optString("time");
-        this.desc = object.optString("desc");
+        this.title = object.optString("remark");
+        this.time = object.optString("add_time");
+        this.coupon = object.optInt("coupon");
+        this.direct =  object.optString("direct");
+        this.cash =  object.optInt("cash");
+
     }
 
     public String getTitle()
@@ -39,13 +42,33 @@ public class WealthInfo
         this.time = time;
     }
 
-    public String getDesc()
+    public int getCoupon()
     {
-        return desc;
+        return coupon;
     }
 
-    public void setDesc(String desc)
+    public void setCoupon(int coupon)
     {
-        this.desc = desc;
+        this.coupon = coupon;
+    }
+
+    public String getDirect()
+    {
+        return direct;
+    }
+
+    public void setDirect(String direct)
+    {
+        this.direct = direct;
+    }
+
+    public int getCash()
+    {
+        return cash;
+    }
+
+    public void setCash(int cash)
+    {
+        this.cash = cash;
     }
 }

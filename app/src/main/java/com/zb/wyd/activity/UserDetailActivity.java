@@ -156,7 +156,7 @@ public class UserDetailActivity extends BaseActivity implements IRequestListener
 
         if (null != userInfo)
         {
-            ImageLoader.getInstance().displayImage(userInfo.getFace(), ivUserPic);
+            ImageLoader.getInstance().displayImage(userInfo.getUface(), ivUserPic);
             tvUserNick.setText(userInfo.getUnick());
 
         }

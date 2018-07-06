@@ -179,51 +179,57 @@ public class APPUtils
      * @see [类、类#方法、类#成员]
      * @since [起始版本]
      */
+    @SuppressLint("MissingPermission")
     public static String getDeviceId(Context context)
     {
 
-        return UUID.randomUUID().toString().replace("-", "");
-        //        String id;
-        //        //android.telephony.TelephonyManager
-        //        TelephonyManager mTelephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        //        if (mTelephony.getDeviceId() != null)
-        //        {
-        //            id = mTelephony.getDeviceId();
-        //        }
-        //        else
-        //        {
-        //            //android.provider.Settings;
-        //            id = Settings.Secure.getString(context.getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
-        //        }
-        //        return id;
+        String id;
+        //android.telephony.TelephonyManager
+        TelephonyManager mTelephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        if (mTelephony.getDeviceId() != null)
+        {
+            id = mTelephony.getDeviceId();
+        }
+        else
+        {
+            //android.provider.Settings; --解决在android 7.0的情况下，有权限getDeviceId()返回null的情形
+            id = Settings.Secure.getString(context.getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        }
+        return id;
     }
 
-    public static String getUniqueId(Context context){
+    public static String getUniqueId(Context context)
+    {
         String androidID = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
         String id = androidID + Build.SERIAL;
-        try {
+        try
+        {
             return toMD5(id);
-        } catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException e)
+        {
             e.printStackTrace();
             return id;
         }
     }
 
 
-    private static String toMD5(String text) throws NoSuchAlgorithmException {
+    private static String toMD5(String text) throws NoSuchAlgorithmException
+    {
         //获取摘要器 MessageDigest
         MessageDigest messageDigest = MessageDigest.getInstance("MD5");
         //通过摘要器对字符串的二进制字节数组进行hash计算
         byte[] digest = messageDigest.digest(text.getBytes());
 
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < digest.length; i++) {
+        for (int i = 0; i < digest.length; i++)
+        {
             //循环每个字符 将计算结果转化为正整数;
             int digestInt = digest[i] & 0xff;
             //将10进制转化为较短的16进制
             String hexString = Integer.toHexString(digestInt);
             //转化结果如果是个位数会省略0,因此判断并补0
-            if (hexString.length() < 2) {
+            if (hexString.length() < 2)
+            {
                 sb.append(0);
             }
             //将循环结果添加到缓冲区
@@ -232,6 +238,7 @@ public class APPUtils
         //返回整个结果
         return sb.toString();
     }
+
     /**
      * 获取设备IMEI
      *

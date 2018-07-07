@@ -19,6 +19,9 @@ public class TaskInfo
     private String desc_times;//每天只能获得20次积分
     private String active;//1,
     private String has_finish;//0
+    private String action;
+
+
 
     public TaskInfo() {}
 
@@ -35,6 +38,7 @@ public class TaskInfo
         this.desc_times = obj.optString("desc_times");
         this.active = obj.optString("active");
         this.has_finish = obj.optString("has_finish");
+        this.action =obj.optString("action");
     }
 
     public String getId()
@@ -155,5 +159,15 @@ public class TaskInfo
     public void setHas_finish(String has_finish)
     {
         this.has_finish = has_finish;
+    }
+
+    public String getAction()
+    {
+        return action;
+    }
+
+    public void setAction(String action)
+    {
+        this.action = action;
     }
 }

@@ -57,6 +57,7 @@
                         android:textColor="@color/blackA"
                         android:textSize="@dimen/t14"/>
                     <RelativeLayout
+                        android:visibility="gone"
                         android:id="@+id/rl_all_recommend"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

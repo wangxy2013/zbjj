@@ -22,17 +22,15 @@ public class MessageHolder extends RecyclerView.ViewHolder
         super(rootView);
         mTypeTv = (TextView) rootView.findViewById(R.id.tv_type);
         mTimeTv = (TextView) rootView.findViewById(R.id.tv_time);
-        mContenTv = (TextView) rootView.findViewById(R.id.tv_content);
+        mContenTv = (TextView) rootView.findViewById(R.id.tv_desc);
 
     }
 
 
     public void setMessageInfo(MessageInfo mMessageInfo)
     {
-
-        mTimeTv.setText(mMessageInfo.getTime());
-        mTypeTv.setText(mMessageInfo.getType());
-        mContenTv.setText(mMessageInfo.getContent());
+        mTimeTv.setText(mMessageInfo.getAdd_time());
+        mContenTv.setText(mMessageInfo.getMessage());
     }
 
 

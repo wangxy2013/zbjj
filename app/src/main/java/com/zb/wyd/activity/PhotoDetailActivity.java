@@ -131,9 +131,7 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
     @Override
     protected void initViews(Bundle savedInstanceState)
     {
-        setContentView(R.layout.activity_photo_detail);
-        StatusBarUtil.setStatusBarColor(this, getResources().getColor(R.color.yellow));
-        StatusBarUtil.StatusBarLightMode(PhotoDetailActivity.this, false);
+
     }
 
     @Override

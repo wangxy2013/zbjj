@@ -12,15 +12,22 @@ import android.widget.TextView;
 import com.zb.wyd.R;
 import com.zb.wyd.adapter.MessageAdapter;
 import com.zb.wyd.entity.MessageInfo;
+import com.zb.wyd.http.DataRequest;
+import com.zb.wyd.http.HttpRequest;
 import com.zb.wyd.http.IRequestListener;
+import com.zb.wyd.json.MessageInfoListHandler;
 import com.zb.wyd.utils.ConstantUtil;
 import com.zb.wyd.utils.ToastUtil;
+import com.zb.wyd.utils.Urls;
+import com.zb.wyd.widget.DividerDecoration;
 import com.zb.wyd.widget.list.refresh.PullToRefreshBase;
 import com.zb.wyd.widget.list.refresh.PullToRefreshRecyclerView;
 import com.zb.wyd.widget.statusbar.StatusBarUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,7 +65,9 @@ public class MessageListActivity extends BaseActivity implements PullToRefreshBa
             switch (msg.what)
             {
                 case REQUEST_SUCCESS:
-
+                    MessageInfoListHandler mMessageInfoListHandler = (MessageInfoListHandler) msg.obj;
+                    mMessageInfoList.addAll(mMessageInfoListHandler.getMessageInfoList());
+                    mMessageAdapter.notifyDataSetChanged();
                     break;
 
                 case REQUEST_FAIL:
@@ -100,6 +109,7 @@ public class MessageListActivity extends BaseActivity implements PullToRefreshBa
         mRecyclerView = mPullToRefreshRecyclerView.getRefreshableView();
         mPullToRefreshRecyclerView.setPullLoadEnabled(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        mRecyclerView.addItemDecoration(new DividerDecoration(this));
         mMessageAdapter = new MessageAdapter(mMessageInfoList);
         mRecyclerView.setAdapter(mMessageAdapter);
         getMessageList();
@@ -109,12 +119,11 @@ public class MessageListActivity extends BaseActivity implements PullToRefreshBa
 
     private void getMessageList()
     {
-        //        Map<String, String> valuePairs = new HashMap<>();
-        //        valuePairs.put("group_id", mGroupId);
-        //        valuePairs.put("pn", pn + "");
-        //        valuePairs.put("pagesize", "15");
-        //        DataRequest.instance().request(MessageListActivity.this, Urls.getBlogListUrl(), this, HttpRequest.GET, GET_BLOG_LIST, valuePairs,
-        //                new BlogListHandler());
+        Map<String, String> valuePairs = new HashMap<>();
+        valuePairs.put("pn", pn + "");
+        valuePairs.put("num", "15");
+        DataRequest.instance().request(MessageListActivity.this, Urls.getMessageUrl(), this, HttpRequest.GET, GET_MESSAGE_LIST, valuePairs,
+                new MessageInfoListHandler());
     }
 
     @Override

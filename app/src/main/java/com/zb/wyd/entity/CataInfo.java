@@ -15,6 +15,9 @@ public class CataInfo implements Serializable
 
     private boolean isSelected;
 
+
+    public  CataInfo(){}
+
     public  CataInfo(JSONObject obj)
     {
         this.id = obj.optString("pid");

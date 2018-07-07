@@ -134,6 +134,12 @@ public class VideoFragment1 extends BaseFragment implements IRequestListener, Vi
                     CataInfoListHandler mCataInfoListHandler = (CataInfoListHandler) msg.obj;
                     cataInfoList.clear();
                     cataInfoList.addAll(mCataInfoListHandler.getCataInfoList());
+
+                    CataInfo mCataInfo = new CataInfo();
+                    mCataInfo.setSelected(true);
+                    mCataInfo.setId("0");
+                    mCataInfo.setName("全部");
+                    cataInfoList.add(0,mCataInfo);
                     mCataAdapter.notifyDataSetChanged();
 
                     if (!cataInfoList.isEmpty())

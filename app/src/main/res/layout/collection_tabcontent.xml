@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:gravity="center_horizontal"
+              android:layout_marginTop="@dimen/dm_10"
+              android:padding="@dimen/dm_5"
+              android:orientation="vertical">
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/anchor_tab_selector"
+        android:gravity="center"
+        android:padding="@dimen/dm_8"
+        android:text="收藏的主播"
+        android:textColor="@drawable/anchor_tab_font_selector"
+        android:textSize="14sp"
+        />
+
+
+</LinearLayout>

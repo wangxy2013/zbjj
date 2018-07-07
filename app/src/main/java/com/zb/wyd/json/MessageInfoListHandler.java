@@ -16,6 +16,10 @@ public class MessageInfoListHandler extends JsonHandler
 {
     private List<MessageInfo> messageInfoList = new ArrayList<>();
 
+    public List<MessageInfo> getMessageInfoList()
+    {
+        return messageInfoList;
+    }
 
     @Override
     protected void parseJson(JSONObject jsonObj) throws Exception

@@ -184,6 +184,17 @@ public class Urls
         return BASE_URL + "fortune/rank";
     }
 
+    public static String getMessageUrl()
+    {
+        return BASE_URL + "msg/index";
+    }
+
+    public static String getFavoritUrl()
+    {
+        return BASE_URL + "favorite/index";
+    }
+
+
 
 }
 

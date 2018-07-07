@@ -65,7 +65,7 @@ public class LiveFragment extends BaseFragment
     {
         tabs.add("直播首页");
         tabs.add("主播列表");
-        tabs.add("直播平台");
+      //  tabs.add("直播平台");
     }
 
     @Override
@@ -86,15 +86,15 @@ public class LiveFragment extends BaseFragment
         MyViewPagerAdapter viewPagerAdapter = new MyViewPagerAdapter(getChildFragmentManager());
         viewPagerAdapter.addFragment(LiveIndexFragment.newInstance(), "直播首页");//添加Fragment
         viewPagerAdapter.addFragment(AnchorListFragment.newInstance(), "主播列表");
-        viewPagerAdapter.addFragment(LivePlatformFragment.newInstance(), "直播平台");
+       // viewPagerAdapter.addFragment(LivePlatformFragment.newInstance(), "直播平台");
         mViewPager.setAdapter(viewPagerAdapter);//设置适配器
         mViewPager.setOffscreenPageLimit(2);
         mTabLayout.addTab(mTabLayout.newTab().setText("直播首页"));//给TabLayout添加Tab
         mTabLayout.addTab(mTabLayout.newTab().setText("主播列表"));
-        mTabLayout.addTab(mTabLayout.newTab().setText("直播平台"));
+       // mTabLayout.addTab(mTabLayout.newTab().setText("直播平台"));
         mTabLayout.setupWithViewPager(mViewPager);//给TabLayout设置关联ViewPager，如果设置了ViewPager，那么ViewPagerAdapter中的getPageTitle()方法返回的就是Tab上的标题
         setTabView();
-//        reflex(mTabLayout);
+        reflex(mTabLayout);
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener()
         {
             @Override
@@ -133,7 +133,7 @@ public class LiveFragment extends BaseFragment
     private void setTabView()
     {
         holder = null;
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 2; i++)
         {
             //依次获取标签
             TabLayout.Tab tab = mTabLayout.getTabAt(i);

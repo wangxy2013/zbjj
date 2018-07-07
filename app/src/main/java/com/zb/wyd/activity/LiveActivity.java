@@ -415,7 +415,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         showProgressDialog();
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
-        DataRequest.instance().request(LiveActivity.this, Urls.getLiveStreamUrl(), this, HttpRequest.POST, GET_LIVE_STREAM, valuePairs,
+        DataRequest.instance().request(LiveActivity.this, Urls.getLiveStreamUrl(), this, HttpRequest.GET, GET_LIVE_STREAM, valuePairs,
                 new LiveInfoHandler());
     }
 

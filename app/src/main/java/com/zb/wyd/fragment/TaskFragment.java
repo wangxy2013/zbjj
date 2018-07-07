@@ -21,8 +21,10 @@ import com.zb.wyd.activity.BaseHandler;
 import com.zb.wyd.activity.BindEmailActivity;
 import com.zb.wyd.activity.MainActivity;
 import com.zb.wyd.activity.RankingActivity;
+import com.zb.wyd.activity.RegisterActivity;
 import com.zb.wyd.activity.UserDetailActivity;
 import com.zb.wyd.activity.WealthListActivity;
+import com.zb.wyd.activity.WebViewActivity;
 import com.zb.wyd.adapter.TaskAdapter;
 import com.zb.wyd.entity.LocationInfo;
 import com.zb.wyd.entity.PhotoInfo;
@@ -232,67 +234,43 @@ public class TaskFragment extends BaseFragment implements IRequestListener, View
             @Override
             public void onItemClick(View view, int position)
             {
-                switch (Integer.parseInt(mIncompleteList.get(position).getId()))
+                TaskInfo mTaskInfo = mIncompleteList.get(position);
+
+                if ("user://register".equals(mTaskInfo.getAction()))
                 {
-                    //激活邮箱
-                    case 3:
-                        startActivity(new Intent(getActivity(), BindEmailActivity.class));
-                        break;
-                    //上传头像
-                    case 4:
-                        startActivity(new Intent(getActivity(), UserDetailActivity.class));
-                        break;
-                    //观看直播
-                    case 5:
-                        ((MainActivity) getActivity()).setTab(0);
-                        break;
-                    //观看点播
-                    case 6:
-                        ((MainActivity) getActivity()).setTab(2);
-                        break;
-                    //分享给朋友
-                    case 7:
-                        Intent textIntent = new Intent(Intent.ACTION_SEND);
-                        textIntent.setType("text/plain");
-                        textIntent.putExtra(Intent.EXTRA_TEXT, "这是一段分享的文字");
-                        startActivity(Intent.createChooser(textIntent, "分享"));
-
-                        break;
-                    //分享到朋友圈
-                    case 8:
-                        Intent textIntent2 = new Intent(Intent.ACTION_SEND);
-                        textIntent2.setType("text/plain");
-                        textIntent2.putExtra(Intent.EXTRA_TEXT, "这是一段分享的文字");
-                        startActivity(Intent.createChooser(textIntent2, "分享"));
-                        break;
-                    //发布自拍
-                    case 9:
-                        ((MainActivity) getActivity()).setTab(3);
-                        break;
-                    //邀请注册
-                    case 10:
-                        Intent textIntent3 = new Intent(Intent.ACTION_SEND);
-                        textIntent3.setType("text/plain");
-                        textIntent3.putExtra(Intent.EXTRA_TEXT, "这是一段分享的文字");
-                        startActivity(Intent.createChooser(textIntent3, "分享"));
-                        break;
-                    //推广APP
-                    case 11:
-                        break;
-                    //节日福利
-                    case 12:
-                        break;
-                    //举报
-                    case 13:
-                        break;
-                    //关注QQ、微信
-                    case 14:
-                        break;
-                    //"分享链接被访问
-                    case 15:
-                        break;
-
+                    startActivity(new Intent(getActivity(), RegisterActivity.class));
                 }
+                else if ("user://email".equals(mTaskInfo.getAction()))
+                {
+                    startActivity(new Intent(getActivity(), BindEmailActivity.class));
+                }
+                else if ("user://profile".equals(mTaskInfo.getAction()))
+                {
+                    startActivity(new Intent(getActivity(), UserDetailActivity.class));
+                }
+                else if ("live://index".equals(mTaskInfo.getAction()))
+                {
+                    ((MainActivity) getActivity()).setTab(0);
+                }
+                else if (mTaskInfo.getAction().startsWith("video"))
+                {
+                    ((MainActivity) getActivity()).setTab(2);
+                }
+                else if (mTaskInfo.getAction().startsWith("http") || mTaskInfo.getAction().startsWith("https"))
+                {
+                    startActivity(new Intent(getActivity(), WebViewActivity.class)
+                            .putExtra(WebViewActivity.EXTRA_TITLE, mTaskInfo.getTname())
+                            .putExtra(WebViewActivity.IS_SETTITLE, true)
+                            .putExtra(WebViewActivity.EXTRA_URL, mTaskInfo.getAction())
+                    );
+                }
+
+
+                //                        Intent textIntent2 = new Intent(Intent.ACTION_SEND);
+                //                        textIntent2.setType("text/plain");
+                //                        textIntent2.putExtra(Intent.EXTRA_TEXT, "这是一段分享的文字");
+                //                        startActivity(Intent.createChooser(textIntent2, "分享"));
+
             }
         });
         rvTaskIncomplete.setAdapter(mIncompleteAdapter);
@@ -332,7 +310,7 @@ public class TaskFragment extends BaseFragment implements IRequestListener, View
             DataRequest.instance().request(getActivity(), Urls.getUserSignUrl(), this, HttpRequest.POST, USER_SIGN_REQUEST, valuePairs,
                     new SignInfoHandler());
         }
-        else if(v == ivDetail)
+        else if (v == ivDetail)
         {
             startActivity(new Intent(getActivity(), RankingActivity.class));
         }

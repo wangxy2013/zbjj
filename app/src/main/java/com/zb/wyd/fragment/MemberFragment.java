@@ -21,6 +21,7 @@ import com.zb.wyd.activity.BindEmailActivity;
 import com.zb.wyd.activity.LoginActivity;
 import com.zb.wyd.activity.MainActivity;
 import com.zb.wyd.activity.MessageListActivity;
+import com.zb.wyd.activity.MyCollectionActivity;
 import com.zb.wyd.activity.UserDetailActivity;
 import com.zb.wyd.activity.WealthListActivity;
 import com.zb.wyd.entity.UserInfo;
@@ -195,6 +196,7 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
         rlEmail.setOnClickListener(this);
         rlMessage.setOnClickListener(this);
         rlWealth.setOnClickListener(this);
+        rlCollection.setOnClickListener(this);
     }
 
     @Override
@@ -277,6 +279,11 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
         {
             if (isClick)
                 startActivity(new Intent(getActivity(), WealthListActivity.class).putExtra("fortune", tvWealth.getText().toString()));
+        }
+        else if(v == rlCollection)
+        {
+            if (isClick)
+                startActivity(new Intent(getActivity(), MyCollectionActivity.class));
         }
     }
 }

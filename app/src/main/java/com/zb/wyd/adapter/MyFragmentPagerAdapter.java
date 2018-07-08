@@ -13,7 +13,7 @@ import com.zb.wyd.fragment.VideoCollectionFragment;
  */
 public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
 
-    private String[] mTitles = new String[]{"首页", "发现", "进货单"};
+    private String[] mTitles = new String[]{"", "", ""};
 
     public MyFragmentPagerAdapter(FragmentManager fm) {
         super(fm);

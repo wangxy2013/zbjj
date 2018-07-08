@@ -4,7 +4,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
     <RelativeLayout
-        android:layout_below="@+id/ll_head"
+        android:id="@+id/rl_head"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/yellow"
@@ -46,6 +46,7 @@
 
     </RelativeLayout>
     <ScrollView
+        android:layout_below="@+id/rl_head"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
        >
@@ -90,6 +91,13 @@
                 android:textColor="@color/blackC"
                 android:textSize="@dimen/t14"
                 android:visibility="gone"/>
+
+            <com.zb.wyd.widget.MaxRecyclerView
+                android:id="@+id/rv_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dm_10"
+                android:layout_marginRight="@dimen/dm_10"/>
         </LinearLayout>
     </ScrollView>
 

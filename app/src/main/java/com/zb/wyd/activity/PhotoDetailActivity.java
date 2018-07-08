@@ -11,8 +11,8 @@ import android.widget.TextView;
 
 import com.zb.wyd.R;
 import com.zb.wyd.adapter.PhotoAdapter;
-import com.zb.wyd.entity.PriceInfo;
 import com.zb.wyd.entity.PhotoInfo;
+import com.zb.wyd.entity.PriceInfo;
 import com.zb.wyd.http.DataRequest;
 import com.zb.wyd.http.HttpRequest;
 import com.zb.wyd.http.IRequestListener;
@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * 描述：自拍详情
@@ -44,8 +45,6 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
     ImageView       ivBack;
     @BindView(R.id.tv_title)
     TextView        tvTitle;
-    @BindView(R.id.tv_submit)
-    TextView        tvSubmit;
     @BindView(R.id.tv_name)
     TextView        tvName;
     @BindView(R.id.tv_add_time)
@@ -54,6 +53,10 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
     MaxRecyclerView rvPhoto;
     @BindView(R.id.btn_buy)
     Button          btnBuy;
+    @BindView(R.id.iv_collection)
+    ImageView       ivCollection;
+    @BindView(R.id.rv_comment)
+    MaxRecyclerView rvComment;
     private List<String> freePic   = new ArrayList<>();
     private List<String> chargePic = new ArrayList<>();
     private List<String> allPic    = new ArrayList<>();
@@ -131,7 +134,9 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
     @Override
     protected void initViews(Bundle savedInstanceState)
     {
-
+        setContentView(R.layout.activity_photo_detail);
+        StatusBarUtil.setStatusBarColor(this, getResources().getColor(R.color.yellow));
+        StatusBarUtil.StatusBarLightMode(PhotoDetailActivity.this, false);
     }
 
     @Override
@@ -259,4 +264,11 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
     }
 
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
 }

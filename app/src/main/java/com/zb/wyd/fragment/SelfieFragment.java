@@ -61,27 +61,25 @@ import butterknife.Unbinder;
 /**
  * 描述：自拍
  */
-public class SelfieFragment extends BaseFragment implements IRequestListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener
+public class SelfieFragment extends BaseFragment implements IRequestListener, View.OnClickListener
 {
 
     @BindView(R.id.banner)
-    CustomBanner               mBanner;
+    CustomBanner mBanner;
     @BindView(R.id.rv_photo)
-    MaxRecyclerView            rvPhoto;
+    RecyclerView rvPhoto;
     @BindView(R.id.iv_show)
-    ImageView                  ivMore;
+    ImageView    ivMore;
     @BindView(R.id.rv_cata)
-    RecyclerView               rvCata;
+    RecyclerView rvCata;
     @BindView(R.id.tv_new)
-    TextView                   tvNew;
+    TextView     tvNew;
     @BindView(R.id.tv_fav)
-    TextView                   tvFav;
+    TextView     tvFav;
     @BindView(R.id.tv_add)
-    TextView                   tvAdd;
+    TextView     tvAdd;
     @BindView(R.id.topView)
-    View                       topView;
-    @BindView(R.id.swipeRefresh)
-    VerticalSwipeRefreshLayout mSwipeRefreshLayout;
+    View         topView;
 
     private List<CataInfo> cataInfoList = new ArrayList<>();
     private CataAdapter mCataAdapter;
@@ -95,7 +93,7 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
 
     private View rootView = null;
     private Unbinder unbinder;
-
+    private int pn = 1;
 
     private              String cta_id                = "0";
     private              String sort                  = "new";
@@ -121,9 +119,11 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
             {
                 case REQUEST_SUCCESS:
                     SelfieInfoListHandler mSelfieInfoListHandler = (SelfieInfoListHandler) msg.obj;
-                    selfieInfoList.clear();
-                    selfieInfoList.addAll(mSelfieInfoListHandler.getSelfieInfoList());
-                    mSelfieAdapter.notifyDataSetChanged();
+                    if (!mSelfieInfoListHandler.getSelfieInfoList().isEmpty())
+                    {
+                        selfieInfoList.addAll(mSelfieInfoListHandler.getSelfieInfoList());
+                        mSelfieAdapter.notifyDataSetChanged();
+                    }
                     break;
 
                 case REQUEST_FAIL:
@@ -219,8 +219,70 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
         tvNew.setOnClickListener(this);
         tvFav.setOnClickListener(this);
         tvAdd.setOnClickListener(this);
-        mSwipeRefreshLayout.setOnRefreshListener(this);
 
+        rvPhoto.setOnScrollListener(new RecyclerView.OnScrollListener()
+        {
+            //用来标记是否正在向最后一个滑动，既是否向下滑动
+            boolean isSlidingToLast = false;
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState)
+            {
+                StaggeredGridLayoutManager manager = (StaggeredGridLayoutManager) recyclerView.getLayoutManager();
+                // 当不滚动时
+                if (newState == RecyclerView.SCROLL_STATE_IDLE)
+                {
+                    //获取最后一个完全显示的ItemPosition
+                    int[] lastVisiblePositions = manager.findLastVisibleItemPositions(new int[manager.getSpanCount()]);
+                    int lastVisiblePos = getMaxElem(lastVisiblePositions);
+                    int totalItemCount = manager.getItemCount();
+
+                    // 判断是否滚动到底部
+                    if (lastVisiblePos == (totalItemCount - 1) && isSlidingToLast)
+                    {
+                        //加载更多功能的代码
+                        //                        Ln.e("howes right="+manager.findLastCompletelyVisibleItemPosition());
+                        //                        Toast.makeText(getActivityContext(),"加载更多",0).show();
+
+                        pn += 1;
+                        getPhotoList();
+
+
+                    }
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy)
+            {
+                super.onScrolled(recyclerView, dx, dy);
+                //dx用来判断横向滑动方向，dy用来判断纵向滑动方向
+                if (dy > 0)
+                {
+                    //大于0表示，正在向下滚动
+                    isSlidingToLast = true;
+                }
+                else
+                {
+                    //小于等于0 表示停止或向上滚动
+                    isSlidingToLast = false;
+                }
+
+            }
+        });
+
+    }
+
+    private int getMaxElem(int[] arr)
+    {
+        int size = arr.length;
+        int maxVal = Integer.MIN_VALUE;
+        for (int i = 0; i < size; i++)
+        {
+            if (arr[i] > maxVal)
+                maxVal = arr[i];
+        }
+        return maxVal;
     }
 
     @Override
@@ -275,7 +337,6 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
 
             }
         });
-        rvPhoto.setNestedScrollingEnabled(false);
         rvPhoto.setAdapter(mSelfieAdapter);
         mHandler.sendEmptyMessage(GET_AD_LIST_CODE);
         loadData();
@@ -300,9 +361,10 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
     private void getPhotoList()
     {
         Map<String, String> valuePairs = new HashMap<>();
-        valuePairs.put("pn", "1");
+        valuePairs.put("pn", pn + "");
         valuePairs.put("cta_id", cta_id);
         valuePairs.put("sort", sort);
+        valuePairs.put("num", "20");
         DataRequest.instance().request(getActivity(), Urls.getPhotoListUrl(), this, HttpRequest.POST, GET_PHPTO_LIST, valuePairs,
                 new SelfieInfoListHandler());
     }
@@ -311,7 +373,7 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
     private void getAdList()
     {
         Map<String, String> valuePairs = new HashMap<>();
-        valuePairs.put("pos_id", "7");
+        valuePairs.put("pos_id", "1");
         DataRequest.instance().request(getActivity(), Urls.getAdListUrl(), this, HttpRequest.POST, GET_AD_LIST, valuePairs,
                 new AdInfoListHandler());
     }
@@ -504,20 +566,4 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
     }
 
 
-    @Override
-    public void onRefresh()
-    {
-        if (mSwipeRefreshLayout != null)
-        {
-            loadData();
-            mSwipeRefreshLayout.post(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    mSwipeRefreshLayout.setRefreshing(false);
-                }
-            });
-        }
-    }
 }

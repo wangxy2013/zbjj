@@ -8,7 +8,7 @@ package com.zb.wyd.utils;
  */
 public class Urls
 {
-    //UI https://lanhuapp.com/url/RzWd2
+    //UI https://lanhuapp.com/web/#/item/board?pid=3f958e36-6866-49c2-9934-24a0edd9ca7c
     //http://api.crap.cn/project.do#/152894835244607000287/interface/list/152894841894709000288
     public static final String HTTP_IP = "http://www.883974.com/";
 
@@ -193,6 +193,26 @@ public class Urls
     {
         return BASE_URL + "favorite/index";
     }
+    public static String getCollectionRequestUrl()
+    {
+        return BASE_URL + "favorite/like";
+    }
+
+    public static String getCommentlistUrl()
+    {
+        return BASE_URL + "photo/list_say";
+    }
+
+
+    public static String getSendCommentUrl()
+    {
+        return BASE_URL + "photo/say";
+    }
+    public static String getAnchorDetailUrl()
+    {
+        return BASE_URL + "live/biuty";
+    }
+
 
 
 

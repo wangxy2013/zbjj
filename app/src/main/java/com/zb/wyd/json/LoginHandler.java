@@ -24,8 +24,10 @@ public class LoginHandler extends JsonHandler
             {
                 String uniqueCode = obj.optString("auth");
                 String uid = obj.optString("id");
+                String uname = obj.optString("uname");
                 ConfigManager.instance().setUniqueCode(uniqueCode);
                 ConfigManager.instance().setUserId(uid);
+                ConfigManager.instance().setUserNickName(uname);
             }
 
 

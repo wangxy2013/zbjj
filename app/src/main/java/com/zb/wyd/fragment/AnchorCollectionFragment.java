@@ -150,10 +150,7 @@ public class AnchorCollectionFragment extends BaseFragment implements PullToRefr
             public void onItemClick(View view, int position)
             {
                 LiveInfo mLiveInfo = liveInfoList.get(position);
-
-                Bundle b = new Bundle();
-                b.putSerializable("LiveInfo", mLiveInfo);
-                startActivity(new Intent(getActivity(), LiveActivity.class).putExtras(b));
+                startActivity(new Intent(getActivity(), LiveActivity.class).putExtra("biz_id",mLiveInfo.getId()));
 
             }
         });

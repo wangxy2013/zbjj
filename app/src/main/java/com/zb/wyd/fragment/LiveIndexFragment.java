@@ -214,9 +214,9 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
                 if (MyApplication.getInstance().isLogin())
                 {
                     LiveInfo mLiveInfo = freeLiveList.get(position);
-                    Bundle b = new Bundle();
-                    b.putSerializable("LiveInfo", mLiveInfo);
-                    startActivity(new Intent(getActivity(), LiveActivity.class).putExtras(b));
+//                    Bundle b = new Bundle();
+//                    b.putSerializable("LiveInfo", mLiveInfo);
+                    startActivity(new Intent(getActivity(), LiveActivity.class).putExtra("biz_id",mLiveInfo.getId()));
 
                 }
                 else
@@ -239,9 +239,10 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
                 {
                     LiveInfo mLiveInfo = newLiveList.get(position);
 
-                    Bundle b = new Bundle();
-                    b.putSerializable("LiveInfo", mLiveInfo);
-                    startActivity(new Intent(getActivity(), LiveActivity.class).putExtras(b));
+//                    Bundle b = new Bundle();
+//                    b.putSerializable("LiveInfo", mLiveInfo);
+//                    startActivity(new Intent(getActivity(), LiveActivity.class).putExtras(b));
+                    startActivity(new Intent(getActivity(), LiveActivity.class).putExtra("biz_id",mLiveInfo.getId()));
 
                 }
                 else

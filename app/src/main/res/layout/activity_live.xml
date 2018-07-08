@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
 
     <com.zb.wyd.widget.LiveVideoPlayer
@@ -17,9 +17,9 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_marginTop="@dimen/dm_20"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dm_36"
+            android:layout_marginTop="@dimen/dm_20"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -91,4 +91,102 @@
                 android:layout_height="wrap_content"/>
         </LinearLayout>
     </RelativeLayout>
-</FrameLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rl_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:padding="@dimen/dm_10">
+
+
+        <ImageView
+            android:id="@+id/iv_closed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_live_close"/>
+
+
+        <TextView
+            android:id="@+id/tv_dm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dm_10"
+            android:layout_toLeftOf="@+id/iv_closed"
+            android:background="@drawable/live_dm_selector"
+            android:paddingBottom="@dimen/dm_5"
+            android:paddingLeft="@dimen/dm_10"
+            android:paddingRight="@dimen/dm_10"
+            android:paddingTop="@dimen/dm_5"
+            android:text="弹幕"
+            android:textColor="@color/white"
+            android:textSize="@dimen/t16"/>
+
+        <ImageView
+            android:id="@+id/iv_report"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dm_10"
+            android:layout_toLeftOf="@+id/tv_dm"
+            android:src="@drawable/ic_report"/>
+
+        <ImageView
+            android:id="@+id/iv_gift"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dm_10"
+            android:layout_toLeftOf="@+id/iv_report"
+            android:src="@drawable/ic_gift"/>
+
+
+        <TextView
+            android:id="@+id/tv_say"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dm_10"
+            android:layout_toLeftOf="@+id/iv_gift"
+            android:background="@drawable/live_input_frame_45dp"
+            android:gravity="center_vertical"
+            android:paddingBottom="@dimen/dm_5"
+            android:paddingLeft="@dimen/dm_10"
+            android:paddingTop="@dimen/dm_5"
+            android:text="输入您想说的"
+            android:textColor="@color/blackA"
+            android:textSize="@dimen/t16"/>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_system"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/rl_bottom"
+        android:layout_marginBottom="@dimen/dm_50"
+        android:layout_marginLeft="@dimen/dm_10"
+        android:layout_marginRight="@dimen/dm_10"
+        android:background="@drawable/live_system_bg"
+        android:padding="@dimen/dm_5"
+        android:text="每天到任务大厅参与任务，免费获得丰厚积分数量"
+        android:textColor="@color/white"
+        android:textSize="@dimen/t14"/>
+
+    <TextView
+        android:id="@+id/tv_welcome_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tv_system"
+        android:layout_marginBottom="@dimen/dm_10"
+        android:layout_marginLeft="@dimen/dm_10"
+        android:layout_marginRight="@dimen/dm_10"
+        android:background="@drawable/live_system_bg"
+        android:padding="@dimen/dm_5"
+        android:text="欢迎进入直播间"
+        android:textColor="@color/white"
+        android:textSize="@dimen/t14"/>
+</RelativeLayout>

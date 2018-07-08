@@ -27,12 +27,13 @@ public class NewHolder extends RecyclerView.ViewHolder
     private RelativeLayout      mItemLayout;
     private MyItemClickListener listener;
     private Context             context;
-
+    private TextView            mStatusTv;
     public NewHolder(View rootView, Context context, MyItemClickListener listener)
     {
         super(rootView);
         this.listener = listener;
         this.context = context;
+        mStatusTv = (TextView) rootView.findViewById(R.id.tv_status);
         mFollowTv = (TextView) rootView.findViewById(R.id.tv_follow);
         mPopularityTv = (TextView) rootView.findViewById(R.id.tv_popularity);
         mNameTv = (TextView) rootView.findViewById(R.id.tv_name);
@@ -55,7 +56,14 @@ public class NewHolder extends RecyclerView.ViewHolder
 
         ImageLoader.getInstance().displayImage(mLiveInfo.getFace(), mImgIv);
 
-
+        if("1".equals(mLiveInfo.getIs_live()))
+        {
+            mStatusTv.setBackgroundResource(R.drawable.common_orange_3dp);
+        }
+        else
+        {
+            mStatusTv.setBackgroundResource(R.drawable.common_gray_3dp);
+        }
         mFollowTv.setText(mLiveInfo.getFavour_count());
         mPopularityTv.setText(mLiveInfo.getOnline());
         mNameTv.setText(mLiveInfo.getNick());

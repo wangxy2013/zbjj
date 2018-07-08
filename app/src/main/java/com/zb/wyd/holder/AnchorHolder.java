@@ -23,6 +23,7 @@ public class AnchorHolder extends RecyclerView.ViewHolder
     private TextView            mFollowTv;
     private TextView            mPopularityTv;
     private TextView            mNameTv;
+    private TextView            mStatusTv;
     private RoundAngleImageView mImgIv;
     private RelativeLayout      mItemLayout;
     private MyItemClickListener listener;
@@ -33,6 +34,7 @@ public class AnchorHolder extends RecyclerView.ViewHolder
         super(rootView);
         this.listener = listener;
         this.context = context;
+        mStatusTv = (TextView) rootView.findViewById(R.id.tv_status);
         mFollowTv = (TextView) rootView.findViewById(R.id.tv_follow);
         mPopularityTv = (TextView) rootView.findViewById(R.id.tv_popularity);
         mNameTv = (TextView) rootView.findViewById(R.id.tv_name);
@@ -54,6 +56,14 @@ public class AnchorHolder extends RecyclerView.ViewHolder
         ImageLoader.getInstance().displayImage(mLiveInfo.getFace(), mImgIv);
 
 
+        if("1".equals(mLiveInfo.getIs_live()))
+        {
+            mStatusTv.setBackgroundResource(R.drawable.common_orange_3dp);
+        }
+        else
+        {
+            mStatusTv.setBackgroundResource(R.drawable.common_gray_3dp);
+        }
         mFollowTv.setText(mLiveInfo.getFavour_count());
         mPopularityTv.setText(mLiveInfo.getOnline());
         mNameTv.setText(mLiveInfo.getNick());

@@ -38,18 +38,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:padding="@dimen/dm_10"
             android:layout_centerVertical="true"
+            android:padding="@dimen/dm_10"
             android:src="@drawable/ic_colletion_black"
             />
 
 
     </RelativeLayout>
     <ScrollView
-        android:layout_below="@+id/rl_head"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-       >
+        android:layout_above="@+id/rl_bottom"
+        android:layout_below="@+id/rl_head"
+        >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -102,6 +103,38 @@
     </ScrollView>
 
 
+    <RelativeLayout
+        android:id="@+id/rl_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:padding="@dimen/dm_10">
+        <TextView
+            android:id="@+id/tv_send"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dm_36"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dm_10"
+            android:background="@drawable/common_yellow_5dp"
+            android:gravity="center"
+            android:paddingLeft="@dimen/dm_10"
+            android:paddingRight="@dimen/dm_10"
+            android:text="发送"
+            android:textColor="@color/white"
+            android:textSize="@dimen/t16"/>
 
-
+        <EditText
+            android:id="@+id/et_content"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dm_36"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/tv_send"
+            android:background="@drawable/gray_frame_2dp"
+            android:hint="说点什么..."
+            android:maxLines="1"
+            android:padding="@dimen/dm_5"
+            android:textSize="@dimen/t14"/>
+    </RelativeLayout>
 </RelativeLayout>

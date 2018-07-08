@@ -22,6 +22,7 @@ public class RecommendHolder extends RecyclerView.ViewHolder
     private TextView            mFollowTv;
     private TextView            mPopularityTv;
     private TextView            mNameTv;
+    private TextView            mStatusTv;
     private RoundAngleImageView mImgIv;
     private RelativeLayout      mItemLayout;
     private MyItemClickListener listener;
@@ -37,7 +38,7 @@ public class RecommendHolder extends RecyclerView.ViewHolder
         mNameTv = (TextView) rootView.findViewById(R.id.tv_name);
         mImgIv = (RoundAngleImageView) rootView.findViewById(R.id.iv_user_pic);
         mItemLayout = (RelativeLayout) rootView.findViewById(R.id.rl_item);
-
+        mStatusTv = (TextView) rootView.findViewById(R.id.tv_status);
     }
 
 
@@ -50,6 +51,15 @@ public class RecommendHolder extends RecyclerView.ViewHolder
         mFollowTv.setText(mLiveInfo.getFavour_count());
         mPopularityTv.setText(mLiveInfo.getOnline());
         mNameTv.setText(mLiveInfo.getNick());
+
+        if("1".equals(mLiveInfo.getIs_live()))
+        {
+            mStatusTv.setBackgroundResource(R.drawable.common_orange_3dp);
+        }
+        else
+        {
+            mStatusTv.setBackgroundResource(R.drawable.common_gray_3dp);
+        }
         mItemLayout.setOnClickListener(new View.OnClickListener()
         {
             @Override

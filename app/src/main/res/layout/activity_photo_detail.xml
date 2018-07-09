@@ -43,6 +43,16 @@
             android:src="@drawable/ic_colletion_black"
             />
 
+        <ImageView
+            android:layout_marginRight="@dimen/dm_10"
+            android:id="@+id/iv_share"
+            android:layout_toLeftOf="@+id/iv_collection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/dm_10"
+            android:src="@drawable/ic_share_selector"
+            />
 
     </RelativeLayout>
     <ScrollView

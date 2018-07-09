@@ -213,8 +213,15 @@ public class Urls
         return BASE_URL + "live/biuty";
     }
 
+    public static String getSharePhotoUrl(String biz_id)
+    {
+        return BASE_URL + "photo/share?token="+ConfigManager.instance().getUniqueCode()+"&device=and&biz_id=" + biz_id;
+    }
 
-
+    public static String getShareVideoUrl(String biz_id)
+    {
+        return BASE_URL + "video/share?token="+ConfigManager.instance().getUniqueCode()+"&device=and&biz_id=" + biz_id;
+    }
 
 }
 

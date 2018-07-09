@@ -8,8 +8,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.VideoAllCallBack;
@@ -29,7 +27,6 @@ import com.zb.wyd.listener.MyOnClickListener;
 import com.zb.wyd.utils.ConstantUtil;
 import com.zb.wyd.utils.DialogUtils;
 import com.zb.wyd.utils.LogUtil;
-import com.zb.wyd.utils.ToastUtil;
 import com.zb.wyd.utils.Urls;
 import com.zb.wyd.widget.MyVideoPlayer;
 
@@ -41,24 +38,17 @@ import butterknife.BindView;
 /**
  * 描述：一句话简单描述
  */
-public class VideoPlayActivity extends BaseActivity implements IRequestListener
+public class VideoPlayActivity1 extends BaseActivity implements IRequestListener
 {
     @BindView(R.id.detail_player)
     MyVideoPlayer videoPlayer;
 
     //  private OrientationUtils orientationUtils;
 
-    private ImageView    mCollectionIv;
-    private ImageView    mShareIv;
-    private ImageView    mSettingIv;
-    private LinearLayout mChannelLayout;
-
-    private TextView mYdTv, mDxTv, mCmTv;
     private VideoInfo mVideoInfo;
     private String    videoName, biz_id;
     private String      videoUri;
     private ChannelInfo mChannelInfo;
-    private static final String      FAVORITE_LIKE           = "favorite_like";
     private static final String      GET_VIDEO_PRICE         = "get_live_price";
     private static final String      GET_VIDEO_STREAM        = "get_video_stream";
     private static final String      BUY_VIDEO               = "buy_live";
@@ -68,9 +58,8 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
     private static final int         BUY_VIDEO_SUCCESS       = 0x05;
     private static final int         SET_STATISTICS          = 0x06;
     private static final int         GET_STREAM_REQUEST      = 0x09;
-    private static final int         FAVORITE_LIKE_SUCCESS   = 0x08;
     @SuppressLint("HandlerLeak")
-    private              BaseHandler mHandler                = new BaseHandler(VideoPlayActivity.this)
+    private              BaseHandler mHandler                = new BaseHandler(VideoPlayActivity1.this)
     {
         @Override
         public void handleMessage(Message msg)
@@ -103,7 +92,7 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
 
                     if (null != mLivePriceInfo)
                     {
-                        DialogUtils.showVideoPriceDialog(VideoPlayActivity.this, mLivePriceInfo, new View.OnClickListener()
+                        DialogUtils.showVideoPriceDialog(VideoPlayActivity1.this, mLivePriceInfo, new View.OnClickListener()
                         {
                             @Override
                             public void onClick(View v)
@@ -144,9 +133,6 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
                 case GET_STREAM_REQUEST:
                     getVideoStream();
                     break;
-                case FAVORITE_LIKE_SUCCESS:
-                    ToastUtil.show(VideoPlayActivity.this, "收藏成功");
-                    break;
             }
         }
     };
@@ -181,21 +167,6 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
     @Override
     protected void initViewData()
     {
-        mCollectionIv = (ImageView) videoPlayer.findViewById(R.id.iv_collection);
-        mShareIv = (ImageView) videoPlayer.findViewById(R.id.iv_share);
-        mSettingIv = (ImageView) videoPlayer.findViewById(R.id.iv_setting);
-        mChannelLayout = (LinearLayout) videoPlayer.findViewById(R.id.ll_channel);
-        mYdTv = (TextView) videoPlayer.findViewById(R.id.tv_yd);
-        mDxTv = (TextView) videoPlayer.findViewById(R.id.tv_dx);
-        mCmTv = (TextView) videoPlayer.findViewById(R.id.tv_cm);
-
-        mCollectionIv.setOnClickListener(this);
-        mShareIv.setOnClickListener(this);
-        mSettingIv.setOnClickListener(this);
-        mYdTv.setOnClickListener(this);
-        mDxTv.setOnClickListener(this);
-        mCmTv.setOnClickListener(this);
-
         String source1 = "http://vod3.vxinda.com/20180523/1381/playlist.m3u8";
 
         String source2 = "rtmp://live.hkstv.hk.lxdns.com/live/hks";
@@ -377,35 +348,32 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
             @Override
             public void onPlayError(String s, Object... objects)
             {
-                hideProgressDialog();
                 LogUtil.e("TAG", "播放错误111111111111111111111111111111111111111111111111111");
 
-                ToastUtil.show(VideoPlayActivity.this, "该网络暂无法播放");
+                DialogUtils.showChannelDialog(VideoPlayActivity1.this, new MyItemClickListener()
+                {
+                    @Override
+                    public void onItemClick(View view, int position)
+                    {
+                        switch (position)
+                        {
+                            case 1:
+                                playVideo(mChannelInfo.getYd() + videoUri);
+                                break;
+                            case 2:
+                                playVideo(mChannelInfo.getDx() + videoUri);
+                                break;
+                            case 3:
+                                playVideo(mChannelInfo.getCm() + videoUri);
+                                break;
+                            case 4:
+                                finish();
+                                break;
+                        }
 
-                //                DialogUtils.showChannelDialog(VideoPlayActivity.this, new MyItemClickListener()
-                //                {
-                //                    @Override
-                //                    public void onItemClick(View view, int position)
-                //                    {
-                //                        switch (position)
-                //                        {
-                //                            case 1:
-                //                                playVideo(mChannelInfo.getYd() + videoUri);
-                //                                break;
-                //                            case 2:
-                //                                playVideo(mChannelInfo.getDx() + videoUri);
-                //                                break;
-                //                            case 3:
-                //                                playVideo(mChannelInfo.getCm() + videoUri);
-                //                                break;
-                //                            case 4:
-                //                                finish();
-                //                                break;
-                //                        }
-                //
-                //
-                //                    }
-                //    });
+
+                    }
+                });
 
 
             }
@@ -440,7 +408,7 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         showProgressDialog();
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
-        DataRequest.instance().request(VideoPlayActivity.this, Urls.getVideoStreamUrl(), this, HttpRequest.POST, GET_VIDEO_STREAM, valuePairs,
+        DataRequest.instance().request(VideoPlayActivity1.this, Urls.getVideoStreamUrl(), this, HttpRequest.POST, GET_VIDEO_STREAM, valuePairs,
                 new VideoStreamHandler());
     }
 
@@ -450,7 +418,7 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "video");
-        DataRequest.instance().request(VideoPlayActivity.this, Urls.getVideoPriceUrl(), this, HttpRequest.POST, GET_VIDEO_PRICE, valuePairs,
+        DataRequest.instance().request(VideoPlayActivity1.this, Urls.getVideoPriceUrl(), this, HttpRequest.POST, GET_VIDEO_PRICE, valuePairs,
                 new LivePriceInfoHandler());
 
     }
@@ -472,63 +440,7 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "video");
         valuePairs.put("finger", finger);
-        DataRequest.instance().request(VideoPlayActivity.this, Urls.getBuyLiveUrl(), this, HttpRequest.POST, BUY_VIDEO, valuePairs,
-                new ResultHandler());
-    }
-
-
-    @Override
-    public void onClick(View v)
-    {
-        super.onClick(v);
-        if (v == mCollectionIv)
-        {
-            favoriteLike();
-        }
-        else if (v == mShareIv)
-        {
-            String shareUrl = Urls.getShareVideoUrl(biz_id);
-            Intent intent1 = new Intent(Intent.ACTION_SEND);
-            intent1.putExtra(Intent.EXTRA_TEXT, shareUrl);
-            intent1.setType("text/plain");
-            startActivity(Intent.createChooser(intent1, "分享"));
-        }
-        else if (v == mSettingIv)
-        {
-            if (mChannelLayout.isShown())
-            {
-                mChannelLayout.setVisibility(View.GONE);
-            }
-            else
-            {
-                mChannelLayout.setVisibility(View.VISIBLE);
-            }
-
-        }
-        else if (v == mYdTv)
-        {
-            mChannelLayout.setVisibility(View.GONE);
-            playVideo(mChannelInfo.getYd() + videoUri);
-        }
-        else if (v == mDxTv)
-        {
-            mChannelLayout.setVisibility(View.GONE);
-            playVideo(mChannelInfo.getDx() + videoUri);
-        }
-        else if (v == mCmTv)
-        {
-            mChannelLayout.setVisibility(View.GONE);
-            playVideo(mChannelInfo.getCm() + videoUri);
-        }
-    }
-
-    private void favoriteLike()
-    {
-        showProgressDialog();
-        Map<String, String> valuePairs = new HashMap<>();
-        valuePairs.put("biz_id", biz_id);
-        valuePairs.put("co_biz", "video");
-        DataRequest.instance().request(VideoPlayActivity.this, Urls.getCollectionRequestUrl(), this, HttpRequest.POST, FAVORITE_LIKE, valuePairs,
+        DataRequest.instance().request(VideoPlayActivity1.this, Urls.getBuyLiveUrl(), this, HttpRequest.POST, BUY_VIDEO, valuePairs,
                 new ResultHandler());
     }
 
@@ -605,17 +517,6 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
             if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
             {
                 mHandler.sendMessage(mHandler.obtainMessage(BUY_VIDEO_SUCCESS, obj));
-            }
-            else
-            {
-                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
-            }
-        }
-        else if (FAVORITE_LIKE.equals(action))
-        {
-            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
-            {
-                mHandler.sendMessage(mHandler.obtainMessage(FAVORITE_LIKE_SUCCESS, obj));
             }
             else
             {

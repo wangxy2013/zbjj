@@ -1,20 +1,25 @@
 package com.zb.wyd.activity;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zb.wyd.R;
 import com.zb.wyd.adapter.MyFragmentPagerAdapter;
-import com.zb.wyd.fragment.AnchorCollectionFragment;
-import com.zb.wyd.fragment.AnchorListFragment;
+import com.zb.wyd.fragment.AnchorSearchFragment;
 import com.zb.wyd.fragment.BaseFragment;
 import com.zb.wyd.fragment.PhotoCollectionFragment;
+import com.zb.wyd.fragment.PhotoSearchFragment;
 import com.zb.wyd.fragment.VideoCollectionFragment;
+import com.zb.wyd.fragment.VideoSearchFragment;
+import com.zb.wyd.listener.SearchListener;
+import com.zb.wyd.utils.ToastUtil;
 import com.zb.wyd.widget.ViewPagerSlide;
 import com.zb.wyd.widget.statusbar.StatusBarUtil;
 
@@ -27,12 +32,10 @@ import butterknife.ButterKnife;
 /**
  * 描述：一句话简单描述
  */
-public class MyCollectionActivity extends BaseActivity
+public class SearchActivity extends BaseActivity
 {
     @BindView(R.id.iv_back)
     ImageView      ivBack;
-    @BindView(R.id.tv_title)
-    TextView       tvTitle;
     @BindView(R.id.tv_anchor)
     TextView       tvAnchor;
     @BindView(R.id.tv_photo)
@@ -43,6 +46,8 @@ public class MyCollectionActivity extends BaseActivity
     TabLayout      mTabLayout;
     @BindView(R.id.viewPager)
     ViewPagerSlide mViewPager;
+    @BindView(R.id.et_keyword)
+    EditText       etKeyword;
 
     private List<BaseFragment> fragmentList = new ArrayList<>();
 
@@ -53,17 +58,17 @@ public class MyCollectionActivity extends BaseActivity
     @Override
     protected void initData()
     {
-        fragmentList.add(new AnchorCollectionFragment());
-        fragmentList.add(new PhotoCollectionFragment());
-        fragmentList.add(new VideoCollectionFragment());
+        fragmentList.add(new AnchorSearchFragment());
+        fragmentList.add(new PhotoSearchFragment());
+        fragmentList.add(new VideoSearchFragment());
     }
 
     @Override
     protected void initViews(Bundle savedInstanceState)
     {
-        setContentView(R.layout.activity_collection);
+        setContentView(R.layout.activity_search);
         StatusBarUtil.setStatusBarColor(this, getResources().getColor(R.color.yellow));
-        StatusBarUtil.StatusBarLightMode(MyCollectionActivity.this, false);
+        StatusBarUtil.StatusBarLightMode(SearchActivity.this, false);
     }
 
     @Override
@@ -73,7 +78,29 @@ public class MyCollectionActivity extends BaseActivity
         tvPhoto.setOnClickListener(this);
         tvVideo.setOnClickListener(this);
         ivBack.setOnClickListener(this);
+        etKeyword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
+            {
+                if (actionId== EditorInfo.IME_ACTION_SEARCH)
+                {
+                    String keyword = etKeyword.getText().toString();
 
+                    if(!TextUtils.isEmpty(keyword))
+                    {
+                        mAnchorSearchListener.setKeyword(keyword);
+                        mPhotoSearchListener.setKeyword(keyword);
+                        mVideoSearchListener.setKeyword(keyword);
+                    }
+                    else
+                    {
+                        ToastUtil.show(SearchActivity.this,"请输入搜索关键字");
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -82,12 +109,12 @@ public class MyCollectionActivity extends BaseActivity
         tabList.add(tvAnchor);
         tabList.add(tvPhoto);
         tabList.add(tvVideo);
-        tvTitle.setText("我的收藏");
-        myFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(),fragmentList);
+        myFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList);
         mViewPager.setAdapter(myFragmentPagerAdapter);
 
         //将TabLayout与ViewPager绑定在一起
         mTabLayout.setupWithViewPager(mViewPager);
+        mViewPager.setOffscreenPageLimit(2);
         setTab(0);
     }
 
@@ -133,4 +160,23 @@ public class MyCollectionActivity extends BaseActivity
         }
     }
 
+
+    private SearchListener mAnchorSearchListener;
+    private SearchListener mPhotoSearchListener;
+    private SearchListener mVideoSearchListener;
+
+    public void setAnchorSearchListener(SearchListener mAnchorSearchListener)
+    {
+        this.mAnchorSearchListener = mAnchorSearchListener;
+    }
+
+    public void setPhotoSearchListener(SearchListener mPhotoSearchListener)
+    {
+        this.mPhotoSearchListener = mPhotoSearchListener;
+    }
+
+    public void setVideoSearchListener(SearchListener mVideoSearchListener)
+    {
+        this.mVideoSearchListener = mVideoSearchListener;
+    }
 }

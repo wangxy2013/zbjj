@@ -68,4 +68,8 @@ dependencies {
         // 如果已经引入 support:appcompat-v7 可以加上这句话
         exclude group: 'com.android.support', module: 'appcompat-v7'
     }
+
+    compile 'com.bartoszlipinski.recyclerviewheader:library:1.2.0'
+
+    compile 'gdut.bsx:share2:0.9.3'
 }

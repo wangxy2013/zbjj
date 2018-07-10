@@ -186,7 +186,7 @@ public class APPUtils
         String id;
         //android.telephony.TelephonyManager
         TelephonyManager mTelephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        if (mTelephony.getDeviceId() != null)
+        if (null != mTelephony && mTelephony.getDeviceId() != null)
         {
             id = mTelephony.getDeviceId();
         }

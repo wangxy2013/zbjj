@@ -223,5 +223,11 @@ public class Urls
         return BASE_URL + "video/share?token="+ConfigManager.instance().getUniqueCode()+"&device=and&biz_id=" + biz_id;
     }
 
+    public static String getSearchUrl()
+    {
+        return BASE_URL + "data/find";
+    }
+
+
 }
 

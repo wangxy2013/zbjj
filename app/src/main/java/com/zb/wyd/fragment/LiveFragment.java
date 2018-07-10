@@ -1,17 +1,19 @@
 package com.zb.wyd.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.zb.wyd.R;
+import com.zb.wyd.activity.SearchActivity;
 import com.zb.wyd.adapter.MyViewPagerAdapter;
 
 import java.lang.reflect.Field;
@@ -34,6 +36,8 @@ public class LiveFragment extends BaseFragment
     TabLayout mTabLayout;
     @BindView(R.id.viewpager)
     ViewPager mViewPager;
+    @BindView(R.id.iv_search)
+    ImageView ivSearch;
     private View rootView = null;
     private Unbinder   unbinder;
     private ViewHolder holder;
@@ -65,7 +69,7 @@ public class LiveFragment extends BaseFragment
     {
         tabs.add("直播首页");
         tabs.add("主播列表");
-      //  tabs.add("直播平台");
+        //  tabs.add("直播平台");
     }
 
     @Override
@@ -77,7 +81,14 @@ public class LiveFragment extends BaseFragment
     @Override
     protected void initEvent()
     {
-
+        ivSearch.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                startActivity(new Intent(getActivity(), SearchActivity.class));
+            }
+        });
     }
 
     @Override
@@ -86,12 +97,12 @@ public class LiveFragment extends BaseFragment
         MyViewPagerAdapter viewPagerAdapter = new MyViewPagerAdapter(getChildFragmentManager());
         viewPagerAdapter.addFragment(LiveIndexFragment.newInstance(), "直播首页");//添加Fragment
         viewPagerAdapter.addFragment(AnchorListFragment.newInstance(), "主播列表");
-       // viewPagerAdapter.addFragment(LivePlatformFragment.newInstance(), "直播平台");
+        // viewPagerAdapter.addFragment(LivePlatformFragment.newInstance(), "直播平台");
         mViewPager.setAdapter(viewPagerAdapter);//设置适配器
         mViewPager.setOffscreenPageLimit(2);
         mTabLayout.addTab(mTabLayout.newTab().setText("直播首页"));//给TabLayout添加Tab
         mTabLayout.addTab(mTabLayout.newTab().setText("主播列表"));
-       // mTabLayout.addTab(mTabLayout.newTab().setText("直播平台"));
+        // mTabLayout.addTab(mTabLayout.newTab().setText("直播平台"));
         mTabLayout.setupWithViewPager(mViewPager);//给TabLayout设置关联ViewPager，如果设置了ViewPager，那么ViewPagerAdapter中的getPageTitle()方法返回的就是Tab上的标题
         setTabView();
         reflex(mTabLayout);

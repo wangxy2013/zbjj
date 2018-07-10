@@ -381,7 +381,7 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
                 LogUtil.e("TAG", "播放错误111111111111111111111111111111111111111111111111111");
 
                 ToastUtil.show(VideoPlayActivity.this, "该网络暂无法播放");
-
+                videoPlayer.showSettingWidget();
                 //                DialogUtils.showChannelDialog(VideoPlayActivity.this, new MyItemClickListener()
                 //                {
                 //                    @Override

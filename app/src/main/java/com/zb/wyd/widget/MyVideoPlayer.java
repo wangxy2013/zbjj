@@ -516,6 +516,12 @@ public class MyVideoPlayer extends GSYVideoPlayer
         setViewShowState(mStartButton, INVISIBLE);
     }
 
+    public void showSettingWidget()
+    {
+        setViewShowState(mBottomContainer, VISIBLE);
+        setViewShowState(mTopContainer, VISIBLE);
+        setViewShowState(mBottomProgressBar, VISIBLE);
+    }
 
     @Override
     protected void changeUiToNormal()

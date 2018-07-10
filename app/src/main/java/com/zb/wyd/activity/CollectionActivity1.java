@@ -38,7 +38,7 @@ public class CollectionActivity1 extends AppCompatActivity
 
         //使用适配器将ViewPager与Fragment绑定在一起
         mViewPager= (ViewPager) findViewById(R.id.viewPager);
-        myFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
+      //  myFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(myFragmentPagerAdapter);
 
         //将TabLayout与ViewPager绑定在一起

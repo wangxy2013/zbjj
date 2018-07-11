@@ -40,12 +40,12 @@ public class CataHolder extends RecyclerView.ViewHolder
         mNameTv.setText(mCataInfo.getName());
         if (mCataInfo.isSelected())
         {
-            mNameTv.setTextSize(16);
+            mNameTv.setTextSize(18);
             mLine.setVisibility(View.VISIBLE);
         }
         else
         {
-            mNameTv.setTextSize(14);
+            mNameTv.setTextSize(16);
             mLine.setVisibility(View.INVISIBLE);
         }
         mItemLayout.setOnClickListener(new View.OnClickListener() {

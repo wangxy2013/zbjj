@@ -89,7 +89,7 @@ public class BindEmailActivity extends BaseActivity implements IRequestListener
                     else
                     {
                         tvCode.setEnabled(true);
-                        tvCode.setText(result + "发送验证码");
+                        tvCode.setText("发送验证码");
                     }
 
                     break;
@@ -181,7 +181,7 @@ public class BindEmailActivity extends BaseActivity implements IRequestListener
             showProgressDialog();
             Map<String, String> valuePairs = new HashMap<>();
             valuePairs.put("email", email);
-            DataRequest.instance().request(this, Urls.getEmailCodeUrl(), this, HttpRequest.POST, GET_EMAIL_CODE, valuePairs,
+            DataRequest.instance().request(this, Urls.getEmailCodeUrl(), this, HttpRequest.GET, GET_EMAIL_CODE, valuePairs,
                     new ResultHandler());
 
         }

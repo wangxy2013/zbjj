@@ -2,9 +2,15 @@ package com.zb.wyd.fragment;
 
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +24,7 @@ import com.zb.wyd.MyApplication;
 import com.zb.wyd.R;
 import com.zb.wyd.activity.BaseHandler;
 import com.zb.wyd.activity.BindEmailActivity;
+import com.zb.wyd.activity.DomainNameActivity;
 import com.zb.wyd.activity.LoginActivity;
 import com.zb.wyd.activity.MainActivity;
 import com.zb.wyd.activity.MessageListActivity;
@@ -42,6 +49,7 @@ import com.zb.wyd.widget.CircleImageView;
 import java.lang.reflect.Member;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -89,6 +97,9 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
     RelativeLayout  rlCustomer;
     @BindView(R.id.btn_logout)
     Button          btnLogout;
+
+    @BindView(R.id.rl_setting)
+    RelativeLayout rlSetting;
 
     private boolean isClick;
 
@@ -142,7 +153,6 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
                             tvEmail.setText("已认证");
                         }
 
-                        tvCustomer.setText("QQ:" + ConfigManager.instance().getSystemQq());
                     }
                     break;
 
@@ -197,12 +207,15 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
         rlMessage.setOnClickListener(this);
         rlWealth.setOnClickListener(this);
         rlCollection.setOnClickListener(this);
+        rlCustomer.setOnClickListener(this);
+        rlUser.setOnClickListener(this);
+        rlSetting.setOnClickListener(this);
     }
 
     @Override
     protected void initViewData()
     {
-
+        tvCustomer.setText("QQ:" + ConfigManager.instance().getSystemQq());
     }
 
     @Override
@@ -215,6 +228,11 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
             Map<String, String> valuePairs = new HashMap<>();
             DataRequest.instance().request(getActivity(), Urls.getUserInfoUrl(), this, HttpRequest.POST, GET_USER_DETAIL, valuePairs,
                     new UserInfoHandler());
+            btnLogout.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            btnLogout.setVisibility(View.GONE);
         }
 
     }
@@ -258,19 +276,24 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
         }
         else if (v == ivEdit)
         {
-            Bundle b = new Bundle();
-            b.putSerializable("USER_INFO", userInfo);
-            startActivity(new Intent(getActivity(), UserDetailActivity.class).putExtras(b));
+            if (MyApplication.getInstance().isLogin())
+            {
+                Bundle b = new Bundle();
+                b.putSerializable("USER_INFO", userInfo);
+                startActivity(new Intent(getActivity(), UserDetailActivity.class).putExtras(b));
+            }
         }
         else if (v == rlEmail)
         {
             if ("0".equals(role))
             {
+                if (!MyApplication.getInstance().isLogin())
                 startActivity(new Intent(getActivity(), BindEmailActivity.class));
             }
         }
         else if (v == rlMessage)
         {
+            if (MyApplication.getInstance().isLogin())
             startActivity(new Intent(getActivity(), MessageListActivity.class));
 
         }
@@ -280,10 +303,67 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
             if (isClick)
                 startActivity(new Intent(getActivity(), WealthListActivity.class).putExtra("fortune", tvWealth.getText().toString()));
         }
-        else if(v == rlCollection)
+        else if (v == rlCollection)
         {
             if (isClick)
                 startActivity(new Intent(getActivity(), MyCollectionActivity.class));
         }
+        else if (v == rlCustomer)
+        {
+            if (!TextUtils.isEmpty(ConfigManager.instance().getSystemQq()))
+            {
+                // 跳转之前，可以先判断手机是否安装QQ
+                if (isQQClientAvailable(getActivity()))
+                {
+                    // 跳转到客服的QQ
+                    String url = "mqqwpa://im/chat?chat_type=wpa&uin=" + ConfigManager.instance().getSystemQq();
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    // 跳转前先判断Uri是否存在，如果打开一个不存在的Uri，App可能会崩溃
+                    if (isValidIntent(getActivity(), intent))
+                    {
+                        startActivity(intent);
+                    }
+                }
+            }
+        }
+        else if (v == rlUser)
+        {
+            if (!MyApplication.getInstance().isLogin())
+                startActivity(new Intent(getActivity(), LoginActivity.class));
+        }
+        else if (v == rlSetting)
+        {
+            startActivity(new Intent(getActivity(), DomainNameActivity.class));
+        }
+    }
+
+    public boolean isQQClientAvailable(Context context)
+    {
+        final PackageManager packageManager = context.getPackageManager();
+        List<PackageInfo> pinfo = packageManager.getInstalledPackages(0);
+        if (pinfo != null)
+        {
+            for (int i = 0; i < pinfo.size(); i++)
+            {
+                String pn = pinfo.get(i).packageName;
+                if (pn.equalsIgnoreCase("com.tencent.qqlite") || pn.equalsIgnoreCase("com.tencent.mobileqq"))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 判断 Uri是否有效
+     */
+    public boolean isValidIntent(Context context, Intent intent)
+    {
+        PackageManager packageManager = context.getPackageManager();
+        List<ResolveInfo> activities = packageManager.queryIntentActivities(intent, 0);
+        return !activities.isEmpty();
+
+
     }
 }

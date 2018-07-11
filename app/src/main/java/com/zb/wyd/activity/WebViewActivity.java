@@ -85,13 +85,14 @@ public class WebViewActivity extends Activity
                                           {
                                               return super.shouldOverrideUrlLoading(view, url);
                                           }
-                                          else
-                                          {
-                                              Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                                              startActivity(intent);
-                                              finish();
-                                              return true;
-                                          }
+//                                          else
+//                                          {
+//                                              Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+//                                              startActivity(intent);
+//                                              finish();
+//                                              return true;
+//                                          }
+                                          return true;
                                       }
 
                                       @Override

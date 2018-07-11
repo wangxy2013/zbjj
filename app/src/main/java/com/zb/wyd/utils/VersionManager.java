@@ -18,10 +18,13 @@ import android.widget.ProgressBar;
 
 
 import com.zb.wyd.R;
+import com.zb.wyd.activity.DomainNameActivity;
 import com.zb.wyd.entity.VersionInfo;
 import com.zb.wyd.http.DataRequest;
 import com.zb.wyd.http.HttpRequest;
 import com.zb.wyd.http.IRequestListener;
+import com.zb.wyd.json.BaiduHandler;
+import com.zb.wyd.json.ResultHandler;
 import com.zb.wyd.json.VersionInfoHandler;
 import com.zb.wyd.listener.MyOnClickListener;
 
@@ -52,12 +55,13 @@ public class VersionManager implements IRequestListener
     /* 进度条与通知ui刷新的handler和msg常量 */
     private ProgressBar mProgress;
 
-    private static final int DOWN_UPDATE     = 0x01;
-    private static final int DOWN_OVER       = 0x02;
-    private static final int REQUEST_SUCCESS = 0x03;
-    private static final int REQUEST_FAIL    = 0x04;
-
-    private static final String GET_VERSION = "get_version";
+    private static final int    DOWN_UPDATE     = 0x01;
+    private static final int    DOWN_OVER       = 0x02;
+    private static final int    REQUEST_SUCCESS = 0x03;
+    private static final int    REQUEST_FAIL    = 0x04;
+    private static final int    BATDU_SUCCESS   = 0x05;
+    private static final String GET_VERSION     = "get_version";
+    private static final String GET_BAIDU       = "get_baidu";
     private int progress;
 
     private Thread downLoadThread;
@@ -93,13 +97,32 @@ public class VersionManager implements IRequestListener
                         ConfigManager.instance().setSystemQq(mVersionInfo.getQq());
                         ConfigManager.instance().setBgLogin(mVersionInfo.getBg_login());
                         ConfigManager.instance().setBgStartup(mVersionInfo.getBg_startup());
-
                         showNoticeDialog(mVersionInfo);
                     }
 
                     break;
 
                 case REQUEST_FAIL:
+                    Map<String, String> valuePairs = new HashMap<>();
+                    DataRequest.instance().request(mContext, "https://www.baidu.com", VersionManager.this, HttpRequest.GET, GET_BAIDU, valuePairs,
+                            new BaiduHandler());
+                    break;
+
+                case BATDU_SUCCESS:
+                    BaiduHandler mResultHandler = (BaiduHandler) msg.obj;
+                    String content = mResultHandler.getContent();
+
+                    if (content.contains("baidu.com"))
+                    {
+                        DialogUtils.showToastDialog2Button(mContext, "不幸的告诉您，域名可能已被封，可发邮件到xjshangmen@gmail.com获取最新地址并进行设置操作。", new View.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(View v)
+                            {
+                                mContext.startActivity(new Intent(mContext, DomainNameActivity.class));
+                            }
+                        });
+                    }
                     break;
             }
         }
@@ -115,7 +138,7 @@ public class VersionManager implements IRequestListener
     public void init()
     {
         Map<String, String> valuePairs = new HashMap<>();
-        DataRequest.instance().request(mContext, Urls.getVersionUrl(), this, HttpRequest.POST, GET_VERSION, valuePairs,
+        DataRequest.instance().request(mContext, Urls.getVersionUrl(), this, HttpRequest.GET, GET_VERSION, valuePairs,
                 new VersionInfoHandler());
     }
 
@@ -267,6 +290,13 @@ public class VersionManager implements IRequestListener
             else
             {
                 mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
+            }
+        }
+        else if (GET_BAIDU.equals(action))
+        {
+            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(BATDU_SUCCESS, obj));
             }
         }
     }

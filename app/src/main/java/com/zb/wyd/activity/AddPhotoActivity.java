@@ -182,7 +182,7 @@ public class AddPhotoActivity extends BaseActivity implements IRequestListener
                     if (null != locationInfo)
                     {
                         location = locationInfo.getProv() + "," + locationInfo.getCity() + "," + locationInfo.getDistrict();
-                        tvLocation.setText("地点:" + locationInfo.getCity());
+                        tvLocation.setText(locationInfo.getCity());
                         tvLocation.setTextColor(ContextCompat.getColor(AddPhotoActivity.this, R.color.yellow));
                     }
                     break;
@@ -500,18 +500,19 @@ public class AddPhotoActivity extends BaseActivity implements IRequestListener
 
     private String getLabel()
     {
-        StringBuffer sb =new StringBuffer();
-        for (int i = 0; i <labelChooseList.size() ; i++)
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < labelChooseList.size(); i++)
         {
             sb.append(labelChooseList.get(i).getId());
-            if(i<labelChooseList.size()-1)
+            if (i < labelChooseList.size() - 1)
             {
                 sb.append(",");
             }
         }
 
-        return  sb.toString();
+        return sb.toString();
     }
+
     private void pickFromGallery()
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN // Permission was added in API Level 16

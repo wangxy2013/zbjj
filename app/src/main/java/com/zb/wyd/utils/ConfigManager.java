@@ -46,6 +46,9 @@ public class ConfigManager
     private static final String SYSTEM_QQ        = "system_qq";
     private static final String BG_LOGIN        = "bg_login";
     private static final String BG_STARTUP        = "bg_startup";
+
+    private static final String DOMAIN_NAME        = "DOMAIN_NAME";
+
     /**
      * 返回实例
      *
@@ -271,6 +274,16 @@ public class ConfigManager
     public String getBgStartup()
     {
         return mSharedPreferences.getString(BG_STARTUP, "");
+    }
+
+    public void setDomainName(String str)
+    {
+        mSharedPreferences.edit().putString(DOMAIN_NAME, str).commit();
+    }
+
+    public  String getDomainName()
+    {
+        return mSharedPreferences.getString(DOMAIN_NAME, "http://www.883974.com/");
     }
 
 

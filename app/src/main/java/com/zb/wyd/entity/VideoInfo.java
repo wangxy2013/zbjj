@@ -19,6 +19,9 @@ public class VideoInfo implements Serializable
     private String  coupon;
     private String finger;
     private String vip_free;
+    private boolean  isNew;
+    private String add_time;
+
     public VideoInfo() {}
 
     public VideoInfo(JSONObject obj)
@@ -33,6 +36,7 @@ public class VideoInfo implements Serializable
         this.coupon = obj.optString("coupon");
         this.finger = obj.optString("finger");
         this.vip_free = obj.optString("vip_free");
+        this.add_time =obj.optString("add_time");
 
     }
 
@@ -134,5 +138,25 @@ public class VideoInfo implements Serializable
     public void setVip_free(String vip_free)
     {
         this.vip_free = vip_free;
+    }
+
+    public boolean isNew()
+    {
+        return isNew;
+    }
+
+    public void setNew(boolean aNew)
+    {
+        isNew = aNew;
+    }
+
+    public String getAdd_time()
+    {
+        return add_time;
+    }
+
+    public void setAdd_time(String add_time)
+    {
+        this.add_time = add_time;
     }
 }

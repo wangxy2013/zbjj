@@ -9,6 +9,7 @@ import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zb.wyd.MyApplication;
 import com.zb.wyd.R;
 import com.zb.wyd.activity.BaseHandler;
+import com.zb.wyd.activity.LiveActivity;
 import com.zb.wyd.activity.LoginActivity;
 import com.zb.wyd.activity.PhotoDetailActivity;
 import com.zb.wyd.activity.VideoPlayActivity;
@@ -433,6 +435,30 @@ public class VideoFragment1 extends BaseFragment implements IRequestListener, Vi
             {
                 //position 轮播图的第几个项
                 //str 轮播图当前项对应的数据
+                AdInfo mAdInfo = adInfoList.get(position);
+                if (!TextUtils.isEmpty(mAdInfo.getLink()))
+                {
+                    if (mAdInfo.getLink().startsWith("video://"))
+                    {
+                        String id = mAdInfo.getLink().replace("video://", "");
+                        VideoInfo mVideoInfo = new VideoInfo();
+                        mVideoInfo.setId(id);
+                        mVideoInfo.setV_name("点播");
+                        Bundle b = new Bundle();
+                        b.putSerializable("VideoInfo",mVideoInfo);
+                        startActivity(new Intent(getActivity(), VideoPlayActivity.class).putExtras(b));
+                    }
+                    else if (mAdInfo.getLink().startsWith("live://"))
+                    {
+                        String id = mAdInfo.getLink().replace("live://", "");
+                        startActivity(new Intent(getActivity(), LiveActivity.class).putExtra("biz_id",id));
+                    }
+                    else if (mAdInfo.getLink().startsWith("photo://"))
+                    {
+                        String id = mAdInfo.getLink().replace("photo://", "");
+                        startActivity(new Intent(getActivity(), PhotoDetailActivity.class).putExtra("biz_id", id));
+                    }
+                }
             }
         });
 

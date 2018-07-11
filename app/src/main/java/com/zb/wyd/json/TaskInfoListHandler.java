@@ -17,6 +17,12 @@ public class TaskInfoListHandler extends JsonHandler
     private List<TaskInfo> mIncompleteList = new ArrayList<>();
     private List<TaskInfo> mCompleteList   = new ArrayList<>();
 
+    private TaskInfo mSiginTaskInfo;
+
+    public TaskInfo getTaskInfo()
+    {
+        return mSiginTaskInfo;
+    }
 
     public List<TaskInfo> getIncompleteList()
     {
@@ -41,14 +47,21 @@ public class TaskInfoListHandler extends JsonHandler
                 for (int i = 0; i < arr.length(); i++)
                 {
                     TaskInfo mTaskInfo = new TaskInfo(arr.optJSONObject(i));
-
-                    if ("0".equals(mTaskInfo.getHas_finish()))
+                    if ("1".equals(mTaskInfo.getId()))
                     {
-                        mIncompleteList.add(mTaskInfo);
+                        mSiginTaskInfo = mTaskInfo;
+
                     }
                     else
                     {
-                        mCompleteList.add(mTaskInfo);
+                        if ("0".equals(mTaskInfo.getHas_finish()))
+                        {
+                            mIncompleteList.add(mTaskInfo);
+                        }
+                        else
+                        {
+                            mCompleteList.add(mTaskInfo);
+                        }
                     }
                 }
             }

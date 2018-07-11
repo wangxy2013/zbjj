@@ -113,7 +113,7 @@ public class TaskFragment extends BaseFragment implements IRequestListener, View
 
                     if (null != userInfo)
                     {
-                        ImageLoader.getInstance().displayImage(userInfo.getFace(), ivUserPic);
+                        ImageLoader.getInstance().displayImage(userInfo.getUface(), ivUserPic);
                         tvUserFortune.setText(userInfo.getTotal_score());
                     }
                     break;
@@ -132,6 +132,9 @@ public class TaskFragment extends BaseFragment implements IRequestListener, View
                         String desc = signInfo.getVal() + "积分";
                         String task = "连续签到" + signInfo.getSeries() + "天";
                         DialogUtils.showTaskDialog(getActivity(), title, desc, task);
+                        tvSignIn.setText("已签到");
+                        tvSignIn.setEnabled(false);
+                        getUserDetail();
                     }
 
                     break;
@@ -141,6 +144,16 @@ public class TaskFragment extends BaseFragment implements IRequestListener, View
 
                 case GET_TASK_SUCCESS:
                     TaskInfoListHandler mTaskInfoListHandler = (TaskInfoListHandler) msg.obj;
+
+                    TaskInfo mTaskInfo = mTaskInfoListHandler.getTaskInfo();
+
+                    if ("1".equals(mTaskInfo.getHas_finish()))
+                    {
+                        tvSignIn.setText("已签到");
+                        tvSignIn.setEnabled(false);
+
+                    }
+
                     mIncompleteList.clear();
                     mCompleteList.clear();
 
@@ -148,6 +161,8 @@ public class TaskFragment extends BaseFragment implements IRequestListener, View
                     mCompleteList.addAll(mTaskInfoListHandler.getCompleteList());
                     mIncompleteAdapter.notifyDataSetChanged();
                     mCompleteAdapter.notifyDataSetChanged();
+
+
                     break;
 
                 case GET_USER_DETAIL_CODE:
@@ -183,14 +198,14 @@ public class TaskFragment extends BaseFragment implements IRequestListener, View
     private void getUserDetail()
     {
         Map<String, String> valuePairs = new HashMap<>();
-        DataRequest.instance().request(getActivity(), Urls.getUserInfoUrl(), this, HttpRequest.POST, GET_USER_DETAIL, valuePairs,
+        DataRequest.instance().request(getActivity(), Urls.getUserInfoUrl(), this, HttpRequest.GET, GET_USER_DETAIL, valuePairs,
                 new UserInfoHandler());
     }
 
     private void getTaskList()
     {
         Map<String, String> valuePairs = new HashMap<>();
-        DataRequest.instance().request(getActivity(), Urls.getTaskUrl(), this, HttpRequest.POST, GET_TASK_REQUEST, valuePairs,
+        DataRequest.instance().request(getActivity(), Urls.getTaskUrl(), this, HttpRequest.GET, GET_TASK_REQUEST, valuePairs,
                 new TaskInfoListHandler());
     }
 

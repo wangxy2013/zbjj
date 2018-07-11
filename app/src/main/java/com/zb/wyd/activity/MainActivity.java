@@ -1,11 +1,19 @@
 package com.zb.wyd.activity;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTabHost;
+import android.support.v4.content.ContextCompat;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,10 +26,14 @@ import com.zb.wyd.fragment.LiveFragment;
 import com.zb.wyd.fragment.MemberFragment;
 import com.zb.wyd.fragment.SelfieFragment;
 import com.zb.wyd.fragment.TaskFragment;
+import com.zb.wyd.fragment.VideoFragment;
 import com.zb.wyd.fragment.VideoFragment1;
 import com.zb.wyd.utils.DialogUtils;
+import com.zb.wyd.utils.ToastUtil;
 import com.zb.wyd.utils.VersionManager;
 import com.zb.wyd.widget.statusbar.StatusBarUtil;
+
+import java.io.File;
 
 import butterknife.BindView;
 
@@ -39,7 +51,7 @@ public class MainActivity extends BaseActivity
             R.drawable.ic_photo_selector, R.drawable.ic_task_selector, R.drawable.ic_member_selector};
 
 
-    private Class fragmentArray[] = {LiveFragment.class, VideoFragment1.class, SelfieFragment.class, TaskFragment.class, MemberFragment.class};
+    private Class fragmentArray[] = {LiveFragment.class, VideoFragment.class, SelfieFragment.class, TaskFragment.class, MemberFragment.class};
 
     @Override
     protected void initData()
@@ -66,7 +78,7 @@ public class MainActivity extends BaseActivity
             @Override
             public void onTabChanged(String tabId)
             {
-                if ("会员".equals(tabId) || "任务".equals(tabId))
+                if ("任务".equals(tabId))
                 {
                     if (!MyApplication.getInstance().isLogin())
                     {
@@ -83,8 +95,51 @@ public class MainActivity extends BaseActivity
         fragmentTabHost.setCurrentTab(p);
     }
 
+    protected static final int READ_PHONE_STATE_PERMISSIONS_REQUEST_CODE = 9002;
+
     @Override
     protected void initViewData()
+    {
+
+
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+        {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.READ_PHONE_STATE))
+            {
+                ToastUtil.show(MainActivity.this, "您已经拒绝过一次");
+            }
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_EXTERNAL_STORAGE},
+                    READ_PHONE_STATE_PERMISSIONS_REQUEST_CODE);
+        }
+        else
+        {
+            initMain();
+        }
+    }
+
+    /**
+     * Callback received when a permissions request has been completed.
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
+    {
+        switch (requestCode)
+        {
+            case READ_PHONE_STATE_PERMISSIONS_REQUEST_CODE:
+                if (grantResults.length > 0&&grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    initMain();
+                }
+                break;
+
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    private void initMain()
     {
         fragmentTabHost.setup(this, getSupportFragmentManager(),
                 R.id.main_layout);
@@ -101,9 +156,7 @@ public class MainActivity extends BaseActivity
         fragmentTabHost.getTabWidget().setDividerDrawable(R.color.transparent);
 
         new VersionManager(this).init();
-
     }
-
 
     private View getView(int i)
     {

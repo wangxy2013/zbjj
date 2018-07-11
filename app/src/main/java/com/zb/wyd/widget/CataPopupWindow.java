@@ -33,7 +33,7 @@ public class CataPopupWindow extends PopupWindow implements PopupWindow.OnDismis
     private MaxRecyclerView     mCataRv;
     private Activity            mContext;
     private CataFilterAdapter   mAdapter;
-    private TextView mClosedTv;
+    private TextView            mClosedTv;
     private MyItemClickListener listener;
     List<CataInfo> mFilterList = new ArrayList<>();
 
@@ -52,16 +52,16 @@ public class CataPopupWindow extends PopupWindow implements PopupWindow.OnDismis
         setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         initView();
         initEvent();
-        // WindowManager.LayoutParams lp = mContext.getWindow().getAttributes();
-        //lp.alpha = 0.5f; //0.0-1.0
-        //mContext.getWindow().setAttributes(lp);
+//        WindowManager.LayoutParams lp = mContext.getWindow().getAttributes();
+//        lp.alpha = 0.5f; //0.0-1.0
+//        mContext.getWindow().setAttributes(lp);
 
     }
 
 
     private void initView()
     {
-        mClosedTv =(TextView) rootView.findViewById(R.id.tv_closed);
+        mClosedTv = (TextView) rootView.findViewById(R.id.tv_closed);
         mCataRv = (MaxRecyclerView) rootView.findViewById(R.id.rv_cata);
         mCataRv.setLayoutManager(new FullyGridLayoutManager(mContext, 5));
         mAdapter = new CataFilterAdapter(mFilterList, mContext, new MyItemClickListener()
@@ -69,7 +69,7 @@ public class CataPopupWindow extends PopupWindow implements PopupWindow.OnDismis
             @Override
             public void onItemClick(View view, int position)
             {
-                listener.onItemClick(view,position);
+                listener.onItemClick(view, position);
                 dismiss();
             }
         });
@@ -78,7 +78,8 @@ public class CataPopupWindow extends PopupWindow implements PopupWindow.OnDismis
 
     private void initEvent()
     {
-        mClosedTv.setOnClickListener(new View.OnClickListener() {
+        mClosedTv.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View v)
             {
@@ -87,7 +88,6 @@ public class CataPopupWindow extends PopupWindow implements PopupWindow.OnDismis
         });
 
     }
-
 
 
     @Override

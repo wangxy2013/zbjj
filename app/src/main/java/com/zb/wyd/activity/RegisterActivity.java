@@ -10,21 +10,18 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zb.wyd.R;
 import com.zb.wyd.http.DataRequest;
 import com.zb.wyd.http.HttpRequest;
 import com.zb.wyd.http.IRequestListener;
-import com.zb.wyd.json.LiveInfoListHandler;
 import com.zb.wyd.json.ResultHandler;
-import com.zb.wyd.json.VideoInfoListHandler;
 import com.zb.wyd.utils.APPUtils;
 import com.zb.wyd.utils.ConfigManager;
 import com.zb.wyd.utils.ConstantUtil;
 import com.zb.wyd.utils.ToastUtil;
 import com.zb.wyd.utils.Urls;
 import com.zb.wyd.widget.statusbar.StatusBarUtil;
-
-import org.checkerframework.common.value.qual.StringVal;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -57,6 +54,8 @@ public class RegisterActivity extends BaseActivity implements IRequestListener
     TextView  tvLogin;
     @BindView(R.id.tv_email)
     TextView  tvEmail;
+    @BindView(R.id.iv_bg)
+    ImageView ivBg;
 
     private String account;
     private String pwd;
@@ -139,6 +138,7 @@ public class RegisterActivity extends BaseActivity implements IRequestListener
     @Override
     protected void initViewData()
     {
+        ImageLoader.getInstance().displayImage(ConfigManager.instance().getBgLogin(), ivBg);
     }
 
 
@@ -208,4 +208,5 @@ public class RegisterActivity extends BaseActivity implements IRequestListener
             }
         }
     }
+
 }

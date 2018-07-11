@@ -24,10 +24,12 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_margin="@dimen/dm_5"
+            android:background="@drawable/integral_bg_3dp"
             android:paddingBottom="@dimen/dm_3"
             android:paddingLeft="@dimen/dm_8"
             android:paddingRight="@dimen/dm_8"
             android:paddingTop="@dimen/dm_3"
+            android:text="积分"
             android:textColor="@color/white"
             android:textSize="@dimen/t10"/>
 

@@ -30,7 +30,7 @@ public class CataFilterHolder extends RecyclerView.ViewHolder
     public void setCataInfo(CataInfo mCataInfo, final int p)
     {
         mNameTv.setText(mCataInfo.getName());
-
+        mNameTv.setSelected(mCataInfo.isSelected());
         mItemLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)

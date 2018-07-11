@@ -79,9 +79,11 @@
                     android:paddingRight="@dimen/dm_12"
                     android:paddingTop="@dimen/dm_3"
                     android:text="身份"
+                    android:visibility="gone"
                     android:textColor="@color/white"
                     android:textSize="@dimen/t14"/>
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/tv_user_sex"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -338,7 +340,41 @@
             android:textColor="@color/redA"
             android:textSize="@dimen/t14"/>
     </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dm_1"
+        android:background="@color/white"
+        android:padding="@dimen/dm_10">
 
+        <ImageView
+            android:id="@+id/iv_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_wealth"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dm_15"
+            android:layout_toRightOf="@+id/iv_setting"
+            android:text="域名设置"
+            android:textColor="@color/blackB"
+            android:textSize="@dimen/t14"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_arrow_right_48"/>
+
+
+    </RelativeLayout>
 
     <Button
         android:id="@+id/btn_logout"

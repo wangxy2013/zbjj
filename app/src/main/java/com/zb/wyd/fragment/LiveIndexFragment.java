@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,10 +22,14 @@ import com.zb.wyd.R;
 import com.zb.wyd.activity.BaseHandler;
 import com.zb.wyd.activity.LiveActivity;
 import com.zb.wyd.activity.LoginActivity;
+import com.zb.wyd.activity.PhotoDetailActivity;
+import com.zb.wyd.activity.VideoPlayActivity;
+import com.zb.wyd.activity.VidoeListActivity;
 import com.zb.wyd.adapter.NewAdapter;
 import com.zb.wyd.adapter.RecommendAdapter;
 import com.zb.wyd.entity.AdInfo;
 import com.zb.wyd.entity.LiveInfo;
+import com.zb.wyd.entity.VideoInfo;
 import com.zb.wyd.http.DataRequest;
 import com.zb.wyd.http.HttpRequest;
 import com.zb.wyd.http.IRequestListener;
@@ -137,7 +142,7 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
                         picList.add(adInfoList.get(i).getImage());
                     }
 
-                    if(!picList.isEmpty())
+                    if (!picList.isEmpty())
                     {
                         initAd();
                     }
@@ -214,9 +219,9 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
                 if (MyApplication.getInstance().isLogin())
                 {
                     LiveInfo mLiveInfo = freeLiveList.get(position);
-//                    Bundle b = new Bundle();
-//                    b.putSerializable("LiveInfo", mLiveInfo);
-                    startActivity(new Intent(getActivity(), LiveActivity.class).putExtra("biz_id",mLiveInfo.getId()));
+                    //                    Bundle b = new Bundle();
+                    //                    b.putSerializable("LiveInfo", mLiveInfo);
+                    startActivity(new Intent(getActivity(), LiveActivity.class).putExtra("biz_id", mLiveInfo.getId()));
 
                 }
                 else
@@ -239,10 +244,10 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
                 {
                     LiveInfo mLiveInfo = newLiveList.get(position);
 
-//                    Bundle b = new Bundle();
-//                    b.putSerializable("LiveInfo", mLiveInfo);
-//                    startActivity(new Intent(getActivity(), LiveActivity.class).putExtras(b));
-                    startActivity(new Intent(getActivity(), LiveActivity.class).putExtra("biz_id",mLiveInfo.getId()));
+                    //                    Bundle b = new Bundle();
+                    //                    b.putSerializable("LiveInfo", mLiveInfo);
+                    //                    startActivity(new Intent(getActivity(), LiveActivity.class).putExtras(b));
+                    startActivity(new Intent(getActivity(), LiveActivity.class).putExtra("biz_id", mLiveInfo.getId()));
 
                 }
                 else
@@ -267,14 +272,14 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
     {
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("pos_id", "1");
-        DataRequest.instance().request(getActivity(), Urls.getAdListUrl(), this, HttpRequest.POST, GET_AD_LIST, valuePairs,
+        DataRequest.instance().request(getActivity(), Urls.getAdListUrl(), this, HttpRequest.GET, GET_AD_LIST, valuePairs,
                 new AdInfoListHandler());
     }
 
     private void getFreeLive()
     {
         Map<String, String> valuePairs = new HashMap<>();
-        DataRequest.instance().request(getActivity(), Urls.getFreeLive(), this, HttpRequest.POST, GET_FREE_LIVE, valuePairs,
+        DataRequest.instance().request(getActivity(), Urls.getFreeLive(), this, HttpRequest.GET, GET_FREE_LIVE, valuePairs,
                 new LiveInfoListHandler());
     }
 
@@ -354,6 +359,30 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
             {
                 //position 轮播图的第几个项
                 //str 轮播图当前项对应的数据
+                AdInfo mAdInfo = adInfoList.get(position);
+                if (!TextUtils.isEmpty(mAdInfo.getLink()))
+                {
+                    if (mAdInfo.getLink().startsWith("video://"))
+                    {
+                        String id = mAdInfo.getLink().replace("video://", "");
+                        VideoInfo mVideoInfo = new VideoInfo();
+                        mVideoInfo.setId(id);
+                        mVideoInfo.setV_name("点播");
+                        Bundle b = new Bundle();
+                        b.putSerializable("VideoInfo",mVideoInfo);
+                        startActivity(new Intent(getActivity(), VideoPlayActivity.class).putExtras(b));
+                    }
+                    else if (mAdInfo.getLink().startsWith("live://"))
+                    {
+                        String id = mAdInfo.getLink().replace("live://", "");
+                        startActivity(new Intent(getActivity(), LiveActivity.class).putExtra("biz_id",id));
+                    }
+                    else if (mAdInfo.getLink().startsWith("photo://"))
+                    {
+                        String id = mAdInfo.getLink().replace("photo://", "");
+                        startActivity(new Intent(getActivity(), PhotoDetailActivity.class).putExtra("biz_id", id));
+                    }
+                }
             }
         });
 
@@ -365,9 +394,11 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
         if (mSwipeRefreshLayout != null)
         {
             loadData();
-            mSwipeRefreshLayout.post(new Runnable() {
+            mSwipeRefreshLayout.post(new Runnable()
+            {
                 @Override
-                public void run() {
+                public void run()
+                {
                     mSwipeRefreshLayout.setRefreshing(false);
                 }
             });

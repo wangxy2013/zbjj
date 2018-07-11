@@ -69,6 +69,11 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
     MaxRecyclerView rvComment;
     @BindView(R.id.tv_send)
     TextView        tvSend;
+    @BindView(R.id.tv_collection_num)
+    TextView        tvCollectionNum;
+    @BindView(R.id.tv_more)
+    TextView        tvMore;
+
     @BindView(R.id.et_content)
     EditText        etContent;
     @BindView(R.id.iv_share)
@@ -82,6 +87,7 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
 
 
     private String biz_id;
+    private int pn=1;
 
     private PriceInfo priceInfo;
     private static final String      BUY_PHOTO                = "buy_photo";
@@ -118,7 +124,7 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
                         tvAddTime.setText("发布于：" + photoInfo.getAdd_time());
                         freePic.clear();
                         freePic.addAll(photoInfo.getFreePic());
-
+                        tvCollectionNum.setText(photoInfo.getFavour_count());
                         chargePic.clear();
                         chargePic.addAll(photoInfo.getChargePic());
 
@@ -155,9 +161,18 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
 
                 case GET_COMMENT_LIST_SUCCESS:
                     CommentInfoListHandler mCommentInfoListHandler = (CommentInfoListHandler) msg.obj;
-                    commentInfoList.clear();
+
+                    if(mCommentInfoListHandler.getCommentInfoList().size()<20)
+                    {
+                        tvMore.setVisibility(View.GONE);
+                    }
+                    else
+                    {
+                        tvMore.setVisibility(View.VISIBLE);
+                    }
                     commentInfoList.addAll(mCommentInfoListHandler.getCommentInfoList());
                     mCommentAdapter.notifyDataSetChanged();
+
 
                     break;
 
@@ -199,6 +214,7 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
         ivCollection.setOnClickListener(this);
         tvSend.setOnClickListener(this);
         ivShare.setOnClickListener(this);
+        tvMore.setOnClickListener(this);
     }
 
     @Override
@@ -297,6 +313,11 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
             intent1.setType("text/plain");
             startActivityForResult(Intent.createChooser(intent1, "分享"), SHARE_PHOTO_REQUEST_CODE);
         }
+        else  if(v == tvMore)
+        {
+            pn+=1;
+            getCommentList();
+        }
     }
 
     private void loadData()
@@ -318,8 +339,8 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
     {
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("pid", biz_id);
-        valuePairs.put("pn", "1");
-        valuePairs.put("num", "999");
+        valuePairs.put("pn", pn+"");
+        valuePairs.put("num", "20");
         DataRequest.instance().request(PhotoDetailActivity.this, Urls.getCommentlistUrl(), this, HttpRequest.GET, GET_COMMENT_LIST, valuePairs,
                 new CommentInfoListHandler());
     }

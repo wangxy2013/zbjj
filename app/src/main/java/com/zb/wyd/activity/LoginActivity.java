@@ -4,20 +4,20 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zb.wyd.R;
 import com.zb.wyd.http.DataRequest;
 import com.zb.wyd.http.HttpRequest;
 import com.zb.wyd.http.IRequestListener;
 import com.zb.wyd.json.LoginHandler;
-import com.zb.wyd.json.ResultHandler;
 import com.zb.wyd.utils.APPUtils;
 import com.zb.wyd.utils.ConfigManager;
 import com.zb.wyd.utils.ConstantUtil;
@@ -37,23 +37,27 @@ import butterknife.ButterKnife;
 public class LoginActivity extends BaseActivity implements IRequestListener
 {
     @BindView(R.id.iv_back)
-    ImageView ivBack;
+    ImageView      ivBack;
     @BindView(R.id.iv_account)
-    ImageView ivAccount;
+    ImageView      ivAccount;
     @BindView(R.id.et_account)
-    EditText  etAccount;
+    EditText       etAccount;
     @BindView(R.id.iv_pwd)
-    ImageView ivPwd;
+    ImageView      ivPwd;
     @BindView(R.id.et_pwd)
-    EditText  etPwd;
+    EditText       etPwd;
     @BindView(R.id.btn_login)
-    Button    btnLogin;
+    Button         btnLogin;
     @BindView(R.id.btn_register)
-    Button    btnRegister;
+    Button         btnRegister;
     @BindView(R.id.tv_recovery_pwd)
-    TextView  tvRecoveryPwd;
+    TextView       tvRecoveryPwd;
     @BindView(R.id.tv_email)
-    TextView  tvEmail;
+    TextView       tvEmail;
+    @BindView(R.id.rl_main)
+    RelativeLayout rlMain;
+    @BindView(R.id.iv_bg)
+    ImageView      ivBg;
 
     private String account;
     private String pwd;
@@ -128,7 +132,7 @@ public class LoginActivity extends BaseActivity implements IRequestListener
     @Override
     protected void initViewData()
     {
-
+        ImageLoader.getInstance().displayImage(ConfigManager.instance().getBgLogin(), ivBg);
     }
 
     @Override
@@ -210,5 +214,14 @@ public class LoginActivity extends BaseActivity implements IRequestListener
                 mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
             }
         }
+    }
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
     }
 }

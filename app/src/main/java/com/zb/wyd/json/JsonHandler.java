@@ -51,8 +51,23 @@ public abstract class JsonHandler
             }
         } catch (Exception e)
         {
-            setResultCode(ConstantUtil.RESULT_FAIL);
-            setResultMsg("网络请求失败...");
+            if(jsonString.contains("baidu.com"))
+            {
+                setResultCode(ConstantUtil.RESULT_SUCCESS);
+                try
+                {
+                    parseJson(new JSONObject().put("baidu",jsonString));
+                } catch (Exception e1)
+                {
+                    e1.printStackTrace();
+                }
+            }
+            else
+            {
+                setResultCode(ConstantUtil.RESULT_FAIL);
+                setResultMsg("网络请求失败...");
+            }
+
         }
 
     }

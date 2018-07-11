@@ -10,6 +10,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,12 +27,14 @@ import com.zb.wyd.activity.BaseHandler;
 import com.zb.wyd.activity.LiveActivity;
 import com.zb.wyd.activity.LoginActivity;
 import com.zb.wyd.activity.PhotoDetailActivity;
+import com.zb.wyd.activity.VideoPlayActivity;
 import com.zb.wyd.adapter.CataAdapter;
 import com.zb.wyd.adapter.SelfieAdapter;
 import com.zb.wyd.entity.AdInfo;
 import com.zb.wyd.entity.CataInfo;
 import com.zb.wyd.entity.LiveInfo;
 import com.zb.wyd.entity.SelfieInfo;
+import com.zb.wyd.entity.VideoInfo;
 import com.zb.wyd.http.DataRequest;
 import com.zb.wyd.http.HttpRequest;
 import com.zb.wyd.http.IRequestListener;
@@ -61,26 +64,27 @@ import butterknife.Unbinder;
 /**
  * 描述：自拍
  */
-public class SelfieFragment extends BaseFragment implements IRequestListener, View.OnClickListener
+public class SelfieFragment extends BaseFragment implements IRequestListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener
 {
 
     @BindView(R.id.banner)
-    CustomBanner mBanner;
+    CustomBanner               mBanner;
     @BindView(R.id.rv_photo)
-    RecyclerView rvPhoto;
+    RecyclerView               rvPhoto;
     @BindView(R.id.iv_show)
-    ImageView    ivMore;
+    ImageView                  ivMore;
     @BindView(R.id.rv_cata)
-    RecyclerView rvCata;
+    RecyclerView               rvCata;
     @BindView(R.id.tv_new)
-    TextView     tvNew;
+    TextView                   tvNew;
     @BindView(R.id.tv_fav)
-    TextView     tvFav;
+    TextView                   tvFav;
     @BindView(R.id.tv_add)
-    TextView     tvAdd;
+    TextView                   tvAdd;
     @BindView(R.id.topView)
-    View         topView;
-
+    View                       topView;
+    @BindView(R.id.swipeRefresh)
+    VerticalSwipeRefreshLayout mSwipeRefreshLayout;
     private List<CataInfo> cataInfoList = new ArrayList<>();
     private CataAdapter mCataAdapter;
 
@@ -136,6 +140,11 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
                     cataInfoList.addAll(mCataInfoListHandler.getCataInfoList());
 
 
+                    CataInfo mCataInfo = new CataInfo();
+                    mCataInfo.setSelected(true);
+                    mCataInfo.setId("0");
+                    mCataInfo.setName("全部");
+                    cataInfoList.add(0, mCataInfo);
                     if (!cataInfoList.isEmpty())
                     {
                         cta_id = cataInfoList.get(0).getId();
@@ -143,7 +152,6 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
                     }
 
                     mCataAdapter.notifyDataSetChanged();
-                    mHandler.sendEmptyMessage(GET_PHOTO_LIST_CODE);
 
                     break;
 
@@ -215,6 +223,7 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
     @Override
     protected void initEvent()
     {
+        mSwipeRefreshLayout.setOnRefreshListener(this);
         ivMore.setOnClickListener(this);
         tvNew.setOnClickListener(this);
         tvFav.setOnClickListener(this);
@@ -338,15 +347,31 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
             }
         });
         rvPhoto.setAdapter(mSelfieAdapter);
+
+
+        //解决swipelayout与Recyclerview的冲突
+        rvPhoto.addOnScrollListener(new RecyclerView.OnScrollListener()
+        {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy)
+            {
+                int topRowVerticalPosition =
+                        (recyclerView == null || recyclerView.getChildCount() == 0) ? 0 : recyclerView.getChildAt(0).getTop();
+                mSwipeRefreshLayout.setEnabled(topRowVerticalPosition >= 0);
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState)
+            {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+        });
         mHandler.sendEmptyMessage(GET_AD_LIST_CODE);
-        loadData();
-
-    }
-
-    private void loadData()
-    {
         mHandler.sendEmptyMessage(GET_CATA_LIST_CODE);
+        mHandler.sendEmptyMessage(GET_PHOTO_LIST_CODE);
+
     }
+
 
     private void getPhotoCata()
     {
@@ -443,6 +468,30 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
             {
                 //position 轮播图的第几个项
                 //str 轮播图当前项对应的数据
+                AdInfo mAdInfo = adInfoList.get(position);
+                if (!TextUtils.isEmpty(mAdInfo.getLink()))
+                {
+                    if (mAdInfo.getLink().startsWith("video://"))
+                    {
+                        String id = mAdInfo.getLink().replace("video://", "");
+                        VideoInfo mVideoInfo = new VideoInfo();
+                        mVideoInfo.setId(id);
+                        mVideoInfo.setV_name("点播");
+                        Bundle b = new Bundle();
+                        b.putSerializable("VideoInfo", mVideoInfo);
+                        startActivity(new Intent(getActivity(), VideoPlayActivity.class).putExtras(b));
+                    }
+                    else if (mAdInfo.getLink().startsWith("live://"))
+                    {
+                        String id = mAdInfo.getLink().replace("live://", "");
+                        startActivity(new Intent(getActivity(), LiveActivity.class).putExtra("biz_id", id));
+                    }
+                    else if (mAdInfo.getLink().startsWith("photo://"))
+                    {
+                        String id = mAdInfo.getLink().replace("photo://", "");
+                        startActivity(new Intent(getActivity(), PhotoDetailActivity.class).putExtra("biz_id", id));
+                    }
+                }
             }
         });
 
@@ -506,32 +555,31 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
     {
         if (v == ivMore)
         {
-            if (null == mCataPopupWindow)
+
+            mCataPopupWindow = new CataPopupWindow(getActivity(), cataInfoList, new MyItemClickListener()
             {
-                mCataPopupWindow = new CataPopupWindow(getActivity(), cataInfoList, new MyItemClickListener()
+                @Override
+                public void onItemClick(View view, int position)
                 {
-                    @Override
-                    public void onItemClick(View view, int position)
+                    for (int i = 0; i < cataInfoList.size(); i++)
                     {
-                        for (int i = 0; i < cataInfoList.size(); i++)
+                        if (i == position)
                         {
-                            if (i == position)
-                            {
-                                cataInfoList.get(position).setSelected(true);
-                            }
-                            else
-                            {
-                                cataInfoList.get(i).setSelected(false);
-                            }
+                            cataInfoList.get(position).setSelected(true);
                         }
-                        mCataAdapter.notifyDataSetChanged();
-
-
-                        cta_id = cataInfoList.get(position).getId();
-                        mHandler.sendEmptyMessage(GET_PHOTO_LIST_CODE);
+                        else
+                        {
+                            cataInfoList.get(i).setSelected(false);
+                        }
                     }
-                });
-            }
+                    mCataAdapter.notifyDataSetChanged();
+
+
+                    cta_id = cataInfoList.get(position).getId();
+                    mHandler.sendEmptyMessage(GET_PHOTO_LIST_CODE);
+                }
+            });
+
 
             if (!cataInfoList.isEmpty())
             {
@@ -540,6 +588,7 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
         }
         else if (v == tvNew)
         {
+            selfieInfoList.clear();
             sort = "new";
             tvNew.setSelected(true);
             tvFav.setSelected(false);
@@ -547,6 +596,7 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
         }
         else if (v == tvFav)
         {
+            selfieInfoList.clear();
             sort = "fav";
             tvNew.setSelected(false);
             tvFav.setSelected(true);
@@ -566,4 +616,24 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
     }
 
 
+    @Override
+    public void onRefresh()
+    {
+        if (mSwipeRefreshLayout != null)
+        {
+            mHandler.sendEmptyMessage(GET_AD_LIST_CODE);
+            mHandler.sendEmptyMessage(GET_CATA_LIST_CODE);
+            mHandler.sendEmptyMessage(GET_PHOTO_LIST_CODE);
+            mSwipeRefreshLayout.post(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+            });
+        }
+
+
+    }
 }

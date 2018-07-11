@@ -182,20 +182,55 @@ public class APPUtils
     @SuppressLint("MissingPermission")
     public static String getDeviceId(Context context)
     {
+        String id = "";
 
-        String id;
+            TelephonyManager mTelephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            if (null != mTelephony && mTelephony.getDeviceId() != null)
+            {
+                id = mTelephony.getDeviceId();
+            }
+            else
+            {
+                id = Settings.Secure.getString(context.getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+            }
+
+
         //android.telephony.TelephonyManager
-        TelephonyManager mTelephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        if (null != mTelephony && mTelephony.getDeviceId() != null)
-        {
-            id = mTelephony.getDeviceId();
-        }
-        else
-        {
-            //android.provider.Settings; --解决在android 7.0的情况下，有权限getDeviceId()返回null的情形
-            id = Settings.Secure.getString(context.getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
-        }
         return id;
+    }
+
+    //获得独一无二的Psuedo ID
+    public static String getUniquePsuedoID()
+    {
+        String serial = null;
+
+        String m_szDevIDShort = "35" +
+                Build.BOARD.length() % 10 + Build.BRAND.length() % 10 +
+
+                Build.CPU_ABI.length() % 10 + Build.DEVICE.length() % 10 +
+
+                Build.DISPLAY.length() % 10 + Build.HOST.length() % 10 +
+
+                Build.ID.length() % 10 + Build.MANUFACTURER.length() % 10 +
+
+                Build.MODEL.length() % 10 + Build.PRODUCT.length() % 10 +
+
+                Build.TAGS.length() % 10 + Build.TYPE.length() % 10 +
+
+                Build.USER.length() % 10; //13 位
+
+        try
+        {
+            serial = android.os.Build.class.getField("SERIAL").get(null).toString();
+            //API>=9 使用serial号
+            return new UUID(m_szDevIDShort.hashCode(), serial.hashCode()).toString();
+        } catch (Exception exception)
+        {
+            //serial需要一个初始化
+            serial = "serial"; // 随便一个初始化
+        }
+        //使用硬件信息拼凑出来的15位号码
+        return new UUID(m_szDevIDShort.hashCode(), serial.hashCode()).toString();
     }
 
     public static String getUniqueId(Context context)

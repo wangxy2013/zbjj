@@ -154,7 +154,6 @@ public class MainActivity extends BaseActivity
             // fragmentTabHost.getTabWidget().getChildAt(i).setBackgroundResource(R.drawable.main_tab_selector);
         }
         fragmentTabHost.getTabWidget().setDividerDrawable(R.color.transparent);
-
         new VersionManager(this).init();
     }
 

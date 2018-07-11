@@ -229,17 +229,6 @@ public class AnchorListFragment extends BaseFragment implements PullToRefreshBas
     }
 
     @Override
-    public void onDestroy()
-    {
-        super.onDestroy();
-        if (null != unbinder)
-        {
-            unbinder.unbind();
-            unbinder = null;
-        }
-    }
-
-    @Override
     public void notify(String action, String resultCode, String resultMsg, Object obj)
     {
         if (mRefreshStatus == 1)

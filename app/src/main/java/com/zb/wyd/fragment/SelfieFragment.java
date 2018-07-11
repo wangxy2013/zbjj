@@ -621,6 +621,10 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
     {
         if (mSwipeRefreshLayout != null)
         {
+            adInfoList.clear();
+            cataInfoList.clear();
+            picList.clear();
+            selfieInfoList.clear();
             mHandler.sendEmptyMessage(GET_AD_LIST_CODE);
             mHandler.sendEmptyMessage(GET_CATA_LIST_CODE);
             mHandler.sendEmptyMessage(GET_PHOTO_LIST_CODE);

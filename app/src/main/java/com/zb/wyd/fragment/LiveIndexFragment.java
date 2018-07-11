@@ -258,10 +258,16 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
         });
         rvHot.setLayoutManager(new FullyGridLayoutManager(getActivity(), 2));
         rvHot.setAdapter(mNewAdapter);
-        mHandler.sendEmptyMessage(GET_AD_LIST_CODE);
-        loadData();
-    }
 
+    }
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+
+        if (isVisibleToUser) {
+            mHandler.sendEmptyMessage(GET_AD_LIST_CODE);
+            loadData();
+        }
+        super.setUserVisibleHint(isVisibleToUser);
+    }
     private void loadData()
     {
         mHandler.sendEmptyMessage(GET_FREE_LIVE_CODE);
@@ -405,16 +411,6 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
         }
     }
 
-    @Override
-    public void onDestroy()
-    {
-        super.onDestroy();
-        if (null != unbinder)
-        {
-            unbinder.unbind();
-            unbinder = null;
-        }
-    }
 
 
     @Override

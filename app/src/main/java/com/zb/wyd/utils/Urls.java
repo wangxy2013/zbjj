@@ -231,5 +231,17 @@ public class Urls
     }
 
 
+    public static String getShareUrl()
+    {
+        return  ConfigManager.instance().getDomainName() + "data/share";
+    }
+
+    public static String getTaskShareUrl()
+    {
+        return  ConfigManager.instance().getDomainName() + "task/share";
+    }
+
+
+
 }
 

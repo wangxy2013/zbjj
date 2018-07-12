@@ -8,6 +8,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.zb.wyd.MyApplication;
 import com.zb.wyd.R;
 import com.zb.wyd.entity.SelfieInfo;
 import com.zb.wyd.entity.VideoInfo;
@@ -38,16 +39,17 @@ public class SelfieHolder extends RecyclerView.ViewHolder
         mImgIv = (RoundAngleImageView) rootView.findViewById(R.id.iv_user_pic);
         mItemLayout = (RelativeLayout) rootView.findViewById(R.id.rl_item);
         mTimeTv = (TextView) rootView.findViewById(R.id.tv_time);
-        mNameTv= (TextView) rootView.findViewById(R.id.tv_name);
-        mFavTv= (TextView) rootView.findViewById(R.id.tv_fav);
+        mNameTv = (TextView) rootView.findViewById(R.id.tv_name);
+        mFavTv = (TextView) rootView.findViewById(R.id.tv_fav);
     }
 
 
-    public void setSelfieInfo(SelfieInfo mSelfieInfo,final  int p)
+    public void setSelfieInfo(SelfieInfo mSelfieInfo, final int p)
     {
+
         int spacingInPixels = context.getResources().getDimensionPixelSize(R.dimen.dm_10) * 3;
         int width = (APPUtils.getScreenWidth(context) - spacingInPixels) / 2;
-        int height = width + (int)(Math.random()*200);
+        int height = width + MyApplication.getInstance().getPhotoDataList().get(p);
         mItemLayout.setLayoutParams(new LinearLayout.LayoutParams(width, height));
         ImageLoader.getInstance().displayImage(mSelfieInfo.getCover(), mImgIv);
 
@@ -55,11 +57,12 @@ public class SelfieHolder extends RecyclerView.ViewHolder
         mTimeTv.setText(mSelfieInfo.getAdd_time());
         mFavTv.setText(mSelfieInfo.getFavour_count());
 
-        mItemLayout.setOnClickListener(new View.OnClickListener() {
+        mItemLayout.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View v)
             {
-                listener.onItemClick(v,p);
+                listener.onItemClick(v, p);
             }
         });
     }

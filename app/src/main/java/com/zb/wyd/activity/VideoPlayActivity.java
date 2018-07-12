@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -17,12 +19,16 @@ import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.zb.wyd.R;
 import com.zb.wyd.entity.ChannelInfo;
 import com.zb.wyd.entity.PriceInfo;
+import com.zb.wyd.entity.ShareInfo;
+import com.zb.wyd.entity.SignInfo;
 import com.zb.wyd.entity.VideoInfo;
 import com.zb.wyd.http.DataRequest;
 import com.zb.wyd.http.HttpRequest;
 import com.zb.wyd.http.IRequestListener;
 import com.zb.wyd.json.LivePriceInfoHandler;
 import com.zb.wyd.json.ResultHandler;
+import com.zb.wyd.json.ShareInfoHandler;
+import com.zb.wyd.json.SignInfoHandler;
 import com.zb.wyd.json.VideoStreamHandler;
 import com.zb.wyd.listener.MyItemClickListener;
 import com.zb.wyd.listener.MyOnClickListener;
@@ -58,10 +64,14 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
     private String    videoName, biz_id;
     private String      videoUri;
     private ChannelInfo mChannelInfo;
+    private String    shareCnontent;
+
+    private static final String GET_SHARE                = "GET_SHARE";
     private static final String      FAVORITE_LIKE           = "favorite_like";
     private static final String      GET_VIDEO_PRICE         = "get_live_price";
     private static final String      GET_VIDEO_STREAM        = "get_video_stream";
     private static final String      BUY_VIDEO               = "buy_live";
+    private static final String GET_TASK_SHARE           = "GET_TASK_SHARE";
     private static final int         REQUEST_SUCCESS         = 0x01;
     private static final int         REQUEST_FAIL            = 0x02;
     private static final int         GET_VIDEO_PRICE_SUCCESS = 0x03;
@@ -69,6 +79,12 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
     private static final int         SET_STATISTICS          = 0x06;
     private static final int         GET_STREAM_REQUEST      = 0x09;
     private static final int         FAVORITE_LIKE_SUCCESS   = 0x08;
+    private static final int    GET_SHARE_CODE           = 0x11;
+    private static final int    GET_SHARE_SUCCESS        = 0x12;
+    private static final int    GET_TASK_SHARE_CODE      = 0x13;
+    private static final int    GET_TASK_SHARE_SUCCESS   = 0x14;
+
+    private static final int         SHARE_PHOTO_REQUEST_CODE = 0x91;
     @SuppressLint("HandlerLeak")
     private              BaseHandler mHandler                = new BaseHandler(VideoPlayActivity.this)
     {
@@ -94,6 +110,7 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
 
 
                 case REQUEST_FAIL:
+                    ToastUtil.show(VideoPlayActivity.this, msg.obj.toString());
                     break;
 
                 case GET_VIDEO_PRICE_SUCCESS:
@@ -146,6 +163,35 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
                     break;
                 case FAVORITE_LIKE_SUCCESS:
                     ToastUtil.show(VideoPlayActivity.this, "收藏成功");
+                    break;
+                case GET_SHARE_CODE:
+                    getShareUrl();
+                    break;
+
+                case GET_SHARE_SUCCESS:
+                    ShareInfoHandler mShareInfoHandler = (ShareInfoHandler) msg.obj;
+                    ShareInfo shareInfo = mShareInfoHandler.getShareInfo();
+                    if (null != shareInfo)
+                    {
+                        shareCnontent = shareInfo.getTitle() + ":" + shareInfo.getUrl();
+                    }
+                    break;
+
+                case GET_TASK_SHARE_CODE:
+                    getTaskShareUrl();
+                    break;
+
+                case GET_TASK_SHARE_SUCCESS:
+                    SignInfoHandler mSignInfoHandler = (SignInfoHandler)msg.obj;
+                    SignInfo signInfo = mSignInfoHandler.getSignInfo();
+
+                    if (null != signInfo)
+                    {
+                        String title = "分享成功";
+                        String desc = signInfo.getVal() + "积分";
+                        String task = "连续分享" + signInfo.getSeries() + "天";
+                        DialogUtils.showTaskDialog(VideoPlayActivity.this, title, desc, task);
+                    }
                     break;
             }
         }
@@ -432,6 +478,7 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
             }
         });
         mHandler.sendEmptyMessage(GET_STREAM_REQUEST);
+        mHandler.sendEmptyMessage(GET_SHARE_CODE);
     }
 
 
@@ -475,7 +522,22 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         DataRequest.instance().request(VideoPlayActivity.this, Urls.getBuyLiveUrl(), this, HttpRequest.POST, BUY_VIDEO, valuePairs,
                 new ResultHandler());
     }
-
+    private void getTaskShareUrl()
+    {
+        Map<String, String> valuePairs = new HashMap<>();
+        valuePairs.put("biz_id", biz_id);
+        valuePairs.put("co_biz", "video");
+        DataRequest.instance().request(VideoPlayActivity.this, Urls.getTaskShareUrl(), this, HttpRequest.GET, GET_TASK_SHARE, valuePairs,
+                new SignInfoHandler());
+    }
+    private void getShareUrl()
+    {
+        Map<String, String> valuePairs = new HashMap<>();
+        valuePairs.put("biz_id", biz_id);
+        valuePairs.put("co_biz", "video");
+        DataRequest.instance().request(VideoPlayActivity.this, Urls.getShareUrl(), this, HttpRequest.GET, GET_SHARE, valuePairs,
+                new ShareInfoHandler());
+    }
 
     @Override
     public void onClick(View v)
@@ -487,11 +549,13 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         }
         else if (v == mShareIv)
         {
-            String shareUrl = Urls.getShareVideoUrl(biz_id);
-            Intent intent1 = new Intent(Intent.ACTION_SEND);
-            intent1.putExtra(Intent.EXTRA_TEXT, shareUrl);
-            intent1.setType("text/plain");
-            startActivity(Intent.createChooser(intent1, "分享"));
+            if (!TextUtils.isEmpty(shareCnontent))
+            {
+                Intent intent1 = new Intent(Intent.ACTION_SEND);
+                intent1.putExtra(Intent.EXTRA_TEXT, shareCnontent);
+                intent1.setType("text/plain");
+                startActivityForResult(Intent.createChooser(intent1, "分享"), SHARE_PHOTO_REQUEST_CODE);
+            }
         }
         else if (v == mSettingIv)
         {
@@ -622,5 +686,34 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
                 mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
             }
         }
+        else if (GET_SHARE.equals(action))
+        {
+            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(GET_SHARE_SUCCESS, obj));
+            }
+
+        }
+        else if (GET_TASK_SHARE.equals(action))
+        {
+            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(GET_TASK_SHARE_SUCCESS, obj));
+            }
+            else
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, final Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d("DemoActivity", "requestCode=" + requestCode + " resultCode=" + resultCode);
+        if((int)(Math.random()*100) <=80)
+            mHandler.sendEmptyMessage(GET_TASK_SHARE_CODE);
+
     }
 }

@@ -3,9 +3,13 @@
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/bg_login"
                 android:orientation="vertical">
-
+    <ImageView
+        android:id="@+id/iv_bg"
+        android:src="@drawable/bg_login"
+        android:scaleType="centerCrop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -58,7 +62,7 @@
                     android:layout_marginLeft="@dimen/dm_5"
                     android:layout_toRightOf="@+id/iv_account"
                     android:background="@color/transparent"
-                    android:hint="请输入用户名"
+                    android:hint="请输入邮箱"
                     android:textColor="@drawable/login_font_selector"
                     android:textColorHint="@color/white"
                     android:textSize="@dimen/t16"/>
@@ -228,7 +232,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/dm_15"
         android:gravity="center_horizontal"
-        android:text="防丢邮箱,发邮件到1111@163.com获取最新地址"
+        android:text="防丢邮箱,发邮件到xjshangmen@gmail.com获取最新地址"
         android:textColor="@color/white"
         android:textSize="@dimen/t14"/>
 </RelativeLayout>

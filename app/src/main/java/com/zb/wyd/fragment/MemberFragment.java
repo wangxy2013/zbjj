@@ -285,28 +285,53 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
         }
         else if (v == rlEmail)
         {
-            if ("0".equals(role))
+            if (MyApplication.getInstance().isLogin())
             {
-                if (!MyApplication.getInstance().isLogin())
-                startActivity(new Intent(getActivity(), BindEmailActivity.class));
+                if ("0".equals(role))
+                {
+
+                    startActivity(new Intent(getActivity(), BindEmailActivity.class));
+
+                }
+                else
+                {
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                }
             }
+
         }
         else if (v == rlMessage)
         {
             if (MyApplication.getInstance().isLogin())
-            startActivity(new Intent(getActivity(), MessageListActivity.class));
-
+            {
+                startActivity(new Intent(getActivity(), MessageListActivity.class));
+            }
+            else
+            {
+                startActivity(new Intent(getActivity(), LoginActivity.class));
+            }
         }
-
         else if (v == rlWealth)
         {
-            if (isClick)
+            if (MyApplication.getInstance().isLogin())
+            {
                 startActivity(new Intent(getActivity(), WealthListActivity.class).putExtra("fortune", tvWealth.getText().toString()));
+            }
+            else
+            {
+                startActivity(new Intent(getActivity(), LoginActivity.class));
+            }
         }
         else if (v == rlCollection)
         {
-            if (isClick)
+            if (MyApplication.getInstance().isLogin())
+            {
                 startActivity(new Intent(getActivity(), MyCollectionActivity.class));
+            }
+            else
+            {
+                startActivity(new Intent(getActivity(), LoginActivity.class));
+            }
         }
         else if (v == rlCustomer)
         {

@@ -588,6 +588,7 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
         }
         else if (v == tvNew)
         {
+            pn =1;
             selfieInfoList.clear();
             sort = "new";
             tvNew.setSelected(true);
@@ -596,6 +597,7 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
         }
         else if (v == tvFav)
         {
+            pn=1;
             selfieInfoList.clear();
             sort = "fav";
             tvNew.setSelected(false);
@@ -621,6 +623,7 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
     {
         if (mSwipeRefreshLayout != null)
         {
+            pn=1;
             adInfoList.clear();
             cataInfoList.clear();
             picList.clear();

@@ -67,6 +67,9 @@ public class BindEmailActivity extends BaseActivity implements IRequestListener
             {
                 case REQUEST_SUCCESS:
                     ToastUtil.show(BindEmailActivity.this, "认证成功");
+
+                    if (mHandler.hasMessages(UPDATE_CODE_VIEW))
+                        mHandler.removeMessages(UPDATE_CODE_VIEW);
                     finish();
                     break;
 
@@ -98,6 +101,7 @@ public class BindEmailActivity extends BaseActivity implements IRequestListener
                     ToastUtil.show(BindEmailActivity.this, "验证码已发送至邮箱");
                     ResultHandler resultHandler = (ResultHandler) msg.obj;
                     token = resultHandler.getContent();
+                    etEmail.setEnabled(false);
                     break;
 
             }
@@ -181,7 +185,8 @@ public class BindEmailActivity extends BaseActivity implements IRequestListener
             showProgressDialog();
             Map<String, String> valuePairs = new HashMap<>();
             valuePairs.put("email", email);
-            DataRequest.instance().request(this, Urls.getEmailCodeUrl(), this, HttpRequest.GET, GET_EMAIL_CODE, valuePairs,
+            valuePairs.put("action", "email");
+            DataRequest.instance().request(this, Urls.getEmailCodeUrl(), this, HttpRequest.POST, GET_EMAIL_CODE, valuePairs,
                     new ResultHandler());
 
         }
@@ -214,5 +219,13 @@ public class BindEmailActivity extends BaseActivity implements IRequestListener
                 mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
             }
         }
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        if (mHandler.hasMessages(UPDATE_CODE_VIEW))
+            mHandler.removeMessages(UPDATE_CODE_VIEW);
     }
 }

@@ -185,8 +185,14 @@ public class MainActivity extends BaseActivity
     {
         if ((keyCode == KeyEvent.KEYCODE_BACK))
         {
-
-            DialogUtils.showToastDialog2Button(MainActivity.this, "是否退出APP", v -> finish());
+            DialogUtils.showToastDialog2Button(MainActivity.this, "是否退出APP", new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                    System.exit(0);
+                }
+            });
+            //DialogUtils.showToastDialog2Button(MainActivity.this, "是否退出APP", v -> finish());
 
             return false;
         }

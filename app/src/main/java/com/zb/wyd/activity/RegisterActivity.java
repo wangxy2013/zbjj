@@ -138,7 +138,18 @@ public class RegisterActivity extends BaseActivity implements IRequestListener
     @Override
     protected void initViewData()
     {
+
+        tvEmail.setText("防丢邮箱,发邮件到"+ConfigManager.instance().getSystemEmail()+"获取最新地址");
         ImageLoader.getInstance().displayImage(ConfigManager.instance().getBgLogin(), ivBg);
+        boolean reg_closed = ConfigManager.instance().getRegClosed();
+        if (reg_closed)
+        {
+            etInvitation.setHint("邀请码(必填)");
+        }
+        else
+        {
+            etInvitation.setHint("邀请码(选填)");
+        }
     }
 
 
@@ -179,13 +190,25 @@ public class RegisterActivity extends BaseActivity implements IRequestListener
                 return;
             }
 
+            String invite = etInvitation.getText().toString();
+            boolean reg_closed = ConfigManager.instance().getRegClosed();
+
+            if (reg_closed)
+            {
+                if (TextUtils.isEmpty(invite))
+                {
+                    ToastUtil.show(RegisterActivity.this, "请输入邀请码");
+                    return;
+                }
+            }
+
             Map<String, String> valuePairs = new HashMap<>();
             valuePairs.put("mobile_id", APPUtils.getUniqueId(RegisterActivity.this));
             valuePairs.put("device", "and");
             valuePairs.put("user_name", account);
             valuePairs.put("password", pwd);
             valuePairs.put("repassword", pwd);
-            valuePairs.put("invite", etInvitation.getText().toString());
+            valuePairs.put("invite", invite);
             DataRequest.instance().request(RegisterActivity.this, Urls.getRegisterUrl(), this, HttpRequest.POST, USER_REGISTER, valuePairs,
                     new ResultHandler());
         }

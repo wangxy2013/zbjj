@@ -3,6 +3,7 @@ package com.zb.wyd.utils;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -229,12 +230,20 @@ public class DialogUtils
         dialog.setContentView(v);
         TextView priceTv = (TextView) v.findViewById(R.id.tv_price);
         TextView userMoneyTv = (TextView) v.findViewById(R.id.tv_user_money);
-
+        TextView msgTv = (TextView) v.findViewById(R.id.tv_msg);
         TextView cancelTv = (TextView) v.findViewById(R.id.tv_cancel);
         TextView submitTv = (TextView) v.findViewById(R.id.tv_submit);
         Double userMoney = Double.parseDouble(mLivePriceInfo.getUser_money());
         int price = mLivePriceInfo.getOff_amount();
-
+        if (TextUtils.isEmpty(mLivePriceInfo.getMsg()))
+        {
+            msgTv.setVisibility(View.GONE);
+        }
+        else
+        {
+            msgTv.setVisibility(View.VISIBLE);
+            msgTv.setText(mLivePriceInfo.getMsg());
+        }
 
         priceTv.setText(price + "积分");
 
@@ -445,7 +454,7 @@ public class DialogUtils
      *
      * @return
      */
-    public static void showTaskDialog(Context mContext, String title, String desc,String task)
+    public static void showTaskDialog(Context mContext, String title, String desc, String task)
     {
         final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
         dialog.setCancelable(false);

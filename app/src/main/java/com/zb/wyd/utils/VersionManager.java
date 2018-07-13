@@ -3,6 +3,7 @@ package com.zb.wyd.utils;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -104,6 +105,14 @@ public class VersionManager implements IRequestListener
                         ConfigManager.instance().setBgLogin(mVersionInfo.getBg_login());
                         ConfigManager.instance().setBgStartup(mVersionInfo.getBg_startup());
                         ConfigManager.instance().setCrossfire(mVersionInfo.getCrossfire());
+                        ConfigManager.instance().setRegClosed(mVersionInfo.isReg_closed());
+                        if (!StringUtils.stringIsEmpty(mVersionInfo.getText()))
+                        {
+                            ClipboardManager cm = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                            // 将文本内容放到系统剪贴板里。
+                            cm.setText(mVersionInfo.getText());
+                        }
+
                         showNoticeDialog(mVersionInfo);
                     }
 
@@ -170,6 +179,7 @@ public class VersionManager implements IRequestListener
 
     private void setDomainName()
     {
+        ConfigManager.instance().setSystemEmail("xjshangmen@gmail.com");
         DialogUtils.showToastDialog2Button(mContext, "不幸的告诉您，域名可能已被封，可发邮件到xjshangmen@gmail.com获取最新地址并进行设置操作。", new View.OnClickListener()
         {
             @Override

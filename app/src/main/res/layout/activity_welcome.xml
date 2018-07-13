@@ -20,9 +20,24 @@
         android:layout_marginRight="@dimen/dm_15"
         android:layout_marginTop="@dimen/dm_30"
         android:background="@drawable/cat_fram_selected_45dp"
-        android:paddingLeft="@dimen/dm_10"
-        android:paddingRight="@dimen/dm_10"
+        android:paddingBottom="@dimen/dm_5"
+        android:paddingLeft="@dimen/dm_15"
+        android:paddingRight="@dimen/dm_15"
+        android:paddingTop="@dimen/dm_5"
         android:textColor="@color/white"
         android:textSize="@dimen/t14"/>
+
+    <TextView
+        android:id="@+id/tv_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/dm_15"
+        android:gravity="center_horizontal"
+        android:text="防丢邮箱,发邮件到xjshangmen@gmail.com获取最新地址"
+        android:textColor="@color/white"
+        android:textSize="@dimen/t14"/>
+
+
 
 </RelativeLayout>

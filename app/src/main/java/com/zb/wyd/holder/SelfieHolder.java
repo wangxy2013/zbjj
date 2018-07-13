@@ -2,7 +2,9 @@ package com.zb.wyd.holder;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -14,6 +16,7 @@ import com.zb.wyd.entity.SelfieInfo;
 import com.zb.wyd.entity.VideoInfo;
 import com.zb.wyd.listener.MyItemClickListener;
 import com.zb.wyd.utils.APPUtils;
+import com.zb.wyd.utils.StringUtils;
 import com.zb.wyd.widget.RoundAngleImageView;
 
 import java.util.Random;
@@ -25,6 +28,7 @@ public class SelfieHolder extends RecyclerView.ViewHolder
 {
     private TextView            mTimeTv;
     private TextView            mNameTv;
+    private ImageView           mLocationIv;
     private TextView            mFavTv;
     private RoundAngleImageView mImgIv;
     private RelativeLayout      mItemLayout;
@@ -41,6 +45,7 @@ public class SelfieHolder extends RecyclerView.ViewHolder
         mTimeTv = (TextView) rootView.findViewById(R.id.tv_time);
         mNameTv = (TextView) rootView.findViewById(R.id.tv_name);
         mFavTv = (TextView) rootView.findViewById(R.id.tv_fav);
+        mLocationIv = (ImageView) rootView.findViewById(R.id.iv_location);
     }
 
 
@@ -56,6 +61,16 @@ public class SelfieHolder extends RecyclerView.ViewHolder
         mNameTv.setText(mSelfieInfo.getPname());
         mTimeTv.setText(mSelfieInfo.getAdd_time());
         mFavTv.setText(mSelfieInfo.getFavour_count());
+
+
+        if (StringUtils.stringIsEmpty(mSelfieInfo.getLocation()))
+        {
+            mLocationIv.setVisibility(View.GONE);
+        }
+        else
+        {
+            mLocationIv.setVisibility(View.VISIBLE);
+        }
 
         mItemLayout.setOnClickListener(new View.OnClickListener()
         {

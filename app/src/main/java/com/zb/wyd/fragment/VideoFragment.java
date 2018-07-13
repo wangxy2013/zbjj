@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,6 +28,7 @@ import com.zb.wyd.activity.LoginActivity;
 import com.zb.wyd.activity.PhotoDetailActivity;
 import com.zb.wyd.activity.VideoPlayActivity;
 import com.zb.wyd.activity.VidoeListActivity;
+import com.zb.wyd.activity.WebViewActivity;
 import com.zb.wyd.adapter.CataAdapter;
 import com.zb.wyd.adapter.IntegerAreaAdapter;
 import com.zb.wyd.adapter.VideoAdapter;
@@ -45,6 +47,7 @@ import com.zb.wyd.utils.ConstantUtil;
 import com.zb.wyd.utils.ToastUtil;
 import com.zb.wyd.utils.Urls;
 import com.zb.wyd.widget.CataPopupWindow;
+import com.zb.wyd.widget.VerticalSwipeRefreshLayout;
 import com.zb.wyd.widget.list.refresh.PullToRefreshBase;
 import com.zb.wyd.widget.list.refresh.PullToRefreshRecyclerView;
 
@@ -60,24 +63,26 @@ import butterknife.Unbinder;
 /**
  * 描述：一句话简单描述
  */
-public class VideoFragment extends BaseFragment implements IRequestListener, View.OnClickListener, PullToRefreshBase.OnRefreshListener<RecyclerView>
+public class VideoFragment extends BaseFragment implements IRequestListener, View.OnClickListener, PullToRefreshBase.OnRefreshListener<RecyclerView>,
+        SwipeRefreshLayout.OnRefreshListener
 {
 
     @BindView(R.id.banner)
-    CustomBanner              mBanner;
+    CustomBanner               mBanner;
     @BindView(R.id.iv_show)
-    ImageView                 ivMore;
+    ImageView                  ivMore;
     @BindView(R.id.rv_cata)
-    RecyclerView              rvCata;
+    RecyclerView               rvCata;
     @BindView(R.id.topView)
-    View                      topView;
+    View                       topView;
     @BindView(R.id.tv_new)
-    TextView                  tvNew;
+    TextView                   tvNew;
     @BindView(R.id.tv_collection)
-    TextView                  tvCollection;
+    TextView                   tvCollection;
     @BindView(R.id.pullToRefreshRecyclerView)
-    PullToRefreshRecyclerView mPullToRefreshRecyclerView;
-
+    PullToRefreshRecyclerView  mPullToRefreshRecyclerView;
+    @BindView(R.id.swipeRefresh)
+    VerticalSwipeRefreshLayout mSwipeRefreshLayout;
 
     private List<CataInfo> cataInfoList = new ArrayList<>();
     private CataAdapter mCataAdapter;
@@ -156,7 +161,6 @@ public class VideoFragment extends BaseFragment implements IRequestListener, Vie
 
                 case GET_VIDEO_LIST_SUCCESS:
                     VideoInfoListHandler mVideoInfoListHandler = (VideoInfoListHandler) msg.obj;
-                    mVideoInfoList.clear();
                     mVideoInfoList.addAll(mVideoInfoListHandler.getVideoInfoList());
                     mVideoAdapter.notifyDataSetChanged();
                     break;
@@ -228,6 +232,7 @@ public class VideoFragment extends BaseFragment implements IRequestListener, Vie
     @Override
     protected void initEvent()
     {
+        mSwipeRefreshLayout.setOnRefreshListener(this);
         ivMore.setOnClickListener(this);
         mPullToRefreshRecyclerView.setOnRefreshListener(this);
         mPullToRefreshRecyclerView.setPullRefreshEnabled(true);
@@ -264,6 +269,8 @@ public class VideoFragment extends BaseFragment implements IRequestListener, Vie
                 mCataAdapter.notifyDataSetChanged();
 
                 cta_id = cataInfoList.get(position).getId();
+                pn = 1;
+                mVideoInfoList.clear();
                 mHandler.sendEmptyMessage(GET_VIDEO_LIST_CODE);
 
 
@@ -295,7 +302,22 @@ public class VideoFragment extends BaseFragment implements IRequestListener, Vie
 
             }
         });
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener()
+        {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy)
+            {
+                int topRowVerticalPosition =
+                        (recyclerView == null || recyclerView.getChildCount() == 0) ? 0 : recyclerView.getChildAt(0).getTop();
+                mSwipeRefreshLayout.setEnabled(topRowVerticalPosition >= 0);
+            }
 
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState)
+            {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+        });
         mVideoAdapter.setNew(true);
         mRecyclerView.setAdapter(mVideoAdapter);
 
@@ -331,7 +353,7 @@ public class VideoFragment extends BaseFragment implements IRequestListener, Vie
     private void getAdList()
     {
         Map<String, String> valuePairs = new HashMap<>();
-        valuePairs.put("pos_id", "1");
+        valuePairs.put("pos_id", "2");
         DataRequest.instance().request(getActivity(), Urls.getAdListUrl(), this, HttpRequest.POST, GET_AD_LIST, valuePairs,
                 new AdInfoListHandler());
     }
@@ -424,6 +446,14 @@ public class VideoFragment extends BaseFragment implements IRequestListener, Vie
                         String id = mAdInfo.getLink().replace("photo://", "");
                         startActivity(new Intent(getActivity(), PhotoDetailActivity.class).putExtra("biz_id", id));
                     }
+                    else if (mAdInfo.getLink().startsWith("http"))
+                    {
+                        startActivity(new Intent(getActivity(), WebViewActivity.class)
+                                .putExtra(WebViewActivity.EXTRA_TITLE, mAdInfo.getAname())
+                                .putExtra(WebViewActivity.IS_SETTITLE, true)
+                                .putExtra(WebViewActivity.EXTRA_URL, mAdInfo.getLink())
+                        );
+                    }
                 }
             }
         });
@@ -497,27 +527,27 @@ public class VideoFragment extends BaseFragment implements IRequestListener, Vie
         if (v == ivMore)
         {
 
-                mCataPopupWindow = new CataPopupWindow(getActivity(), cataInfoList, new MyItemClickListener()
+            mCataPopupWindow = new CataPopupWindow(getActivity(), cataInfoList, new MyItemClickListener()
+            {
+                @Override
+                public void onItemClick(View view, int position)
                 {
-                    @Override
-                    public void onItemClick(View view, int position)
+                    for (int i = 0; i < cataInfoList.size(); i++)
                     {
-                        for (int i = 0; i < cataInfoList.size(); i++)
+                        if (i == position)
                         {
-                            if (i == position)
-                            {
-                                cataInfoList.get(position).setSelected(true);
-                            }
-                            else
-                            {
-                                cataInfoList.get(i).setSelected(false);
-                            }
+                            cataInfoList.get(position).setSelected(true);
                         }
-                        mCataAdapter.notifyDataSetChanged();
-                        cta_id = cataInfoList.get(position).getId();
-                        mHandler.sendEmptyMessage(GET_VIDEO_LIST_CODE);
+                        else
+                        {
+                            cataInfoList.get(i).setSelected(false);
+                        }
                     }
-                });
+                    mCataAdapter.notifyDataSetChanged();
+                    cta_id = cataInfoList.get(position).getId();
+                    mHandler.sendEmptyMessage(GET_VIDEO_LIST_CODE);
+                }
+            });
 
 
             if (!cataInfoList.isEmpty())
@@ -567,5 +597,27 @@ public class VideoFragment extends BaseFragment implements IRequestListener, Vie
         pn += 1;
         mRefreshStatus = 1;
         loadData();
+    }
+
+    @Override
+    public void onRefresh()
+    {
+        if (mSwipeRefreshLayout != null)
+        {
+            mVideoInfoList.clear();
+            pn = 1;
+            mRefreshStatus = 0;
+            loadData();
+
+            mSwipeRefreshLayout.post(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+            });
+        }
+
     }
 }

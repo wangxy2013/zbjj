@@ -106,10 +106,10 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     private static final int    GET_ANCHOR_REQUEST     = 0x10;
     private static final int    FAVORITE_LIKE_SUCCESS  = 0x11;
 
-    private static final int GET_ANCHOR_SUCCESS = 0x12;
-
+    private static final int         GET_ANCHOR_SUCCESS = 0x12;
+    private static final int         SHOW_SYSTEM_TV     = 0x13;
     @SuppressLint("HandlerLeak")
-    private BaseHandler mHandler = new BaseHandler(LiveActivity.this)
+    private              BaseHandler mHandler           = new BaseHandler(LiveActivity.this)
     {
         @Override
         public void handleMessage(Message msg)
@@ -224,6 +224,11 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                         tvUserName.setText(mUserInfo.getNick());
                         tvFavourCount.setText(mUserInfo.getFavour_count());
                     }
+                    break;
+
+                case SHOW_SYSTEM_TV:
+                    dmShow = true;
+                    tvSystem.setVisibility(View.VISIBLE);
                     break;
             }
         }
@@ -442,6 +447,8 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         mHandler.sendEmptyMessage(GET_STREAM_REQUEST);
         mHandler.sendEmptyMessage(GET_ONLINER_REQUEST);
         mHandler.sendEmptyMessage(GET_ANCHOR_REQUEST);
+
+        mHandler.sendEmptyMessageDelayed(SHOW_SYSTEM_TV, 60 * 1000);
     }
 
 
@@ -481,7 +488,6 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     //通知单服务器
     private void setStatistics(long duration)
     {
-        showProgressDialog();
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "live");
@@ -585,10 +591,13 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         super.onDestroy();
         GSYVideoManager.releaseAllVideos();
         endTime = System.currentTimeMillis();
-
         long duration = (endTime - startTime) / 100;
-
         setStatistics(duration);
+
+        if (mHandler.hasMessages(SHOW_SYSTEM_TV))
+        {
+            mHandler.removeMessages(SHOW_SYSTEM_TV);
+        }
 
     }
 
@@ -603,9 +612,9 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     @Override
     public void notify(String action, String resultCode, String resultMsg, Object obj)
     {
-        hideProgressDialog();
         if (GET_LIVE_STREAM.equals(action))
         {
+            hideProgressDialog();
             if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
             {
                 mHandler.sendMessage(mHandler.obtainMessage(REQUEST_SUCCESS, obj));
@@ -633,6 +642,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         }
         else if (BUY_LIVE.equals(action))
         {
+            hideProgressDialog();
             if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
             {
                 mHandler.sendMessage(mHandler.obtainMessage(BUY_LIVE_SUCCESS, obj));
@@ -655,6 +665,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         }
         else if (FAVORITE_LIKE.equals(action))
         {
+            hideProgressDialog();
             if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
             {
                 mHandler.sendMessage(mHandler.obtainMessage(FAVORITE_LIKE_SUCCESS, obj));
@@ -677,12 +688,4 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         }
     }
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }

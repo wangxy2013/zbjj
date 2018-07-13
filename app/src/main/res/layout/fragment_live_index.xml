@@ -45,7 +45,11 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:src="@drawable/ic_recommend"/>
-
+                    <ImageView
+                        android:visibility="gone"
+                        android:id="@+id/iv_temp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -57,11 +61,11 @@
                         android:textColor="@color/blackA"
                         android:textSize="@dimen/t14"/>
                     <RelativeLayout
-                        android:visibility="gone"
                         android:id="@+id/rl_all_recommend"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true">
+                        android:layout_alignParentRight="true"
+                        android:visibility="gone">
                         <ImageView
                             android:id="@+id/iv_recommend_right"
                             android:layout_width="wrap_content"

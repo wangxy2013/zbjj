@@ -49,8 +49,8 @@ public class ConfigManager
 
     private static final String DOMAIN_NAME = "domain_name";
 
-    private static final String CROSSFIRE = "crossfire";
-
+    private static final String CROSSFIRE  = "crossfire";
+    private static final String REG_CLOSED = "reg_closed";
 
     /**
      * 返回实例
@@ -286,7 +286,7 @@ public class ConfigManager
 
     public String getDomainName()
     {
-        return mSharedPreferences.getString(DOMAIN_NAME, "http://www.883974.com")+"/";
+        return mSharedPreferences.getString(DOMAIN_NAME, "http://www.883974.com") + "/";
     }
 
     public void setCrossfire(String str)
@@ -297,6 +297,17 @@ public class ConfigManager
     public String getCrossfire()
     {
         return mSharedPreferences.getString(CROSSFIRE, "");
+    }
+
+
+    public void setRegClosed(boolean str)
+    {
+        mSharedPreferences.edit().putBoolean(REG_CLOSED, str).commit();
+    }
+
+    public boolean getRegClosed()
+    {
+        return mSharedPreferences.getBoolean(REG_CLOSED, false);
     }
 
 

@@ -20,14 +20,14 @@ public class LoginHandler extends JsonHandler
         {
             JSONObject obj = jsonObject.optJSONObject("data");
 
-            if(null !=obj)
+            if (null != obj)
             {
                 String uniqueCode = obj.optString("auth");
                 String uid = obj.optString("id");
                 String uname = obj.optString("uname");
                 ConfigManager.instance().setUniqueCode(uniqueCode);
                 ConfigManager.instance().setUserId(uid);
-                ConfigManager.instance().setUserNickName(uname);
+                ConfigManager.instance().setUserNickName(obj.optString("unick"));
             }
 
 

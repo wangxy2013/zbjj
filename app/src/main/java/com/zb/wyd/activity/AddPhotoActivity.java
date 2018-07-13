@@ -503,7 +503,7 @@ public class AddPhotoActivity extends BaseActivity implements IRequestListener
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < labelChooseList.size(); i++)
         {
-            sb.append(labelChooseList.get(i).getId());
+            sb.append(labelChooseList.get(i).getName());
             if (i < labelChooseList.size() - 1)
             {
                 sb.append(",");

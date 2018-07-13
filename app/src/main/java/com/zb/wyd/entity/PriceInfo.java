@@ -13,6 +13,7 @@ public class PriceInfo
     private String id;//直播ID
     private int    off_amount;//折扣
     private int    old_amount;//原价
+    private String msg;
 
     public PriceInfo(JSONObject obj)
     {
@@ -22,6 +23,17 @@ public class PriceInfo
         this.id = obj.optString("id");
         this.off_amount = obj.optInt("off_amount");
         this.old_amount = obj.optInt("old_amount");
+        this.msg = obj.optString("msg");
+    }
+
+    public String getMsg()
+    {
+        return msg;
+    }
+
+    public void setMsg(String msg)
+    {
+        this.msg = msg;
     }
 
     public String getFinger()

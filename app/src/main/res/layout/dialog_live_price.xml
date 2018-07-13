@@ -50,6 +50,14 @@
         android:textColor="@color/blackB"
         android:textSize="@dimen/t14"/>
 
+    <TextView
+        android:id="@+id/tv_msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dm_10"
+        android:gravity="center"
+        android:textColor="@color/blackA"
+        android:textSize="@dimen/t14"/>
 
     <LinearLayout
         android:layout_width="match_parent"

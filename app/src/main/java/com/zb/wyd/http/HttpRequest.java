@@ -137,7 +137,7 @@ public class HttpRequest implements Runnable
     {
         OkHttpClient mOkHttpClient = new OkHttpClient();
         // mOkHttpClient.setConnectTimeout(10, TimeUnit.SECONDS);
-        mOkHttpClient.newBuilder().connectTimeout(20, TimeUnit.SECONDS);
+        mOkHttpClient.newBuilder().connectTimeout(30, TimeUnit.SECONDS);
         //        mOkHttpClient.newBuilder().readTimeout(10, TimeUnit.SECONDS);
         //        mOkHttpClient.newBuilder().writeTimeout(10, TimeUnit.SECONDS);
         urlRequest = urlRequest + concatParams();
@@ -161,7 +161,7 @@ public class HttpRequest implements Runnable
         OkHttpClient mOkHttpClient = new OkHttpClient();
         // mOkHttpClient.connectTimeoutMillis()
         // mOkHttpClient.setConnectTimeout(30, TimeUnit.SECONDS);
-        mOkHttpClient.newBuilder().connectTimeout(20, TimeUnit.SECONDS);
+        mOkHttpClient.newBuilder().connectTimeout(30, TimeUnit.SECONDS);
         //                mOkHttpClient.newBuilder().readTimeout(10, TimeUnit.SECONDS);
         //                mOkHttpClient.newBuilder().writeTimeout(10, TimeUnit.SECONDS);
         /**

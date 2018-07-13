@@ -28,6 +28,7 @@ import com.zb.wyd.activity.LiveActivity;
 import com.zb.wyd.activity.LoginActivity;
 import com.zb.wyd.activity.PhotoDetailActivity;
 import com.zb.wyd.activity.VideoPlayActivity;
+import com.zb.wyd.activity.WebViewActivity;
 import com.zb.wyd.adapter.CataAdapter;
 import com.zb.wyd.adapter.SelfieAdapter;
 import com.zb.wyd.entity.AdInfo;
@@ -99,7 +100,7 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
     private Unbinder unbinder;
     private int pn = 1;
 
-    private              String cta_id                = "0";
+    private              String photoTag                = "0";
     private              String sort                  = "new";
     private static final String GET_AD_LIST           = "get_ad_list";
     private static final String GET_CATA_LIST         = "get_cata_list";
@@ -147,7 +148,7 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
                     cataInfoList.add(0, mCataInfo);
                     if (!cataInfoList.isEmpty())
                     {
-                        cta_id = cataInfoList.get(0).getId();
+                        photoTag = cataInfoList.get(0).getId();
                         cataInfoList.get(0).setSelected(true);
                     }
 
@@ -321,7 +322,9 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
                     }
                 }
                 mCataAdapter.notifyDataSetChanged();
-                cta_id = cataInfoList.get(position).getId();
+                photoTag = cataInfoList.get(position).getName();
+                pn=1;
+                selfieInfoList.clear();
                 mHandler.sendEmptyMessage(GET_PHOTO_LIST_CODE);
             }
         });
@@ -387,7 +390,7 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
     {
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("pn", pn + "");
-        valuePairs.put("cta_id", cta_id);
+        valuePairs.put("tag", photoTag);
         valuePairs.put("sort", sort);
         valuePairs.put("num", "20");
         DataRequest.instance().request(getActivity(), Urls.getPhotoListUrl(), this, HttpRequest.POST, GET_PHPTO_LIST, valuePairs,
@@ -398,7 +401,7 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
     private void getAdList()
     {
         Map<String, String> valuePairs = new HashMap<>();
-        valuePairs.put("pos_id", "1");
+        valuePairs.put("pos_id", "3");
         DataRequest.instance().request(getActivity(), Urls.getAdListUrl(), this, HttpRequest.POST, GET_AD_LIST, valuePairs,
                 new AdInfoListHandler());
     }
@@ -491,6 +494,14 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
                         String id = mAdInfo.getLink().replace("photo://", "");
                         startActivity(new Intent(getActivity(), PhotoDetailActivity.class).putExtra("biz_id", id));
                     }
+                    else if (mAdInfo.getLink().startsWith("http"))
+                    {
+                        startActivity(new Intent(getActivity(), WebViewActivity.class)
+                                .putExtra(WebViewActivity.EXTRA_TITLE, mAdInfo.getAname())
+                                .putExtra(WebViewActivity.IS_SETTITLE, true)
+                                .putExtra(WebViewActivity.EXTRA_URL, mAdInfo.getLink())
+                        );
+                    }
                 }
             }
         });
@@ -501,11 +512,11 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
     public void onDestroy()
     {
         super.onDestroy();
-        if (null != unbinder)
-        {
-            unbinder.unbind();
-            unbinder = null;
-        }
+//        if (null != unbinder)
+//        {
+//            unbinder.unbind();
+//            unbinder = null;
+//        }
     }
 
 
@@ -575,7 +586,9 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
                     mCataAdapter.notifyDataSetChanged();
 
 
-                    cta_id = cataInfoList.get(position).getId();
+                    photoTag = cataInfoList.get(position).getName();
+                    pn=1;
+                    selfieInfoList.clear();
                     mHandler.sendEmptyMessage(GET_PHOTO_LIST_CODE);
                 }
             });

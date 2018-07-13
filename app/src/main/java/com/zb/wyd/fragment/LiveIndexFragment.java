@@ -25,6 +25,7 @@ import com.zb.wyd.activity.LoginActivity;
 import com.zb.wyd.activity.PhotoDetailActivity;
 import com.zb.wyd.activity.VideoPlayActivity;
 import com.zb.wyd.activity.VidoeListActivity;
+import com.zb.wyd.activity.WebViewActivity;
 import com.zb.wyd.adapter.NewAdapter;
 import com.zb.wyd.adapter.RecommendAdapter;
 import com.zb.wyd.entity.AdInfo;
@@ -98,6 +99,7 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
     private static final int GET_HOT_LIVE_FAIL  = 0X14;
 
     private static final int GET_AD_LIST_SUCCESS = 0x04;
+
 
     @SuppressLint("HandlerLeak")
     private BaseHandler mHandler = new BaseHandler(getActivity())
@@ -411,6 +413,14 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
                     {
                         String id = mAdInfo.getLink().replace("photo://", "");
                         startActivity(new Intent(getActivity(), PhotoDetailActivity.class).putExtra("biz_id", id));
+                    }
+                    else if (mAdInfo.getLink().startsWith("http"))
+                    {
+                        startActivity(new Intent(getActivity(), WebViewActivity.class)
+                                .putExtra(WebViewActivity.EXTRA_TITLE, mAdInfo.getAname())
+                                .putExtra(WebViewActivity.IS_SETTITLE, true)
+                                .putExtra(WebViewActivity.EXTRA_URL, mAdInfo.getLink())
+                        );
                     }
                 }
             }

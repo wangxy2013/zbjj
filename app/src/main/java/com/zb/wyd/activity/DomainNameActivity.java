@@ -14,6 +14,7 @@ import com.zb.wyd.utils.ToastUtil;
 import com.zb.wyd.widget.statusbar.StatusBarUtil;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * 描述：一句话简单描述
@@ -28,6 +29,8 @@ public class DomainNameActivity extends BaseActivity
     EditText  etName;
     @BindView(R.id.btn_submit)
     Button    btnSubmit;
+    @BindView(R.id.tv_email)
+    TextView  tvEmail;
 
     @Override
     protected void initData()
@@ -46,7 +49,8 @@ public class DomainNameActivity extends BaseActivity
     @Override
     protected void initEvent()
     {
-        ivBack.setOnClickListener(new View.OnClickListener() {
+        ivBack.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View v)
             {
@@ -54,19 +58,20 @@ public class DomainNameActivity extends BaseActivity
             }
         });
 
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
+        btnSubmit.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View v)
             {
                 String name = etName.getText().toString();
-                if(StringUtils.stringIsEmpty(name))
+                if (StringUtils.stringIsEmpty(name))
                 {
-                    ToastUtil.show(DomainNameActivity.this,"请输入正确的域名");
+                    ToastUtil.show(DomainNameActivity.this, "请输入正确的域名");
                     return;
                 }
 
                 ConfigManager.instance().setDomainName(name);
-                ToastUtil.show(DomainNameActivity.this,"保存成功!");
+                ToastUtil.show(DomainNameActivity.this, "保存成功!");
                 finish();
             }
         });
@@ -76,7 +81,9 @@ public class DomainNameActivity extends BaseActivity
     protected void initViewData()
     {
         tvTitle.setText("域名设置");
+        tvEmail.setText("防丢邮箱,发邮件到"+ConfigManager.instance().getSystemEmail()+"获取最新地址");
     }
+
 
 
 }

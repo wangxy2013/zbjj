@@ -133,6 +133,7 @@ public class LoginActivity extends BaseActivity implements IRequestListener
     protected void initViewData()
     {
         ImageLoader.getInstance().displayImage(ConfigManager.instance().getBgLogin(), ivBg);
+        tvEmail.setText("防丢邮箱,发邮件到"+ConfigManager.instance().getSystemEmail()+"获取最新地址");
     }
 
     @Override

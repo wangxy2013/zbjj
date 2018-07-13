@@ -4,15 +4,16 @@ import org.json.JSONObject;
 
 public class VersionInfo
 {
-    public String version;//版本号
-    public String version_desc;//版本描述
-    public String version_name;//
-    public String link;//下载链接
-    public String forcedup;//是否强制升级。
-    public String add_time;
-    public String update_time;
-    public String del_flag;
-
+    private String version;//版本号
+    private String version_desc;//版本描述
+    private String version_name;//
+    private String link;//下载链接
+    private String forcedup;//是否强制升级。
+    private String add_time;
+    private String update_time;
+    private String del_flag;
+    private String text;
+    private boolean reg_closed;
 
     private String bg_login;//
     private String bg_startup;//
@@ -26,7 +27,7 @@ public class VersionInfo
         this.bg_login = obj.optString("bg_login");
         this.bg_startup = obj.optString("bg_startup");
         this.qq = obj.optString("qq");
-        this.emai = obj.optString("emai1");
+        this.emai = obj.optString("email");
         this.version = obj.optString("version");
         this.version_desc = obj.optString("version_desc");
         this.version_name = obj.optString("version_name");
@@ -36,6 +37,8 @@ public class VersionInfo
         this.update_time = obj.optString("update_time");
         this.del_flag = obj.optString("del_flag");
         this.crossfire = obj.optString("crossfire");
+        this.text = obj.optString("text");
+        this.reg_closed = obj.optBoolean("reg_close");
         forcedup = "1";
 
     }
@@ -168,5 +171,25 @@ public class VersionInfo
     public void setEmai(String emai)
     {
         this.emai = emai;
+    }
+
+    public String getText()
+    {
+        return text;
+    }
+
+    public void setText(String text)
+    {
+        this.text = text;
+    }
+
+    public boolean isReg_closed()
+    {
+        return reg_closed;
+    }
+
+    public void setReg_closed(boolean reg_closed)
+    {
+        this.reg_closed = reg_closed;
     }
 }

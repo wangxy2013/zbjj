@@ -51,7 +51,7 @@ public class ConfigManager
 
     private static final String CROSSFIRE  = "crossfire";
     private static final String REG_CLOSED = "reg_closed";
-
+    private static final String IP_LOOK_UP = "ip_look_up";
     /**
      * 返回实例
      *
@@ -310,6 +310,14 @@ public class ConfigManager
         return mSharedPreferences.getBoolean(REG_CLOSED, false);
     }
 
+    public void setIpLookUp(String str)
+    {
+        mSharedPreferences.edit().putString(IP_LOOK_UP, str).commit();
+    }
 
+    public String getIpLookUp()
+    {
+        return mSharedPreferences.getString(IP_LOOK_UP, "");
+    }
 }
 

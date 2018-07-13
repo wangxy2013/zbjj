@@ -99,14 +99,16 @@ public class MainActivity extends BaseActivity
 
         EasyTap.wake(this);
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+                && ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
         {
 
             if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.READ_PHONE_STATE))
             {
                 ToastUtil.show(MainActivity.this, "您已经拒绝过一次");
             }
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_EXTERNAL_STORAGE},
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_PHONE_STATE, Manifest.permission
+                            .READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     READ_PHONE_STATE_PERMISSIONS_REQUEST_CODE);
         }
         else
@@ -124,7 +126,11 @@ public class MainActivity extends BaseActivity
         switch (requestCode)
         {
             case READ_PHONE_STATE_PERMISSIONS_REQUEST_CODE:
-                if (grantResults.length > 0&&grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[1] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[2] == PackageManager.PERMISSION_GRANTED
+                        )
                 {
                     initMain();
                 }
@@ -181,7 +187,8 @@ public class MainActivity extends BaseActivity
     {
         if ((keyCode == KeyEvent.KEYCODE_BACK))
         {
-            DialogUtils.showToastDialog2Button(MainActivity.this, "是否退出APP", new View.OnClickListener() {
+            DialogUtils.showToastDialog2Button(MainActivity.this, "是否退出APP", new View.OnClickListener()
+            {
                 @Override
                 public void onClick(View v)
                 {

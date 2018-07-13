@@ -14,7 +14,7 @@ public class VersionInfo
     private String del_flag;
     private String text;
     private boolean reg_closed;
-
+    private String iplookup;
     private String bg_login;//
     private String bg_startup;//
     private String qq;//
@@ -24,6 +24,7 @@ public class VersionInfo
     public VersionInfo(JSONObject obj)
     {
 
+        this.iplookup = obj.optString("iplookup");
         this.bg_login = obj.optString("bg_login");
         this.bg_startup = obj.optString("bg_startup");
         this.qq = obj.optString("qq");
@@ -191,5 +192,15 @@ public class VersionInfo
     public void setReg_closed(boolean reg_closed)
     {
         this.reg_closed = reg_closed;
+    }
+
+    public String getIplookup()
+    {
+        return iplookup;
+    }
+
+    public void setIplookup(String iplookup)
+    {
+        this.iplookup = iplookup;
     }
 }

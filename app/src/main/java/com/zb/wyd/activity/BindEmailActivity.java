@@ -102,6 +102,7 @@ public class BindEmailActivity extends BaseActivity implements IRequestListener
                     ResultHandler resultHandler = (ResultHandler) msg.obj;
                     token = resultHandler.getContent();
                     etEmail.setEnabled(false);
+                    mHandler.sendEmptyMessage(UPDATE_CODE_VIEW);
                     break;
 
             }
@@ -180,7 +181,6 @@ public class BindEmailActivity extends BaseActivity implements IRequestListener
             }
 
             tvCode.setEnabled(false);
-            mHandler.sendEmptyMessage(UPDATE_CODE_VIEW);
 
             showProgressDialog();
             Map<String, String> valuePairs = new HashMap<>();

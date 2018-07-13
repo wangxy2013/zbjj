@@ -38,6 +38,7 @@ import com.zb.wyd.json.LocationInfoHandler;
 import com.zb.wyd.json.PhotoInfoHandler;
 import com.zb.wyd.json.ResultHandler;
 import com.zb.wyd.listener.MyItemClickListener;
+import com.zb.wyd.utils.ConfigManager;
 import com.zb.wyd.utils.ConstantUtil;
 import com.zb.wyd.utils.DialogUtils;
 import com.zb.wyd.utils.ImageUtils;
@@ -189,7 +190,7 @@ public class AddPhotoActivity extends BaseActivity implements IRequestListener
 
                 case GET_LOCATION_CODE:
                     Map<String, String> valuePairs = new HashMap<>();
-                    DataRequest.instance().request(AddPhotoActivity.this, Urls.getIplookupUrl(), AddPhotoActivity.this, HttpRequest.POST, GET_LOCATION,
+                    DataRequest.instance().request(AddPhotoActivity.this, ConfigManager.instance().getIpLookUp(), AddPhotoActivity.this, HttpRequest.POST, GET_LOCATION,
                             valuePairs,
                             new LocationInfoHandler());
                     break;

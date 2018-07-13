@@ -131,6 +131,7 @@ public class RecoveryPwdActivity extends BaseActivity implements IRequestListene
                     ResultHandler resultHandler = (ResultHandler) msg.obj;
                     token = resultHandler.getContent();
                     etAccount.setEnabled(false);
+                    mHandler.sendEmptyMessage(UPDATE_CODE_VIEW);
                     break;
 
             }
@@ -223,8 +224,6 @@ public class RecoveryPwdActivity extends BaseActivity implements IRequestListene
             }
 
             tvCode.setEnabled(false);
-            mHandler.sendEmptyMessage(UPDATE_CODE_VIEW);
-
             showProgressDialog();
             Map<String, String> valuePairs = new HashMap<>();
             valuePairs.put("email", email);

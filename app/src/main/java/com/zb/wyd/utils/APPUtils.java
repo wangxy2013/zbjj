@@ -151,7 +151,7 @@ public class APPUtils
      */
     public static String getVersionName(Context mContext)
     {
-        String version = "1.0.0";
+        String version = "2.2.2";
         if (null != mContext)
         {
             try
@@ -167,7 +167,7 @@ public class APPUtils
             }
         }
 
-
+        LogUtil.e("TAG", "version--->" + version);
         return version;
     }
 
@@ -184,15 +184,15 @@ public class APPUtils
     {
         String id = "";
 
-            TelephonyManager mTelephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-            if (null != mTelephony && mTelephony.getDeviceId() != null)
-            {
-                id = mTelephony.getDeviceId();
-            }
-            else
-            {
-                id = Settings.Secure.getString(context.getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
-            }
+        TelephonyManager mTelephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        if (null != mTelephony && mTelephony.getDeviceId() != null)
+        {
+            id = mTelephony.getDeviceId();
+        }
+        else
+        {
+            id = Settings.Secure.getString(context.getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        }
 
 
         //android.telephony.TelephonyManager

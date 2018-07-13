@@ -52,10 +52,10 @@ public class WebViewActivity extends Activity
         mWebView = (WebView) findViewById(R.id.mWebView);
         mWebView.getSettings().setUseWideViewPort(true);
         mWebView.getSettings().setLoadWithOverviewMode(true);
-        mWebView.getSettings().setBuiltInZoomControls(true);
-        mWebView.getSettings().setSupportZoom(true);
+        mWebView.getSettings().setBuiltInZoomControls(false);
+        mWebView.getSettings().setSupportZoom(false);
         mWebView.getSettings().setJavaScriptEnabled(true);
-        mWebView.addJavascriptInterface(new JSService(), "Svmuu");
+        mWebView.addJavascriptInterface(new JSService(), "object");
         mWebView.setWebViewClient(new WebViewClient()
                                   {
                                       @Override
@@ -85,13 +85,13 @@ public class WebViewActivity extends Activity
                                           {
                                               return super.shouldOverrideUrlLoading(view, url);
                                           }
-//                                          else
-//                                          {
-//                                              Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-//                                              startActivity(intent);
-//                                              finish();
-//                                              return true;
-//                                          }
+                                          //                                          else
+                                          //                                          {
+                                          //                                              Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                                          //                                              startActivity(intent);
+                                          //                                              finish();
+                                          //                                              return true;
+                                          //                                          }
                                           return true;
                                       }
 
@@ -195,13 +195,10 @@ public class WebViewActivity extends Activity
         @JavascriptInterface
         public void onPayDone()
         {
-            //            startActivity(new Intent(WebViewActivity.this, MainActivityEx.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-            //            ContextUtil.toast_debug("onPayDone");
         }
 
         public void onPayFail()
         {
-            //            ContextUtil.toast_debug("onPayFail");
         }
 
         @JavascriptInterface

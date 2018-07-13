@@ -79,11 +79,10 @@
                     android:paddingRight="@dimen/dm_12"
                     android:paddingTop="@dimen/dm_3"
                     android:text="身份"
-                    android:visibility="gone"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/t14"/>
+                    android:textSize="@dimen/t14"
+                    android:visibility="gone"/>
                 <TextView
-                    android:visibility="gone"
                     android:id="@+id/tv_user_sex"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -95,7 +94,8 @@
                     android:paddingTop="@dimen/dm_3"
                     android:text="性别"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/t14"/>
+                    android:textSize="@dimen/t14"
+                    android:visibility="gone"/>
                 <TextView
                     android:id="@+id/tv_user_level"
                     android:layout_width="wrap_content"
@@ -160,6 +160,50 @@
             android:layout_toLeftOf="@+id/iv_arrow1"
             android:text="0"
             android:textColor="@color/blackB"
+            android:textSize="@dimen/t14"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_collection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dm_1"
+        android:background="@color/white"
+        android:padding="@dimen/dm_10">
+
+        <ImageView
+            android:id="@+id/iv_collection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_collection"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dm_15"
+            android:layout_toRightOf="@+id/iv_collection"
+            android:text="我的收藏"
+            android:textColor="@color/blackB"
+            android:textSize="@dimen/t14"/>
+
+        <ImageView
+            android:id="@+id/iv_arrow4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_arrow_right_48"/>
+
+        <TextView
+            android:id="@+id/tv_collection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dm_5"
+            android:layout_toLeftOf="@+id/iv_arrow4"
+            android:textColor="@color/redA"
             android:textSize="@dimen/t14"/>
     </RelativeLayout>
     <RelativeLayout
@@ -252,50 +296,7 @@
             android:textColor="@color/redA"
             android:textSize="@dimen/t14"/>
     </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/rl_collection"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dm_1"
-        android:background="@color/white"
-        android:padding="@dimen/dm_10">
 
-        <ImageView
-            android:id="@+id/iv_collection"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_collection"/>
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/dm_15"
-            android:layout_toRightOf="@+id/iv_collection"
-            android:text="我的收藏"
-            android:textColor="@color/blackB"
-            android:textSize="@dimen/t14"/>
-
-        <ImageView
-            android:id="@+id/iv_arrow4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_arrow_right_48"/>
-
-        <TextView
-            android:id="@+id/tv_collection"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/dm_5"
-            android:layout_toLeftOf="@+id/iv_arrow4"
-            android:textColor="@color/redA"
-            android:textSize="@dimen/t14"/>
-    </RelativeLayout>
     <RelativeLayout
         android:id="@+id/rl_customer"
         android:layout_width="match_parent"

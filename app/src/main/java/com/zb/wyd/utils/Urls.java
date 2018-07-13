@@ -242,6 +242,9 @@ public class Urls
     }
 
 
-
+    public static String getUserForgotUrl()
+    {
+        return  ConfigManager.instance().getDomainName() + "user/forgot";
+    }
 }
 

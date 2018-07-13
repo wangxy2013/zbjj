@@ -5,9 +5,10 @@
               android:gravity="center"
               android:orientation="vertical">
 
-    <TextView
+    <com.zb.wyd.widget.AutoFitTextView
         android:id="@+id/tv_tab_name"
         android:layout_width="wrap_content"
+        android:maxLines="1"
         android:layout_height="wrap_content"
         android:textColor="@drawable/main_tab_font_selector"
         android:textSize="16sp"/>

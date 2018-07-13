@@ -29,6 +29,7 @@ import com.zb.wyd.activity.LoginActivity;
 import com.zb.wyd.activity.MainActivity;
 import com.zb.wyd.activity.MessageListActivity;
 import com.zb.wyd.activity.MyCollectionActivity;
+import com.zb.wyd.activity.RecoveryPwdActivity;
 import com.zb.wyd.activity.UserDetailActivity;
 import com.zb.wyd.activity.WealthListActivity;
 import com.zb.wyd.entity.UserInfo;
@@ -293,12 +294,12 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
                     startActivity(new Intent(getActivity(), BindEmailActivity.class));
 
                 }
-                else
-                {
-                    startActivity(new Intent(getActivity(), LoginActivity.class));
-                }
-            }
 
+            }
+            else
+            {
+                startActivity(new Intent(getActivity(), LoginActivity.class));
+            }
         }
         else if (v == rlMessage)
         {
@@ -348,6 +349,10 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
                     {
                         startActivity(intent);
                     }
+                }
+                else
+                {
+                    ToastUtil.show(getActivity(),"请先安装QQ");
                 }
             }
         }

@@ -14,7 +14,8 @@ import java.lang.reflect.Method;
 /**
  * Created by xiongxuesong-pc on 2016/5/15.
  */
-public class StatusBarUtil {
+public class StatusBarUtil
+{
 
     private static SystemBarTintManager tintManager;
 
@@ -23,8 +24,10 @@ public class StatusBarUtil {
      *
      * @param activity
      */
-    public static void transparencyBar(Activity activity) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+    public static void transparencyBar(Activity activity)
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+        {
             Window window = activity.getWindow();
             window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -37,13 +40,16 @@ public class StatusBarUtil {
      * @param activity
      * @param colorId
      */
-    public static void setStatusBarColor(Activity activity, int colorId) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+    public static void setStatusBarColor(Activity activity, int colorId)
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+        {
             //使用SystemBarTint库使4.4版本状态栏变色，需要先将状态栏设置为透明
             transparencyBar(activity);
             ViewGroup contentFrameLayout = (ViewGroup) activity.findViewById(Window.ID_ANDROID_CONTENT);
             View parentView = contentFrameLayout.getChildAt(0);
-            if (parentView != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            if (parentView != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+            {
                 parentView.setFitsSystemWindows(true);
             }
             tintManager = new SystemBarTintManager(activity);
@@ -65,19 +71,28 @@ public class StatusBarUtil {
      * @param activity
      * @param flag_fullscreen true：添加全屏   false：清除全屏
      */
-    public static void setFitsSystemWindows(Activity activity, boolean flag_fullscreen) {
+    public static void setFitsSystemWindows(Activity activity, boolean flag_fullscreen)
+    {
         ViewGroup contentFrameLayout = (ViewGroup) activity.findViewById(Window.ID_ANDROID_CONTENT);
         View parentView = contentFrameLayout.getChildAt(0);
-        if (flag_fullscreen) {
+        if (flag_fullscreen)
+        {
             activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);//全屏
-        } else {
+        }
+        else
+        {
             activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);//清除全屏
         }
-        if (parentView != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            if (tintManager != null) {
-                if (flag_fullscreen) {
+        if (parentView != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+        {
+            if (tintManager != null)
+            {
+                if (flag_fullscreen)
+                {
                     tintManager.setStatusBarTintEnabled(false);
-                } else {
+                }
+                else
+                {
                     tintManager.setStatusBarTintEnabled(true);
                 }
             }
@@ -85,20 +100,22 @@ public class StatusBarUtil {
     }
 
     /**
-     *
      * @param activity
-     * @param navigationBarState    navigationBar是否可见，true：可见   false：不可见
+     * @param navigationBarState navigationBar是否可见，true：可见   false：不可见
      */
-    public static void setSystemUI(Activity activity, boolean navigationBarState){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+    public static void setSystemUI(Activity activity, boolean navigationBarState)
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+        {
             Window window = activity.getWindow();
-            if(navigationBarState){
+            if (navigationBarState)
+            {
                 window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
                         | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
                 //添加Flag把状态栏设为可绘制模式
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
                 int uiFlags = 0;
-//                uiFlags |= View.SYSTEM_UI_FLAG_LAYOUT_STABLE;//隐藏NavigationBar时会留下空白
+                //                uiFlags |= View.SYSTEM_UI_FLAG_LAYOUT_STABLE;//隐藏NavigationBar时会留下空白
                 uiFlags |= View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
                 uiFlags |= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
                 uiFlags |= View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
@@ -106,7 +123,9 @@ public class StatusBarUtil {
                 window.getDecorView().setSystemUiVisibility(uiFlags);
                 window.setNavigationBarColor(Color.TRANSPARENT);
                 window.setStatusBarColor(Color.TRANSPARENT);
-            }else {
+            }
+            else
+            {
                 window.getDecorView().setSystemUiVisibility(0);
             }
         }
@@ -120,23 +139,34 @@ public class StatusBarUtil {
      * @param dark     是否把状态栏字体及图标颜色设置为深色
      * @return 1:MIUUI 2:Flyme 3:android6.0
      */
-    public static int StatusBarLightMode(Activity activity, boolean dark) {
+    public static int StatusBarLightMode(Activity activity, boolean dark)
+    {
         int result = 0;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            if (MIUISetStatusBarLightMode(activity.getWindow(), dark)) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+        {
+            if (MIUISetStatusBarLightMode(activity.getWindow(), dark))
+            {
                 result = 1;
-            } else if (FlymeSetStatusBarLightMode(activity.getWindow(), dark)) {
+            }
+            else if (FlymeSetStatusBarLightMode(activity.getWindow(), dark))
+            {
                 result = 2;
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            }
+            else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            {
                 View decorView = activity.getWindow().getDecorView();
                 int oldVis = decorView.getSystemUiVisibility();
                 int newVis = oldVis;
-                if (dark) {
+                if (dark)
+                {
                     newVis |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-                } else {
+                }
+                else
+                {
                     newVis &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
                 }
-                if (newVis != oldVis) {
+                if (newVis != oldVis)
+                {
                     decorView.setSystemUiVisibility(newVis);
                 }
                 result = 3;
@@ -153,10 +183,13 @@ public class StatusBarUtil {
      * @param dark   是否把状态栏字体及图标颜色设置为深色
      * @return boolean 成功执行返回true
      */
-    public static boolean FlymeSetStatusBarLightMode(Window window, boolean dark) {
+    public static boolean FlymeSetStatusBarLightMode(Window window, boolean dark)
+    {
         boolean result = false;
-        if (window != null) {
-            try {
+        if (window != null)
+        {
+            try
+            {
                 WindowManager.LayoutParams lp = window.getAttributes();
                 Field darkFlag = WindowManager.LayoutParams.class
                         .getDeclaredField("MEIZU_FLAG_DARK_STATUS_BAR_ICON");
@@ -166,15 +199,19 @@ public class StatusBarUtil {
                 meizuFlags.setAccessible(true);
                 int bit = darkFlag.getInt(null);
                 int value = meizuFlags.getInt(lp);
-                if (dark) {
+                if (dark)
+                {
                     value |= bit;
-                } else {
+                }
+                else
+                {
                     value &= ~bit;
                 }
                 meizuFlags.setInt(lp, value);
                 window.setAttributes(lp);
                 result = true;
-            } catch (Exception e) {
+            } catch (Exception e)
+            {
 
             }
         }
@@ -188,23 +225,30 @@ public class StatusBarUtil {
      * @param dark   是否把状态栏字体及图标颜色设置为深色
      * @return boolean 成功执行返回true
      */
-    public static boolean MIUISetStatusBarLightMode(Window window, boolean dark) {
+    public static boolean MIUISetStatusBarLightMode(Window window, boolean dark)
+    {
         boolean result = false;
-        if (window != null) {
+        if (window != null)
+        {
             Class clazz = window.getClass();
-            try {
+            try
+            {
                 int darkModeFlag = 0;
                 Class layoutParams = Class.forName("android.view.MiuiWindowManager$LayoutParams");
                 Field field = layoutParams.getField("EXTRA_FLAG_STATUS_BAR_DARK_MODE");
                 darkModeFlag = field.getInt(layoutParams);
                 Method extraFlagField = clazz.getMethod("setExtraFlags", int.class, int.class);
-                if (dark) {
+                if (dark)
+                {
                     extraFlagField.invoke(window, darkModeFlag, darkModeFlag);//状态栏透明且黑色字体
-                } else {
+                }
+                else
+                {
                     extraFlagField.invoke(window, 0, darkModeFlag);//清除黑色字体
                 }
                 result = true;
-            } catch (Exception e) {
+            } catch (Exception e)
+            {
 
             }
         }
@@ -218,17 +262,24 @@ public class StatusBarUtil {
      * @param activity
      * @param type     1:MIUUI 2:Flyme 3:android6.0
      */
-    public static void StatusBarLightMode(Activity activity, int type) {
-        if (type == 1) {
+    public static void StatusBarLightMode(Activity activity, int type)
+    {
+        if (type == 1)
+        {
             MIUISetStatusBarLightMode(activity.getWindow(), true);
-        } else if (type == 2) {
+        }
+        else if (type == 2)
+        {
             FlymeSetStatusBarLightMode(activity.getWindow(), true);
-        } else if (type == 3) {
+        }
+        else if (type == 3)
+        {
             View decorView = activity.getWindow().getDecorView();
             int oldVis = decorView.getSystemUiVisibility();
             int newVis = oldVis;
             newVis |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-            if (newVis != oldVis) {
+            if (newVis != oldVis)
+            {
                 decorView.setSystemUiVisibility(newVis);
             }
         }
@@ -238,12 +289,18 @@ public class StatusBarUtil {
     /**
      * 清除MIUI或flyme或6.0以上版本状态栏黑色字体，即白色字体
      */
-    public static void StatusBarDarkMode(Activity activity, int type) {
-        if (type == 1) {
+    public static void StatusBarDarkMode(Activity activity, int type)
+    {
+        if (type == 1)
+        {
             MIUISetStatusBarLightMode(activity.getWindow(), false);
-        } else if (type == 2) {
+        }
+        else if (type == 2)
+        {
             FlymeSetStatusBarLightMode(activity.getWindow(), false);
-        } else if (type == 3) {
+        }
+        else if (type == 3)
+        {
             activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
         }
 

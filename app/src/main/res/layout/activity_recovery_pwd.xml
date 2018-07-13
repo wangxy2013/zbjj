@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
     <LinearLayout
+        android:layout_marginTop="@dimen/dm_15"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -91,7 +92,7 @@
                     android:layout_width="@dimen/dm_120"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:background="@drawable/btn_login_frame_45dp"
+                    android:background="@drawable/code_bg_selector"
                     android:gravity="center"
                     android:padding="@dimen/dm_13"
                     android:text="发送验证码"

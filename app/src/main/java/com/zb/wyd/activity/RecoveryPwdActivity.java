@@ -74,11 +74,13 @@ public class RecoveryPwdActivity extends BaseActivity implements IRequestListene
     ImageView    ivBg;
 
 
+    private boolean isFitst = true;
+
     private int time = 60;
     private int    count;
     private String token;
-
-    private static final String BIND_EMAIL             = "bind_email";
+    private String pwd;
+    private static final String USER_FORGOT            = "user_forgot";
     private static final String GET_EMAIL_CODE         = "get_email_code";
     private static final int    REQUEST_SUCCESS        = 0x01;
     private static final int    REQUEST_FAIL           = 0x02;
@@ -95,6 +97,9 @@ public class RecoveryPwdActivity extends BaseActivity implements IRequestListene
             switch (msg.what)
             {
                 case REQUEST_SUCCESS:
+                    ToastUtil.show(RecoveryPwdActivity.this, "密码找回成功");
+                    ConfigManager.instance().setUserPwd(pwd);
+                    finish();
                     break;
 
 
@@ -131,6 +136,7 @@ public class RecoveryPwdActivity extends BaseActivity implements IRequestListene
             }
         }
     };
+
     @Override
     protected void initData()
     {
@@ -141,8 +147,8 @@ public class RecoveryPwdActivity extends BaseActivity implements IRequestListene
     protected void initViews(Bundle savedInstanceState)
     {
         setContentView(R.layout.activity_recovery_pwd);
-        StatusBarUtil.transparencyBar(this);
-        StatusBarUtil.StatusBarLightMode(this, false);
+        StatusBarUtil.transparencyBar(RecoveryPwdActivity.this);
+        StatusBarUtil.StatusBarLightMode(RecoveryPwdActivity.this, false);
     }
 
     @Override
@@ -167,7 +173,7 @@ public class RecoveryPwdActivity extends BaseActivity implements IRequestListene
             @Override
             public void onFocusChange(View v, boolean hasFocus)
             {
-                ivAccount.setSelected(hasFocus);
+                ivInvitation.setSelected(hasFocus);
             }
         });
 
@@ -202,11 +208,11 @@ public class RecoveryPwdActivity extends BaseActivity implements IRequestListene
     public void onClick(View v)
     {
         super.onClick(v);
-        if(v == ivBack)
+        if (v == ivBack)
         {
             finish();
         }
-        else if(v == tvCode)
+        else if (v == tvCode)
         {
             String email = etAccount.getText().toString();
 
@@ -222,11 +228,88 @@ public class RecoveryPwdActivity extends BaseActivity implements IRequestListene
             showProgressDialog();
             Map<String, String> valuePairs = new HashMap<>();
             valuePairs.put("email", email);
-            valuePairs.put("action", "email");
+            valuePairs.put("action", "forgot");
             DataRequest.instance().request(this, Urls.getEmailCodeUrl(), this, HttpRequest.POST, GET_EMAIL_CODE, valuePairs,
                     new ResultHandler());
         }
-        else  if(v == llQq)
+        else if (v == btnSubmit)
+        {
+            if (isFitst)
+            {
+                String email = etAccount.getText().toString();
+
+                if (!StringUtils.checkEmail(email))
+                {
+                    ToastUtil.show(this, "请输入正确的邮箱");
+                    return;
+                }
+
+                String code = etInvitation.getText().toString();
+
+                if (TextUtils.isEmpty(code))
+                {
+                    ToastUtil.show(this, "请输入验证码");
+                    return;
+
+                }
+                llFirst.setVisibility(View.GONE);
+                llNext.setVisibility(View.VISIBLE);
+                isFitst = false;
+                btnSubmit.setText("提交");
+
+            }
+            else
+            {
+
+                String email = etAccount.getText().toString();
+
+                if (!StringUtils.checkEmail(email))
+                {
+                    ToastUtil.show(this, "请输入正确的邮箱");
+                    return;
+                }
+
+
+                String code = etInvitation.getText().toString();
+
+                if (TextUtils.isEmpty(code))
+                {
+                    if (!StringUtils.checkEmail(email))
+                    {
+                        ToastUtil.show(this, "请输入验证码");
+                        return;
+                    }
+                }
+
+                pwd = etPwd.getText().toString();
+                String pwd1 = etPwd1.getText().toString();
+
+
+                if (TextUtils.isEmpty(pwd) || pwd.length() < 8)
+                {
+                    ToastUtil.show(RecoveryPwdActivity.this, "请输入8-16位密码");
+                    return;
+                }
+
+                if (!pwd.equals(pwd1))
+                {
+                    ToastUtil.show(RecoveryPwdActivity.this, "请保持2次密码输入一致");
+                    return;
+                }
+
+                showProgressDialog();
+                Map<String, String> valuePairs = new HashMap<>();
+                valuePairs.put("email", email);
+                valuePairs.put("vcode", code);
+                valuePairs.put("token", token);
+                valuePairs.put("passwd", pwd);
+                valuePairs.put("repasswd", pwd);
+                DataRequest.instance().request(this, Urls.getUserForgotUrl(), this, HttpRequest.POST, USER_FORGOT, valuePairs,
+                        new ResultHandler());
+            }
+
+        }
+        else if (v == llQq)
         {
             if (!TextUtils.isEmpty(ConfigManager.instance().getSystemQq()))
             {
@@ -242,6 +325,10 @@ public class RecoveryPwdActivity extends BaseActivity implements IRequestListene
                         startActivity(intent);
                     }
                 }
+                else
+                {
+                    ToastUtil.show(RecoveryPwdActivity.this,"请先安装QQ");
+                }
             }
         }
     }
@@ -255,6 +342,17 @@ public class RecoveryPwdActivity extends BaseActivity implements IRequestListene
             if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
             {
                 mHandler.sendMessage(mHandler.obtainMessage(GET_EMAIL_CODE_SUCCESS, obj));
+            }
+            else
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
+            }
+        }
+        else if (USER_FORGOT.equals(action))
+        {
+            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_SUCCESS, obj));
             }
             else
             {

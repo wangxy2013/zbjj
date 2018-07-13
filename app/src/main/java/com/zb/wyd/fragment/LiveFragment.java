@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.zb.wyd.R;
 import com.zb.wyd.activity.SearchActivity;
 import com.zb.wyd.adapter.MyViewPagerAdapter;
+import com.zb.wyd.widget.AutoFitTextView;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -170,11 +171,11 @@ public class LiveFragment extends BaseFragment
 
     class ViewHolder
     {
-        TextView tvTabName;
+        AutoFitTextView tvTabName;
 
         public ViewHolder(View tabView)
         {
-            tvTabName = (TextView) tabView.findViewById(R.id.tv_tab_name);
+            tvTabName = (AutoFitTextView) tabView.findViewById(R.id.tv_tab_name);
         }
     }
 

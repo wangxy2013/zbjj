@@ -4,15 +4,20 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zb.wyd.R;
 import com.zb.wyd.adapter.CommentAdapter;
 import com.zb.wyd.adapter.PhotoAdapter;
@@ -21,6 +26,7 @@ import com.zb.wyd.entity.PhotoInfo;
 import com.zb.wyd.entity.PriceInfo;
 import com.zb.wyd.entity.ShareInfo;
 import com.zb.wyd.entity.SignInfo;
+import com.zb.wyd.entity.UserInfo;
 import com.zb.wyd.http.DataRequest;
 import com.zb.wyd.http.HttpRequest;
 import com.zb.wyd.http.IRequestListener;
@@ -36,6 +42,7 @@ import com.zb.wyd.utils.DialogUtils;
 import com.zb.wyd.utils.StringUtils;
 import com.zb.wyd.utils.ToastUtil;
 import com.zb.wyd.utils.Urls;
+import com.zb.wyd.widget.CircleImageView;
 import com.zb.wyd.widget.DividerDecoration;
 import com.zb.wyd.widget.MaxRecyclerView;
 import com.zb.wyd.widget.statusbar.StatusBarUtil;
@@ -78,13 +85,23 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
     TextView        tvMore;
 
     @BindView(R.id.et_content)
-    EditText  etContent;
+    EditText        etContent;
     @BindView(R.id.iv_share)
-    ImageView ivShare;
+    ImageView       ivShare;
     @BindView(R.id.tv_contact)
-    TextView  tvContact;
+    TextView        tvContact;
     @BindView(R.id.tv_location)
-    TextView  tvLocation;
+    TextView        tvLocation;
+    @BindView(R.id.rl_head)
+    RelativeLayout  rlHead;
+    @BindView(R.id.ll_label)
+    LinearLayout    llLabel;
+    @BindView(R.id.iv_user_pic)
+    CircleImageView ivUserPic;
+    @BindView(R.id.tv_user_name)
+    TextView        tvUserName;
+    @BindView(R.id.tv_desc)
+    TextView        tvDesc;
     private List<String>      freePic         = new ArrayList<>();
     private List<String>      chargePic       = new ArrayList<>();
     private List<String>      allPic          = new ArrayList<>();
@@ -92,11 +109,16 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
     private PhotoAdapter   mPhotoAdapter;
     private CommentAdapter mCommentAdapter;
 
+    private int labelBgArr[] = {
+            R.drawable.lable1_3dp, R.drawable.lable2_3dp, R.drawable.lable3_3dp, R.drawable.lable4_3dp, R.drawable.lable5_3dp, R.drawable
+            .lable6_3dp,};
 
     private String biz_id;
     private int pn = 1;
     private PriceInfo priceInfo;
     private String    shareCnontent;
+
+    private String contact;
 
     private static final String GET_TASK_SHARE           = "GET_TASK_SHARE";
     private static final String GET_SHARE                = "GET_SHARE";
@@ -137,23 +159,69 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
                     {
                         priceInfo = photoInfo.getPriceInfo();
                         tvName.setText(photoInfo.getPname());
-                        tvAddTime.setText("发布于：" + photoInfo.getAdd_time());
+                        tvAddTime.setText(photoInfo.getAdd_time());
+                        tvDesc.setText(photoInfo.getDesc());
+
+                        if (!TextUtils.isEmpty(photoInfo.getTags()))
+                        {
+                            String labeArr[] = photoInfo.getTags().split(",");
+
+
+                            for (int i = 0; i < labeArr.length; i++)
+                            {
+                                TextView tvLabel = new TextView(PhotoDetailActivity.this);
+                                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout
+                                        .LayoutParams.WRAP_CONTENT);
+                                params.leftMargin = 10;
+                                tvLabel.setPadding(10, 3, 10, 3);
+                                tvLabel.setText(labeArr[i]);
+                                tvLabel.setTextSize(12);
+                                tvLabel.setTextColor(ContextCompat.getColor(PhotoDetailActivity.this, R.color.white));
+                                tvLabel.setBackgroundResource(labelBgArr[i]);
+                                tvLabel.setLayoutParams(params);
+                                llLabel.addView(tvLabel);
+
+                            }
+                        }
+
+
+                        UserInfo userInfo = photoInfo.getUserInfo();
+
+                        if (null != userInfo)
+                        {
+                            ImageLoader.getInstance().displayImage(userInfo.getUface(), ivUserPic);
+                            tvUserName.setText(userInfo.getUnick());
+                        }
+
                         freePic.clear();
                         freePic.addAll(photoInfo.getFreePic());
                         tvCollectionNum.setText(photoInfo.getFavour_count());
                         chargePic.clear();
                         chargePic.addAll(photoInfo.getChargePic());
 
+
                         if (null != priceInfo)
                         {
                             btnBuy.setVisibility(View.VISIBLE);
-                            tvContact.setText("联系作者");
                         }
                         else
                         {
                             btnBuy.setVisibility(View.GONE);
-                            tvContact.setText(photoInfo.getContact());
+
+
                         }
+
+                        contact = photoInfo.getContact();
+                        if (TextUtils.isEmpty(contact))
+                        {
+                            tvContact.setVisibility(View.GONE);
+                        }
+                        else
+                        {
+                            tvContact.setVisibility(View.VISIBLE);
+                            tvContact.setText("联系作者");
+                        }
+
 
                         tvLocation.setText(photoInfo.getLocation());
 
@@ -265,6 +333,7 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
         tvSend.setOnClickListener(this);
         ivShare.setOnClickListener(this);
         tvMore.setOnClickListener(this);
+        tvContact.setOnClickListener(this);
     }
 
     @Override
@@ -299,6 +368,39 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
         mHandler.sendEmptyMessage(GET_SHARE_CODE);
     }
 
+    private void showBuyDialog()
+    {
+        if (null != priceInfo)
+        {
+            DialogUtils.showLivePriceDialog(PhotoDetailActivity.this, priceInfo, new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+
+                }
+            }, new MyOnClickListener.OnSubmitListener()
+            {
+                @Override
+                public void onSubmit(String content)
+                {
+                    if ("1".equals(content))//兑换
+                    {
+
+                        buyPhoto(priceInfo.getFinger());
+
+
+                    }
+                    else//去做任务
+                    {
+                        sendBroadcast(new Intent(MainActivity.TAB_TASK));
+                        finish();
+                    }
+                }
+            }).show();
+        }
+    }
+
     @Override
     protected void onResume()
     {
@@ -315,35 +417,7 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
         }
         else if (v == btnBuy)
         {
-            if (null != priceInfo)
-            {
-                DialogUtils.showLivePriceDialog(PhotoDetailActivity.this, priceInfo, new View.OnClickListener()
-                {
-                    @Override
-                    public void onClick(View v)
-                    {
-                        finish();
-                    }
-                }, new MyOnClickListener.OnSubmitListener()
-                {
-                    @Override
-                    public void onSubmit(String content)
-                    {
-                        if ("1".equals(content))//兑换
-                        {
-
-                            buyPhoto(priceInfo.getFinger());
-
-
-                        }
-                        else//去做任务
-                        {
-                            sendBroadcast(new Intent(MainActivity.TAB_TASK));
-                            finish();
-                        }
-                    }
-                }).show();
-            }
+            showBuyDialog();
         }
         else if (v == ivCollection)
         {
@@ -368,6 +442,17 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
         {
             pn += 1;
             getCommentList();
+        }
+        else if (v == tvContact)
+        {
+            if ("fee".equals(contact))
+            {
+                showBuyDialog();
+            }
+            else
+            {
+                tvContact.setText(contact);
+            }
         }
     }
 
@@ -541,11 +626,5 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
 
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
+
 }

@@ -28,6 +28,8 @@ public class PhotoInfo
     private String savename;//ALJzcAHDVkwodewfchZV.jpg",
     private String savepath;//\/18\/06\/24\/01\/",
 
+    private UserInfo userInfo;
+
 
     private List<String> freePic   = new ArrayList<>();
     private List<String> chargePic = new ArrayList<>();
@@ -250,5 +252,15 @@ public class PhotoInfo
     public void setSavepath(String savepath)
     {
         this.savepath = savepath;
+    }
+
+    public UserInfo getUserInfo()
+    {
+        return userInfo;
+    }
+
+    public void setUserInfo(UserInfo userInfo)
+    {
+        this.userInfo = userInfo;
     }
 }

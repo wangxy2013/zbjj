@@ -3,6 +3,7 @@ package com.zb.wyd.json;
 
 import com.zb.wyd.entity.PriceInfo;
 import com.zb.wyd.entity.PhotoInfo;
+import com.zb.wyd.entity.UserInfo;
 
 import org.json.JSONObject;
 
@@ -24,12 +25,15 @@ public class PhotoInfoHandler extends JsonHandler
         {
 
             JSONObject obj = jsonObj.optJSONObject("data");
-            photoInfo = new PhotoInfo(obj);
 
-            if(null != obj)
+            if (null != obj)
             {
-                PriceInfo priceInfo = new PriceInfo(obj.optJSONObject("price"));
-                photoInfo.setPriceInfo(priceInfo);
+                photoInfo = new PhotoInfo(obj);
+                if(null != obj.optJSONObject("price"))
+                photoInfo.setPriceInfo(new PriceInfo(obj.optJSONObject("price")));
+
+                if(null != obj.optJSONObject("userinfo"))
+                photoInfo.setUserInfo(new UserInfo(obj.optJSONObject("userinfo")));
             }
 
 

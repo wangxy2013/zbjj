@@ -80,17 +80,22 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
 
     private NewAdapter mNewAdapter;
 
+    private int getFreeCount, getHotCount;
 
     private static final String GET_FREE_LIVE         = "get_free_live";
     private static final String GET_NEW_LIVE          = "get_new_live";
     private static final String GET_AD_LIST           = "get_ad_list";
     private static final int    GET_FREE_LIVE_SUCCESS = 0x01;
     private static final int    REQUEST_FAIL          = 0x02;
-    private static final int    GET_NEW_LIVE_SUCCESS  = 0x03;
+    private static final int    GET_HOT_LIVE_SUCCESS  = 0x03;
 
     private static final int GET_AD_LIST_CODE   = 0X10;
     private static final int GET_FREE_LIVE_CODE = 0X11;
     private static final int GET_NEW_LIVE_CODE  = 0X12;
+
+
+    private static final int GET_FREE_LIVE_FAIL = 0X13;
+    private static final int GET_HOT_LIVE_FAIL  = 0X14;
 
     private static final int GET_AD_LIST_SUCCESS = 0x04;
 
@@ -112,7 +117,7 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
                     break;
 
 
-                case GET_NEW_LIVE_SUCCESS:
+                case GET_HOT_LIVE_SUCCESS:
                     LiveInfoListHandler mLiveInfoListHandler1 = (LiveInfoListHandler) msg.obj;
                     newLiveList.clear();
                     newLiveList.addAll(mLiveInfoListHandler1.getUserInfoList());
@@ -151,6 +156,21 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
                 case GET_AD_LIST_CODE:
                     getAdList();
                     break;
+
+
+                case GET_FREE_LIVE_FAIL:
+                    getFreeCount++;
+                    if (getFreeCount <= 3)
+                    {
+                        mHandler.sendEmptyMessage(GET_FREE_LIVE_CODE);
+                    }
+
+                case GET_HOT_LIVE_FAIL:
+                    getHotCount++;
+                    if (getHotCount <= 3)
+                    {
+                        mHandler.sendEmptyMessage(GET_NEW_LIVE_CODE);
+                    }
             }
         }
     };
@@ -260,14 +280,18 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
         rvHot.setAdapter(mNewAdapter);
 
     }
-    public void setUserVisibleHint(boolean isVisibleToUser) {
 
-        if (isVisibleToUser) {
+    public void setUserVisibleHint(boolean isVisibleToUser)
+    {
+
+        if (isVisibleToUser)
+        {
             mHandler.sendEmptyMessage(GET_AD_LIST_CODE);
             loadData();
         }
         super.setUserVisibleHint(isVisibleToUser);
     }
+
     private void loadData()
     {
         mHandler.sendEmptyMessage(GET_FREE_LIVE_CODE);
@@ -375,13 +399,13 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
                         mVideoInfo.setId(id);
                         mVideoInfo.setV_name("点播");
                         Bundle b = new Bundle();
-                        b.putSerializable("VideoInfo",mVideoInfo);
+                        b.putSerializable("VideoInfo", mVideoInfo);
                         startActivity(new Intent(getActivity(), VideoPlayActivity.class).putExtras(b));
                     }
                     else if (mAdInfo.getLink().startsWith("live://"))
                     {
                         String id = mAdInfo.getLink().replace("live://", "");
-                        startActivity(new Intent(getActivity(), LiveActivity.class).putExtra("biz_id",id));
+                        startActivity(new Intent(getActivity(), LiveActivity.class).putExtra("biz_id", id));
                     }
                     else if (mAdInfo.getLink().startsWith("photo://"))
                     {
@@ -412,7 +436,6 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
     }
 
 
-
     @Override
     public void notify(String action, String resultCode, String resultMsg, Object obj)
     {
@@ -424,18 +447,18 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
             }
             else
             {
-                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
+                mHandler.sendMessage(mHandler.obtainMessage(GET_FREE_LIVE_CODE, resultMsg));
             }
         }
         else if (GET_NEW_LIVE.equals(action))
         {
             if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
             {
-                mHandler.sendMessage(mHandler.obtainMessage(GET_NEW_LIVE_SUCCESS, obj));
+                mHandler.sendMessage(mHandler.obtainMessage(GET_HOT_LIVE_SUCCESS, obj));
             }
             else
             {
-                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
+                mHandler.sendMessage(mHandler.obtainMessage(GET_HOT_LIVE_FAIL, resultMsg));
             }
         }
         else if (GET_AD_LIST.equals(action))

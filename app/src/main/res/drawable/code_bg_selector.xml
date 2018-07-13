@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@drawable/btn_gray_frame_45dp" android:state_enabled="false"/>
+    <item android:drawable="@drawable/btn_login_frame_45dp" android:state_enabled="true"/>
+</selector>

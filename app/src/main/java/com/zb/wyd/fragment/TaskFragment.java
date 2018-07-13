@@ -271,6 +271,11 @@ public class TaskFragment extends BaseFragment implements IRequestListener, View
                 {
                     ((MainActivity) getActivity()).setTab(2);
                 }
+                else if ("photo://create".equals(mTaskInfo.getAction()))
+                {
+                    startActivity(new Intent(getActivity(), AddPhotoActivity.class));
+                }
+
                 else if (mTaskInfo.getAction().startsWith("http") || mTaskInfo.getAction().startsWith("https"))
                 {
                     startActivity(new Intent(getActivity(), WebViewActivity.class)

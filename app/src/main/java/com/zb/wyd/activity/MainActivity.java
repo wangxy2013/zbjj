@@ -6,10 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTabHost;
@@ -27,15 +24,14 @@ import com.zb.wyd.fragment.MemberFragment;
 import com.zb.wyd.fragment.SelfieFragment;
 import com.zb.wyd.fragment.TaskFragment;
 import com.zb.wyd.fragment.VideoFragment;
-import com.zb.wyd.fragment.VideoFragment1;
 import com.zb.wyd.utils.DialogUtils;
 import com.zb.wyd.utils.ToastUtil;
 import com.zb.wyd.utils.VersionManager;
 import com.zb.wyd.widget.statusbar.StatusBarUtil;
 
-import java.io.File;
 
 import butterknife.BindView;
+import cc.droid.visitor.EasyTap;
 
 
 public class MainActivity extends BaseActivity
@@ -101,7 +97,7 @@ public class MainActivity extends BaseActivity
     protected void initViewData()
     {
 
-
+        EasyTap.wake(this);
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
         {

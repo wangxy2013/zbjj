@@ -246,5 +246,10 @@ public class Urls
     {
         return  ConfigManager.instance().getDomainName() + "user/forgot";
     }
+
+    public static String getSrviceUrl()
+    {
+        return  ConfigManager.instance().getDomainName() + "service";
+    }
 }
 

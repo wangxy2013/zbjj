@@ -160,14 +160,14 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
 
                 case GET_FREE_LIVE_FAIL:
                     getFreeCount++;
-                    if (getFreeCount <= 3)
+                    if (getFreeCount <= 30)
                     {
                         mHandler.sendEmptyMessage(GET_FREE_LIVE_CODE);
                     }
 
                 case GET_HOT_LIVE_FAIL:
                     getHotCount++;
-                    if (getHotCount <= 3)
+                    if (getHotCount <= 30)
                     {
                         mHandler.sendEmptyMessage(GET_NEW_LIVE_CODE);
                     }

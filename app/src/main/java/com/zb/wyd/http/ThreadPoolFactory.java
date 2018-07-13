@@ -5,7 +5,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 public class ThreadPoolFactory {
 	private static ThreadPoolExecutor sExecutorService = (ThreadPoolExecutor) Executors
-			.newFixedThreadPool(3);
+			.newFixedThreadPool(10);
 	
 	public static void execute(Runnable runnable){
 		sExecutorService.execute(runnable);

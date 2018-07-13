@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -62,6 +63,11 @@ public class VersionManager implements IRequestListener
     private static final int    BATDU_SUCCESS   = 0x05;
     private static final String GET_VERSION     = "get_version";
     private static final String GET_BAIDU       = "get_baidu";
+    private static final String TEST_DOMAINNAME = "test_domainname";
+
+    private static final int TEST_DOMAINNAME_FAIL    = 0x06;
+    private static final int TEST_DOMAINNAME_SUCCESS = 0x07;
+
     private int progress;
 
     private Thread downLoadThread;
@@ -97,6 +103,7 @@ public class VersionManager implements IRequestListener
                         ConfigManager.instance().setSystemQq(mVersionInfo.getQq());
                         ConfigManager.instance().setBgLogin(mVersionInfo.getBg_login());
                         ConfigManager.instance().setBgStartup(mVersionInfo.getBg_startup());
+                        ConfigManager.instance().setCrossfire(mVersionInfo.getCrossfire());
                         showNoticeDialog(mVersionInfo);
                     }
 
@@ -114,20 +121,64 @@ public class VersionManager implements IRequestListener
 
                     if (content.contains("baidu.com"))
                     {
-                        DialogUtils.showToastDialog2Button(mContext, "不幸的告诉您，域名可能已被封，可发邮件到xjshangmen@gmail.com获取最新地址并进行设置操作。", new View.OnClickListener()
+
+                        String crossfire = ConfigManager.instance().getCrossfire();
+                        if (TextUtils.isEmpty(crossfire))
                         {
-                            @Override
-                            public void onClick(View v)
-                            {
-                                mContext.startActivity(new Intent(mContext, DomainNameActivity.class));
-                            }
-                        });
+                            setDomainName();
+                        }
+                        else
+                        {
+                            domianName = crossfire.split(";");
+                            testDomainName();
+                        }
+
                     }
+                    break;
+
+                case TEST_DOMAINNAME_SUCCESS:
+                    break;
+
+                case TEST_DOMAINNAME_FAIL:
+                    testDomainName();
                     break;
             }
         }
 
     };
+
+    private String domianName[];
+    private int p = 0;
+
+    private void testDomainName()
+    {
+        LogUtil.e("DomainName", "PPPPPPPPPPPPPPPP->" + p);
+        if (p < domianName.length)
+        {
+            ConfigManager.instance().setDomainName(domianName[p]);
+            p++;
+
+            Map<String, String> valuePairs1 = new HashMap<>();
+            DataRequest.instance().request(mContext, Urls.getVersionUrl(), VersionManager.this, HttpRequest.GET, TEST_DOMAINNAME, valuePairs1,
+                    new VersionInfoHandler());
+        }
+        else
+        {
+            setDomainName();
+        }
+    }
+
+    private void setDomainName()
+    {
+        DialogUtils.showToastDialog2Button(mContext, "不幸的告诉您，域名可能已被封，可发邮件到xjshangmen@gmail.com获取最新地址并进行设置操作。", new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                mContext.startActivity(new Intent(mContext, DomainNameActivity.class));
+            }
+        });
+    }
 
     public VersionManager(Context context)
     {
@@ -297,6 +348,17 @@ public class VersionManager implements IRequestListener
             if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
             {
                 mHandler.sendMessage(mHandler.obtainMessage(BATDU_SUCCESS, obj));
+            }
+        }
+        else if (TEST_DOMAINNAME.equals(action))
+        {
+            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(TEST_DOMAINNAME_SUCCESS, obj));
+            }
+            else
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(TEST_DOMAINNAME_FAIL, resultMsg));
             }
         }
     }

@@ -18,6 +18,7 @@ public class VersionInfo
     private String bg_startup;//
     private String qq;//
     private String emai;//
+    private String crossfire;
 
     public VersionInfo(JSONObject obj)
     {
@@ -34,10 +35,20 @@ public class VersionInfo
         this.add_time = obj.optString("add_time");
         this.update_time = obj.optString("update_time");
         this.del_flag = obj.optString("del_flag");
+        this.crossfire = obj.optString("crossfire");
         forcedup = "1";
 
     }
 
+    public String getCrossfire()
+    {
+        return crossfire;
+    }
+
+    public void setCrossfire(String crossfire)
+    {
+        this.crossfire = crossfire;
+    }
 
     public String getVersion()
     {

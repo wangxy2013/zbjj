@@ -32,6 +32,8 @@ import com.zb.wyd.activity.MyCollectionActivity;
 import com.zb.wyd.activity.RecoveryPwdActivity;
 import com.zb.wyd.activity.UserDetailActivity;
 import com.zb.wyd.activity.WealthListActivity;
+import com.zb.wyd.activity.WebViewActivity;
+import com.zb.wyd.activity.WelComeActivity;
 import com.zb.wyd.entity.UserInfo;
 import com.zb.wyd.http.DataRequest;
 import com.zb.wyd.http.HttpRequest;
@@ -102,11 +104,8 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
     @BindView(R.id.rl_setting)
     RelativeLayout rlSetting;
 
-    private boolean isClick;
-
     private View rootView = null;
     private Unbinder unbinder;
-    private String   role;
     private UserInfo userInfo;
     private static final String      GET_USER_DETAIL = "get_user_detail";
     private static final int         REQUEST_SUCCESS = 0x01;
@@ -126,7 +125,6 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
 
                     if (null != userInfo)
                     {
-                        isClick = true;
                         String unick = userInfo.getUnick();
                         String fortune = userInfo.getFortune();
                         String vip_level = userInfo.getVip_level();
@@ -144,8 +142,7 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
                         tvUserLevel.setText("V" + vip_level);
                         tvWealth.setText(fortune);
 
-                        role = userInfo.getRole();
-                        if ("0".equals(role))
+                        if ("-".equals(userInfo.getEmail()))
                         {
                             tvEmail.setText("未认证");
                         }
@@ -225,7 +222,6 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
         super.onResume();
         if (MyApplication.getInstance().isLogin())
         {
-            isClick = false;
             Map<String, String> valuePairs = new HashMap<>();
             DataRequest.instance().request(getActivity(), Urls.getUserInfoUrl(), this, HttpRequest.POST, GET_USER_DETAIL, valuePairs,
                     new UserInfoHandler());
@@ -288,7 +284,7 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
         {
             if (MyApplication.getInstance().isLogin())
             {
-                if ("0".equals(role))
+                if ("未认证".equals(tvEmail.getText().toString()))
                 {
 
                     startActivity(new Intent(getActivity(), BindEmailActivity.class));
@@ -336,25 +332,33 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
         }
         else if (v == rlCustomer)
         {
-            if (!TextUtils.isEmpty(ConfigManager.instance().getSystemQq()))
-            {
-                // 跳转之前，可以先判断手机是否安装QQ
-                if (isQQClientAvailable(getActivity()))
-                {
-                    // 跳转到客服的QQ
-                    String url = "mqqwpa://im/chat?chat_type=wpa&uin=" + ConfigManager.instance().getSystemQq();
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                    // 跳转前先判断Uri是否存在，如果打开一个不存在的Uri，App可能会崩溃
-                    if (isValidIntent(getActivity(), intent))
-                    {
-                        startActivity(intent);
-                    }
-                }
-                else
-                {
-                    ToastUtil.show(getActivity(),"请先安装QQ");
-                }
-            }
+            //            if (!TextUtils.isEmpty(ConfigManager.instance().getSystemQq()))
+            //            {
+            //                // 跳转之前，可以先判断手机是否安装QQ
+            //                if (isQQClientAvailable(getActivity()))
+            //                {
+            //                    // 跳转到客服的QQ
+            //                    String url = "mqqwpa://im/chat?chat_type=wpa&uin=" + ConfigManager.instance().getSystemQq();
+            //                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            //                    // 跳转前先判断Uri是否存在，如果打开一个不存在的Uri，App可能会崩溃
+            //                    if (isValidIntent(getActivity(), intent))
+            //                    {
+            //                        startActivity(intent);
+            //                    }
+            //                }
+            //                else
+            //                {
+            //                    ToastUtil.show(getActivity(),"请先安装QQ");
+            //                }
+            //            }
+
+            startActivity(new Intent(getActivity(), WebViewActivity.class)
+                    .putExtra(WebViewActivity.EXTRA_TITLE, "帮助中心")
+                    .putExtra(WebViewActivity.IS_SETTITLE, true)
+                    .putExtra(WebViewActivity.EXTRA_URL, Urls.getSrviceUrl())
+            );
+
+
         }
         else if (v == rlUser)
         {

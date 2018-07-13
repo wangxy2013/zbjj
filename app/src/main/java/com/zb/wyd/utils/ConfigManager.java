@@ -42,12 +42,15 @@ public class ConfigManager
     private static final String USER_PIC        = "useer_pic";
     private static final String USER_SEX        = "user_sex";
 
-    private static final String SYSTEM_EMAIL        = "system_email";
-    private static final String SYSTEM_QQ        = "system_qq";
-    private static final String BG_LOGIN        = "bg_login";
-    private static final String BG_STARTUP        = "bg_startup";
+    private static final String SYSTEM_EMAIL = "system_email";
+    private static final String SYSTEM_QQ    = "system_qq";
+    private static final String BG_LOGIN     = "bg_login";
+    private static final String BG_STARTUP   = "bg_startup";
 
-    private static final String DOMAIN_NAME        = "DOMAIN_NAME";
+    private static final String DOMAIN_NAME = "domain_name";
+
+    private static final String CROSSFIRE = "crossfire";
+
 
     /**
      * 返回实例
@@ -281,9 +284,19 @@ public class ConfigManager
         mSharedPreferences.edit().putString(DOMAIN_NAME, str).commit();
     }
 
-    public  String getDomainName()
+    public String getDomainName()
     {
-        return mSharedPreferences.getString(DOMAIN_NAME, "http://www.883974.com/");
+        return mSharedPreferences.getString(DOMAIN_NAME, "http://www.883974.com")+"/";
+    }
+
+    public void setCrossfire(String str)
+    {
+        mSharedPreferences.edit().putString(CROSSFIRE, str).commit();
+    }
+
+    public String getCrossfire()
+    {
+        return mSharedPreferences.getString(CROSSFIRE, "");
     }
 
 

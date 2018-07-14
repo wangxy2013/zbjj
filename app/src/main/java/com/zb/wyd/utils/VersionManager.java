@@ -149,6 +149,7 @@ public class VersionManager implements IRequestListener
                     break;
 
                 case TEST_DOMAINNAME_SUCCESS:
+                    ConfigManager.instance().setDomainName(mDomainName);
                     break;
 
                 case TEST_DOMAINNAME_FAIL:
@@ -162,12 +163,13 @@ public class VersionManager implements IRequestListener
     private String domianName[];
     private int p = 0;
 
+    private String  mDomainName ;
     private void testDomainName()
     {
         LogUtil.e("DomainName", "PPPPPPPPPPPPPPPP->" + p);
         if (p < domianName.length)
         {
-            ConfigManager.instance().setDomainName(domianName[p]);
+            mDomainName= domianName[p];
             p++;
 
             Map<String, String> valuePairs1 = new HashMap<>();

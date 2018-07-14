@@ -4,6 +4,7 @@ import android.app.Application;
 import android.app.Service;
 import android.os.Vibrator;
 
+import com.umeng.commonsdk.UMConfigure;
 import com.zb.wyd.utils.APPUtils;
 import com.zb.wyd.utils.ConfigManager;
 import com.zb.wyd.utils.LogUtil;
@@ -31,6 +32,8 @@ public class MyApplication extends Application
         APPUtils.configImageLoader(getApplicationContext());
         ConfigManager.instance().init(this);
         initPhotoData();
+        UMConfigure.init(this, UMConfigure.DEVICE_TYPE_PHONE, "");
+        UMConfigure.setLogEnabled(true);
     }
 
     public List<Integer> getPhotoDataList()

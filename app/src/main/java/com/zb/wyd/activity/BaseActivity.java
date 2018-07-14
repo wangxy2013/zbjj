@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 
+import com.umeng.analytics.MobclickAgent;
 import com.zb.wyd.R;
 import com.zb.wyd.utils.DialogUtils;
 import com.zb.wyd.utils.LogUtil;
@@ -72,7 +73,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         super.onPause();
         //SDK已经禁用了基于Activity 的页面统计，所以需要再次重新统计页面
         //        MobclickAgent.onPageEnd(mPageName);
-        //        MobclickAgent.onPause(this);
+        MobclickAgent.onPause(this);
     }
 
     @Override
@@ -81,7 +82,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         super.onResume();
         //SDK已经禁用了基于Activity 的页面统计，所以需要再次重新统计页面
         //        MobclickAgent.onPageStart(mPageName);
-        //        MobclickAgent.onResume(this);
+        MobclickAgent.onResume(this);
     }
 
     @Override

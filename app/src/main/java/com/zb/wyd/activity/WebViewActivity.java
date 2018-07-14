@@ -17,7 +17,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zb.wyd.R;
+import com.zb.wyd.utils.APPUtils;
+import com.zb.wyd.utils.ConfigManager;
+import com.zb.wyd.utils.LogUtil;
 import com.zb.wyd.utils.StringUtils;
+import com.zb.wyd.widget.statusbar.StatusBarUtil;
 
 
 /**
@@ -47,6 +51,8 @@ public class WebViewActivity extends Activity
 
     protected void initView()
     {
+        StatusBarUtil.setStatusBarColor(this, getResources().getColor(R.color.yellow));
+        StatusBarUtil.StatusBarLightMode(WebViewActivity.this, false);
         mBackIv = (ImageView) findViewById(R.id.iv_back);
         mTitleTv = (TextView) findViewById(R.id.tv_title);
         mWebView = (WebView) findViewById(R.id.mWebView);
@@ -157,7 +163,10 @@ public class WebViewActivity extends Activity
 
     protected void initViewData()
     {
-        mUrl = getIntent().getStringExtra(EXTRA_URL);
+        mUrl = getIntent().getStringExtra(EXTRA_URL) + "?auth=" + ConfigManager.instance().getUniqueCode() + "&mobile_id=" + APPUtils.getDeviceId(this) +
+                "&device=and";
+
+        LogUtil.e("TAG","url-->" + mUrl);
         isSetTitle = getIntent().getBooleanExtra(IS_SETTITLE, true);
 
         if (isSetTitle)

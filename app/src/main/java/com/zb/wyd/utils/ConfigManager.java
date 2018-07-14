@@ -52,6 +52,8 @@ public class ConfigManager
     private static final String CROSSFIRE  = "crossfire";
     private static final String REG_CLOSED = "reg_closed";
     private static final String IP_LOOK_UP = "ip_look_up";
+
+    private static final String   VIP_LEVEL  = "vip_level";
     /**
      * 返回实例
      *
@@ -319,5 +321,16 @@ public class ConfigManager
     {
         return mSharedPreferences.getString(IP_LOOK_UP, "");
     }
+
+    public void setVipLevel(int str)
+    {
+        mSharedPreferences.edit().putInt(VIP_LEVEL, str).commit();
+    }
+
+    public int getVipLevelVIE()
+    {
+        return mSharedPreferences.getInt(VIP_LEVEL, 0);
+    }
+
 }
 

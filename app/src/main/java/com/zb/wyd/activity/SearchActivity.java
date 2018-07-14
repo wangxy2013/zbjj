@@ -78,23 +78,38 @@ public class SearchActivity extends BaseActivity
         tvPhoto.setOnClickListener(this);
         tvVideo.setOnClickListener(this);
         ivBack.setOnClickListener(this);
-        etKeyword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        etKeyword.setOnEditorActionListener(new TextView.OnEditorActionListener()
+        {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
             {
-                if (actionId== EditorInfo.IME_ACTION_SEARCH)
+                if (actionId == EditorInfo.IME_ACTION_SEARCH)
                 {
                     String keyword = etKeyword.getText().toString();
 
-                    if(!TextUtils.isEmpty(keyword))
+                    if (!TextUtils.isEmpty(keyword))
                     {
-                        mAnchorSearchListener.setKeyword(keyword);
-                        mPhotoSearchListener.setKeyword(keyword);
-                        mVideoSearchListener.setKeyword(keyword);
+
+                        switch (mViewPager.getCurrentItem())
+                        {
+                            case 0:
+                                mAnchorSearchListener.setKeyword(keyword);
+                                break;
+
+                            case 1:
+                                mPhotoSearchListener.setKeyword(keyword);
+                                break;
+
+                            case 2:
+                                mVideoSearchListener.setKeyword(keyword);
+                                break;
+                        }
+
+
                     }
                     else
                     {
-                        ToastUtil.show(SearchActivity.this,"请输入搜索关键字");
+                        ToastUtil.show(SearchActivity.this, "请输入搜索关键字");
                     }
                     return true;
                 }

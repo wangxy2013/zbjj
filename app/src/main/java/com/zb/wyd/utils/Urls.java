@@ -251,5 +251,13 @@ public class Urls
     {
         return  ConfigManager.instance().getDomainName() + "service";
     }
+
+
+    public static String getInviteUrl()
+    {
+        return  ConfigManager.instance().getDomainName() + "user/invite";
+    }
+
+
 }
 

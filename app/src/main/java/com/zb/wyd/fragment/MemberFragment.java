@@ -98,6 +98,10 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
     TextView        tvCustomer;
     @BindView(R.id.rl_customer)
     RelativeLayout  rlCustomer;
+    @BindView(R.id.rl_extension)
+    RelativeLayout  rlExtension;
+
+
     @BindView(R.id.btn_logout)
     Button          btnLogout;
 
@@ -208,6 +212,7 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
         rlCustomer.setOnClickListener(this);
         rlUser.setOnClickListener(this);
         rlSetting.setOnClickListener(this);
+        rlExtension.setOnClickListener(this);
     }
 
     @Override
@@ -368,6 +373,22 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
         else if (v == rlSetting)
         {
             startActivity(new Intent(getActivity(), DomainNameActivity.class));
+        }
+        else if(v == rlExtension)
+        {
+            if (MyApplication.getInstance().isLogin())
+            {
+                startActivity(new Intent(getActivity(), WebViewActivity.class)
+                        .putExtra(WebViewActivity.EXTRA_TITLE, "我的推广")
+                        .putExtra(WebViewActivity.IS_SETTITLE, true)
+                        .putExtra(WebViewActivity.EXTRA_URL, Urls.getInviteUrl())
+                );
+            }
+            else
+            {
+                startActivity(new Intent(getActivity(), LoginActivity.class));
+            }
+
         }
     }
 

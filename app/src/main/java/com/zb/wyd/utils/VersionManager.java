@@ -28,7 +28,6 @@ import com.zb.wyd.http.DataRequest;
 import com.zb.wyd.http.HttpRequest;
 import com.zb.wyd.http.IRequestListener;
 import com.zb.wyd.json.BaiduHandler;
-import com.zb.wyd.json.ResultHandler;
 import com.zb.wyd.json.VersionInfoHandler;
 import com.zb.wyd.listener.MyOnClickListener;
 

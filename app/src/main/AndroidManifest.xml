@@ -188,6 +188,11 @@
         </provider>
 
 
+
+
+        <meta-data android:value="5b49fdf6b27b0a30ec0001d1" android:name="UMENG_APPKEY"/>
+        <meta-data android:value="Umeng" android:name="UMENG_CHANNEL"/>
+
     </application>
 
 </manifest>

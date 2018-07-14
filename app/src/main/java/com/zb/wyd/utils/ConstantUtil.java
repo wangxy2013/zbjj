@@ -22,7 +22,7 @@ public class ConstantUtil
 
 
 
-    public static final  String WX_APPID = "wx17e33484aba9fcc2";
+    public static final  String UMENG_CODE = "5b456506f43e4816810001e9";
 
 
 

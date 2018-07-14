@@ -531,7 +531,7 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("pid", biz_id);
         valuePairs.put("text", text);
-        DataRequest.instance().request(PhotoDetailActivity.this, Urls.getSendCommentUrl(), this, HttpRequest.POST, GET_TASK_SHARE, valuePairs,
+        DataRequest.instance().request(PhotoDetailActivity.this, Urls.getSendCommentUrl(), this, HttpRequest.POST, SEND_COMMENT, valuePairs,
                 new ResultHandler());
     }
 

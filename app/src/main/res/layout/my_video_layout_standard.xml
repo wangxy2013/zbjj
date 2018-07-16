@@ -138,7 +138,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/dm_10"
-                android:src="@drawable/ic_collection_yellow"/>
+                android:src="@drawable/ic_video_collection_selector"/>
 
 
             <ImageView

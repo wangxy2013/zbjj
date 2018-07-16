@@ -34,7 +34,6 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/dm_15"
         android:gravity="center_horizontal"
-        android:text="防丢邮箱,发邮件到xjshangmen@gmail.com获取最新地址"
         android:textColor="@color/white"
         android:textSize="@dimen/t14"/>
 

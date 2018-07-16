@@ -30,6 +30,7 @@ public class PhotoInfo
 
     private UserInfo userInfo;
 
+    private String has_favorite;
 
     private List<String> freePic   = new ArrayList<>();
     private List<String> chargePic = new ArrayList<>();
@@ -50,7 +51,7 @@ public class PhotoInfo
         this.charge_album = obj.optString("charge_album");
         this.favour_count = obj.optString("favour_count");
         this.add_time = obj.optString("add_time");
-
+        this.has_favorite = obj.optString("has_favorite");
         if (!StringUtils.stringIsEmpty(free_album)) ;
         {
             String[] free = free_album.replace("$$", ";").split(";");
@@ -59,13 +60,13 @@ public class PhotoInfo
             {
                 if (!StringUtils.stringIsEmpty(free[i]))
 
-                    if(free[i].startsWith("http"))
+                    if (free[i].startsWith("http"))
                     {
                         freePic.add(free[i]);
                     }
                     else
                     {
-                        freePic.add(host+free[i]);
+                        freePic.add(host + free[i]);
                     }
 
             }
@@ -79,13 +80,13 @@ public class PhotoInfo
             {
                 if (!StringUtils.stringIsEmpty(charge[i]))
                 {
-                    if(charge[i].startsWith("http"))
+                    if (charge[i].startsWith("http"))
                     {
                         chargePic.add(charge[i]);
                     }
                     else
                     {
-                        freePic.add(host+charge[i]);
+                        freePic.add(host + charge[i]);
                     }
                 }
 
@@ -262,5 +263,15 @@ public class PhotoInfo
     public void setUserInfo(UserInfo userInfo)
     {
         this.userInfo = userInfo;
+    }
+
+    public String getHas_favorite()
+    {
+        return has_favorite;
+    }
+
+    public void setHas_favorite(String has_favorite)
+    {
+        this.has_favorite = has_favorite;
     }
 }

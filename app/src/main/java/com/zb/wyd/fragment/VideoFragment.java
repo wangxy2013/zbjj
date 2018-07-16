@@ -290,10 +290,12 @@ public class VideoFragment extends BaseFragment implements IRequestListener, Vie
             {
                 if (MyApplication.getInstance().isLogin())
                 {
-                    Bundle b = new Bundle();
-                    b.putSerializable("VideoInfo", mVideoInfoList.get(position));
-                    startActivity(new Intent(getActivity(), VideoPlayActivity.class).putExtras(b));
-
+                    if (mVideoInfoList.size() > position)
+                    {
+                        Bundle b = new Bundle();
+                        b.putSerializable("VideoInfo", mVideoInfoList.get(position));
+                        startActivity(new Intent(getActivity(), VideoPlayActivity.class).putExtras(b));
+                    }
                 }
                 else
                 {

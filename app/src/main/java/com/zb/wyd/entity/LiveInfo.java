@@ -19,6 +19,7 @@ public class LiveInfo implements Serializable
     private String online;//12345,
     private String is_live;//1
 
+    private String location;
 
     public LiveInfo() {}
 
@@ -32,7 +33,18 @@ public class LiveInfo implements Serializable
         this.update_time = obj.optString("update_time");
         this.online = obj.optString("online");
         this.is_live = obj.optString("is_live");
+        this.location = obj.optString("location");
 
+    }
+
+    public String getLocation()
+    {
+        return location;
+    }
+
+    public void setLocation(String location)
+    {
+        this.location = location;
     }
 
     public String getId()

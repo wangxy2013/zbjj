@@ -13,6 +13,7 @@ import com.zb.wyd.R;
 import com.zb.wyd.entity.LiveInfo;
 import com.zb.wyd.listener.MyItemClickListener;
 import com.zb.wyd.utils.APPUtils;
+import com.zb.wyd.utils.StringUtils;
 import com.zb.wyd.widget.RoundAngleImageView;
 
 
@@ -28,6 +29,10 @@ public class NewHolder extends RecyclerView.ViewHolder
     private MyItemClickListener listener;
     private Context             context;
     private TextView            mStatusTv;
+    private RelativeLayout      rlLocationLayout;
+    private TextView            mLocationTv;
+
+
     public NewHolder(View rootView, Context context, MyItemClickListener listener)
     {
         super(rootView);
@@ -39,6 +44,10 @@ public class NewHolder extends RecyclerView.ViewHolder
         mNameTv = (TextView) rootView.findViewById(R.id.tv_name);
         mImgIv = (RoundAngleImageView) rootView.findViewById(R.id.iv_user_pic);
         mItemLayout = (RelativeLayout) rootView.findViewById(R.id.rl_item);
+        rlLocationLayout = (RelativeLayout) rootView.findViewById(R.id.rl_location);
+        mLocationTv = (TextView) rootView.findViewById(R.id.tv_location);
+
+
         int spacingInPixels = context.getResources().getDimensionPixelSize(R.dimen.dm_10) * 3;
         int width = (APPUtils.getScreenWidth(context) - spacingInPixels) / 2;
         mItemLayout.setLayoutParams(new LinearLayout.LayoutParams(width, width * 13 / 20));
@@ -51,12 +60,12 @@ public class NewHolder extends RecyclerView.ViewHolder
     }
 
 
-    public void setLiveInfo(LiveInfo mLiveInfo ,final  int p)
+    public void setLiveInfo(LiveInfo mLiveInfo, final int p)
     {
 
         ImageLoader.getInstance().displayImage(mLiveInfo.getFace(), mImgIv);
 
-        if("1".equals(mLiveInfo.getIs_live()))
+        if ("1".equals(mLiveInfo.getIs_live()))
         {
             mStatusTv.setBackgroundResource(R.drawable.common_orange_3dp);
         }
@@ -64,14 +73,26 @@ public class NewHolder extends RecyclerView.ViewHolder
         {
             mStatusTv.setBackgroundResource(R.drawable.common_gray_3dp);
         }
+
+        if (StringUtils.stringIsEmpty(mLiveInfo.getLocation()))
+        {
+            rlLocationLayout.setVisibility(View.GONE);
+        }
+        else
+        {
+            rlLocationLayout.setVisibility(View.VISIBLE);
+            mLocationTv.setText(mLiveInfo.getLocation());
+        }
+
         mFollowTv.setText(mLiveInfo.getFavour_count());
         mPopularityTv.setText(mLiveInfo.getOnline());
         mNameTv.setText(mLiveInfo.getNick());
-        mItemLayout.setOnClickListener(new View.OnClickListener() {
+        mItemLayout.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View v)
             {
-                listener.onItemClick(v,p);
+                listener.onItemClick(v, p);
             }
         });
     }

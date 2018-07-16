@@ -8,7 +8,7 @@
         <item name="android:alertDialogTheme">@style/alertDialog</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
-        <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="android:windowBackground">@drawable/ic_welcom_bg</item>
     </style>
 
     <style name="AppTheme" parent="BaseTheme"/>

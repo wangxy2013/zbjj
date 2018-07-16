@@ -65,6 +65,8 @@ import butterknife.ButterKnife;
  */
 public class AddPhotoActivity extends BaseActivity implements IRequestListener
 {
+    @BindView(R.id.iv_location)
+    ImageView       ivLocation;
     @BindView(R.id.iv_back)
     ImageView       ivBack;
     @BindView(R.id.tv_title)
@@ -101,9 +103,10 @@ public class AddPhotoActivity extends BaseActivity implements IRequestListener
     MaxRecyclerView rvLabel;
 
 
-    private int    index;
-    private String host;
-    private String location;
+    private boolean isShowLocation;
+    private int     index;
+    private String  host;
+    private String  location;
     private List<PicInfo>  freePicList     = new ArrayList<>();
     private List<PicInfo>  chargePicList   = new ArrayList<>();
     private List<CataInfo> labelChooseList = new ArrayList<>();
@@ -112,6 +115,7 @@ public class AddPhotoActivity extends BaseActivity implements IRequestListener
     private AddPhotoAdapter    chargeAdapter;
     private LabelChooseAdapter mLabelChooseAdapter;
 
+    private   LocationInfo locationInfo;
     // 拍照临时图片
     private String                   mTempPhotoPath;
     private SelectPicturePopupWindow mSelectPicturePopupWindow;
@@ -178,10 +182,12 @@ public class AddPhotoActivity extends BaseActivity implements IRequestListener
 
                 case GET_LOCATION_SUCCESS:
                     LocationInfoHandler mLocationInfoHandler = (LocationInfoHandler) msg.obj;
-                    LocationInfo locationInfo = mLocationInfoHandler.getLocationInfo();
+                     locationInfo = mLocationInfoHandler.getLocationInfo();
 
                     if (null != locationInfo)
                     {
+                        isShowLocation = true;
+                        ivLocation.setVisibility(View.VISIBLE);
                         location = locationInfo.getProv() + "," + locationInfo.getCity() + "," + locationInfo.getDistrict();
                         tvLocation.setText(locationInfo.getCity());
                         tvLocation.setTextColor(ContextCompat.getColor(AddPhotoActivity.this, R.color.yellow));
@@ -190,7 +196,8 @@ public class AddPhotoActivity extends BaseActivity implements IRequestListener
 
                 case GET_LOCATION_CODE:
                     Map<String, String> valuePairs = new HashMap<>();
-                    DataRequest.instance().request(AddPhotoActivity.this, ConfigManager.instance().getIpLookUp(), AddPhotoActivity.this, HttpRequest.POST, GET_LOCATION,
+                    DataRequest.instance().request(AddPhotoActivity.this, ConfigManager.instance().getIpLookUp(), AddPhotoActivity.this, HttpRequest.GET,
+                            GET_LOCATION,
                             valuePairs,
                             new LocationInfoHandler());
                     break;
@@ -383,9 +390,9 @@ public class AddPhotoActivity extends BaseActivity implements IRequestListener
                     return;
                 }
 
-                if (chargePicList.size() < 6)
+                if (chargePicList.size() <4)
                 {
-                    ToastUtil.show(this, "收费图片数量不少于5张");
+                    ToastUtil.show(this, "收费图片数量不少于3张");
                     return;
                 }
 
@@ -441,7 +448,15 @@ public class AddPhotoActivity extends BaseActivity implements IRequestListener
             valuePairs.put("title", title);
             valuePairs.put("desc", etDesc.getText().toString());
             valuePairs.put("tags", getLabel());
-            valuePairs.put("location", location);
+            if(isShowLocation)
+            {
+                valuePairs.put("location", location);
+            }
+            else
+            {
+                valuePairs.put("location", "");
+            }
+
             valuePairs.put("free_album", freeSb.toString());
             valuePairs.put("contact", etContact.getText().toString());
             valuePairs.put("charge_album", chargeSb.toString());
@@ -467,6 +482,25 @@ public class AddPhotoActivity extends BaseActivity implements IRequestListener
             //            Map<String, String> valuePairs = new HashMap<>();
             //            DataRequest.instance().request(AddPhotoActivity.this, Urls.getIplookupUrl(), this, HttpRequest.POST, GET_LOCATION, valuePairs,
             //                    new LocationInfoHandler());
+
+            if (isShowLocation)
+            {
+                isShowLocation = false;
+                ivLocation.setVisibility(View.GONE);
+                tvLocation.setText("不显示地址");
+                tvLocation.setTextColor(ContextCompat.getColor(AddPhotoActivity.this, R.color.blackA));
+            }
+            else
+            {
+                if (null != locationInfo)
+                {
+                    tvLocation.setText(locationInfo.getCity());
+                }
+                isShowLocation = false;
+                ivLocation.setVisibility(View.VISIBLE);
+                tvLocation.setTextColor(ContextCompat.getColor(AddPhotoActivity.this, R.color.yellow));
+            }
+
         }
         else if (v == llTags)
         {

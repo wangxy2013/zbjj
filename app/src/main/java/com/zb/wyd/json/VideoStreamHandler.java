@@ -12,7 +12,7 @@ public class VideoStreamHandler extends JsonHandler
 {
     private ChannelInfo channelInfo;
     private String      uri;
-
+    private String has_favorite;
     public ChannelInfo getChannelInfo()
     {
         return channelInfo;
@@ -23,6 +23,11 @@ public class VideoStreamHandler extends JsonHandler
         return uri;
     }
 
+    public String getHas_favorite()
+    {
+        return has_favorite;
+    }
+
     @Override
     protected void parseJson(JSONObject jsonObj) throws Exception
     {
@@ -30,9 +35,11 @@ public class VideoStreamHandler extends JsonHandler
         {
 
             JSONObject obj = jsonObj.optJSONObject("data");
-            uri = obj.optString("uri");
+
             if (null != obj)
             {
+                uri = obj.optString("uri");
+                has_favorite = obj.optString("has_favorite");
                 channelInfo = new ChannelInfo(obj.optJSONObject("channel"));
             }
 

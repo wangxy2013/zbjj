@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import com.donkingliang.banner.CustomBanner;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zb.wyd.MyApplication;
 import com.zb.wyd.R;
+import com.zb.wyd.activity.AddPhotoActivity;
 import com.zb.wyd.activity.BaseHandler;
 import com.zb.wyd.activity.LiveActivity;
 import com.zb.wyd.activity.LoginActivity;
@@ -30,14 +32,17 @@ import com.zb.wyd.adapter.NewAdapter;
 import com.zb.wyd.adapter.RecommendAdapter;
 import com.zb.wyd.entity.AdInfo;
 import com.zb.wyd.entity.LiveInfo;
+import com.zb.wyd.entity.LocationInfo;
 import com.zb.wyd.entity.VideoInfo;
 import com.zb.wyd.http.DataRequest;
 import com.zb.wyd.http.HttpRequest;
 import com.zb.wyd.http.IRequestListener;
 import com.zb.wyd.json.AdInfoListHandler;
 import com.zb.wyd.json.LiveInfoListHandler;
+import com.zb.wyd.json.LocationInfoHandler;
 import com.zb.wyd.listener.MyItemClickListener;
 import com.zb.wyd.utils.APPUtils;
+import com.zb.wyd.utils.ConfigManager;
 import com.zb.wyd.utils.ConstantUtil;
 import com.zb.wyd.utils.Urls;
 import com.zb.wyd.widget.FullyGridLayoutManager;
@@ -78,13 +83,13 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
     private List<LiveInfo> newLiveList  = new ArrayList<>();
     private List<AdInfo>   adInfoList   = new ArrayList<>();
     private RecommendAdapter mRecommendAdapter;
+    private NewAdapter       mHotAdapter;
+    private int              getFreeCount, getHotCount;
 
-    private NewAdapter mNewAdapter;
 
-    private int getFreeCount, getHotCount;
-
+    private static final String GET_LOCATION          = "get_location";
     private static final String GET_FREE_LIVE         = "get_free_live";
-    private static final String GET_NEW_LIVE          = "get_new_live";
+    private static final String GET_HOT_LIVE          = "get_hot_live";
     private static final String GET_AD_LIST           = "get_ad_list";
     private static final int    GET_FREE_LIVE_SUCCESS = 0x01;
     private static final int    REQUEST_FAIL          = 0x02;
@@ -92,14 +97,18 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
 
     private static final int GET_AD_LIST_CODE   = 0X10;
     private static final int GET_FREE_LIVE_CODE = 0X11;
-    private static final int GET_NEW_LIVE_CODE  = 0X12;
+    private static final int GET_HOT_LIVE_CODE  = 0X12;
 
 
-    private static final int GET_FREE_LIVE_FAIL = 0X13;
-    private static final int GET_HOT_LIVE_FAIL  = 0X14;
-
+    private static final int GET_FREE_LIVE_FAIL  = 0X13;
+    private static final int GET_HOT_LIVE_FAIL   = 0X14;
     private static final int GET_AD_LIST_SUCCESS = 0x04;
 
+    private static final int GET_LOCATION_CODE    = 0X15;
+    private static final int GET_LOCATION_FAIL    = 0X16;
+    private static final int GET_LOCATION_SUCCESS = 0x17;
+
+    private String location;
 
     @SuppressLint("HandlerLeak")
     private BaseHandler mHandler = new BaseHandler(getActivity())
@@ -123,7 +132,7 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
                     LiveInfoListHandler mLiveInfoListHandler1 = (LiveInfoListHandler) msg.obj;
                     newLiveList.clear();
                     newLiveList.addAll(mLiveInfoListHandler1.getUserInfoList());
-                    mNewAdapter.notifyDataSetChanged();
+                    mHotAdapter.notifyDataSetChanged();
                     break;
 
                 case REQUEST_FAIL:
@@ -133,8 +142,8 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
                     getFreeLive();
                     break;
 
-                case GET_NEW_LIVE_CODE:
-                    getNewLive();
+                case GET_HOT_LIVE_CODE:
+                    getHotLive();
                     break;
 
                 case GET_AD_LIST_SUCCESS:
@@ -167,12 +176,41 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
                         mHandler.sendEmptyMessage(GET_FREE_LIVE_CODE);
                     }
 
+                    break;
                 case GET_HOT_LIVE_FAIL:
                     getHotCount++;
                     if (getHotCount <= 30)
                     {
-                        mHandler.sendEmptyMessage(GET_NEW_LIVE_CODE);
+                        mHandler.sendEmptyMessage(GET_HOT_LIVE_CODE);
                     }
+                    break;
+
+                case GET_LOCATION_CODE:
+                    if (TextUtils.isEmpty(location))
+                    {
+                        getLocation();
+                    }
+                    else
+                    {
+                        mHandler.sendEmptyMessage(GET_HOT_LIVE_CODE);
+                    }
+
+                    break;
+
+                case GET_LOCATION_SUCCESS:
+                    LocationInfoHandler mLocationInfoHandler = (LocationInfoHandler) msg.obj;
+                    LocationInfo locationInfo = mLocationInfoHandler.getLocationInfo();
+
+                    if (null != locationInfo)
+                    {
+                        location = locationInfo.getProv() + "," + locationInfo.getCity() + "," + locationInfo.getDistrict();
+                    }
+                    mHandler.sendEmptyMessage(GET_HOT_LIVE_CODE);
+                    break;
+
+                case GET_LOCATION_FAIL:
+                    mHandler.sendEmptyMessage(GET_HOT_LIVE_CODE);
+                    break;
             }
         }
     };
@@ -257,7 +295,7 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
         rvRecommend.setAdapter(mRecommendAdapter);
 
 
-        mNewAdapter = new NewAdapter(newLiveList, getActivity(), new MyItemClickListener()
+        mHotAdapter = new NewAdapter(newLiveList, getActivity(), new MyItemClickListener()
         {
             @Override
             public void onItemClick(View view, int position)
@@ -269,7 +307,10 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
                     //                    Bundle b = new Bundle();
                     //                    b.putSerializable("LiveInfo", mLiveInfo);
                     //                    startActivity(new Intent(getActivity(), LiveActivity.class).putExtras(b));
-                    startActivity(new Intent(getActivity(), LiveActivity.class).putExtra("biz_id", mLiveInfo.getId()));
+                    startActivity(new Intent(getActivity(), LiveActivity.class)
+                            .putExtra("biz_id", mLiveInfo.getId())
+                            .putExtra("location", mLiveInfo.getLocation())
+                    );
 
                 }
                 else
@@ -279,7 +320,7 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
             }
         });
         rvHot.setLayoutManager(new FullyGridLayoutManager(getActivity(), 2));
-        rvHot.setAdapter(mNewAdapter);
+        rvHot.setAdapter(mHotAdapter);
 
     }
 
@@ -297,7 +338,9 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
     private void loadData()
     {
         mHandler.sendEmptyMessage(GET_FREE_LIVE_CODE);
-        mHandler.sendEmptyMessage(GET_NEW_LIVE_CODE);
+        // mHandler.sendEmptyMessage(GET_HOT_LIVE_CODE);
+        mHandler.sendEmptyMessage(GET_LOCATION_CODE);
+
     }
 
     private void getAdList()
@@ -315,16 +358,24 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
                 new LiveInfoListHandler());
     }
 
-    private void getNewLive()
+    private void getHotLive()
     {
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("pn", "1");
         valuePairs.put("num", "20");
+        valuePairs.put("location", location);
         valuePairs.put("sort", "hot");
-        DataRequest.instance().request(getActivity(), Urls.getNewLive(), this, HttpRequest.GET, GET_NEW_LIVE, valuePairs,
+        DataRequest.instance().request(getActivity(), Urls.getNewLive(), this, HttpRequest.GET, GET_HOT_LIVE, valuePairs,
                 new LiveInfoListHandler());
     }
 
+    private void getLocation()
+    {
+        Map<String, String> valuePairs = new HashMap<>();
+        DataRequest.instance().request(getActivity(), ConfigManager.instance().getIpLookUp(), this, HttpRequest.GET, GET_LOCATION,
+                valuePairs,
+                new LocationInfoHandler());
+    }
 
     private void initAd()
     {
@@ -460,7 +511,7 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
                 mHandler.sendMessage(mHandler.obtainMessage(GET_FREE_LIVE_CODE, resultMsg));
             }
         }
-        else if (GET_NEW_LIVE.equals(action))
+        else if (GET_HOT_LIVE.equals(action))
         {
             if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
             {
@@ -482,6 +533,19 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
                 mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
             }
         }
+        else if (GET_LOCATION.equals(action))
+        {
+            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(GET_LOCATION_SUCCESS, obj));
+            }
+            else
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(GET_LOCATION_FAIL, resultMsg));
+            }
+        }
+
+
     }
 
     @Override

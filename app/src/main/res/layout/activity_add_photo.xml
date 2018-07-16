@@ -111,8 +111,8 @@
                 android:id="@+id/ll_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_marginTop="@dimen/dm_10"
+                android:orientation="vertical"
                 android:visibility="gone">
                 <View
                     android:layout_width="match_parent"
@@ -130,9 +130,9 @@
                     android:hint="输入您要收取的费用5-200积分"
                     android:inputType="number"
                     android:maxLength="3"
+                    android:paddingBottom="@dimen/dm_15"
                     android:paddingLeft="@dimen/dm_10"
                     android:paddingTop="@dimen/dm_15"
-                    android:paddingBottom="@dimen/dm_15"
                     android:textColor="@color/blackC"
                     android:textSize="@dimen/t14"/>
             </LinearLayout>
@@ -147,9 +147,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
             <LinearLayout
-                android:layout_marginTop="@dimen/dm_10"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dm_10"
                 android:padding="@dimen/dm_10">
 
 
@@ -184,8 +184,9 @@
                     android:paddingRight="@dimen/dm_15"
                     android:paddingTop="@dimen/dm_5">
                     <ImageView
-
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:id="@+id/iv_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:src="@drawable/ic_location"/>
                     <TextView
                         android:id="@+id/tv_location"
@@ -208,8 +209,8 @@
                 android:layout_height="wrap_content"
                 android:background="@color/transparent"
                 android:hint="输入您的联系方式"
-                android:paddingLeft="@dimen/dm_10"
                 android:paddingBottom="@dimen/dm_15"
+                android:paddingLeft="@dimen/dm_10"
                 android:paddingTop="@dimen/dm_15"
                 android:textColor="@color/blackC"
                 android:textSize="@dimen/t14"/>

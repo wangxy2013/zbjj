@@ -35,6 +35,7 @@ import com.zb.wyd.utils.ConfigManager;
 import com.zb.wyd.utils.ConstantUtil;
 import com.zb.wyd.utils.DialogUtils;
 import com.zb.wyd.utils.LogUtil;
+import com.zb.wyd.utils.StringUtils;
 import com.zb.wyd.utils.ToastUtil;
 import com.zb.wyd.utils.Urls;
 import com.zb.wyd.widget.CircleImageView;
@@ -46,7 +47,6 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * 描述：一句话简单描述
@@ -82,8 +82,12 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     TextView       tvWelcomeName;
     @BindView(R.id.tv_say)
     TextView       tvSay;
-    private String biz_id;
-    private long   startTime, endTime;
+
+    @BindView(R.id.tv_location)
+    TextView tvLocation;
+
+    private String biz_id, location;
+    private long startTime, endTime;
 
 
     private List<UserInfo> onlineList = new ArrayList<>();
@@ -210,6 +214,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                 case FAVORITE_LIKE_SUCCESS:
                     tvFollow.setText("已关注");
                     ToastUtil.show(LiveActivity.this, "关注成功");
+                    tvFollow.setEnabled(false);
                     break;
 
                 case GET_ANCHOR_SUCCESS:
@@ -223,6 +228,18 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                         ImageLoader.getInstance().displayImage(mUserInfo.getFace(), ivUserPic);
                         tvUserName.setText(mUserInfo.getNick());
                         tvFavourCount.setText(mUserInfo.getFavour_count());
+
+                        if("1".equals(mUserInfo.getHas_favorite()))
+                        {
+                            tvFollow.setText("已关注");
+                            tvFollow.setEnabled(false);
+                        }
+                        else
+                        {
+                            tvFollow.setText("关注");
+                            tvFollow.setEnabled(true);
+                        }
+
                     }
                     break;
 
@@ -238,6 +255,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     protected void initData()
     {
         biz_id = getIntent().getStringExtra("biz_id");
+        location = getIntent().getStringExtra("location");
     }
 
     @Override
@@ -264,6 +282,15 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     @Override
     protected void initViewData()
     {
+        if (StringUtils.stringIsEmpty(location))
+        {
+            tvLocation.setVisibility(View.GONE);
+        }
+        else
+        {
+            tvLocation.setText("主播正在" + location + "进行直播");
+            tvLocation.setVisibility(View.VISIBLE);
+        }
 
         LinearLayoutManager layoutmanager = new LinearLayoutManager(this);
         layoutmanager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -285,7 +312,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
             @Override
             public void onPrepared(String s, Object... objects)
             {
-
+                setStatistics(0);
             }
 
             //点击了开始按键播放，objects[0]是title，object[1]是当前所处播放器（全屏或非全屏）

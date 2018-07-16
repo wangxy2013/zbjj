@@ -20,6 +20,7 @@ public class UserInfo implements Serializable
     private String is_live;//1
     private String uface;//1
 
+    private String has_favorite;
 
     private String uname;//test003;//
     private String email;//
@@ -50,7 +51,7 @@ public class UserInfo implements Serializable
         this.login_ip = obj.optString("login_ip");
         this.fortune = obj.optString("fortune");
         this.total_score = obj.optString("total_score");
-
+        this.has_favorite = obj.optString("has_favorite");
 
         this.id = obj.optString("id");
         this.uface = obj.optString("uface");
@@ -272,5 +273,15 @@ public class UserInfo implements Serializable
     public void setTotal_score(String total_score)
     {
         this.total_score = total_score;
+    }
+
+    public String getHas_favorite()
+    {
+        return has_favorite;
+    }
+
+    public void setHas_favorite(String has_favorite)
+    {
+        this.has_favorite = has_favorite;
     }
 }

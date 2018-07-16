@@ -162,6 +162,16 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
                         tvAddTime.setText(photoInfo.getAdd_time());
                         tvDesc.setText(photoInfo.getDesc());
 
+                        if ("1".equals(photoInfo.getHas_favorite()))
+                        {
+                            ivCollection.setEnabled(false);
+                        }
+                        else
+                        {
+                            ivCollection.setEnabled(true);
+                        }
+
+
                         if (!TextUtils.isEmpty(photoInfo.getTags()))
                         {
                             String labeArr[] = photoInfo.getTags().split(",");
@@ -269,11 +279,13 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
                     break;
                 case FAVORITE_LIKE_SUCCESS:
                     ToastUtil.show(PhotoDetailActivity.this, "收藏成功");
+                    ivCollection.setEnabled(false);
                     break;
 
                 case SEND_COMMENT_SUCCESS:
                     etContent.setText("");
                     ToastUtil.show(PhotoDetailActivity.this, "评论成功");
+                    commentInfoList.clear();
                     getCommentList();
                     break;
 

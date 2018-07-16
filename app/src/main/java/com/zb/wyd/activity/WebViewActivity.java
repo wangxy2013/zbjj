@@ -2,8 +2,11 @@ package com.zb.wyd.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -22,6 +25,14 @@ import com.zb.wyd.utils.ConfigManager;
 import com.zb.wyd.utils.LogUtil;
 import com.zb.wyd.utils.StringUtils;
 import com.zb.wyd.widget.statusbar.StatusBarUtil;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 
 /**
@@ -61,7 +72,7 @@ public class WebViewActivity extends Activity
         mWebView.getSettings().setBuiltInZoomControls(false);
         mWebView.getSettings().setSupportZoom(false);
         mWebView.getSettings().setJavaScriptEnabled(true);
-        mWebView.addJavascriptInterface(new JSService(), "object");
+        mWebView.addJavascriptInterface(new JSService(), "native");
         mWebView.setWebViewClient(new WebViewClient()
                                   {
                                       @Override
@@ -166,7 +177,7 @@ public class WebViewActivity extends Activity
         mUrl = getIntent().getStringExtra(EXTRA_URL) + "?auth=" + ConfigManager.instance().getUniqueCode() + "&mobile_id=" + APPUtils.getDeviceId(this) +
                 "&device=and";
 
-        LogUtil.e("TAG","url-->" + mUrl);
+        LogUtil.e("TAG", "url-->" + mUrl);
         isSetTitle = getIntent().getBooleanExtra(IS_SETTITLE, true);
 
         if (isSetTitle)
@@ -237,6 +248,54 @@ public class WebViewActivity extends Activity
         {
         }
 
+        @JavascriptInterface
+        public void share(String title, String url, String cover)
+        {
+            String shareCnontent = title + ":" + url;
+            Intent intent1 = new Intent(Intent.ACTION_SEND);
+            intent1.putExtra(Intent.EXTRA_TEXT, shareCnontent);
+            intent1.setType("text/plain");
+            startActivity(Intent.createChooser(intent1, "分享"));
+        }
+
+        @JavascriptInterface
+        public void shareImage(String cover)
+        {
+            new Thread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+
+                    try
+                    {
+                        Bitmap mBitmap = getBitmap(cover);
+
+                        if (null != mBitmap)
+                        {
+                            File file = bitMap2File(mBitmap);
+
+                            if (file != null && file.exists() && file.isFile())
+                            {
+                                //由文件得到uri
+                                Uri imageUri = Uri.fromFile(file);
+                                Intent shareIntent = new Intent();
+                                shareIntent.setAction(Intent.ACTION_SEND);
+                                shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
+                                shareIntent.setType("image/*");
+                                startActivity(Intent.createChooser(shareIntent, "分享图片"));
+                            }
+                        }
+
+                    } catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+            }).
+
+                    start();
+        }
     }
 
     @Override
@@ -261,5 +320,57 @@ public class WebViewActivity extends Activity
             return super.onKeyDown(keyCode, event);
         }
 
+    }
+
+    private Bitmap getBitmap(String path) throws IOException
+    {
+        URL url = new URL(path);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setConnectTimeout(5000);
+        conn.setRequestMethod("GET");
+        if (conn.getResponseCode() == 200)
+        {
+            InputStream inputStream = conn.getInputStream();
+            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+            return bitmap;
+        }
+        return null;
+
+    }
+
+    public File bitMap2File(Bitmap bitmap)
+    {
+
+
+        String path = "";
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()))
+        {
+            path = Environment.getExternalStorageDirectory() + File.separator;//保存到sd根目录下
+        }
+
+
+        //        File f = new File(path, System.currentTimeMillis() + ".jpg");
+        File f = new File(path, "share" + ".jpg");
+        if (f.exists())
+        {
+            f.delete();
+        }
+        try
+        {
+            FileOutputStream out = new FileOutputStream(f);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.flush();
+            out.close();
+            bitmap.recycle();
+        } catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        } finally
+        {
+            return f;
+        }
     }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
+                android:background="@color/windowBackground"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
@@ -181,13 +182,27 @@
         android:id="@+id/tv_welcome_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/tv_system"
+        android:layout_above="@+id/tv_location"
         android:layout_marginBottom="@dimen/dm_10"
         android:layout_marginLeft="@dimen/dm_10"
         android:layout_marginRight="@dimen/dm_10"
         android:background="@drawable/live_system_bg"
         android:padding="@dimen/dm_5"
         android:text="欢迎进入直播间"
+        android:textColor="@color/white"
+        android:textSize="@dimen/t14"/>
+
+    <TextView
+        android:id="@+id/tv_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tv_system"
+        android:layout_marginBottom="@dimen/dm_10"
+        android:layout_marginLeft="@dimen/dm_10"
+        android:layout_marginRight="@dimen/dm_10"
+        android:background="@drawable/live_system_bg"
+        android:padding="@dimen/dm_5"
+        android:visibility="gone"
         android:textColor="@color/white"
         android:textSize="@dimen/t14"/>
 </RelativeLayout>

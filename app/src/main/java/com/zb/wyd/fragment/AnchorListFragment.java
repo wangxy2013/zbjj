@@ -7,22 +7,28 @@ import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.zb.wyd.MyApplication;
 import com.zb.wyd.R;
 import com.zb.wyd.activity.BaseHandler;
 import com.zb.wyd.activity.LiveActivity;
+import com.zb.wyd.activity.LoginActivity;
 import com.zb.wyd.adapter.AnchorAdapter;
 import com.zb.wyd.entity.LiveInfo;
+import com.zb.wyd.entity.LocationInfo;
 import com.zb.wyd.http.DataRequest;
 import com.zb.wyd.http.HttpRequest;
 import com.zb.wyd.http.IRequestListener;
 import com.zb.wyd.json.LiveInfoListHandler;
+import com.zb.wyd.json.LocationInfoHandler;
 import com.zb.wyd.listener.MyItemClickListener;
+import com.zb.wyd.utils.ConfigManager;
 import com.zb.wyd.utils.ConstantUtil;
 import com.zb.wyd.utils.ToastUtil;
 import com.zb.wyd.utils.Urls;
@@ -64,10 +70,17 @@ public class AnchorListFragment extends BaseFragment implements PullToRefreshBas
     private AnchorAdapter mAnchorAdapter;
     private View rootView = null;
     private Unbinder unbinder;
-    private static final String GET_ANCHOR_LIST = "get_anchor_list";
+    private String   location;
 
-    private static final int REQUEST_SUCCESS = 0x01;
-    private static final int REQUEST_FAIL    = 0x02;
+    private static final String GET_LOCATION    = "get_anchor_location";
+    private static final String GET_ANCHOR_LIST = "get_anchor_list";
+    private static final int    REQUEST_SUCCESS = 0x01;
+    private static final int    REQUEST_FAIL    = 0x02;
+
+    private static final int GET_ANCHOR_CODE      = 0X14;
+    private static final int GET_LOCATION_CODE    = 0X15;
+    private static final int GET_LOCATION_FAIL    = 0X16;
+    private static final int GET_LOCATION_SUCCESS = 0x17;
 
     @SuppressLint("HandlerLeak")
     private BaseHandler mHandler = new BaseHandler(getActivity())
@@ -93,7 +106,36 @@ public class AnchorListFragment extends BaseFragment implements PullToRefreshBas
 
                 case REQUEST_FAIL:
                     ToastUtil.show(getActivity(), msg.obj.toString());
+                    break;
 
+                case GET_ANCHOR_CODE:
+                    getAnchorList();
+                    break;
+                case GET_LOCATION_CODE:
+                    if (TextUtils.isEmpty(location))
+                    {
+                        getLocation();
+                    }
+                    else
+                    {
+                        mHandler.sendEmptyMessage(GET_ANCHOR_CODE);
+                    }
+
+                    break;
+
+                case GET_LOCATION_SUCCESS:
+                    LocationInfoHandler mLocationInfoHandler = (LocationInfoHandler) msg.obj;
+                    LocationInfo locationInfo = mLocationInfoHandler.getLocationInfo();
+
+                    if (null != locationInfo)
+                    {
+                        location = locationInfo.getProv() + "," + locationInfo.getCity() + "," + locationInfo.getDistrict();
+                    }
+                    mHandler.sendEmptyMessage(GET_ANCHOR_CODE);
+                    break;
+
+                case GET_LOCATION_FAIL:
+                    mHandler.sendEmptyMessage(GET_ANCHOR_CODE);
                     break;
 
 
@@ -172,9 +214,18 @@ public class AnchorListFragment extends BaseFragment implements PullToRefreshBas
             @Override
             public void onItemClick(View view, int position)
             {
-                LiveInfo mLiveInfo = liveInfoList.get(position);
-
-                startActivity(new Intent(getActivity(), LiveActivity.class).putExtra("biz_id",mLiveInfo.getId()));
+                if (MyApplication.getInstance().isLogin())
+                {
+                    LiveInfo mLiveInfo = liveInfoList.get(position);
+                    startActivity(new Intent(getActivity(), LiveActivity.class)
+                            .putExtra("biz_id", mLiveInfo.getId())
+                            .putExtra("location", mLiveInfo.getLocation())
+                    );
+                }
+                else
+                {
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                }
 
             }
         });
@@ -185,14 +236,27 @@ public class AnchorListFragment extends BaseFragment implements PullToRefreshBas
 
     private void loadData()
     {
+        mHandler.sendEmptyMessage(GET_LOCATION_CODE);
+    }
+
+    private void getAnchorList()
+    {
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("pn", pn + "");
         valuePairs.put("num", "20");
         valuePairs.put("sort", sort);
+        valuePairs.put("location", location);
         DataRequest.instance().request(getActivity(), Urls.getNewLive(), this, HttpRequest.GET, GET_ANCHOR_LIST, valuePairs,
                 new LiveInfoListHandler());
     }
 
+    private void getLocation()
+    {
+        Map<String, String> valuePairs = new HashMap<>();
+        DataRequest.instance().request(getActivity(), ConfigManager.instance().getIpLookUp(), this, HttpRequest.GET, GET_LOCATION,
+                valuePairs,
+                new LocationInfoHandler());
+    }
 
     private void setTabSelected(int p)
     {
@@ -251,6 +315,18 @@ public class AnchorListFragment extends BaseFragment implements PullToRefreshBas
                 mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
             }
         }
+        else if (GET_LOCATION.equals(action))
+        {
+            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(GET_LOCATION_SUCCESS, obj));
+            }
+            else
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(GET_LOCATION_FAIL, resultMsg));
+            }
+        }
+
     }
 
     @Override

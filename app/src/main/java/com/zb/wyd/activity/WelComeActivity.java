@@ -96,8 +96,8 @@ public class WelComeActivity extends BaseActivity
         tvTips.setText("3s");
         mHandler.sendEmptyMessageDelayed(UPDATE_CODE_VIEW, 1000);
 
-        if(!TextUtils.isEmpty(ConfigManager.instance().getSystemEmail()))
-        tvEmail.setText("防丢邮箱,发邮件到" + ConfigManager.instance().getSystemEmail() + "获取最新地址");
+        if (!TextUtils.isEmpty(ConfigManager.instance().getSystemEmail()))
+            tvEmail.setText("防丢邮箱,发邮件到" + ConfigManager.instance().getSystemEmail() + "获取最新地址");
 
         if (!TextUtils.isEmpty(ConfigManager.instance().getBgStartup()))
         {
@@ -106,11 +106,4 @@ public class WelComeActivity extends BaseActivity
     }
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }

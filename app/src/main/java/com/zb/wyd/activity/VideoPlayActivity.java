@@ -64,29 +64,29 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
     private String    videoName, biz_id;
     private String      videoUri;
     private ChannelInfo mChannelInfo;
-    private String    shareCnontent;
-
-    private static final String GET_SHARE                = "GET_SHARE";
-    private static final String      FAVORITE_LIKE           = "favorite_like";
-    private static final String      GET_VIDEO_PRICE         = "get_live_price";
-    private static final String      GET_VIDEO_STREAM        = "get_video_stream";
-    private static final String      BUY_VIDEO               = "buy_live";
-    private static final String GET_TASK_SHARE           = "GET_TASK_SHARE";
-    private static final int         REQUEST_SUCCESS         = 0x01;
-    private static final int         REQUEST_FAIL            = 0x02;
-    private static final int         GET_VIDEO_PRICE_SUCCESS = 0x03;
-    private static final int         BUY_VIDEO_SUCCESS       = 0x05;
-    private static final int         SET_STATISTICS          = 0x06;
-    private static final int         GET_STREAM_REQUEST      = 0x09;
-    private static final int         FAVORITE_LIKE_SUCCESS   = 0x08;
-    private static final int    GET_SHARE_CODE           = 0x11;
-    private static final int    GET_SHARE_SUCCESS        = 0x12;
-    private static final int    GET_TASK_SHARE_CODE      = 0x13;
-    private static final int    GET_TASK_SHARE_SUCCESS   = 0x14;
+    private String      shareCnontent;
+    private long        startTime, endTime;
+    private static final String GET_SHARE               = "GET_SHARE";
+    private static final String FAVORITE_LIKE           = "favorite_like";
+    private static final String GET_VIDEO_PRICE         = "get_live_price";
+    private static final String GET_VIDEO_STREAM        = "get_video_stream";
+    private static final String BUY_VIDEO               = "buy_live";
+    private static final String GET_TASK_SHARE          = "GET_TASK_SHARE";
+    private static final int    REQUEST_SUCCESS         = 0x01;
+    private static final int    REQUEST_FAIL            = 0x02;
+    private static final int    GET_VIDEO_PRICE_SUCCESS = 0x03;
+    private static final int    BUY_VIDEO_SUCCESS       = 0x05;
+    private static final int    SET_STATISTICS          = 0x06;
+    private static final int    GET_STREAM_REQUEST      = 0x09;
+    private static final int    FAVORITE_LIKE_SUCCESS   = 0x08;
+    private static final int    GET_SHARE_CODE          = 0x11;
+    private static final int    GET_SHARE_SUCCESS       = 0x12;
+    private static final int    GET_TASK_SHARE_CODE     = 0x13;
+    private static final int    GET_TASK_SHARE_SUCCESS  = 0x14;
 
     private static final int         SHARE_PHOTO_REQUEST_CODE = 0x91;
     @SuppressLint("HandlerLeak")
-    private              BaseHandler mHandler                = new BaseHandler(VideoPlayActivity.this)
+    private              BaseHandler mHandler                 = new BaseHandler(VideoPlayActivity.this)
     {
         @Override
         public void handleMessage(Message msg)
@@ -103,7 +103,14 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
                         videoUri = mVideoStreamHandler.getUri();
                         String uri = mChannelInfo.getYd() + videoUri;
                         LogUtil.e("TAG", uri);
-
+                        if ("1".equals(mVideoStreamHandler.getHas_favorite()))
+                        {
+                            mCollectionIv.setEnabled(false);
+                        }
+                        else
+                        {
+                            mCollectionIv.setEnabled(true);
+                        }
                         playVideo(uri);
                     }
                     break;
@@ -163,6 +170,7 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
                     break;
                 case FAVORITE_LIKE_SUCCESS:
                     ToastUtil.show(VideoPlayActivity.this, "收藏成功");
+                    mCollectionIv.setEnabled(false);
                     break;
                 case GET_SHARE_CODE:
                     getShareUrl();
@@ -182,7 +190,7 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
                     break;
 
                 case GET_TASK_SHARE_SUCCESS:
-                    SignInfoHandler mSignInfoHandler = (SignInfoHandler)msg.obj;
+                    SignInfoHandler mSignInfoHandler = (SignInfoHandler) msg.obj;
                     SignInfo signInfo = mSignInfoHandler.getSignInfo();
 
                     if (null != signInfo)
@@ -302,7 +310,8 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
             @Override
             public void onPrepared(String s, Object... objects)
             {
-
+                startTime = System.currentTimeMillis();
+                setStatistics(0);
             }
 
             //点击了开始按键播放，objects[0]是title，object[1]是当前所处播放器（全屏或非全屏）
@@ -502,6 +511,16 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
 
     }
 
+    //通知单服务器
+    private void setStatistics(long duration)
+    {
+        Map<String, String> valuePairs = new HashMap<>();
+        valuePairs.put("biz_id", biz_id);
+        valuePairs.put("co_biz", "video");
+        valuePairs.put("duration", String.valueOf(duration));
+        DataRequest.instance().request(VideoPlayActivity.this, Urls.getStatisticsUrl(), this, HttpRequest.POST, "SET_STATISTICS", valuePairs,
+                new ResultHandler());
+    }
 
     private void playVideo(String uri)
     {
@@ -522,6 +541,7 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         DataRequest.instance().request(VideoPlayActivity.this, Urls.getBuyLiveUrl(), this, HttpRequest.POST, BUY_VIDEO, valuePairs,
                 new ResultHandler());
     }
+
     private void getTaskShareUrl()
     {
         Map<String, String> valuePairs = new HashMap<>();
@@ -530,6 +550,7 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         DataRequest.instance().request(VideoPlayActivity.this, Urls.getTaskShareUrl(), this, HttpRequest.GET, GET_TASK_SHARE, valuePairs,
                 new SignInfoHandler());
     }
+
     private void getShareUrl()
     {
         Map<String, String> valuePairs = new HashMap<>();
@@ -617,6 +638,10 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         GSYVideoManager.releaseAllVideos();
         //        if (orientationUtils != null)
         //            orientationUtils.releaseListener();
+
+        endTime = System.currentTimeMillis();
+        long duration = (endTime - startTime) / 100;
+        setStatistics(duration);
     }
 
     @Override
@@ -712,7 +737,7 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
     {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d("DemoActivity", "requestCode=" + requestCode + " resultCode=" + resultCode);
-        if((int)(Math.random()*100) <=80)
+        if ((int) (Math.random() * 100) <= 80)
             mHandler.sendEmptyMessage(GET_TASK_SHARE_CODE);
 
     }

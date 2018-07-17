@@ -104,11 +104,7 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
     private static final int GET_HOT_LIVE_FAIL   = 0X14;
     private static final int GET_AD_LIST_SUCCESS = 0x04;
 
-    private static final int GET_LOCATION_CODE    = 0X15;
-    private static final int GET_LOCATION_FAIL    = 0X16;
-    private static final int GET_LOCATION_SUCCESS = 0x17;
 
-    private String location;
 
     @SuppressLint("HandlerLeak")
     private BaseHandler mHandler = new BaseHandler(getActivity())
@@ -183,33 +179,6 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
                     {
                         mHandler.sendEmptyMessage(GET_HOT_LIVE_CODE);
                     }
-                    break;
-
-                case GET_LOCATION_CODE:
-                    if (TextUtils.isEmpty(location))
-                    {
-                        getLocation();
-                    }
-                    else
-                    {
-                        mHandler.sendEmptyMessage(GET_HOT_LIVE_CODE);
-                    }
-
-                    break;
-
-                case GET_LOCATION_SUCCESS:
-                    LocationInfoHandler mLocationInfoHandler = (LocationInfoHandler) msg.obj;
-                    LocationInfo locationInfo = mLocationInfoHandler.getLocationInfo();
-
-                    if (null != locationInfo)
-                    {
-                        location = locationInfo.getProv() + "," + locationInfo.getCity() + "," + locationInfo.getDistrict();
-                    }
-                    mHandler.sendEmptyMessage(GET_HOT_LIVE_CODE);
-                    break;
-
-                case GET_LOCATION_FAIL:
-                    mHandler.sendEmptyMessage(GET_HOT_LIVE_CODE);
                     break;
             }
         }
@@ -338,8 +307,7 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
     private void loadData()
     {
         mHandler.sendEmptyMessage(GET_FREE_LIVE_CODE);
-        // mHandler.sendEmptyMessage(GET_HOT_LIVE_CODE);
-        mHandler.sendEmptyMessage(GET_LOCATION_CODE);
+         mHandler.sendEmptyMessage(GET_HOT_LIVE_CODE);
 
     }
 
@@ -363,18 +331,10 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("pn", "1");
         valuePairs.put("num", "20");
-        valuePairs.put("location", location);
+        valuePairs.put("location", MyApplication.getInstance().getLocation());
         valuePairs.put("sort", "hot");
         DataRequest.instance().request(getActivity(), Urls.getNewLive(), this, HttpRequest.GET, GET_HOT_LIVE, valuePairs,
                 new LiveInfoListHandler());
-    }
-
-    private void getLocation()
-    {
-        Map<String, String> valuePairs = new HashMap<>();
-        DataRequest.instance().request(getActivity(), ConfigManager.instance().getIpLookUp(), this, HttpRequest.GET, GET_LOCATION,
-                valuePairs,
-                new LocationInfoHandler());
     }
 
     private void initAd()
@@ -533,17 +493,7 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
                 mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
             }
         }
-        else if (GET_LOCATION.equals(action))
-        {
-            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
-            {
-                mHandler.sendMessage(mHandler.obtainMessage(GET_LOCATION_SUCCESS, obj));
-            }
-            else
-            {
-                mHandler.sendMessage(mHandler.obtainMessage(GET_LOCATION_FAIL, resultMsg));
-            }
-        }
+
 
 
     }

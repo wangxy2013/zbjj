@@ -23,7 +23,7 @@ public class MyApplication extends Application
     private static MyApplication instance;
 
     public static MyApplication getInstance() {return instance;}
-
+    private String  location;
 
     @Override
     public void onCreate()
@@ -71,4 +71,13 @@ public class MyApplication extends Application
         return instance;
     }
 
+    public String getLocation()
+    {
+        return location;
+    }
+
+    public void setLocation(String location)
+    {
+        this.location = location;
+    }
 }

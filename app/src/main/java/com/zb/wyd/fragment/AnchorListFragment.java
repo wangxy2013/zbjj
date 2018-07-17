@@ -72,15 +72,11 @@ public class AnchorListFragment extends BaseFragment implements PullToRefreshBas
     private Unbinder unbinder;
     private String   location;
 
-    private static final String GET_LOCATION    = "get_anchor_location";
     private static final String GET_ANCHOR_LIST = "get_anchor_list";
     private static final int    REQUEST_SUCCESS = 0x01;
     private static final int    REQUEST_FAIL    = 0x02;
 
     private static final int GET_ANCHOR_CODE      = 0X14;
-    private static final int GET_LOCATION_CODE    = 0X15;
-    private static final int GET_LOCATION_FAIL    = 0X16;
-    private static final int GET_LOCATION_SUCCESS = 0x17;
 
     @SuppressLint("HandlerLeak")
     private BaseHandler mHandler = new BaseHandler(getActivity())
@@ -110,32 +106,6 @@ public class AnchorListFragment extends BaseFragment implements PullToRefreshBas
 
                 case GET_ANCHOR_CODE:
                     getAnchorList();
-                    break;
-                case GET_LOCATION_CODE:
-                    if (TextUtils.isEmpty(location))
-                    {
-                        getLocation();
-                    }
-                    else
-                    {
-                        mHandler.sendEmptyMessage(GET_ANCHOR_CODE);
-                    }
-
-                    break;
-
-                case GET_LOCATION_SUCCESS:
-                    LocationInfoHandler mLocationInfoHandler = (LocationInfoHandler) msg.obj;
-                    LocationInfo locationInfo = mLocationInfoHandler.getLocationInfo();
-
-                    if (null != locationInfo)
-                    {
-                        location = locationInfo.getProv() + "," + locationInfo.getCity() + "," + locationInfo.getDistrict();
-                    }
-                    mHandler.sendEmptyMessage(GET_ANCHOR_CODE);
-                    break;
-
-                case GET_LOCATION_FAIL:
-                    mHandler.sendEmptyMessage(GET_ANCHOR_CODE);
                     break;
 
 
@@ -236,7 +206,7 @@ public class AnchorListFragment extends BaseFragment implements PullToRefreshBas
 
     private void loadData()
     {
-        mHandler.sendEmptyMessage(GET_LOCATION_CODE);
+        getAnchorList();
     }
 
     private void getAnchorList()
@@ -250,13 +220,6 @@ public class AnchorListFragment extends BaseFragment implements PullToRefreshBas
                 new LiveInfoListHandler());
     }
 
-    private void getLocation()
-    {
-        Map<String, String> valuePairs = new HashMap<>();
-        DataRequest.instance().request(getActivity(), ConfigManager.instance().getIpLookUp(), this, HttpRequest.GET, GET_LOCATION,
-                valuePairs,
-                new LocationInfoHandler());
-    }
 
     private void setTabSelected(int p)
     {
@@ -313,17 +276,6 @@ public class AnchorListFragment extends BaseFragment implements PullToRefreshBas
             else
             {
                 mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
-            }
-        }
-        else if (GET_LOCATION.equals(action))
-        {
-            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
-            {
-                mHandler.sendMessage(mHandler.obtainMessage(GET_LOCATION_SUCCESS, obj));
-            }
-            else
-            {
-                mHandler.sendMessage(mHandler.obtainMessage(GET_LOCATION_FAIL, resultMsg));
             }
         }
 

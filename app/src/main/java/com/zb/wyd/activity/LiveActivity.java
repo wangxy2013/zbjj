@@ -109,7 +109,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     private static final int    GET_STREAM_REQUEST     = 0x09;
     private static final int    GET_ANCHOR_REQUEST     = 0x10;
     private static final int    FAVORITE_LIKE_SUCCESS  = 0x11;
-
+    private static final int    FAVORITE_LIKE_FAIL  = 0x14;
     private static final int         GET_ANCHOR_SUCCESS = 0x12;
     private static final int         SHOW_SYSTEM_TV     = 0x13;
     @SuppressLint("HandlerLeak")
@@ -217,6 +217,9 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                     tvFollow.setEnabled(false);
                     break;
 
+                case FAVORITE_LIKE_FAIL:
+                    ToastUtil.show(LiveActivity.this, "操作失败");
+                    break;
                 case GET_ANCHOR_SUCCESS:
 
                     UserInfoHandler mUserInfoHandler = (UserInfoHandler) msg.obj;
@@ -699,7 +702,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
             }
             else
             {
-                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
+                mHandler.sendMessage(mHandler.obtainMessage(FAVORITE_LIKE_FAIL, resultMsg));
             }
         }
         else if (GET_USER_INFO.equals(action))
@@ -710,7 +713,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
             }
             else
             {
-                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
+                //mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
             }
         }
     }

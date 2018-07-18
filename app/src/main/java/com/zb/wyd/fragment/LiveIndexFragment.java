@@ -121,6 +121,15 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
                     freeLiveList.clear();
                     freeLiveList.addAll(mLiveInfoListHandler.getUserInfoList());
                     mRecommendAdapter.notifyDataSetChanged();
+
+                    if(freeLiveList.isEmpty())
+                    {
+                        rlAllRecommend.setVisibility(View.GONE);
+                    }
+                    else
+                    {
+                        rlAllRecommend.setVisibility(View.VISIBLE);
+                    }
                     break;
 
 

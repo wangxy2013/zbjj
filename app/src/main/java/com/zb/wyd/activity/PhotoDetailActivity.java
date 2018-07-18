@@ -232,8 +232,16 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
                             tvContact.setText("联系作者");
                         }
 
+                        if (TextUtils.isEmpty(photoInfo.getLocation()))
+                        {
+                            tvLocation.setVisibility(View.GONE);
+                        }
+                        else
+                        {
+                            tvLocation.setVisibility(View.VISIBLE);
+                            tvLocation.setText(photoInfo.getLocation());
 
-                        tvLocation.setText(photoInfo.getLocation());
+                        }
 
                         allPic.addAll(freePic);
                         allPic.addAll(chargePic);

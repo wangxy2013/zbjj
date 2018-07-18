@@ -159,7 +159,7 @@ public class SpaceImageDetailActivity extends BaseActivity
 
                 if (ConfigManager.instance().getVipLevelVIE() <= 0)
                 {
-                    DialogUtils.showPromptDialog(SpaceImageDetailActivity.this, "vip等级大于0才可以下载高清图片", new MyItemClickListener()
+                    DialogUtils.showPromptDialog(SpaceImageDetailActivity.this, "VIP可下载", new MyItemClickListener()
                     {
                         @Override
                         public void onItemClick(View view, int position)

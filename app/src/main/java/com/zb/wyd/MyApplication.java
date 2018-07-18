@@ -1,14 +1,11 @@
 package com.zb.wyd;
 
 import android.app.Application;
-import android.app.Service;
 import android.os.StrictMode;
-import android.os.Vibrator;
 
 import com.umeng.commonsdk.UMConfigure;
 import com.zb.wyd.utils.APPUtils;
 import com.zb.wyd.utils.ConfigManager;
-import com.zb.wyd.utils.LogUtil;
 import com.zb.wyd.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -80,4 +77,6 @@ public class MyApplication extends Application
     {
         this.location = location;
     }
+
+
 }

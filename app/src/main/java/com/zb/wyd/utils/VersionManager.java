@@ -121,9 +121,9 @@ public class VersionManager implements IRequestListener
                     break;
 
                 case REQUEST_FAIL:
-                    Map<String, String> valuePairs = new HashMap<>();
-                    DataRequest.instance().request(mContext, "https://www.baidu.com", VersionManager.this, HttpRequest.GET, GET_BAIDU, valuePairs,
-                            new BaiduHandler());
+//                    Map<String, String> valuePairs = new HashMap<>();
+//                    DataRequest.instance().request(mContext, "https://www.baidu.com", VersionManager.this, HttpRequest.GET, GET_BAIDU, valuePairs,
+//                            new BaiduHandler());
                     break;
 
                 case BATDU_SUCCESS:

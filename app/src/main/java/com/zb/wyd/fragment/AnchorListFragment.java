@@ -70,12 +70,10 @@ public class AnchorListFragment extends BaseFragment implements PullToRefreshBas
     private AnchorAdapter mAnchorAdapter;
     private View rootView = null;
     private Unbinder unbinder;
-    private String   location;
 
     private static final String GET_ANCHOR_LIST = "get_anchor_list";
     private static final int    REQUEST_SUCCESS = 0x01;
     private static final int    REQUEST_FAIL    = 0x02;
-
     private static final int GET_ANCHOR_CODE      = 0X14;
 
     @SuppressLint("HandlerLeak")
@@ -97,7 +95,6 @@ public class AnchorListFragment extends BaseFragment implements PullToRefreshBas
 
                     liveInfoList.addAll(mOrderListHandler.getUserInfoList());
                     mAnchorAdapter.notifyDataSetChanged();
-
                     break;
 
                 case REQUEST_FAIL:
@@ -215,7 +212,7 @@ public class AnchorListFragment extends BaseFragment implements PullToRefreshBas
         valuePairs.put("pn", pn + "");
         valuePairs.put("num", "20");
         valuePairs.put("sort", sort);
-        valuePairs.put("location", location);
+        valuePairs.put("location", MyApplication.getInstance().getLocation());
         DataRequest.instance().request(getActivity(), Urls.getNewLive(), this, HttpRequest.GET, GET_ANCHOR_LIST, valuePairs,
                 new LiveInfoListHandler());
     }
@@ -249,7 +246,6 @@ public class AnchorListFragment extends BaseFragment implements PullToRefreshBas
                 sort = "rand";
                 break;
         }
-        liveInfoList.clear();
         pn = 1;
         mRefreshStatus = 0;
         loadData();

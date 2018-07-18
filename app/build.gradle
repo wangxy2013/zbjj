@@ -19,8 +19,9 @@ android {
         applicationId "com.zb.wyd"
         minSdkVersion 22
         targetSdkVersion 26
-        versionCode 22300
-        versionName "2.2.3"
+        versionCode 23400
+        versionName "2.3.4"
+        multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -33,11 +34,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    repositories {
-        flatDir {
-            dirs 'libs'
-        }
-    }
+
 }
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -73,8 +70,8 @@ dependencies {
         exclude group: 'com.android.support', module: 'appcompat-v7'
     }
     compile 'com.bartoszlipinski.recyclerviewheader:library:1.2.0'
-    compile(name: 'visitor', ext: 'aar')
-
+    compile project(':visitor-release')
+    compile 'com.google.code.gson:gson:2.8.2'
     compile 'com.umeng.sdk:common:1.5.0'
     compile 'com.umeng.sdk:analytics:7.5.0'
 }

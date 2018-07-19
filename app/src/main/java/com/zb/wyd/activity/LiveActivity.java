@@ -487,7 +487,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "live");
-        DataRequest.instance().request(LiveActivity.this, Urls.getLivePriceUrl(), this, HttpRequest.POST, GET_LIVE_PRICE, valuePairs,
+        DataRequest.instance().request(LiveActivity.this, Urls.getLivePriceUrl(), this, HttpRequest.GET, GET_LIVE_PRICE, valuePairs,
                 new LivePriceInfoHandler());
 
     }

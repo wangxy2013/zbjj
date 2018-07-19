@@ -515,4 +515,15 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
             ((LiveFragment) getParentFragment()).setTabIndex(1);
         }
     }
+
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        if (null != unbinder)
+        {
+            unbinder.unbind();
+            unbinder = null;
+        }
+    }
 }

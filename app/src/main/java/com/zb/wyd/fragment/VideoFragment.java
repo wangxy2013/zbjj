@@ -150,7 +150,6 @@ public class VideoFragment extends BaseFragment implements IRequestListener, Vie
                     if (!cataInfoList.isEmpty())
                     {
                         cta_id = cataInfoList.get(0).getId();
-                        mHandler.sendEmptyMessage(GET_VIDEO_LIST_CODE);
                     }
 
                     break;
@@ -356,7 +355,7 @@ public class VideoFragment extends BaseFragment implements IRequestListener, Vie
     {
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("pos_id", "2");
-        DataRequest.instance().request(getActivity(), Urls.getAdListUrl(), this, HttpRequest.POST, GET_AD_LIST, valuePairs,
+        DataRequest.instance().request(getActivity(), Urls.getAdListUrl(), this, HttpRequest.GET, GET_AD_LIST, valuePairs,
                 new AdInfoListHandler());
     }
 

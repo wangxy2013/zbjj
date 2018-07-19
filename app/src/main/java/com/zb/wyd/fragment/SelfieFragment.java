@@ -90,6 +90,8 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
     private CataAdapter mCataAdapter;
 
 
+    private int getPhotoCount;
+
     private List<SelfieInfo> selfieInfoList = new ArrayList<>();
     private SelfieAdapter mSelfieAdapter;
 
@@ -100,7 +102,7 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
     private Unbinder unbinder;
     private int pn = 1;
 
-    private              String photoTag                = "0";
+    private              String photoTag              = "0";
     private              String sort                  = "new";
     private static final String GET_AD_LIST           = "get_ad_list";
     private static final String GET_CATA_LIST         = "get_cata_list";
@@ -132,7 +134,17 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
                     break;
 
                 case REQUEST_FAIL:
-                    ToastUtil.show(getActivity(), msg.obj.toString());
+
+                    getPhotoCount++;
+                    if (getPhotoCount <= 30)
+                    {
+                        if(pn==1)
+                        {
+                            getPhotoList();
+                        }
+
+                    }
+                    //ToastUtil.show(getActivity(), msg.obj.toString());
 
                     break;
                 case GET_CATA_LIST_SUCCESS:
@@ -323,7 +335,7 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
                 }
                 mCataAdapter.notifyDataSetChanged();
                 photoTag = cataInfoList.get(position).getName();
-                pn=1;
+                pn = 1;
                 selfieInfoList.clear();
                 mHandler.sendEmptyMessage(GET_PHOTO_LIST_CODE);
             }
@@ -402,7 +414,7 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
     {
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("pos_id", "3");
-        DataRequest.instance().request(getActivity(), Urls.getAdListUrl(), this, HttpRequest.POST, GET_AD_LIST, valuePairs,
+        DataRequest.instance().request(getActivity(), Urls.getAdListUrl(), this, HttpRequest.GET, GET_AD_LIST, valuePairs,
                 new AdInfoListHandler());
     }
 
@@ -512,11 +524,11 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
     public void onDestroy()
     {
         super.onDestroy();
-//        if (null != unbinder)
-//        {
-//            unbinder.unbind();
-//            unbinder = null;
-//        }
+        //        if (null != unbinder)
+        //        {
+        //            unbinder.unbind();
+        //            unbinder = null;
+        //        }
     }
 
 
@@ -532,7 +544,7 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
             }
             else
             {
-                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
+                //  mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
             }
         }
         else if (GET_PHPTO_LIST.equals(action))
@@ -554,7 +566,7 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
             }
             else
             {
-                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
+                //  mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
             }
         }
     }
@@ -587,7 +599,7 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
 
 
                     photoTag = cataInfoList.get(position).getName();
-                    pn=1;
+                    pn = 1;
                     selfieInfoList.clear();
                     mHandler.sendEmptyMessage(GET_PHOTO_LIST_CODE);
                 }
@@ -601,7 +613,7 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
         }
         else if (v == tvNew)
         {
-            pn =1;
+            pn = 1;
             selfieInfoList.clear();
             sort = "new";
             tvNew.setSelected(true);
@@ -610,7 +622,7 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
         }
         else if (v == tvFav)
         {
-            pn=1;
+            pn = 1;
             selfieInfoList.clear();
             sort = "fav";
             tvNew.setSelected(false);
@@ -636,7 +648,7 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
     {
         if (mSwipeRefreshLayout != null)
         {
-            pn=1;
+            pn = 1;
             adInfoList.clear();
             cataInfoList.clear();
             picList.clear();

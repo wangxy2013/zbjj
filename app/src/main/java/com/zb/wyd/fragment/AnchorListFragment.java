@@ -310,4 +310,14 @@ public class AnchorListFragment extends BaseFragment implements PullToRefreshBas
             setTabSelected(2);
         }
     }
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        if (null != unbinder)
+        {
+            unbinder.unbind();
+            unbinder = null;
+        }
+    }
 }

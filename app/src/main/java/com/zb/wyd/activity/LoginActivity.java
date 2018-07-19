@@ -1,11 +1,13 @@
 package com.zb.wyd.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -133,7 +135,7 @@ public class LoginActivity extends BaseActivity implements IRequestListener
     protected void initViewData()
     {
         ImageLoader.getInstance().displayImage(ConfigManager.instance().getBgLogin(), ivBg);
-        tvEmail.setText("防丢邮箱,发邮件到"+ConfigManager.instance().getSystemEmail()+"获取最新地址");
+        tvEmail.setText("防丢邮箱,发邮件到" + ConfigManager.instance().getSystemEmail() + "获取最新地址");
     }
 
     @Override
@@ -151,15 +153,17 @@ public class LoginActivity extends BaseActivity implements IRequestListener
 
         if (v == btnLogin)
         {
-
+            InputMethodManager imm = (InputMethodManager)
+                    getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
             account = etAccount.getText().toString();
             pwd = etPwd.getText().toString();
 
 
-            if (TextUtils.isEmpty(account) || account.length() < 6)
+            if (TextUtils.isEmpty(account) || account.length() < 5)
             {
-                ToastUtil.show(LoginActivity.this, "请输入6-16位账号");
+                ToastUtil.show(LoginActivity.this, "请输入5-16位账号");
                 return;
             }
             String str = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm";
@@ -170,9 +174,9 @@ public class LoginActivity extends BaseActivity implements IRequestListener
             }
 
 
-            if (TextUtils.isEmpty(pwd) || pwd.length() < 8)
+            if (TextUtils.isEmpty(pwd) || pwd.length() < 6)
             {
-                ToastUtil.show(LoginActivity.this, "请输入8-16位密码");
+                ToastUtil.show(LoginActivity.this, "请输入6-18位密码");
                 return;
             }
 

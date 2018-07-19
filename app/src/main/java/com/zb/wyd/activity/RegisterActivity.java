@@ -19,6 +19,7 @@ import com.zb.wyd.json.ResultHandler;
 import com.zb.wyd.utils.APPUtils;
 import com.zb.wyd.utils.ConfigManager;
 import com.zb.wyd.utils.ConstantUtil;
+import com.zb.wyd.utils.KeyBoardUtils;
 import com.zb.wyd.utils.ToastUtil;
 import com.zb.wyd.utils.Urls;
 import com.zb.wyd.widget.statusbar.StatusBarUtil;
@@ -171,9 +172,9 @@ public class RegisterActivity extends BaseActivity implements IRequestListener
             pwd = etPwd.getText().toString();
 
 
-            if (TextUtils.isEmpty(account) || account.length() < 6)
+            if (TextUtils.isEmpty(account) || account.length() < 5)
             {
-                ToastUtil.show(RegisterActivity.this, "请输入6-16位账号");
+                ToastUtil.show(RegisterActivity.this, "请输入5-16位账号");
                 return;
             }
             String str = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm";
@@ -184,9 +185,9 @@ public class RegisterActivity extends BaseActivity implements IRequestListener
             }
 
 
-            if (TextUtils.isEmpty(pwd) || pwd.length() < 8)
+            if (TextUtils.isEmpty(pwd) || pwd.length() < 6)
             {
-                ToastUtil.show(RegisterActivity.this, "请输入8-16位密码");
+                ToastUtil.show(RegisterActivity.this, "请输入6-18位密码");
                 return;
             }
 

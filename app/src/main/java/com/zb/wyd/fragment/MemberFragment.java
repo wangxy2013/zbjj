@@ -100,10 +100,11 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
     RelativeLayout  rlCustomer;
     @BindView(R.id.rl_extension)
     RelativeLayout  rlExtension;
-
+    @BindView(R.id.tv_version)
+    TextView        tvVersion;
 
     @BindView(R.id.btn_logout)
-    Button          btnLogout;
+    Button btnLogout;
 
     @BindView(R.id.rl_setting)
     RelativeLayout rlSetting;
@@ -219,6 +220,7 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
     protected void initViewData()
     {
         tvCustomer.setText("QQ:" + ConfigManager.instance().getSystemQq());
+        tvVersion.setText("版本:V" + APPUtils.getVersionName(getActivity()));
     }
 
     @Override
@@ -228,7 +230,7 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
         if (MyApplication.getInstance().isLogin())
         {
             Map<String, String> valuePairs = new HashMap<>();
-            DataRequest.instance().request(getActivity(), Urls.getUserInfoUrl(), this, HttpRequest.POST, GET_USER_DETAIL, valuePairs,
+            DataRequest.instance().request(getActivity(), Urls.getUserInfoUrl(), this, HttpRequest.GET, GET_USER_DETAIL, valuePairs,
                     new UserInfoHandler());
             btnLogout.setVisibility(View.VISIBLE);
         }
@@ -374,7 +376,7 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
         {
             startActivity(new Intent(getActivity(), DomainNameActivity.class));
         }
-        else if(v == rlExtension)
+        else if (v == rlExtension)
         {
             if (MyApplication.getInstance().isLogin())
             {

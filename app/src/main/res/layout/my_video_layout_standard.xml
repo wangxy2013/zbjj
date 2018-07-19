@@ -174,7 +174,20 @@
             android:textColor="@color/white"
             android:textSize="@dimen/t16"
             android:textStyle="bold"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/white"/>
 
+        <TextView
+            android:id="@+id/tv_cm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="@dimen/dm_15"
+            android:text="联通网络"
+            android:textColor="@color/white"
+            android:textSize="@dimen/t14"/>
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -203,20 +216,7 @@
             android:text="电信网络"
             android:textColor="@color/white"
             android:textSize="@dimen/t14"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/white"/>
 
-        <TextView
-            android:id="@+id/tv_cm"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="@dimen/dm_15"
-            android:text="联通网络"
-            android:textColor="@color/white"
-            android:textSize="@dimen/t14"/>
 
     </LinearLayout>
 

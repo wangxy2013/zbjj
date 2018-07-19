@@ -238,14 +238,14 @@ public class LiveFragment extends BaseFragment
 
     }
 
-    @Override
-    public void onDestroy()
-    {
-        super.onDestroy();
-        if (null != unbinder)
-        {
-            unbinder.unbind();
-            unbinder = null;
-        }
-    }
+//    @Override
+//    public void onDestroy()
+//    {
+//        super.onDestroy();
+//        if (null != unbinder)
+//        {
+//            unbinder.unbind();
+//            unbinder = null;
+//        }
+//    }
 }

@@ -31,7 +31,7 @@
             android:inputType="textPassword"
             android:background="@color/transparent"
             android:hint="输入原密码"
-            android:maxLength="30"
+            android:maxLength="18"
             android:textColor="@color/blackC"
             android:textSize="@dimen/t14"/>
 
@@ -62,7 +62,7 @@
             android:background="@color/transparent"
             android:hint="输入新密码"
             android:inputType="textPassword"
-            android:maxLength="30"
+            android:maxLength="18"
             android:textColor="@color/blackC"
             android:textSize="@dimen/t14"/>
 
@@ -93,7 +93,7 @@
             android:layout_toRightOf="@+id/iv_aging_pwd"
             android:background="@color/transparent"
             android:hint="确认新密码"
-            android:maxLength="30"
+            android:maxLength="18"
             android:inputType="textPassword"
             android:textColor="@color/blackC"
             android:textSize="@dimen/t14"/>

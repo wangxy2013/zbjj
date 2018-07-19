@@ -70,7 +70,7 @@ public class DomainNameActivity extends BaseActivity
                     return;
                 }
 
-                ConfigManager.instance().setDomainName(name);
+                ConfigManager.instance().setZdyDomainName(name);
                 ToastUtil.show(DomainNameActivity.this, "保存成功!");
                 finish();
             }

@@ -290,7 +290,7 @@ public class VideoChildFragment extends BaseFragment implements SwipeRefreshLayo
     {
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("pos_id", "1");
-        DataRequest.instance().request(getActivity(), Urls.getAdListUrl(), this, HttpRequest.POST, GET_AD_LIST, valuePairs,
+        DataRequest.instance().request(getActivity(), Urls.getAdListUrl(), this, HttpRequest.GET, GET_AD_LIST, valuePairs,
                 new AdInfoListHandler());
     }
 

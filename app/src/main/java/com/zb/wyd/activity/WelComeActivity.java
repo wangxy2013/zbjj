@@ -19,6 +19,7 @@ import com.zb.wyd.http.DataRequest;
 import com.zb.wyd.http.HttpRequest;
 import com.zb.wyd.http.IRequestListener;
 import com.zb.wyd.json.LocationInfoHandler;
+import com.zb.wyd.json.ResultHandler;
 import com.zb.wyd.json.VersionInfoHandler;
 import com.zb.wyd.utils.APPUtils;
 import com.zb.wyd.utils.ConfigManager;
@@ -64,8 +65,8 @@ public class WelComeActivity extends BaseActivity implements IRequestListener
     private static final int TEST_DOMAINNAME_FAIL    = 0x06;
     private static final int TEST_DOMAINNAME_SUCCESS = 0x07;
 
-    private        String[]     parkedDomainArr = {"0816data.com", "hedayishu.com", "dayundao.com"};
-    private        List<String> domainNameList  = new ArrayList<>();
+    private String[]     parkedDomainArr = {"0816data.com", "hedayishu.com", "dayundao.com"};
+    private List<String> domainNameList  = new ArrayList<>();
 
 
     @SuppressLint("HandlerLeak")
@@ -179,7 +180,6 @@ public class WelComeActivity extends BaseActivity implements IRequestListener
             ImageLoader.getInstance().displayImage(ConfigManager.instance().getBgStartup(), ivBg);
         }
         initDomainName();
-
     }
 
 
@@ -196,7 +196,12 @@ public class WelComeActivity extends BaseActivity implements IRequestListener
         {
             domianNameArr = crossfire.split(";");
         }
+        String myDomainName = ConfigManager.instance().getZydDomainName();
 
+        if (!"".equals(myDomainName))
+        {
+            domainNameList.add(myDomainName);
+        }
         if (null != domianNameArr)
         {
             for (int i = 0; i < domianNameArr.length; i++)
@@ -232,10 +237,10 @@ public class WelComeActivity extends BaseActivity implements IRequestListener
             mDomainName = domainNameList.get(p);
             p++;
 
-            String url = mDomainName + "/index/config?auth=";
+            String url = mDomainName + "/ping.js?auth=";
             Map<String, String> valuePairs1 = new HashMap<>();
-            DataRequest.instance().request(this, url, WelComeActivity.this, HttpRequest.POST, TEST_DOMAINNAME, valuePairs1,
-                    new VersionInfoHandler());
+            DataRequest.instance().request(this, url, WelComeActivity.this, HttpRequest.GET, TEST_DOMAINNAME, valuePairs1,
+                    new ResultHandler());
         }
         else
         {

@@ -101,7 +101,7 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
                     if (null != mChannelInfo)
                     {
                         videoUri = mVideoStreamHandler.getUri();
-                        String uri = mChannelInfo.getYd() + videoUri;
+                        String uri = mChannelInfo.getCm() + videoUri;
                         LogUtil.e("TAG", uri);
                         if ("1".equals(mVideoStreamHandler.getHas_favorite()))
                         {
@@ -435,7 +435,8 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
                 hideProgressDialog();
                 LogUtil.e("TAG", "播放错误111111111111111111111111111111111111111111111111111");
 
-                ToastUtil.show(VideoPlayActivity.this, "该网络暂无法播放");
+                ToastUtil.show(VideoPlayActivity.this, "该网络暂无法播放，请切换网络重试");
+                mChannelLayout.setVisibility(View.VISIBLE);
                 videoPlayer.showSettingWidget();
                 //                DialogUtils.showChannelDialog(VideoPlayActivity.this, new MyItemClickListener()
                 //                {

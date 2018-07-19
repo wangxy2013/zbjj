@@ -52,8 +52,9 @@ public class ConfigManager
     private static final String CROSSFIRE  = "crossfire";
     private static final String REG_CLOSED = "reg_closed";
     private static final String IP_LOOK_UP = "ip_look_up";
-
     private static final String   VIP_LEVEL  = "vip_level";
+
+    private static final String ZDY_DOMAIN_NAME = "zdy_domain_name";
     /**
      * 返回实例
      *
@@ -288,7 +289,7 @@ public class ConfigManager
 
     public String getDomainName()
     {
-        return mSharedPreferences.getString(DOMAIN_NAME, "http://www.883974.com") + "/";
+        return mSharedPreferences.getString(DOMAIN_NAME, "") ;
     }
 
     public void setCrossfire(String str)
@@ -330,6 +331,16 @@ public class ConfigManager
     public int getVipLevelVIE()
     {
         return mSharedPreferences.getInt(VIP_LEVEL, 0);
+    }
+
+    public void setZdyDomainName(String str)
+    {
+        mSharedPreferences.edit().putString(ZDY_DOMAIN_NAME, str).commit();
+    }
+
+    public String getZydDomainName()
+    {
+        return mSharedPreferences.getString(ZDY_DOMAIN_NAME, "") ;
     }
 
 }

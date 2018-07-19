@@ -284,9 +284,9 @@ public class RecoveryPwdActivity extends BaseActivity implements IRequestListene
                 String pwd1 = etPwd1.getText().toString();
 
 
-                if (TextUtils.isEmpty(pwd) || pwd.length() < 8)
+                if (TextUtils.isEmpty(pwd) || pwd.length() < 6)
                 {
-                    ToastUtil.show(RecoveryPwdActivity.this, "请输入8-16位密码");
+                    ToastUtil.show(RecoveryPwdActivity.this, "请输入6-18位密码");
                     return;
                 }
 

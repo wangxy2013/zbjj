@@ -96,7 +96,7 @@
                 android:layout_marginLeft="@dimen/dm_5"
                 android:layout_toRightOf="@+id/iv_pwd"
                 android:background="@color/transparent"
-                android:hint="密码长度为6-18位"
+                android:hint="密码长度为7-18位"
                 android:inputType="textPassword"
                 android:maxLength="18"
                 android:textColor="@drawable/login_font_selector"

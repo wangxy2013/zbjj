@@ -106,6 +106,7 @@ public class VideoFragment extends BaseFragment implements IRequestListener, Vie
     private String  cta_id = "0";
     private String  sort   = "new";
 
+
     private static final String GET_CATA_LIST  = "get_cata_list";
     private static final String GET_VIDEO_LIST = "get_video_list";
     private static final String GET_AD_LIST    = "get_ad_list";
@@ -160,6 +161,10 @@ public class VideoFragment extends BaseFragment implements IRequestListener, Vie
 
                 case GET_VIDEO_LIST_SUCCESS:
                     VideoInfoListHandler mVideoInfoListHandler = (VideoInfoListHandler) msg.obj;
+                    if (pn == 1)
+                    {
+                        mVideoInfoList.clear();
+                    }
                     mVideoInfoList.addAll(mVideoInfoListHandler.getVideoInfoList());
                     mVideoAdapter.notifyDataSetChanged();
                     break;
@@ -269,7 +274,6 @@ public class VideoFragment extends BaseFragment implements IRequestListener, Vie
 
                 cta_id = cataInfoList.get(position).getId();
                 pn = 1;
-                mVideoInfoList.clear();
                 mHandler.sendEmptyMessage(GET_VIDEO_LIST_CODE);
 
 
@@ -329,6 +333,7 @@ public class VideoFragment extends BaseFragment implements IRequestListener, Vie
 
     private void loadData()
     {
+        mSwipeRefreshLayout.setRefreshing(true);
         mHandler.sendEmptyMessage(GET_VIDEO_LIST_CODE);
     }
 
@@ -498,6 +503,14 @@ public class VideoFragment extends BaseFragment implements IRequestListener, Vie
 
         else if (GET_VIDEO_LIST.equals(action))
         {
+            mSwipeRefreshLayout.post(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+            });
             if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
             {
                 mHandler.sendMessage(mHandler.obtainMessage(GET_VIDEO_LIST_SUCCESS, obj));
@@ -561,7 +574,6 @@ public class VideoFragment extends BaseFragment implements IRequestListener, Vie
             mVideoAdapter.setNew(true);
             tvNew.setSelected(true);
             tvCollection.setSelected(false);
-            mVideoInfoList.clear();
             pn = 1;
             mRefreshStatus = 0;
             sort = "new";
@@ -573,7 +585,6 @@ public class VideoFragment extends BaseFragment implements IRequestListener, Vie
             mVideoAdapter.setNew(false);
             tvNew.setSelected(false);
             tvCollection.setSelected(true);
-            mVideoInfoList.clear();
             pn = 1;
             mRefreshStatus = 0;
             sort = "fav";
@@ -605,7 +616,6 @@ public class VideoFragment extends BaseFragment implements IRequestListener, Vie
     {
         if (mSwipeRefreshLayout != null)
         {
-            mVideoInfoList.clear();
             pn = 1;
             mRefreshStatus = 0;
             loadData();

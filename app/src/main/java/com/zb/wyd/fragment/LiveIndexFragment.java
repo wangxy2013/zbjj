@@ -525,5 +525,6 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
             unbinder.unbind();
             unbinder = null;
         }
+        mHandler.removeCallbacksAndMessages(null);
     }
 }

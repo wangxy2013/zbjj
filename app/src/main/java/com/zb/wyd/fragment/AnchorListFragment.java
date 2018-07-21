@@ -319,5 +319,7 @@ public class AnchorListFragment extends BaseFragment implements PullToRefreshBas
             unbinder.unbind();
             unbinder = null;
         }
+
+        mHandler.removeCallbacksAndMessages(null);
     }
 }

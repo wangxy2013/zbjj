@@ -250,6 +250,7 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
             unbinder.unbind();
             unbinder = null;
         }
+        mHandler.removeCallbacksAndMessages(null);
     }
 
 

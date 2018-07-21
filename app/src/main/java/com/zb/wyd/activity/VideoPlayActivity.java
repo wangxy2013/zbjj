@@ -182,6 +182,11 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
                     if (null != shareInfo)
                     {
                         shareCnontent = shareInfo.getTitle() + ":" + shareInfo.getUrl();
+
+                        Intent intent1 = new Intent(Intent.ACTION_SEND);
+                        intent1.putExtra(Intent.EXTRA_TEXT, shareCnontent);
+                        intent1.setType("text/plain");
+                        startActivityForResult(Intent.createChooser(intent1, "分享"), SHARE_PHOTO_REQUEST_CODE);
                     }
                     break;
 
@@ -242,6 +247,8 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         mYdTv = (TextView) videoPlayer.findViewById(R.id.tv_yd);
         mDxTv = (TextView) videoPlayer.findViewById(R.id.tv_dx);
         mCmTv = (TextView) videoPlayer.findViewById(R.id.tv_cm);
+
+        mCmTv.setSelected(true);
 
         mCollectionIv.setOnClickListener(this);
         mShareIv.setOnClickListener(this);
@@ -488,7 +495,6 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
             }
         });
         mHandler.sendEmptyMessage(GET_STREAM_REQUEST);
-        mHandler.sendEmptyMessage(GET_SHARE_CODE);
     }
 
 
@@ -571,13 +577,9 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         }
         else if (v == mShareIv)
         {
-            if (!TextUtils.isEmpty(shareCnontent))
-            {
-                Intent intent1 = new Intent(Intent.ACTION_SEND);
-                intent1.putExtra(Intent.EXTRA_TEXT, shareCnontent);
-                intent1.setType("text/plain");
-                startActivityForResult(Intent.createChooser(intent1, "分享"), SHARE_PHOTO_REQUEST_CODE);
-            }
+            showProgressDialog();
+            mHandler.sendEmptyMessage(GET_SHARE_CODE);
+
         }
         else if (v == mSettingIv)
         {
@@ -593,16 +595,25 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         }
         else if (v == mYdTv)
         {
+            mYdTv.setSelected(true);
+            mCmTv.setSelected(false);
+            mDxTv.setSelected(false);
             mChannelLayout.setVisibility(View.GONE);
             playVideo(mChannelInfo.getYd() + videoUri);
         }
         else if (v == mDxTv)
         {
+            mYdTv.setSelected(false);
+            mCmTv.setSelected(false);
+            mDxTv.setSelected(true);
             mChannelLayout.setVisibility(View.GONE);
             playVideo(mChannelInfo.getDx() + videoUri);
         }
         else if (v == mCmTv)
         {
+            mYdTv.setSelected(false);
+            mCmTv.setSelected(true);
+            mDxTv.setSelected(false);
             mChannelLayout.setVisibility(View.GONE);
             playVideo(mChannelInfo.getCm() + videoUri);
         }
@@ -717,6 +728,10 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
             if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
             {
                 mHandler.sendMessage(mHandler.obtainMessage(GET_SHARE_SUCCESS, obj));
+            }
+            else
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
             }
 
         }

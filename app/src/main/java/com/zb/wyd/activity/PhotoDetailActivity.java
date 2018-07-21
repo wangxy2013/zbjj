@@ -307,6 +307,11 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
                     if (null != shareInfo)
                     {
                         shareCnontent = shareInfo.getTitle() + ":" + shareInfo.getUrl();
+                        Intent intent1 = new Intent(Intent.ACTION_SEND);
+                        intent1.putExtra(Intent.EXTRA_TEXT, shareCnontent);
+                        intent1.setType("text/plain");
+                        startActivityForResult(Intent.createChooser(intent1, "分享"), SHARE_PHOTO_REQUEST_CODE);
+
                     }
                     break;
 
@@ -385,7 +390,6 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
     {
         mHandler.sendEmptyMessage(GET_PHOTO_LIST_CODE);
         mHandler.sendEmptyMessage(GET_COMMENT_LIST_CODE);
-        mHandler.sendEmptyMessage(GET_SHARE_CODE);
     }
 
     private void showBuyDialog()
@@ -450,13 +454,8 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
         }
         else if (v == ivShare)
         {
-            if (!TextUtils.isEmpty(shareCnontent))
-            {
-                Intent intent1 = new Intent(Intent.ACTION_SEND);
-                intent1.putExtra(Intent.EXTRA_TEXT, shareCnontent);
-                intent1.setType("text/plain");
-                startActivityForResult(Intent.createChooser(intent1, "分享"), SHARE_PHOTO_REQUEST_CODE);
-            }
+            showProgressDialog();
+            mHandler.sendEmptyMessage(GET_SHARE_CODE);
         }
         else if (v == tvMore)
         {
@@ -619,6 +618,10 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
             if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
             {
                 mHandler.sendMessage(mHandler.obtainMessage(GET_SHARE_SUCCESS, obj));
+            }
+            else
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
             }
 
         }

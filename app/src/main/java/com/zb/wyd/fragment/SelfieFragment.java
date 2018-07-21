@@ -138,7 +138,7 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
                     getPhotoCount++;
                     if (getPhotoCount <= 30)
                     {
-                        if(pn==1)
+                        if (pn == 1)
                         {
                             getPhotoList();
                         }
@@ -524,11 +524,12 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
     public void onDestroy()
     {
         super.onDestroy();
-        //        if (null != unbinder)
-        //        {
-        //            unbinder.unbind();
-        //            unbinder = null;
-        //        }
+        if (null != unbinder)
+        {
+            unbinder.unbind();
+            unbinder = null;
+        }
+        mHandler.removeCallbacksAndMessages(null);
     }
 
 

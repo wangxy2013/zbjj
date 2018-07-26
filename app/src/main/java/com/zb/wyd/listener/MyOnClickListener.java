@@ -1,8 +1,6 @@
 package com.zb.wyd.listener;
 
 /**
- * User: 王先云
- * Date: 2015-09-02 09:02
  * DESC: 一句话简单描述
  */
 public class MyOnClickListener

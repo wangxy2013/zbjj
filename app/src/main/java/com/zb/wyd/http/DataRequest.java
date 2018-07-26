@@ -11,10 +11,6 @@ import java.util.Map;
 
 
 /**
- * @author 王先云
- * @date 2014年9月16日 上午9:40:51
- * @since[产品/模块版本]
- * @see
  */
 public class DataRequest
 {

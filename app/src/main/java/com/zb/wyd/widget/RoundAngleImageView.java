@@ -1,9 +1,6 @@
 package com.zb.wyd.widget;
 
 /**
- * User: 王先云
- * Date: 2015-08-04 17:15
- * DESC: 圆角图片
  */
 import android.annotation.SuppressLint;
 import android.content.Context;

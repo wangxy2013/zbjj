@@ -123,7 +123,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dm_3"
-                        android:text="11111111111"
                         android:textColor="@color/redA"
                         android:textSize="@dimen/t10"/>
 

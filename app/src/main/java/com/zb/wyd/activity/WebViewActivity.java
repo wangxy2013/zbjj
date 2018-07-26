@@ -19,7 +19,9 @@ import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.zb.wyd.MyApplication;
 import com.zb.wyd.R;
+import com.zb.wyd.entity.VideoInfo;
 import com.zb.wyd.utils.APPUtils;
 import com.zb.wyd.utils.ConfigManager;
 import com.zb.wyd.utils.LogUtil;
@@ -249,6 +251,58 @@ public class WebViewActivity extends Activity
         }
 
         @JavascriptInterface
+        public void videoplay(String video_id)
+        {
+            if (MyApplication.getInstance().isLogin())
+            {
+                VideoInfo mVideoInfo = new VideoInfo();
+                mVideoInfo.setId(video_id);
+                mVideoInfo.setV_name("");
+                Bundle b = new Bundle();
+                b.putSerializable("VideoInfo", mVideoInfo);
+                startActivity(new Intent(WebViewActivity.this, VideoPlayActivity.class).putExtras(b));
+                finish();
+            }
+            else
+            {
+                startActivity(new Intent(WebViewActivity.this, LoginActivity.class));
+            }
+
+        }
+
+        @JavascriptInterface
+        public void videolist(String cat_id)
+        {
+            if(!TextUtils.isEmpty(cat_id))
+            startActivity(new Intent(WebViewActivity.this, VidoeListActivity.class)
+                    .putExtra("sort", "new")
+                    .putExtra("cta_id", cat_id)
+            );
+        }
+
+        @JavascriptInterface
+        public void photolist(String cat_id)
+        {
+            startActivity(new Intent(WebViewActivity.this, PhotoListActivity.class).putExtra("cat_id", cat_id));
+            finish();
+        }
+
+        @JavascriptInterface
+        public void photoplay(String photo_id)
+        {
+            if (MyApplication.getInstance().isLogin())
+            {
+                startActivity(new Intent(WebViewActivity.this, PhotoDetailActivity.class).putExtra("biz_id", photo_id));
+                finish();
+            }
+            else
+            {
+                startActivity(new Intent(WebViewActivity.this, LoginActivity.class));
+            }
+        }
+
+
+        @JavascriptInterface
         public void share(String title, String url, String cover)
         {
             String shareCnontent = title + ":" + url;
@@ -296,6 +350,8 @@ public class WebViewActivity extends Activity
 
                     start();
         }
+
+
     }
 
     @Override

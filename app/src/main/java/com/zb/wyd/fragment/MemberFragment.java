@@ -219,7 +219,7 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
     @Override
     protected void initViewData()
     {
-        tvCustomer.setText("QQ:" + ConfigManager.instance().getSystemQq());
+        tvCustomer.setText(ConfigManager.instance().getSystemQq());
         tvVersion.setText("版本:V" + APPUtils.getVersionName(getActivity()));
     }
 

@@ -60,7 +60,7 @@
             android:background="@drawable/anchor_tab_selector"
             android:gravity="center"
             android:padding="@dimen/dm_8"
-            android:text="收藏的主播"
+            android:text="主播"
             android:textColor="@drawable/anchor_tab_font_selector"
             android:textSize="@dimen/t14"/>
 
@@ -73,7 +73,7 @@
             android:background="@drawable/anchor_tab_selector"
             android:gravity="center"
             android:padding="@dimen/dm_8"
-            android:text="收藏的自拍"
+            android:text="自拍"
             android:textColor="@drawable/anchor_tab_font_selector"
             android:textSize="@dimen/t14"/>
         <TextView
@@ -85,7 +85,7 @@
             android:background="@drawable/anchor_tab_selector"
             android:gravity="center"
             android:padding="@dimen/dm_8"
-            android:text="收藏的视频"
+            android:text="视频"
             android:textColor="@drawable/anchor_tab_font_selector"
             android:textSize="@dimen/t14"/>
     </LinearLayout>

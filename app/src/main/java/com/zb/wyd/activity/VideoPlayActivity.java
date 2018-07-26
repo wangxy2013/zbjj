@@ -2,6 +2,7 @@ package com.zb.wyd.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Message;
 import android.text.TextUtils;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.VideoAllCallBack;
+import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.zb.wyd.R;
 import com.zb.wyd.entity.ChannelInfo;
@@ -52,12 +54,13 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
     @BindView(R.id.detail_player)
     MyVideoPlayer videoPlayer;
 
-    //  private OrientationUtils orientationUtils;
+     private OrientationUtils orientationUtils;
 
     private ImageView    mCollectionIv;
     private ImageView    mShareIv;
     private ImageView    mSettingIv;
     private LinearLayout mChannelLayout;
+    private LinearLayout mSeekLayout;
 
     private TextView mYdTv, mDxTv, mCmTv;
     private VideoInfo mVideoInfo;
@@ -111,6 +114,19 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
                         {
                             mCollectionIv.setEnabled(true);
                         }
+
+                        videoPlayer.setIS_SCREEN_ORIENTATION_LANDSCAPE(mVideoStreamHandler.getStand());
+                      if(mVideoStreamHandler.getStand())
+                      {
+                          mSeekLayout.setVisibility(View.INVISIBLE);
+                          orientationUtils.setScreenType( ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                      }
+                      else
+                      {
+                          orientationUtils.setScreenType( ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                          orientationUtils .resolveByClick();
+                      }
+
                         playVideo(uri);
                     }
                     break;
@@ -247,7 +263,7 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         mYdTv = (TextView) videoPlayer.findViewById(R.id.tv_yd);
         mDxTv = (TextView) videoPlayer.findViewById(R.id.tv_dx);
         mCmTv = (TextView) videoPlayer.findViewById(R.id.tv_cm);
-
+        mSeekLayout= (LinearLayout) videoPlayer.findViewById(R.id.sp_layout);
         mCmTv.setSelected(true);
 
         mCollectionIv.setOnClickListener(this);
@@ -269,7 +285,7 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         ImageView imageView = new ImageView(this);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setImageResource(R.drawable.ic_launcher);
-        videoPlayer.setThumbImageView(imageView);
+      //  videoPlayer.setThumbImageView(imageView);
         //增加title
         videoPlayer.getTitleTextView().setVisibility(View.VISIBLE);
 
@@ -279,7 +295,7 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         videoPlayer.getFullscreenButton().setVisibility(View.GONE);
 
         //        //设置旋转
-        //orientationUtils = new OrientationUtils(this, videoPlayer);
+        orientationUtils = new OrientationUtils(this, videoPlayer);
         //        //设置全屏按键功能,这是使用的是选择屏幕，而不是全屏
         //        videoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener()
         //        {

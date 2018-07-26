@@ -65,7 +65,6 @@
         <activity
             android:name=".activity.VideoPlayActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="landscape"
             android:windowSoftInputMode="stateHidden|adjustPan"/>
 
 
@@ -160,6 +159,7 @@
             android:name=".activity.WebViewActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
+            android:process=":remote"
             android:windowSoftInputMode="stateHidden|adjustPan"/>
         <activity
             android:name=".activity.DomainNameActivity"
@@ -170,6 +170,11 @@
 
         <activity
             android:name=".activity.RecoveryPwdActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan"/>
+        <activity
+            android:name=".activity.PhotoListActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan"/>

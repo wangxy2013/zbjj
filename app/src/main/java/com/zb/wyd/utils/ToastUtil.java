@@ -41,6 +41,7 @@ public class ToastUtil
     {
         if (null != context)
         {
+            context = context.getApplicationContext();
             LayoutInflater inflater = LayoutInflater.from(context);
             View view = inflater.inflate(R.layout.layout_toast, null);
             TextView textView = (TextView) view.findViewById(R.id.text);

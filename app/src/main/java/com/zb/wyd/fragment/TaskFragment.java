@@ -269,7 +269,7 @@ public class TaskFragment extends BaseFragment implements IRequestListener, View
                 }
                 else if (mTaskInfo.getAction().startsWith("video"))
                 {
-                    ((MainActivity) getActivity()).setTab(2);
+                    ((MainActivity) getActivity()).setTab(1);
                 }
                 else if ("photo://create".equals(mTaskInfo.getAction()))
                 {

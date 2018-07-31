@@ -133,7 +133,7 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
                         String unick = userInfo.getUnick();
                         String fortune = userInfo.getFortune();
                         String vip_level = userInfo.getVip_level();
-
+                        ConfigManager.instance().setUserRole(Integer.parseInt(userInfo.getRole()));
                         ImageLoader.getInstance().displayImage(userInfo.getUface(), ivUserPic);
                         if ("-".equals(unick) || StringUtils.stringIsEmpty(unick))
                         {
@@ -153,7 +153,7 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
                         }
                         else
                         {
-                            tvEmail.setText("已认证");
+                            tvEmail.setText(userInfo.getEmail());
                         }
 
                     }

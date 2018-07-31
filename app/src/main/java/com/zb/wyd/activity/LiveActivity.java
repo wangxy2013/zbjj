@@ -89,31 +89,34 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     private String biz_id, location;
     private long startTime, endTime;
 
+    private String has_favorite;
 
     private List<UserInfo> onlineList = new ArrayList<>();
     private OnlineAdapter mOnlineAdapter;
 
-    private static final String GET_USER_INFO          = "get_user_info";
-    private static final String GET_LIVE_PRICE         = "get_live_price";
-    private static final String GET_LIVE_STREAM        = "get_live_stream";
-    private static final String GET_ONLINER            = "get_onliner";
-    private static final String BUY_LIVE               = "buy_live";
-    private static final String FAVORITE_LIKE          = "favorite_like";
-    private static final int    REQUEST_SUCCESS        = 0x01;
-    private static final int    REQUEST_FAIL           = 0x02;
-    private static final int    GET_LIVE_PRICE_SUCCESS = 0x03;
-    private static final int    BUY_LIVE_SUCCESS       = 0x05;
-    private static final int    SET_STATISTICS         = 0x06;
-    private static final int    GET_ONLINER_SUCCESS    = 0x07;
-    private static final int    GET_ONLINER_REQUEST    = 0x08;
-    private static final int    GET_STREAM_REQUEST     = 0x09;
-    private static final int    GET_ANCHOR_REQUEST     = 0x10;
-    private static final int    FAVORITE_LIKE_SUCCESS  = 0x11;
-    private static final int    FAVORITE_LIKE_FAIL  = 0x14;
-    private static final int         GET_ANCHOR_SUCCESS = 0x12;
-    private static final int         SHOW_SYSTEM_TV     = 0x13;
+    private static final String      GET_USER_INFO          = "get_user_info";
+    private static final String      GET_LIVE_PRICE         = "get_live_price";
+    private static final String      GET_LIVE_STREAM        = "get_live_stream";
+    private static final String      GET_ONLINER            = "get_onliner";
+    private static final String      BUY_LIVE               = "buy_live";
+    private static final String      FAVORITE_LIKE          = "favorite_like";
+    private final        String UN_FAVORITE_LIKE         = "un_favorite_like";
+    private static final int         REQUEST_SUCCESS        = 0x01;
+    private static final int         REQUEST_FAIL           = 0x02;
+    private static final int         GET_LIVE_PRICE_SUCCESS = 0x03;
+    private static final int         BUY_LIVE_SUCCESS       = 0x05;
+    private static final int         SET_STATISTICS         = 0x06;
+    private static final int         GET_ONLINER_SUCCESS    = 0x07;
+    private static final int         GET_ONLINER_REQUEST    = 0x08;
+    private static final int         GET_STREAM_REQUEST     = 0x09;
+    private static final int         GET_ANCHOR_REQUEST     = 0x10;
+    private static final int         FAVORITE_LIKE_SUCCESS  = 0x11;
+    private static final int         UN_FAVORITE_LIKE_SUCCESS  = 0x15;
+    private static final int         FAVORITE_LIKE_FAIL     = 0x14;
+    private static final int         GET_ANCHOR_SUCCESS     = 0x12;
+    private static final int         SHOW_SYSTEM_TV         = 0x13;
     @SuppressLint("HandlerLeak")
-    private              BaseHandler mHandler           = new BaseHandler(LiveActivity.this)
+    private              BaseHandler mHandler               = new BaseHandler(LiveActivity.this)
     {
         @Override
         public void handleMessage(Message msg)
@@ -212,11 +215,15 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                     break;
 
                 case FAVORITE_LIKE_SUCCESS:
+                    has_favorite= "1";
                     tvFollow.setText("已关注");
                     ToastUtil.show(LiveActivity.this, "关注成功");
-                    tvFollow.setEnabled(false);
                     break;
-
+                case UN_FAVORITE_LIKE_SUCCESS:
+                    has_favorite= "0";
+                    tvFollow.setText("关注");
+                    ToastUtil.show(LiveActivity.this, "取消关注成功");
+                    break;
                 case FAVORITE_LIKE_FAIL:
                     ToastUtil.show(LiveActivity.this, "操作失败");
                     break;
@@ -231,16 +238,14 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                         ImageLoader.getInstance().displayImage(mUserInfo.getFace(), ivUserPic);
                         tvUserName.setText(mUserInfo.getNick());
                         tvFavourCount.setText(mUserInfo.getFavour_count());
-
-                        if("1".equals(mUserInfo.getHas_favorite()))
+                        has_favorite = mUserInfo.getHas_favorite();
+                        if ("1".equals(mUserInfo.getHas_favorite()))
                         {
                             tvFollow.setText("已关注");
-                            tvFollow.setEnabled(false);
                         }
                         else
                         {
                             tvFollow.setText("关注");
-                            tvFollow.setEnabled(true);
                         }
 
                     }
@@ -280,6 +285,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         ivReport.setOnClickListener(this);
         tvSay.setOnClickListener(this);
         tvDm.setOnClickListener(this);
+        ivUserPic.setOnClickListener(this);
     }
 
     @Override
@@ -555,7 +561,15 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         DataRequest.instance().request(LiveActivity.this, Urls.getCollectionRequestUrl(), this, HttpRequest.POST, FAVORITE_LIKE, valuePairs,
                 new ResultHandler());
     }
-
+    private void unFavoriteLike()
+    {
+        showProgressDialog();
+        Map<String, String> valuePairs = new HashMap<>();
+        valuePairs.put("biz_id", biz_id);
+        valuePairs.put("co_biz", "live");
+        DataRequest.instance().request(LiveActivity.this, Urls.getFavoriteUnLikeUrl(), this, HttpRequest.POST, UN_FAVORITE_LIKE, valuePairs,
+                new ResultHandler());
+    }
     private boolean dmShow = true;
 
     @Override
@@ -564,7 +578,15 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         super.onClick(v);
         if (v == tvFollow)
         {
-            favoriteLike();
+            if("1".equals(has_favorite))
+            {
+                unFavoriteLike();
+            }
+            else
+            {
+                favoriteLike();
+            }
+
         }
         else if (v == tvDm)
         {
@@ -599,6 +621,13 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                 }
             });
         }
+        else  if(v ==ivUserPic)
+        {
+            if(!tvFollow.isShown())
+            {
+                tvFollow.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     @Override
@@ -623,11 +652,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         endTime = System.currentTimeMillis();
         long duration = (endTime - startTime) / 100;
         setStatistics(duration);
-
-        if (mHandler.hasMessages(SHOW_SYSTEM_TV))
-        {
-            mHandler.removeMessages(SHOW_SYSTEM_TV);
-        }
+        mHandler.removeCallbacksAndMessages(null);
 
     }
 
@@ -699,6 +724,18 @@ public class LiveActivity extends BaseActivity implements IRequestListener
             if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
             {
                 mHandler.sendMessage(mHandler.obtainMessage(FAVORITE_LIKE_SUCCESS, obj));
+            }
+            else
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(FAVORITE_LIKE_FAIL, resultMsg));
+            }
+        }
+        else if (UN_FAVORITE_LIKE.equals(action))
+        {
+            hideProgressDialog();
+            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(UN_FAVORITE_LIKE_SUCCESS, obj));
             }
             else
             {

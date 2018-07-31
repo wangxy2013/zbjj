@@ -119,7 +119,7 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
     private String    shareCnontent;
 
     private String contact;
-
+    private              String has_favorite             = "0";
     private static final String GET_TASK_SHARE           = "GET_TASK_SHARE";
     private static final String GET_SHARE                = "GET_SHARE";
     private static final String BUY_PHOTO                = "buy_photo";
@@ -127,6 +127,7 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
     private static final String SEND_COMMENT             = "send_comment";
     private static final String GET_PH0TO_DETAIL         = "get_photo_detail";
     private static final String GET_COMMENT_LIST         = " get_comment_list";
+    private final        String UN_FAVORITE_LIKE         = "un_favorite_like";
     private static final int    REQUEST_SUCCESS          = 0x01;
     private static final int    REQUEST_FAIL             = 0x02;
     private static final int    BUY_PHOTO_SUCCESS        = 0x05;
@@ -134,6 +135,7 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
     private static final int    GET_COMMENT_LIST_SUCCESS = 0x07;
     private static final int    GET_PHOTO_LIST_CODE      = 0x08;
     private static final int    FAVORITE_LIKE_SUCCESS    = 0x09;
+    private final        int    UN_FAVORITE_LIKE_SUCCESS = 0x15;
     private static final int    SEND_COMMENT_SUCCESS     = 0x10;
     private static final int    GET_SHARE_CODE           = 0x11;
     private static final int    GET_SHARE_SUCCESS        = 0x12;
@@ -162,6 +164,7 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
                         tvAddTime.setText(photoInfo.getAdd_time());
                         tvDesc.setText(photoInfo.getDesc());
 
+                        has_favorite = photoInfo.getHas_favorite();
                         if ("1".equals(photoInfo.getHas_favorite()))
                         {
                             ivCollection.setEnabled(false);
@@ -286,10 +289,15 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
                     getPhotoList();
                     break;
                 case FAVORITE_LIKE_SUCCESS:
+                    has_favorite = "1";
                     ToastUtil.show(PhotoDetailActivity.this, "收藏成功");
-                    ivCollection.setEnabled(false);
+                    ivCollection.setSelected(true);
                     break;
-
+                case UN_FAVORITE_LIKE_SUCCESS:
+                    has_favorite = "0";
+                    ToastUtil.show(PhotoDetailActivity.this, "取消收藏成功");
+                    ivCollection.setSelected(false);
+                    break;
                 case SEND_COMMENT_SUCCESS:
                     etContent.setText("");
                     ToastUtil.show(PhotoDetailActivity.this, "评论成功");
@@ -445,7 +453,14 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
         }
         else if (v == ivCollection)
         {
-            favoriteLike();
+            if("1".equals(has_favorite))
+            {
+                unFavoriteLike();
+            }
+            else
+            {
+                favoriteLike();
+            }
 
         }
         else if (v == tvSend)
@@ -515,6 +530,15 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "photo");
         DataRequest.instance().request(PhotoDetailActivity.this, Urls.getCollectionRequestUrl(), this, HttpRequest.POST, FAVORITE_LIKE, valuePairs,
+                new ResultHandler());
+    }
+    private void unFavoriteLike()
+    {
+        showProgressDialog();
+        Map<String, String> valuePairs = new HashMap<>();
+        valuePairs.put("biz_id", biz_id);
+        valuePairs.put("co_biz", "photo");
+        DataRequest.instance().request(PhotoDetailActivity.this, Urls.getFavoriteUnLikeUrl(), this, HttpRequest.POST, UN_FAVORITE_LIKE, valuePairs,
                 new ResultHandler());
     }
 
@@ -630,6 +654,18 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
             if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
             {
                 mHandler.sendMessage(mHandler.obtainMessage(GET_TASK_SHARE_SUCCESS, obj));
+            }
+            else
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
+            }
+        }
+        else if (UN_FAVORITE_LIKE.equals(action))
+        {
+            hideProgressDialog();
+            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(UN_FAVORITE_LIKE_SUCCESS, obj));
             }
             else
             {

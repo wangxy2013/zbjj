@@ -52,7 +52,11 @@ public class Urls
     {
         return  ConfigManager.instance().getDomainName() + "/video/list";
     }
-
+    //抖音
+    public static String getDouyinListUrl()
+    {
+        return  ConfigManager.instance().getDomainName() + "/douyin/list";
+    }
     //获取真实的直播地址
     public static String getLiveStreamUrl()
     {
@@ -94,6 +98,12 @@ public class Urls
     public static String getVideoStreamUrl()
     {
         return  ConfigManager.instance().getDomainName() + "/video/stream";
+    }
+
+    //获取点播流
+    public static String getDyVideoStreamUrl()
+    {
+        return  ConfigManager.instance().getDomainName() + "/douyin/stream";
     }
 
 
@@ -198,7 +208,10 @@ public class Urls
     {
         return  ConfigManager.instance().getDomainName() + "/favorite/like";
     }
-
+    public static String getFavoriteUnLikeUrl()
+    {
+        return  ConfigManager.instance().getDomainName() + "/favorite/unlike";
+    }
     public static String getCommentlistUrl()
     {
         return  ConfigManager.instance().getDomainName() + "/photo/list_say";
@@ -256,6 +269,21 @@ public class Urls
     public static String getInviteUrl()
     {
         return  ConfigManager.instance().getDomainName() + "/user/invite";
+    }
+
+
+    public static String getMessageReportUrl()
+    {
+        return  ConfigManager.instance().getDomainName() + "/msg/report";
+    }
+
+    public static String getCooperationUrl()
+    {
+        return  ConfigManager.instance().getDomainName() + "/service/cooperation";
+    }
+    public static String getResetunameUrl()
+    {
+        return  ConfigManager.instance().getDomainName() + "/user/reset_uname";
     }
 
 

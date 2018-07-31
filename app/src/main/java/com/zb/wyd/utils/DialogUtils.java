@@ -178,7 +178,7 @@ public class DialogUtils
      *
      * @return
      */
-    public static Dialog showToastDialog2Button(Context mContext, String str, final View.OnClickListener onClickListener, final View.OnClickListener
+    public static Dialog showToastDialog2Button(Context mContext, String str,String buttonStr, final View.OnClickListener onClickListener, final View.OnClickListener
             onClickListener1)
     {
         final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
@@ -187,6 +187,9 @@ public class DialogUtils
         dialog.setContentView(v);
         TextView mTitle = (TextView) v.findViewById(R.id.tv_title);
         mTitle.setText(str);
+
+        TextView mSubmitTv = (TextView) v.findViewById(R.id.tv_submit);
+        mSubmitTv.setText(buttonStr);
         ((RelativeLayout) v.findViewById(R.id.rl_confirm)).setOnClickListener(new View.OnClickListener()
         {
             @Override

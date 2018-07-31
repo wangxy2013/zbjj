@@ -2,6 +2,7 @@ package com.zb.wyd.json;
 
 
 import com.zb.wyd.entity.AdInfo;
+import com.zb.wyd.entity.StyleInfo;
 import com.zb.wyd.entity.TaskInfo;
 
 import org.json.JSONArray;
@@ -47,6 +48,13 @@ public class TaskInfoListHandler extends JsonHandler
                 for (int i = 0; i < arr.length(); i++)
                 {
                     TaskInfo mTaskInfo = new TaskInfo(arr.optJSONObject(i));
+
+                    if(null !=arr.optJSONObject(i) && null !=arr.optJSONObject(i).optJSONObject("style"))
+                    {
+                        StyleInfo styleInfo = new StyleInfo(arr.optJSONObject(i).optJSONObject("style"));
+                        mTaskInfo.setStyleInfo(styleInfo);
+                    }
+
                     if ("1".equals(mTaskInfo.getId()))
                     {
                         mSiginTaskInfo = mTaskInfo;

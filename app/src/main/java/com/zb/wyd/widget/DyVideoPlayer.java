@@ -32,7 +32,7 @@ import moe.codeest.enviews.ENPlayView;
 /**
  * 描述：一句话简单描述
  */
-public class MyVideoPlayer extends GSYVideoPlayer
+public class DyVideoPlayer extends GSYVideoPlayer
 {
     //亮度dialog
     protected Dialog mBrightnessDialog;
@@ -78,17 +78,17 @@ public class MyVideoPlayer extends GSYVideoPlayer
     /**
      * 1.5.0开始加入，如果需要不同布局区分功能，需要重载
      */
-    public MyVideoPlayer(Context context, Boolean fullFlag)
+    public DyVideoPlayer(Context context, Boolean fullFlag)
     {
         super(context, fullFlag);
     }
 
-    public MyVideoPlayer(Context context)
+    public DyVideoPlayer(Context context)
     {
         super(context);
     }
 
-    public MyVideoPlayer(Context context, AttributeSet attrs)
+    public DyVideoPlayer(Context context, AttributeSet attrs)
     {
         super(context, attrs);
     }
@@ -127,7 +127,7 @@ public class MyVideoPlayer extends GSYVideoPlayer
     @Override
     public int getLayoutId()
     {
-        return R.layout.my_video_layout_standard;
+        return R.layout.dy_video_layout_standard;
     }
 
     /**
@@ -139,7 +139,7 @@ public class MyVideoPlayer extends GSYVideoPlayer
         if (mVideoAllCallBack != null)
         {
             Debuger.printfLog("onClickStartThumb");
-            mVideoAllCallBack.onClickStartThumb(mOriginUrl, mTitle, MyVideoPlayer.this);
+            mVideoAllCallBack.onClickStartThumb(mOriginUrl, mTitle, DyVideoPlayer.this);
         }
         prepareVideo();
         startDismissControlViewTimer();
@@ -382,8 +382,8 @@ public class MyVideoPlayer extends GSYVideoPlayer
     protected void cloneParams(GSYBaseVideoPlayer from, GSYBaseVideoPlayer to)
     {
         super.cloneParams(from, to);
-        MyVideoPlayer sf = (MyVideoPlayer) from;
-        MyVideoPlayer st = (MyVideoPlayer) to;
+        DyVideoPlayer sf = (DyVideoPlayer) from;
+        DyVideoPlayer st = (DyVideoPlayer) to;
         if (st.mProgressBar != null && sf.mProgressBar != null)
         {
             st.mProgressBar.setProgress(sf.mProgressBar.getProgress());

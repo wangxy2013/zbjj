@@ -55,6 +55,8 @@ public class ConfigManager
     private static final String   VIP_LEVEL  = "vip_level";
 
     private static final String ZDY_DOMAIN_NAME = "zdy_domain_name";
+
+    private static final String USER_ROLE = "user_role";
     /**
      * 返回实例
      *
@@ -341,6 +343,17 @@ public class ConfigManager
     public String getZydDomainName()
     {
         return mSharedPreferences.getString(ZDY_DOMAIN_NAME, "") ;
+    }
+
+
+    public void setUserRole(int str)
+    {
+        mSharedPreferences.edit().putInt(USER_ROLE, str).commit();
+    }
+
+    public int getUserRole()
+    {
+        return mSharedPreferences.getInt(USER_ROLE, 0) ;
     }
 
 }

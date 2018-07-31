@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.text.TextPaint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,7 +71,7 @@ public class LiveFragment extends BaseFragment
     {
         tabs.add("直播首页");
         tabs.add("主播列表");
-        //  tabs.add("直播平台");
+        tabs.add("成人抖音");
     }
 
     @Override
@@ -98,12 +99,12 @@ public class LiveFragment extends BaseFragment
         MyViewPagerAdapter viewPagerAdapter = new MyViewPagerAdapter(getChildFragmentManager());
         viewPagerAdapter.addFragment(LiveIndexFragment.newInstance(), "直播首页");//添加Fragment
         viewPagerAdapter.addFragment(AnchorListFragment.newInstance(), "主播列表");
-        // viewPagerAdapter.addFragment(LivePlatformFragment.newInstance(), "直播平台");
+        viewPagerAdapter.addFragment(DouyinFragment.newInstance(), "成人抖音");
         mViewPager.setAdapter(viewPagerAdapter);//设置适配器
         mViewPager.setOffscreenPageLimit(2);
         mTabLayout.addTab(mTabLayout.newTab().setText("直播首页"));//给TabLayout添加Tab
         mTabLayout.addTab(mTabLayout.newTab().setText("主播列表"));
-        // mTabLayout.addTab(mTabLayout.newTab().setText("直播平台"));
+        mTabLayout.addTab(mTabLayout.newTab().setText("成人抖音"));
         mTabLayout.setupWithViewPager(mViewPager);//给TabLayout设置关联ViewPager，如果设置了ViewPager，那么ViewPagerAdapter中的getPageTitle()方法返回的就是Tab上的标题
         setTabView();
         reflex(mTabLayout);
@@ -116,6 +117,8 @@ public class LiveFragment extends BaseFragment
                 holder.tvTabName.setSelected(true);
                 //选中后字体变大
                 holder.tvTabName.setTextSize(18);
+                TextPaint tp = holder.tvTabName.getPaint();
+                tp.setFakeBoldText(true);
                 //让Viewpager跟随TabLayout的标签切换
                 mViewPager.setCurrentItem(tab.getPosition());
             }
@@ -127,6 +130,8 @@ public class LiveFragment extends BaseFragment
                 holder.tvTabName.setSelected(false);
                 //恢复为默认字体大小
                 holder.tvTabName.setTextSize(16);
+                TextPaint tp = holder.tvTabName.getPaint();
+                tp.setFakeBoldText(false);
             }
 
             @Override
@@ -145,7 +150,7 @@ public class LiveFragment extends BaseFragment
     private void setTabView()
     {
         holder = null;
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 3; i++)
         {
             //依次获取标签
             TabLayout.Tab tab = mTabLayout.getTabAt(i);
@@ -159,6 +164,8 @@ public class LiveFragment extends BaseFragment
             {
                 holder.tvTabName.setSelected(true);
                 holder.tvTabName.setTextSize(18);
+                TextPaint tp = holder.tvTabName.getPaint();
+                tp.setFakeBoldText(true);
             }
         }
     }

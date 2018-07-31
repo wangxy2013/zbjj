@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/windowBackground"
+              android:orientation="vertical">
+    <include layout="@layout/layout_head"/>
+
+
+   <EditText
+       android:id="@+id/et_content"
+       android:background="@drawable/gray_frame_2dp"
+       android:padding="@dimen/dm_5"
+       android:gravity="top"
+       android:layout_margin="@dimen/dm_10"
+       android:hint="填写问题详情描述"
+       android:layout_width="match_parent"
+       android:layout_height="@dimen/dm_120"/>
+</LinearLayout>

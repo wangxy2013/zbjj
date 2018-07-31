@@ -46,7 +46,9 @@ import com.zb.wyd.json.ResultHandler;
 import com.zb.wyd.json.SelfieInfoListHandler;
 import com.zb.wyd.listener.MyItemClickListener;
 import com.zb.wyd.utils.APPUtils;
+import com.zb.wyd.utils.ConfigManager;
 import com.zb.wyd.utils.ConstantUtil;
+import com.zb.wyd.utils.DialogUtils;
 import com.zb.wyd.utils.ToastUtil;
 import com.zb.wyd.utils.Urls;
 import com.zb.wyd.widget.CataPopupWindow;
@@ -126,6 +128,11 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
             {
                 case REQUEST_SUCCESS:
                     SelfieInfoListHandler mSelfieInfoListHandler = (SelfieInfoListHandler) msg.obj;
+
+                    if (pn == 1)
+                    {
+                        selfieInfoList.clear();
+                    }
                     if (!mSelfieInfoListHandler.getSelfieInfoList().isEmpty())
                     {
                         selfieInfoList.addAll(mSelfieInfoListHandler.getSelfieInfoList());
@@ -615,7 +622,6 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
         else if (v == tvNew)
         {
             pn = 1;
-            selfieInfoList.clear();
             sort = "new";
             tvNew.setSelected(true);
             tvFav.setSelected(false);
@@ -624,7 +630,6 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
         else if (v == tvFav)
         {
             pn = 1;
-            selfieInfoList.clear();
             sort = "fav";
             tvNew.setSelected(false);
             tvFav.setSelected(true);
@@ -634,7 +639,33 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
         {
             if (MyApplication.getInstance().isLogin())
             {
-                startActivity(new Intent(getActivity(), AddPhotoActivity.class));
+                if (ConfigManager.instance().getUserRole() > 0)
+                {
+                    startActivity(new Intent(getActivity(), AddPhotoActivity.class));
+                }
+                else
+                {
+                    DialogUtils.showToastDialog2Button(getActivity(), "发布视频需要通过系统认证", "去申请认证", new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            startActivity(new Intent(getActivity(), WebViewActivity.class)
+                                    .putExtra(WebViewActivity.EXTRA_TITLE, "申请认证")
+                                    .putExtra(WebViewActivity.IS_SETTITLE, true)
+                                    .putExtra(WebViewActivity.EXTRA_URL, Urls.getCooperationUrl())
+                            );
+                        }
+                    }, new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v)
+                        {
+
+                        }
+                    }).show();
+                }
+
             }
             else
             {
@@ -650,10 +681,6 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
         if (mSwipeRefreshLayout != null)
         {
             pn = 1;
-            adInfoList.clear();
-            cataInfoList.clear();
-            picList.clear();
-            selfieInfoList.clear();
             mHandler.sendEmptyMessage(GET_AD_LIST_CODE);
             mHandler.sendEmptyMessage(GET_CATA_LIST_CODE);
             mHandler.sendEmptyMessage(GET_PHOTO_LIST_CODE);

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/dm_5"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_item"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true">
+        <com.zb.wyd.widget.RoundAngleImageView
+            android:id="@+id/iv_user_pic"
+            android:layout_width="match_parent"
+            android:scaleType="centerCrop"
+            android:layout_height="match_parent"
+            android:src="@color/text_blue1"/>
+
+        <TextView
+            android:layout_marginBottom="@dimen/dm_10"
+            android:layout_above="@+id/ll_bottom"
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dm_5"
+            android:textColor="@color/white"
+            android:textSize="@dimen/t14"/>
+        <RelativeLayout
+            android:id="@+id/ll_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="@dimen/dm_5">
+
+
+            <ImageView
+                android:id="@+id/iv_follow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_follow"/>
+
+
+            <TextView
+                android:id="@+id/tv_follow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dm_5"
+                android:layout_toRightOf="@+id/iv_follow"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textSize="@dimen/t10"/>
+
+            <TextView
+                android:id="@+id/tv_popularity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dm_5"
+                android:text="0"
+                android:visibility="gone"
+                android:textColor="@color/white"
+                android:textSize="@dimen/t10"/>
+
+            <ImageView
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/tv_popularity"
+                android:src="@drawable/ic_popularity"/>
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+</LinearLayout>

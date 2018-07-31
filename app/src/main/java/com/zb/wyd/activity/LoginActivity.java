@@ -20,7 +20,6 @@ import com.zb.wyd.http.DataRequest;
 import com.zb.wyd.http.HttpRequest;
 import com.zb.wyd.http.IRequestListener;
 import com.zb.wyd.json.LoginHandler;
-import com.zb.wyd.utils.APPUtils;
 import com.zb.wyd.utils.ConfigManager;
 import com.zb.wyd.utils.ConstantUtil;
 import com.zb.wyd.utils.ToastUtil;
@@ -60,6 +59,8 @@ public class LoginActivity extends BaseActivity implements IRequestListener
     RelativeLayout rlMain;
     @BindView(R.id.iv_bg)
     ImageView      ivBg;
+    @BindView(R.id.tv_rest_uname)
+    TextView       tvRestUname;
 
     private String account;
     private String pwd;
@@ -129,6 +130,7 @@ public class LoginActivity extends BaseActivity implements IRequestListener
         btnRegister.setOnClickListener(this);
         tvRecoveryPwd.setOnClickListener(this);
         ivBack.setOnClickListener(this);
+        tvRestUname.setOnClickListener(this);
     }
 
     @Override
@@ -166,12 +168,12 @@ public class LoginActivity extends BaseActivity implements IRequestListener
                 ToastUtil.show(LoginActivity.this, "请输入5-16位账号");
                 return;
             }
-            String str = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm";
-            if (!str.contains(String.valueOf(account.charAt(0))))
-            {
-                ToastUtil.show(LoginActivity.this, "账号必须以字母开头");
-                return;
-            }
+            //            String str = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm";
+            //            if (!str.contains(String.valueOf(account.charAt(0))))
+            //            {
+            //                ToastUtil.show(LoginActivity.this, "账号必须以字母开头");
+            //                return;
+            //            }
 
 
             if (TextUtils.isEmpty(pwd) || pwd.length() < 6)
@@ -181,8 +183,6 @@ public class LoginActivity extends BaseActivity implements IRequestListener
             }
 
             Map<String, String> valuePairs = new HashMap<>();
-            valuePairs.put("mobile_id", APPUtils.getUniqueId(LoginActivity.this));
-            valuePairs.put("device", "and");
             valuePairs.put("user_name", account);
             valuePairs.put("password", pwd);
             DataRequest.instance().request(LoginActivity.this, Urls.getLoginUrl(), this, HttpRequest.POST, USER_LOGIN, valuePairs,
@@ -202,6 +202,14 @@ public class LoginActivity extends BaseActivity implements IRequestListener
         {
             startActivity(new Intent(LoginActivity.this, RecoveryPwdActivity.class));
 
+        }
+        else if(v == tvRestUname)
+        {
+            startActivity(new Intent(LoginActivity.this,WebViewActivity.class)
+                    .putExtra(WebViewActivity.EXTRA_TITLE, "用戶名找回")
+                    .putExtra(WebViewActivity.IS_SETTITLE, true)
+                    .putExtra(WebViewActivity.EXTRA_URL,Urls.getResetunameUrl())
+            );
         }
     }
 

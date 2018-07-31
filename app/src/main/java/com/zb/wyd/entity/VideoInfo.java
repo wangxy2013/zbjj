@@ -18,9 +18,14 @@ public class VideoInfo implements Serializable
     private String fee;//3 private String
     private String  coupon;
     private String finger;
+    private String cash;
     private String vip_free;
     private boolean  isNew;
     private String add_time;
+
+    private String has_favorite;
+    private UserInfo userInfo;
+
 
     public VideoInfo() {}
 
@@ -37,7 +42,27 @@ public class VideoInfo implements Serializable
         this.finger = obj.optString("finger");
         this.vip_free = obj.optString("vip_free");
         this.add_time =obj.optString("add_time");
+        this.cash =obj.optString("cash");
+    }
 
+    public String getHas_favorite()
+    {
+        return has_favorite;
+    }
+
+    public void setHas_favorite(String has_favorite)
+    {
+        this.has_favorite = has_favorite;
+    }
+
+    public String getCash()
+    {
+        return cash;
+    }
+
+    public void setCash(String cash)
+    {
+        this.cash = cash;
     }
 
     public String getId()
@@ -158,5 +183,15 @@ public class VideoInfo implements Serializable
     public void setAdd_time(String add_time)
     {
         this.add_time = add_time;
+    }
+
+    public UserInfo getUserInfo()
+    {
+        return userInfo;
+    }
+
+    public void setUserInfo(UserInfo userInfo)
+    {
+        this.userInfo = userInfo;
     }
 }

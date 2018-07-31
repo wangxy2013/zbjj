@@ -76,7 +76,7 @@
             android:layout_toRightOf="@+id/iv_code"
             android:background="@color/transparent"
             android:hint="请输入验证码"
-            android:maxLength="10"
+            android:maxLength="20"
             android:textColor="@color/blackC"
             android:textSize="@dimen/t14"/>
     </RelativeLayout>

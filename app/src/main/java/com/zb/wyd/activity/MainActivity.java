@@ -96,7 +96,6 @@ public class MainActivity extends BaseActivity
     @Override
     protected void initViewData()
     {
-
         EasyTap.wake(this);
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
@@ -242,4 +241,6 @@ public class MainActivity extends BaseActivity
         }
 
     }
+
+
 }

@@ -21,7 +21,17 @@ public class TaskInfo
     private String has_finish;//0
     private String action;
 
+    private StyleInfo styleInfo;
 
+    public StyleInfo getStyleInfo()
+    {
+        return styleInfo;
+    }
+
+    public void setStyleInfo(StyleInfo styleInfo)
+    {
+        this.styleInfo = styleInfo;
+    }
 
     public TaskInfo() {}
 

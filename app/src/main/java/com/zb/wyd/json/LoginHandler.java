@@ -29,7 +29,7 @@ public class LoginHandler extends JsonHandler
                 ConfigManager.instance().setUserId(uid);
                 ConfigManager.instance().setUserNickName(obj.optString("unick"));
                 ConfigManager.instance().setVipLevel(obj.optInt("vip_level"));
-
+                ConfigManager.instance().setUserRole(obj.optInt("role"));
             }
 
 

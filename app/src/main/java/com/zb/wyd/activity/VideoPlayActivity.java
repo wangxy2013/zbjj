@@ -62,6 +62,7 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
     private LinearLayout mChannelLayout;
     private LinearLayout mSeekLayout;
 
+    private String has_favorite="0";
     private TextView mYdTv, mDxTv, mCmTv;
     private VideoInfo mVideoInfo;
     private String    videoName, biz_id;
@@ -71,6 +72,7 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
     private long        startTime, endTime;
     private static final String GET_SHARE               = "GET_SHARE";
     private static final String FAVORITE_LIKE           = "favorite_like";
+    private final        String      UN_FAVORITE_LIKE         = "un_favorite_like";
     private static final String GET_VIDEO_PRICE         = "get_live_price";
     private static final String GET_VIDEO_STREAM        = "get_video_stream";
     private static final String BUY_VIDEO               = "buy_live";
@@ -82,6 +84,7 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
     private static final int    SET_STATISTICS          = 0x06;
     private static final int    GET_STREAM_REQUEST      = 0x09;
     private static final int    FAVORITE_LIKE_SUCCESS   = 0x08;
+    private final        int         UN_FAVORITE_LIKE_SUCCESS    = 0x10;
     private static final int    GET_SHARE_CODE          = 0x11;
     private static final int    GET_SHARE_SUCCESS       = 0x12;
     private static final int    GET_TASK_SHARE_CODE     = 0x13;
@@ -106,26 +109,27 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
                         videoUri = mVideoStreamHandler.getUri();
                         String uri = mChannelInfo.getCm() + videoUri;
                         LogUtil.e("TAG", uri);
-                        if ("1".equals(mVideoStreamHandler.getHas_favorite()))
+                        has_favorite= mVideoStreamHandler.getHas_favorite();
+                        if ("1".equals(has_favorite))
                         {
-                            mCollectionIv.setEnabled(false);
+                            mCollectionIv.setSelected(true);
                         }
                         else
                         {
-                            mCollectionIv.setEnabled(true);
+                            mCollectionIv.setSelected(false);
                         }
 
-                        videoPlayer.setIS_SCREEN_ORIENTATION_LANDSCAPE(mVideoStreamHandler.getStand());
-                      if(mVideoStreamHandler.getStand())
-                      {
-                          mSeekLayout.setVisibility(View.INVISIBLE);
-                          orientationUtils.setScreenType( ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                      }
-                      else
-                      {
-                          orientationUtils.setScreenType( ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                          orientationUtils .resolveByClick();
-                      }
+//                        videoPlayer.setIS_SCREEN_ORIENTATION_LANDSCAPE(mVideoStreamHandler.getStand());
+//                      if(mVideoStreamHandler.getStand())
+//                      {
+//                          mSeekLayout.setVisibility(View.INVISIBLE);
+//                          orientationUtils.setScreenType( ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+//                      }
+//                      else
+//                      {
+//                          orientationUtils.setScreenType( ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//                          orientationUtils .resolveByClick();
+//                      }
 
                         playVideo(uri);
                     }
@@ -185,8 +189,14 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
                     getVideoStream();
                     break;
                 case FAVORITE_LIKE_SUCCESS:
+                    has_favorite="1";
                     ToastUtil.show(VideoPlayActivity.this, "收藏成功");
-                    mCollectionIv.setEnabled(false);
+                    mCollectionIv.setSelected(true);
+                    break;
+                case UN_FAVORITE_LIKE_SUCCESS:
+                    has_favorite="0";
+                    ToastUtil.show(VideoPlayActivity.this, "取消收藏成功");
+                    mCollectionIv.setSelected(false);
                     break;
                 case GET_SHARE_CODE:
                     getShareUrl();
@@ -282,9 +292,9 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         String flv = "rtmp://stream.pull.dianxunba.com/vod/cdb485af5d15e049ab86fac38d6d83a4";
         //  videoPlayer.setUp(source1, true, "测试视频");
         //增加封面
-        ImageView imageView = new ImageView(this);
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        imageView.setImageResource(R.drawable.ic_launcher);
+//        ImageView imageView = new ImageView(this);
+//        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//        imageView.setImageResource(R.drawable.ic_launcher);
       //  videoPlayer.setThumbImageView(imageView);
         //增加title
         videoPlayer.getTitleTextView().setVisibility(View.VISIBLE);
@@ -549,8 +559,11 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
     {
         showProgressDialog();
         LogUtil.e("TAG", "uri--->" + uri);
-        videoPlayer.setUp(uri, false, videoName);
-        videoPlayer.startPlayLogic();
+        if(null !=videoPlayer)
+        {
+            videoPlayer.setUp(uri, false, videoName);
+            videoPlayer.startPlayLogic();
+        }
     }
 
     //兑换
@@ -589,7 +602,15 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         super.onClick(v);
         if (v == mCollectionIv)
         {
-            favoriteLike();
+            if("1".equals(has_favorite))
+            {
+                unFavoriteLike();
+            }
+            else
+            {
+                favoriteLike();
+            }
+
         }
         else if (v == mShareIv)
         {
@@ -642,6 +663,16 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "video");
         DataRequest.instance().request(VideoPlayActivity.this, Urls.getCollectionRequestUrl(), this, HttpRequest.POST, FAVORITE_LIKE, valuePairs,
+                new ResultHandler());
+    }
+
+    private void unFavoriteLike()
+    {
+        showProgressDialog();
+        Map<String, String> valuePairs = new HashMap<>();
+        valuePairs.put("biz_id", biz_id);
+        valuePairs.put("co_biz", "video");
+        DataRequest.instance().request(VideoPlayActivity.this, Urls.getFavoriteUnLikeUrl(), this, HttpRequest.POST, UN_FAVORITE_LIKE, valuePairs,
                 new ResultHandler());
     }
 
@@ -739,6 +770,19 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
                 mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
             }
         }
+        else if (UN_FAVORITE_LIKE.equals(action))
+        {
+            hideProgressDialog();
+            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(UN_FAVORITE_LIKE_SUCCESS, obj));
+            }
+            else
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
+            }
+        }
+
         else if (GET_SHARE.equals(action))
         {
             if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))

@@ -1,6 +1,7 @@
 package com.zb.wyd.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
@@ -40,6 +41,8 @@ public class MessageListActivity extends BaseActivity implements PullToRefreshBa
     ImageView                 mBackIv;
     @BindView(R.id.tv_title)
     TextView                  tvTitle;
+    @BindView(R.id.tv_submit)
+    TextView                  tvSubmit;
     @BindView(R.id.pullToRefreshRecyclerView)
     PullToRefreshRecyclerView mPullToRefreshRecyclerView;
     private RecyclerView mRecyclerView; //
@@ -98,6 +101,7 @@ public class MessageListActivity extends BaseActivity implements PullToRefreshBa
     protected void initEvent()
     {
         mBackIv.setOnClickListener(this);
+        tvSubmit.setOnClickListener(this);
         mPullToRefreshRecyclerView.setOnRefreshListener(this);
         mPullToRefreshRecyclerView.setPullRefreshEnabled(true);
     }
@@ -106,6 +110,9 @@ public class MessageListActivity extends BaseActivity implements PullToRefreshBa
     protected void initViewData()
     {
         tvTitle.setText("消息中心");
+        tvSubmit.setText("+");
+        tvSubmit.setTextSize(22);
+        tvSubmit.setVisibility(View.VISIBLE);
         mRecyclerView = mPullToRefreshRecyclerView.getRefreshableView();
         mPullToRefreshRecyclerView.setPullLoadEnabled(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -150,6 +157,10 @@ public class MessageListActivity extends BaseActivity implements PullToRefreshBa
         if (v == mBackIv)
         {
             finish();
+        }
+        else if (v == tvSubmit)
+        {
+            startActivity(new Intent(MessageListActivity.this, QuestionActivity.class));
         }
 
     }

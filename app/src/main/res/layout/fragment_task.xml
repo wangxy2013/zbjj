@@ -57,8 +57,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="已获积分"
-                android:textColor="@color/blackC"
+                android:text="累计获得积分"
+                android:textColor="@color/white"
                 android:textSize="@dimen/t18"/>
 
             <TextView
@@ -66,8 +66,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dm_5"
-                android:text="3333333"
-                android:textColor="@color/blackC"
+                android:text="0"
+                android:textColor="@color/white"
                 android:textSize="@dimen/t18"
                 android:textStyle="bold"/>
 

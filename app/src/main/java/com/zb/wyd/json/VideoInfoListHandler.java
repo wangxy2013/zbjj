@@ -2,6 +2,7 @@ package com.zb.wyd.json;
 
 
 import com.zb.wyd.entity.LiveInfo;
+import com.zb.wyd.entity.UserInfo;
 import com.zb.wyd.entity.VideoInfo;
 
 import org.json.JSONArray;
@@ -34,7 +35,14 @@ public class VideoInfoListHandler extends JsonHandler
             {
                 for (int i = 0; i < arr.length(); i++)
                 {
-                    VideoInfo mVideoInfo = new VideoInfo(arr.optJSONObject(i));
+                    JSONObject videoObj = arr.optJSONObject(i);
+                    VideoInfo mVideoInfo = new VideoInfo(videoObj);
+
+                   if (null !=videoObj&&null!=videoObj.optJSONObject("userinfo"))
+                   {
+                       UserInfo userInfo= new UserInfo(arr.optJSONObject(i).optJSONObject("userinfo"));
+                       mVideoInfo.setUserInfo(userInfo);
+                   }
                     videoInfoList.add(mVideoInfo);
                 }
             }

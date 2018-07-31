@@ -483,55 +483,7 @@ public class APPUtils
     }
 
 
-    //判断Activity是否在后台
-    public static boolean isBackground(Context mContext, String className)
-    {
-        ActivityManager activityManager = (ActivityManager) mContext
-                .getSystemService(Context.ACTIVITY_SERVICE);
-        String packageName = "com.svmuu";
-        String bingMapClassName = " com.svmuu.ui.activity.live." + className;
 
-        List<ActivityManager.RunningTaskInfo> tasksInfo = activityManager.getRunningTasks(1);
-        if (tasksInfo.size() > 0)
-
-        {
-            ComponentName topConponent = tasksInfo.get(0).topActivity;
-
-            if (packageName.equals(topConponent.getPackageName()))
-            {
-
-                //当前的APP在前台运行
-
-                if (topConponent.getClassName().equals(bingMapClassName))
-                {
-
-                    //当前正在运行的是不是期望的Activity
-                    return false;
-                }
-
-                else
-                {
-
-                    //当前的APP在后台运行
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    public static boolean isRunningForeground(Context context)
-    {
-        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        ComponentName cn = am.getRunningTasks(1).get(0).topActivity;
-        String currentPackageName = cn.getPackageName();
-        if (!TextUtils.isEmpty(currentPackageName) && currentPackageName.equals("com.svmuu"))
-        {
-            return true;
-        }
-
-        return false;
-    }
 
 
     public static void logout(Context mContext)

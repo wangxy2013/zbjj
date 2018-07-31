@@ -177,12 +177,12 @@ public class RegisterActivity extends BaseActivity implements IRequestListener
                 ToastUtil.show(RegisterActivity.this, "请输入5-16位账号");
                 return;
             }
-            String str = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm";
-            if (!str.contains(String.valueOf(account.charAt(0))))
-            {
-                ToastUtil.show(RegisterActivity.this, "账号必须以字母开头");
-                return;
-            }
+//            String str = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm";
+//            if (!str.contains(String.valueOf(account.charAt(0))))
+//            {
+//                ToastUtil.show(RegisterActivity.this, "账号必须以字母开头");
+//                return;
+//            }
 
 
             if (TextUtils.isEmpty(pwd) || pwd.length() < 6)
@@ -204,8 +204,6 @@ public class RegisterActivity extends BaseActivity implements IRequestListener
             }
 
             Map<String, String> valuePairs = new HashMap<>();
-            valuePairs.put("mobile_id", APPUtils.getUniqueId(RegisterActivity.this));
-            valuePairs.put("device", "and");
             valuePairs.put("user_name", account);
             valuePairs.put("password", pwd);
             valuePairs.put("repassword", pwd);

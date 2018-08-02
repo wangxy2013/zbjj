@@ -10,6 +10,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
+import android.support.annotation.RequiresApi;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -91,6 +93,8 @@ public class VersionManager implements IRequestListener
                     {
                         downloadDialog.dismiss();
                     }
+
+
                     installApk();
                     break;
                 case REQUEST_SUCCESS:
@@ -108,6 +112,8 @@ public class VersionManager implements IRequestListener
                         ConfigManager.instance().setCrossfire(mVersionInfo.getCrossfire());
                         ConfigManager.instance().setRegClosed(mVersionInfo.isReg_closed());
                         ConfigManager.instance().setIpLookUp(mVersionInfo.getIplookup());
+                        ConfigManager.instance().setUploadUrl(mVersionInfo.getUpload());
+
                         if (!StringUtils.stringIsEmpty(mVersionInfo.getText()))
                         {
                             ClipboardManager cm = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
@@ -325,6 +331,7 @@ public class VersionManager implements IRequestListener
         downLoadThread.start();
     }
 
+
     /**
      * 安装apk
      */
@@ -358,6 +365,19 @@ public class VersionManager implements IRequestListener
         }
 
     }
+
+
+    /**
+     * 跳转到设置-允许安装未知来源-页面
+     */
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void startInstallPermissionSettingActivity() {
+        //注意这个是8.0新API
+        Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mContext.startActivity(intent);
+    }
+
 
 
     @Override

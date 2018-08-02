@@ -20,10 +20,12 @@ public class VersionInfo
     private String qq;//
     private String emai;//
     private String crossfire;
+    private String upload;
 
     public VersionInfo(JSONObject obj)
     {
 
+        this.upload = obj.optString("upload");
         this.iplookup = obj.optString("iplookup");
         this.bg_login = obj.optString("bg_login");
         this.bg_startup = obj.optString("bg_startup");
@@ -42,6 +44,16 @@ public class VersionInfo
         this.reg_closed = obj.optBoolean("reg_close");
         forcedup = "1";
 
+    }
+
+    public String getUpload()
+    {
+        return upload;
+    }
+
+    public void setUpload(String upload)
+    {
+        this.upload = upload;
     }
 
     public String getCrossfire()

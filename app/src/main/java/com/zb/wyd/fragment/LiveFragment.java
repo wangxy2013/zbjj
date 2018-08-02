@@ -101,7 +101,7 @@ public class LiveFragment extends BaseFragment
         viewPagerAdapter.addFragment(AnchorListFragment.newInstance(), "主播列表");
         viewPagerAdapter.addFragment(DouyinFragment.newInstance(), "成人抖音");
         mViewPager.setAdapter(viewPagerAdapter);//设置适配器
-        mViewPager.setOffscreenPageLimit(2);
+        mViewPager.setOffscreenPageLimit(1);
         mTabLayout.addTab(mTabLayout.newTab().setText("直播首页"));//给TabLayout添加Tab
         mTabLayout.addTab(mTabLayout.newTab().setText("主播列表"));
         mTabLayout.addTab(mTabLayout.newTab().setText("成人抖音"));

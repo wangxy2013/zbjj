@@ -350,6 +350,10 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
     {
         int width = APPUtils.getScreenWidth(getActivity());
         int height = (int) (width * 0.4);
+        if(null ==mBanner)
+        {
+            return;
+        }
         mBanner.setLayoutParams(new LinearLayout.LayoutParams(width, height));
         mBanner.setVisibility(View.VISIBLE);
         mBanner.setPages(new CustomBanner.ViewCreator<String>()

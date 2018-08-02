@@ -142,7 +142,7 @@ public class Urls
     //获取自拍详情
     public static String getPhotoUploadUrl()
     {
-        return  ConfigManager.instance().getDomainName() + "/photo/upload";
+        return  ConfigManager.instance().getUploadUrl();
     }
 
     //获取自拍详情

@@ -57,6 +57,8 @@ public class ConfigManager
     private static final String ZDY_DOMAIN_NAME = "zdy_domain_name";
 
     private static final String USER_ROLE = "user_role";
+
+    private static final String UPLOAD_URL = "upload_url";
     /**
      * 返回实例
      *
@@ -355,6 +357,19 @@ public class ConfigManager
     {
         return mSharedPreferences.getInt(USER_ROLE, 0) ;
     }
+
+
+
+    public void setUploadUrl(String str)
+    {
+        mSharedPreferences.edit().putString(UPLOAD_URL, str).commit();
+    }
+
+    public String getUploadUrl()
+    {
+        return mSharedPreferences.getString(UPLOAD_URL, "") ;
+    }
+
 
 }
 

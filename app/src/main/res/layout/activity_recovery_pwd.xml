@@ -208,6 +208,7 @@
             android:layout_marginTop="@dimen/dm_10"
             android:background="@drawable/btn_register_frame_45dp"
             android:gravity="center"
+            android:visibility="gone"
             android:orientation="horizontal"
             android:padding="@dimen/dm_10">
 

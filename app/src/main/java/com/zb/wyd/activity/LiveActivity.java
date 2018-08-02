@@ -3,6 +3,7 @@ package com.zb.wyd.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -41,6 +42,7 @@ import com.zb.wyd.utils.Urls;
 import com.zb.wyd.widget.CircleImageView;
 import com.zb.wyd.widget.LiveVideoPlayer;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -94,29 +96,29 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     private List<UserInfo> onlineList = new ArrayList<>();
     private OnlineAdapter mOnlineAdapter;
 
-    private static final String      GET_USER_INFO          = "get_user_info";
-    private static final String      GET_LIVE_PRICE         = "get_live_price";
-    private static final String      GET_LIVE_STREAM        = "get_live_stream";
-    private static final String      GET_ONLINER            = "get_onliner";
-    private static final String      BUY_LIVE               = "buy_live";
-    private static final String      FAVORITE_LIKE          = "favorite_like";
-    private final        String UN_FAVORITE_LIKE         = "un_favorite_like";
-    private static final int         REQUEST_SUCCESS        = 0x01;
-    private static final int         REQUEST_FAIL           = 0x02;
-    private static final int         GET_LIVE_PRICE_SUCCESS = 0x03;
-    private static final int         BUY_LIVE_SUCCESS       = 0x05;
-    private static final int         SET_STATISTICS         = 0x06;
-    private static final int         GET_ONLINER_SUCCESS    = 0x07;
-    private static final int         GET_ONLINER_REQUEST    = 0x08;
-    private static final int         GET_STREAM_REQUEST     = 0x09;
-    private static final int         GET_ANCHOR_REQUEST     = 0x10;
-    private static final int         FAVORITE_LIKE_SUCCESS  = 0x11;
-    private static final int         UN_FAVORITE_LIKE_SUCCESS  = 0x15;
-    private static final int         FAVORITE_LIKE_FAIL     = 0x14;
-    private static final int         GET_ANCHOR_SUCCESS     = 0x12;
-    private static final int         SHOW_SYSTEM_TV         = 0x13;
+    private static final String        GET_USER_INFO            = "get_user_info";
+    private static final String        GET_LIVE_PRICE           = "get_live_price";
+    private static final String        GET_LIVE_STREAM          = "get_live_stream";
+    private static final String        GET_ONLINER              = "get_onliner";
+    private static final String        BUY_LIVE                 = "buy_live";
+    private static final String        FAVORITE_LIKE            = "favorite_like";
+    private final        String        UN_FAVORITE_LIKE         = "un_favorite_like";
+    private static final int           REQUEST_SUCCESS          = 0x01;
+    private static final int           REQUEST_FAIL             = 0x02;
+    private static final int           GET_LIVE_PRICE_SUCCESS   = 0x03;
+    private static final int           BUY_LIVE_SUCCESS         = 0x05;
+    private static final int           SET_STATISTICS           = 0x06;
+    private static final int           GET_ONLINER_SUCCESS      = 0x07;
+    private static final int           GET_ONLINER_REQUEST      = 0x08;
+    private static final int           GET_STREAM_REQUEST       = 0x09;
+    private static final int           GET_ANCHOR_REQUEST       = 0x10;
+    private static final int           FAVORITE_LIKE_SUCCESS    = 0x11;
+    private static final int           UN_FAVORITE_LIKE_SUCCESS = 0x15;
+    private static final int           FAVORITE_LIKE_FAIL       = 0x14;
+    private static final int           GET_ANCHOR_SUCCESS       = 0x12;
+    private static final int           SHOW_SYSTEM_TV           = 0x13;
     @SuppressLint("HandlerLeak")
-    private              BaseHandler mHandler               = new BaseHandler(LiveActivity.this)
+    private              NoLeakHandler mHandler                 = new NoLeakHandler(LiveActivity.this)
     {
         @Override
         public void handleMessage(Message msg)
@@ -215,12 +217,12 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                     break;
 
                 case FAVORITE_LIKE_SUCCESS:
-                    has_favorite= "1";
+                    has_favorite = "1";
                     tvFollow.setText("已关注");
                     ToastUtil.show(LiveActivity.this, "关注成功");
                     break;
                 case UN_FAVORITE_LIKE_SUCCESS:
-                    has_favorite= "0";
+                    has_favorite = "0";
                     tvFollow.setText("关注");
                     ToastUtil.show(LiveActivity.this, "取消关注成功");
                     break;
@@ -235,19 +237,27 @@ public class LiveActivity extends BaseActivity implements IRequestListener
 
                     if (null != mUserInfo)
                     {
-                        ImageLoader.getInstance().displayImage(mUserInfo.getFace(), ivUserPic);
-                        tvUserName.setText(mUserInfo.getNick());
-                        tvFavourCount.setText(mUserInfo.getFavour_count());
+                        if (null != ivUserPic)
+                        {
+                            ImageLoader.getInstance().displayImage(mUserInfo.getFace(), ivUserPic);
+                        }
+                        if (null != tvUserName)
+                            tvUserName.setText(mUserInfo.getNick());
+                        if (null != tvFavourCount)
+                            tvFavourCount.setText(mUserInfo.getFavour_count());
                         has_favorite = mUserInfo.getHas_favorite();
-                        if ("1".equals(mUserInfo.getHas_favorite()))
+                        if (null != tvFollow)
                         {
-                            tvFollow.setText("已关注");
-                        }
-                        else
-                        {
-                            tvFollow.setText("关注");
-                        }
 
+                            if ("1".equals(mUserInfo.getHas_favorite()))
+                            {
+                                tvFollow.setText("已关注");
+                            }
+                            else
+                            {
+                                tvFollow.setText("关注");
+                            }
+                        }
                     }
                     break;
 
@@ -561,6 +571,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         DataRequest.instance().request(LiveActivity.this, Urls.getCollectionRequestUrl(), this, HttpRequest.POST, FAVORITE_LIKE, valuePairs,
                 new ResultHandler());
     }
+
     private void unFavoriteLike()
     {
         showProgressDialog();
@@ -570,6 +581,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         DataRequest.instance().request(LiveActivity.this, Urls.getFavoriteUnLikeUrl(), this, HttpRequest.POST, UN_FAVORITE_LIKE, valuePairs,
                 new ResultHandler());
     }
+
     private boolean dmShow = true;
 
     @Override
@@ -578,7 +590,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         super.onClick(v);
         if (v == tvFollow)
         {
-            if("1".equals(has_favorite))
+            if ("1".equals(has_favorite))
             {
                 unFavoriteLike();
             }
@@ -621,9 +633,9 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                 }
             });
         }
-        else  if(v ==ivUserPic)
+        else if (v == ivUserPic)
         {
-            if(!tvFollow.isShown())
+            if (!tvFollow.isShown())
             {
                 tvFollow.setVisibility(View.VISIBLE);
             }
@@ -754,5 +766,23 @@ public class LiveActivity extends BaseActivity implements IRequestListener
             }
         }
     }
+
+
+    private static class NoLeakHandler extends Handler
+    {
+        private WeakReference<LiveActivity> mActivity;
+
+        public NoLeakHandler(LiveActivity activity)
+        {
+            mActivity = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg)
+        {
+            super.handleMessage(msg);
+        }
+    }
+
 
 }

@@ -358,6 +358,7 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
             {
                 if (MyApplication.getInstance().isLogin())
                 {
+                    if(null !=selfieInfoList&&position<selfieInfoList.size())
                     startActivity(new Intent(getActivity(), PhotoDetailActivity.class).putExtra("biz_id", selfieInfoList.get(position).getId()));
 
                 }
@@ -412,7 +413,7 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
         valuePairs.put("tag", photoTag);
         valuePairs.put("sort", sort);
         valuePairs.put("num", "20");
-        DataRequest.instance().request(getActivity(), Urls.getPhotoListUrl(), this, HttpRequest.POST, GET_PHPTO_LIST, valuePairs,
+        DataRequest.instance().request(getActivity(), Urls.getPhotoListUrl(), this, HttpRequest.GET, GET_PHPTO_LIST, valuePairs,
                 new SelfieInfoListHandler());
     }
 

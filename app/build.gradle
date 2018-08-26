@@ -19,8 +19,8 @@ android {
         applicationId "com.zb.wyd"
         minSdkVersion 22
         targetSdkVersion 26
-        versionCode 23700
-        versionName "2.3.7"
+        versionCode 25100
+        versionName "2.5.1"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -70,7 +70,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'appcompat-v7'
     }
     compile 'com.bartoszlipinski.recyclerviewheader:library:1.2.0'
-    compile project(':visitor-release')
+    compile project(':visitor-20180822')
     compile 'com.google.code.gson:gson:2.8.2'
     compile 'com.umeng.sdk:common:1.5.0'
     compile 'com.umeng.sdk:analytics:7.5.0'

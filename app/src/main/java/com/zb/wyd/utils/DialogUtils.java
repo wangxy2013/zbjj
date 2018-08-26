@@ -79,29 +79,32 @@ public class DialogUtils
      */
     public static void showPromptDialog(Context mContext, String title, final MyItemClickListener listener)
     {
-        final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
-        dialog.setCancelable(true);
-        View v = LayoutInflater.from(mContext).inflate(R.layout.dialog_prompt, null);
-        dialog.setContentView(v);
-        ((TextView) v.findViewById(R.id.tv_content)).setText(title);
-        v.findViewById(R.id.tv_submit).setOnClickListener(new View.OnClickListener()
+        if(!((Activity)mContext).isFinishing())
         {
-            @Override
-            public void onClick(View v)
+            final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
+            dialog.setCancelable(true);
+            View v = LayoutInflater.from(mContext).inflate(R.layout.dialog_prompt, null);
+            dialog.setContentView(v);
+            ((TextView) v.findViewById(R.id.tv_content)).setText(title);
+            v.findViewById(R.id.tv_submit).setOnClickListener(new View.OnClickListener()
             {
-                listener.onItemClick(v, 0);
-                dialog.dismiss();
-            }
-        });
+                @Override
+                public void onClick(View v)
+                {
+                    listener.onItemClick(v, 0);
+                    dialog.dismiss();
+                }
+            });
 
-        //Dialog部分
-        Window mWindow = dialog.getWindow();
-        WindowManager.LayoutParams lp = mWindow.getAttributes();
-        lp.gravity = Gravity.CENTER;
-        lp.width = APPUtils.getScreenWidth(mContext) * 3 / 4;
-        mWindow.setAttributes(lp);
-        dialog.setCancelable(false);
-        dialog.show();
+            //Dialog部分
+            Window mWindow = dialog.getWindow();
+            WindowManager.LayoutParams lp = mWindow.getAttributes();
+            lp.gravity = Gravity.CENTER;
+            lp.width = APPUtils.getScreenWidth(mContext) * 3 / 4;
+            mWindow.setAttributes(lp);
+            dialog.setCancelable(false);
+            dialog.show();
+        }
     }
 
 

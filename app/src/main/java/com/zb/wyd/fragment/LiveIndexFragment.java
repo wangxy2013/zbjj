@@ -128,6 +128,7 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
                     }
                     else
                     {
+
                         rlAllRecommend.setVisibility(View.VISIBLE);
                     }
                     break;

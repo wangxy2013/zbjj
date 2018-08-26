@@ -57,6 +57,14 @@ public class VideoHolder extends RecyclerView.ViewHolder
         mPopularityTv.setText(mVideoInfo.getCoupon());
         mNameTv.setText(mVideoInfo.getV_name());
 
+        if (mVideoInfo.isNew() && null !=mStatusTv)
+        {
+            mStatusTv.setText(mVideoInfo.getAdd_time());
+        }
+        else
+        {
+            mStatusTv.setText("");
+        }
         mItemLayout.setOnClickListener(new View.OnClickListener()
         {
             @Override

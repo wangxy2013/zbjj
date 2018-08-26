@@ -90,7 +90,7 @@ public class WelComeActivity extends BaseActivity implements IRequestListener
                     }
                     else
                     {
-                        startActivity(new Intent(WelComeActivity.this, MainActivity.class));
+                        startActivity(new Intent(WelComeActivity.this, HostActivity.class));
                         finish();
                     }
 

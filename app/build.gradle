@@ -4,7 +4,7 @@ android {
         config {
             keyAlias 'wyd'
             keyPassword 'wyd2018'
-            storeFile file('wyd.jks')
+            storeFile file('F:/otherPro/WYD/app/wyd.jks')
             storePassword 'wyd2018'
         }
     }
@@ -26,10 +26,7 @@ android {
     }
     buildTypes {
         release {
-            buildConfigField "boolean", "LOG_DEBUG", "false" //不显示log
-            zipAlignEnabled true     //Zipalign优化
-            shrinkResources true    // 移除无用的resource文件
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -42,7 +43,13 @@ import com.zb.wyd.utils.Urls;
 import com.zb.wyd.widget.CircleImageView;
 import com.zb.wyd.widget.LiveVideoPlayer;
 
+import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.drafts.Draft_10;
+import org.java_websocket.handshake.ServerHandshake;
+
 import java.lang.ref.WeakReference;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,30 +67,30 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     @BindView(R.id.iv_user_pic)
     CircleImageView ivUserPic;
     @BindView(R.id.tv_user_name)
-    TextView        tvUserName;
+    TextView tvUserName;
     @BindView(R.id.tv_favour_count)
-    TextView        tvFavourCount;
+    TextView tvFavourCount;
     @BindView(R.id.tv_follow)
-    TextView        tvFollow;
+    TextView tvFollow;
     @BindView(R.id.rv_online)
-    RecyclerView    rvOnline;
+    RecyclerView rvOnline;
 
     @BindView(R.id.rl_content)
     RelativeLayout mContentLayout;
     @BindView(R.id.iv_closed)
-    ImageView      ivClosed;
+    ImageView ivClosed;
     @BindView(R.id.tv_dm)
-    TextView       tvDm;
+    TextView tvDm;
     @BindView(R.id.iv_report)
-    ImageView      ivReport;
+    ImageView ivReport;
     @BindView(R.id.iv_gift)
-    ImageView      ivGift;
+    ImageView ivGift;
     @BindView(R.id.tv_system)
-    TextView       tvSystem;
+    TextView tvSystem;
     @BindView(R.id.tv_welcome_name)
-    TextView       tvWelcomeName;
+    TextView tvWelcomeName;
     @BindView(R.id.tv_say)
-    TextView       tvSay;
+    TextView tvSay;
 
     @BindView(R.id.tv_location)
     TextView tvLocation;
@@ -96,29 +103,29 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     private List<UserInfo> onlineList = new ArrayList<>();
     private OnlineAdapter mOnlineAdapter;
 
-    private static final String        GET_USER_INFO            = "get_user_info";
-    private static final String        GET_LIVE_PRICE           = "get_live_price";
-    private static final String        GET_LIVE_STREAM          = "get_live_stream";
-    private static final String        GET_ONLINER              = "get_onliner";
-    private static final String        BUY_LIVE                 = "buy_live";
-    private static final String        FAVORITE_LIKE            = "favorite_like";
-    private final        String        UN_FAVORITE_LIKE         = "un_favorite_like";
-    private static final int           REQUEST_SUCCESS          = 0x01;
-    private static final int           REQUEST_FAIL             = 0x02;
-    private static final int           GET_LIVE_PRICE_SUCCESS   = 0x03;
-    private static final int           BUY_LIVE_SUCCESS         = 0x05;
-    private static final int           SET_STATISTICS           = 0x06;
-    private static final int           GET_ONLINER_SUCCESS      = 0x07;
-    private static final int           GET_ONLINER_REQUEST      = 0x08;
-    private static final int           GET_STREAM_REQUEST       = 0x09;
-    private static final int           GET_ANCHOR_REQUEST       = 0x10;
-    private static final int           FAVORITE_LIKE_SUCCESS    = 0x11;
-    private static final int           UN_FAVORITE_LIKE_SUCCESS = 0x15;
-    private static final int           FAVORITE_LIKE_FAIL       = 0x14;
-    private static final int           GET_ANCHOR_SUCCESS       = 0x12;
-    private static final int           SHOW_SYSTEM_TV           = 0x13;
+    private static final String GET_USER_INFO = "get_user_info";
+    private static final String GET_LIVE_PRICE = "get_live_price";
+    private static final String GET_LIVE_STREAM = "get_live_stream";
+    private static final String GET_ONLINER = "get_onliner";
+    private static final String BUY_LIVE = "buy_live";
+    private static final String FAVORITE_LIKE = "favorite_like";
+    private final String UN_FAVORITE_LIKE = "un_favorite_like";
+    private static final int REQUEST_SUCCESS = 0x01;
+    private static final int REQUEST_FAIL = 0x02;
+    private static final int GET_LIVE_PRICE_SUCCESS = 0x03;
+    private static final int BUY_LIVE_SUCCESS = 0x05;
+    private static final int SET_STATISTICS = 0x06;
+    private static final int GET_ONLINER_SUCCESS = 0x07;
+    private static final int GET_ONLINER_REQUEST = 0x08;
+    private static final int GET_STREAM_REQUEST = 0x09;
+    private static final int GET_ANCHOR_REQUEST = 0x10;
+    private static final int FAVORITE_LIKE_SUCCESS = 0x11;
+    private static final int UN_FAVORITE_LIKE_SUCCESS = 0x15;
+    private static final int FAVORITE_LIKE_FAIL = 0x14;
+    private static final int GET_ANCHOR_SUCCESS = 0x12;
+    private static final int SHOW_SYSTEM_TV = 0x13;
     @SuppressLint("HandlerLeak")
-    private              NoLeakHandler mHandler                 = new NoLeakHandler(LiveActivity.this)
+    private NoLeakHandler mHandler = new NoLeakHandler(LiveActivity.this)
     {
         @Override
         public void handleMessage(Message msg)
@@ -241,8 +248,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                         {
                             ImageLoader.getInstance().displayImage(mUserInfo.getFace(), ivUserPic);
                         }
-                        if (null != tvUserName)
-                            tvUserName.setText(mUserInfo.getNick());
+                        if (null != tvUserName) tvUserName.setText(mUserInfo.getNick());
                         if (null != tvFavourCount)
                             tvFavourCount.setText(mUserInfo.getFavour_count());
                         has_favorite = mUserInfo.getHas_favorite();
@@ -280,8 +286,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     protected void initViews(Bundle savedInstanceState)
     {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_live);
     }
 
@@ -495,6 +500,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         mHandler.sendEmptyMessage(GET_ANCHOR_REQUEST);
 
         mHandler.sendEmptyMessageDelayed(SHOW_SYSTEM_TV, 60 * 1000);
+        initWebSocket();
     }
 
 
@@ -503,8 +509,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "live");
-        DataRequest.instance().request(LiveActivity.this, Urls.getLivePriceUrl(), this, HttpRequest.GET, GET_LIVE_PRICE, valuePairs,
-                new LivePriceInfoHandler());
+        DataRequest.instance().request(LiveActivity.this, Urls.getLivePriceUrl(), this, HttpRequest.GET, GET_LIVE_PRICE, valuePairs, new LivePriceInfoHandler());
 
     }
 
@@ -514,8 +519,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         showProgressDialog();
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
-        DataRequest.instance().request(LiveActivity.this, Urls.getLiveStreamUrl(), this, HttpRequest.GET, GET_LIVE_STREAM, valuePairs,
-                new LiveInfoHandler());
+        DataRequest.instance().request(LiveActivity.this, Urls.getLiveStreamUrl(), this, HttpRequest.GET, GET_LIVE_STREAM, valuePairs, new LiveInfoHandler());
     }
 
     //兑换
@@ -526,8 +530,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "live");
         valuePairs.put("finger", finger);
-        DataRequest.instance().request(LiveActivity.this, Urls.getBuyLiveUrl(), this, HttpRequest.POST, BUY_LIVE, valuePairs,
-                new ResultHandler());
+        DataRequest.instance().request(LiveActivity.this, Urls.getBuyLiveUrl(), this, HttpRequest.POST, BUY_LIVE, valuePairs, new ResultHandler());
     }
 
 
@@ -538,16 +541,14 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "live");
         valuePairs.put("duration", String.valueOf(duration));
-        DataRequest.instance().request(LiveActivity.this, Urls.getStatisticsUrl(), this, HttpRequest.POST, "SET_STATISTICS", valuePairs,
-                new ResultHandler());
+        DataRequest.instance().request(LiveActivity.this, Urls.getStatisticsUrl(), this, HttpRequest.POST, "SET_STATISTICS", valuePairs, new ResultHandler());
     }
 
     private void getUserInfo()
     {
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
-        DataRequest.instance().request(LiveActivity.this, Urls.getAnchorDetailUrl(), this, HttpRequest.GET, GET_USER_INFO, valuePairs,
-                new UserInfoHandler());
+        DataRequest.instance().request(LiveActivity.this, Urls.getAnchorDetailUrl(), this, HttpRequest.GET, GET_USER_INFO, valuePairs, new UserInfoHandler());
     }
 
     private void getOnLiner()
@@ -556,8 +557,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "live");
-        DataRequest.instance().request(LiveActivity.this, Urls.getOnlinerUrl(), this, HttpRequest.GET, GET_ONLINER, valuePairs,
-                new OnlinerListHandler());
+        DataRequest.instance().request(LiveActivity.this, Urls.getOnlinerUrl(), this, HttpRequest.GET, GET_ONLINER, valuePairs, new OnlinerListHandler());
 
 
     }
@@ -568,8 +568,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "live");
-        DataRequest.instance().request(LiveActivity.this, Urls.getCollectionRequestUrl(), this, HttpRequest.POST, FAVORITE_LIKE, valuePairs,
-                new ResultHandler());
+        DataRequest.instance().request(LiveActivity.this, Urls.getCollectionRequestUrl(), this, HttpRequest.POST, FAVORITE_LIKE, valuePairs, new ResultHandler());
     }
 
     private void unFavoriteLike()
@@ -578,8 +577,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "live");
-        DataRequest.instance().request(LiveActivity.this, Urls.getFavoriteUnLikeUrl(), this, HttpRequest.POST, UN_FAVORITE_LIKE, valuePairs,
-                new ResultHandler());
+        DataRequest.instance().request(LiveActivity.this, Urls.getFavoriteUnLikeUrl(), this, HttpRequest.POST, UN_FAVORITE_LIKE, valuePairs, new ResultHandler());
     }
 
     private boolean dmShow = true;
@@ -640,6 +638,9 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                 tvFollow.setVisibility(View.VISIBLE);
             }
         }
+
+        //WS sendMsg
+       // mSocketClient.send("");
     }
 
     @Override
@@ -666,7 +667,68 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         setStatistics(duration);
         mHandler.removeCallbacksAndMessages(null);
 
+        if (mSocketClient != null) {
+            mSocketClient.close();
+        }
+
     }
+
+
+    private WebSocketClient mSocketClient;
+
+
+    private void initWebSocket()
+    {
+        new Thread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                try
+                {
+                    String wsUri = "ws://103.70.225.116:9501/" + ConfigManager.instance().getUniqueCode() + "?biz_id=" + biz_id;
+
+                    Log.e("wsUri", "wsUri-->" + wsUri);
+                    mSocketClient = new WebSocketClient(new URI(wsUri), new Draft_10())
+                    {
+                        @Override
+                        public void onOpen(ServerHandshake handshakedata)
+                        {
+                            Log.d("picher_log", "打开通道" + handshakedata.getHttpStatus());
+                            // handler.obtainMessage(0, message).sendToTarget();
+                        }
+
+                        @Override
+                        public void onMessage(String message)
+                        {
+                            Log.d("picher_log", "接收消息" + message);
+                            // handler.obtainMessage(0, message).sendToTarget();
+                        }
+
+                        @Override
+                        public void onClose(int code, String reason, boolean remote)
+                        {
+                            Log.d("picher_log", "通道关闭");
+                            // handler.obtainMessage(0, message).sendToTarget();
+                        }
+
+                        @Override
+                        public void onError(Exception ex)
+                        {
+                            Log.d("picher_log", "链接错误");
+                        }
+                    };
+                    mSocketClient.connect();
+
+                }
+                catch (URISyntaxException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
 
     @Override
     public void onBackPressed()
@@ -675,6 +737,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         videoPlayer.setVideoAllCallBack(null);
         super.onBackPressed();
     }
+
 
     @Override
     public void notify(String action, String resultCode, String resultMsg, Object obj)

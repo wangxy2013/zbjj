@@ -15,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-
 import com.zb.wyd.R;
 import com.zb.wyd.entity.PriceInfo;
 import com.zb.wyd.listener.MyItemClickListener;
@@ -79,7 +78,7 @@ public class DialogUtils
      */
     public static void showPromptDialog(Context mContext, String title, final MyItemClickListener listener)
     {
-        if(!((Activity)mContext).isFinishing())
+        if (!((Activity) mContext).isFinishing())
         {
             final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
             dialog.setCancelable(true);
@@ -112,17 +111,14 @@ public class DialogUtils
     {
         LayoutInflater inflater = LayoutInflater.from(context);
         View v = inflater.inflate(R.layout.dialog_loading1, null);// 得到加载view
-        LinearLayout layout = (LinearLayout) v
-                .findViewById(R.id.dialog_loading_view);// 加载布局
+        LinearLayout layout = (LinearLayout) v.findViewById(R.id.dialog_loading_view);// 加载布局
         TextView tipTextView = (TextView) v.findViewById(R.id.tipTextView);// 提示文字
         tipTextView.setText(msg);// 设置加载信息
 
         Dialog loadingDialog = new Dialog(context, R.style.MyDialogStyle);// 创建自定义样式dialog
         loadingDialog.setCancelable(true); // 是否可以按“返回键”消失
         loadingDialog.setCanceledOnTouchOutside(false); // 点击加载框以外的区域
-        loadingDialog.setContentView(layout, new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT));// 设置布局
+        loadingDialog.setContentView(layout, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));// 设置布局
         /**
          *将显示Dialog的方法封装在这里面
          */
@@ -181,8 +177,7 @@ public class DialogUtils
      *
      * @return
      */
-    public static Dialog showToastDialog2Button(Context mContext, String str,String buttonStr, final View.OnClickListener onClickListener, final View.OnClickListener
-            onClickListener1)
+    public static Dialog showToastDialog2Button(Context mContext, String str, String buttonStr, final View.OnClickListener onClickListener, final View.OnClickListener onClickListener1)
     {
         final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
         dialog.setCancelable(false);
@@ -227,8 +222,7 @@ public class DialogUtils
      *
      * @return
      */
-    public static Dialog showLivePriceDialog(Context mContext, PriceInfo mLivePriceInfo, final View.OnClickListener cancelListener, final
-    MyOnClickListener.OnSubmitListener listener)
+    public static Dialog showLivePriceDialog(Context mContext, PriceInfo mLivePriceInfo, final View.OnClickListener cancelListener, final MyOnClickListener.OnSubmitListener listener)
     {
         final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
         dialog.setCancelable(false);
@@ -311,8 +305,7 @@ public class DialogUtils
      *
      * @return
      */
-    public static Dialog showVideoPriceDialog(Context mContext, PriceInfo mLivePriceInfo, final View.OnClickListener cancelListener, final
-    MyOnClickListener.OnSubmitListener listener)
+    public static Dialog showVideoPriceDialog(Context mContext, PriceInfo mLivePriceInfo, final View.OnClickListener cancelListener, final MyOnClickListener.OnSubmitListener listener)
     {
         final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
         dialog.setCancelable(false);
@@ -491,5 +484,53 @@ public class DialogUtils
         mWindow.setAttributes(lp);
         dialog.show();
     }
+
+
+//    /**
+//     * 礼物
+//     *
+//     * @return
+//     */
+//    public static void showGiftDialog(Context mContext, List<GiftInfo> giftInfoList)
+//    {
+//        final Dialog dialog = new Dialog(mContext, R.style.DialogStyle);
+//        dialog.setCancelable(true);
+//        View v = LayoutInflater.from(mContext).inflate(R.layout.dialog_gift, null);
+//        dialog.setContentView(v);
+//
+//        RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
+//
+//        recyclerView.setLayoutManager(new FullyGridLayoutManager(mContext, 4));
+//
+//        GiftAdapter giftAdapter = new GiftAdapter(mContext, giftInfoList, new MyItemClickListener()
+//        {
+//            @Override
+//            public void onItemClick(View view, int position)
+//            {
+//                for (int i = 0; i < giftInfoList.size(); i++)
+//                {
+//                    if (i == position)
+//                    {
+//                        giftInfoList.get(position).setSelected(true);
+//                    }
+//                    else
+//                    {
+//                        giftInfoList.get(position).setSelected(false);
+//                    }
+//                }
+//
+//            }
+//        });
+//        recyclerView.setAdapter(giftAdapter);
+//
+//
+//        //Dialog部分
+//        Window mWindow = dialog.getWindow();
+//        WindowManager.LayoutParams lp = mWindow.getAttributes();
+//        lp.gravity = Gravity.BOTTOM;
+//        lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
+//        mWindow.setAttributes(lp);
+//        dialog.show();
+//    }
 
 }

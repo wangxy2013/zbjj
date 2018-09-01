@@ -1,8 +1,6 @@
 package com.zb.wyd.json;
 
-import com.zb.wyd.MyApplication;
 import com.zb.wyd.utils.ConfigManager;
-import com.zb.wyd.utils.ToastUtil;
 
 import org.json.JSONObject;
 
@@ -27,9 +25,12 @@ public class LoginHandler extends JsonHandler
                 String uname = obj.optString("uname");
                 ConfigManager.instance().setUniqueCode(uniqueCode);
                 ConfigManager.instance().setUserId(uid);
+                ConfigManager.instance().setUserName(uname);
                 ConfigManager.instance().setUserNickName(obj.optString("unick"));
                 ConfigManager.instance().setVipLevel(obj.optInt("vip_level"));
+                ConfigManager.instance().setVipType(obj.optInt("vip_type"));
                 ConfigManager.instance().setUserRole(obj.optInt("role"));
+                ConfigManager.instance().setUserPic(obj.optString("uface"));
             }
 
 

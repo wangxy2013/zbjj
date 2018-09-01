@@ -1,7 +1,7 @@
 package com.zb.wyd.json;
 
 
-import com.zb.wyd.entity.LiveInfo;
+import com.zb.wyd.entity.FortuneInfo;
 import com.zb.wyd.entity.UserInfo;
 
 import org.json.JSONObject;
@@ -24,8 +24,15 @@ public class UserInfoHandler extends JsonHandler
         try
         {
 
+            JSONObject obj = jsonObj.optJSONObject("data");
+            if (null != obj)
+            {
+                userInfo = new UserInfo(obj);
 
-            userInfo = new UserInfo(jsonObj.optJSONObject("data"));
+                FortuneInfo mFortuneInfo = new FortuneInfo(obj.optJSONObject("fortune"));
+                userInfo.setFortuneInfo(mFortuneInfo);
+
+            }
 
 
         } catch (Exception e)

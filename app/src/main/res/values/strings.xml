@@ -55,4 +55,5 @@
     <string name="chat_image_preview_send">发送</string>
     <string name="chat_image_preview_load_err">图片加载失败</string>
     <string name="chat_image_preview_ori">原图发送</string>
+    <string name="gift_tip">送出%1$s</string>
 </resources>

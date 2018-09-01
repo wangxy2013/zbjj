@@ -3,7 +3,6 @@ package com.zb.wyd.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
@@ -20,20 +19,15 @@ import com.zb.wyd.http.HttpRequest;
 import com.zb.wyd.http.IRequestListener;
 import com.zb.wyd.json.LocationInfoHandler;
 import com.zb.wyd.json.ResultHandler;
-import com.zb.wyd.json.VersionInfoHandler;
-import com.zb.wyd.utils.APPUtils;
 import com.zb.wyd.utils.ConfigManager;
 import com.zb.wyd.utils.ConstantUtil;
 import com.zb.wyd.utils.DialogUtils;
 import com.zb.wyd.utils.LogUtil;
-import com.zb.wyd.utils.ToastUtil;
-import com.zb.wyd.utils.Urls;
-import com.zb.wyd.utils.VersionManager;
 import com.zb.wyd.widget.statusbar.StatusBarUtil;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -155,9 +149,7 @@ public class WelComeActivity extends BaseActivity implements IRequestListener
         {
             url = url + "?auth=";
             Map<String, String> valuePairs = new HashMap<>();
-            DataRequest.instance().request(this, url, this, HttpRequest.GET, "GET_LOCATION",
-                    valuePairs,
-                    new LocationInfoHandler());
+            DataRequest.instance().request(this, url, this, HttpRequest.GET, "GET_LOCATION", valuePairs, new LocationInfoHandler());
         }
 
     }
@@ -191,38 +183,47 @@ public class WelComeActivity extends BaseActivity implements IRequestListener
 
     private void initDomainName()
     {
-        String crossfire = ConfigManager.instance().getCrossfire();
-        if (!TextUtils.isEmpty(crossfire))
+        boolean test = true;
+        if (test)
         {
-            domianNameArr = crossfire.split(";");
-        }
-        String myDomainName = ConfigManager.instance().getZydDomainName();
-
-        if (!"".equals(myDomainName))
-        {
-            domainNameList.add(myDomainName);
-        }
-        if (null != domianNameArr)
-        {
-            for (int i = 0; i < domianNameArr.length; i++)
-            {
-                domainNameList.add(domianNameArr[i]);
-            }
-
-
-            for (int i = 0; i < parkedDomainArr.length; i++)
-            {
-                domainNameList.add("http://" + getRandomString() + "." + parkedDomainArr[i]);
-            }
+            mDomainName = "https://qvjia.com";
+            mHandler.sendEmptyMessage(TEST_DOMAINNAME_SUCCESS);
         }
         else
         {
-            for (int i = 0; i < parkedDomainArr.length; i++)
+            String crossfire = ConfigManager.instance().getCrossfire();
+            if (!TextUtils.isEmpty(crossfire))
             {
-                domainNameList.add("http://" + getRandomString() + "." + parkedDomainArr[i]);
+                domianNameArr = crossfire.split(";");
             }
+            String myDomainName = ConfigManager.instance().getZydDomainName();
+
+            if (!"".equals(myDomainName))
+            {
+                domainNameList.add(myDomainName);
+            }
+            if (null != domianNameArr)
+            {
+                for (int i = 0; i < domianNameArr.length; i++)
+                {
+                    domainNameList.add(domianNameArr[i]);
+                }
+
+
+                for (int i = 0; i < parkedDomainArr.length; i++)
+                {
+                    domainNameList.add("https://" + getRandomString() + "." + parkedDomainArr[i]);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < parkedDomainArr.length; i++)
+                {
+                    domainNameList.add("https://" + getRandomString() + "." + parkedDomainArr[i]);
+                }
+            }
+            mHandler.sendEmptyMessage(TEST_DOMAINNAME_FAIL);
         }
-        mHandler.sendEmptyMessage(TEST_DOMAINNAME_FAIL);
     }
 
 
@@ -239,12 +240,13 @@ public class WelComeActivity extends BaseActivity implements IRequestListener
 
             String url = mDomainName + "/ping.js?auth=";
             Map<String, String> valuePairs1 = new HashMap<>();
-            DataRequest.instance().request(this, url, WelComeActivity.this, HttpRequest.GET, TEST_DOMAINNAME, valuePairs1,
-                    new ResultHandler());
+            DataRequest.instance().request(this, url, WelComeActivity.this, HttpRequest.GET, TEST_DOMAINNAME, valuePairs1, new ResultHandler());
         }
         else
         {
+
             setDomainName();
+
         }
     }
 

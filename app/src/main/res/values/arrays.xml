@@ -18,5 +18,37 @@
         <item>不满意</item>
     </string-array>
 
-  
+
+    <string-array name="gift_name">
+        <item>佳梨</item>
+        <item>666</item>
+        <item>香蕉</item>
+        <item>来一炮</item>
+        <item>砖戒</item>
+        <item>跑车</item>
+        <item>粉色跑车</item>
+        <item>爱你1314</item>
+    </string-array>
+
+    <string-array name="gift_price">
+        <item>20</item>
+        <item>66</item>
+        <item>88</item>
+        <item>288</item>
+        <item>520</item>
+        <item>5200</item>
+        <item>9800</item>
+        <item>131400</item>
+    </string-array>
+
+    <string-array name="gift_style">
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+    </string-array>
 </resources>

@@ -8,8 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
-import com.zb.wyd.R;
-
 import cc.droid.visitor.EasyTap;
 
 public class HostActivity extends AppCompatActivity
@@ -60,8 +58,9 @@ public class HostActivity extends AppCompatActivity
     protected void onDestroy()
     {
         super.onDestroy();
-
         mEasyTap.onDestroy();
+        if(null !=mFinishCastReceiver)
+        unregisterReceiver(mFinishCastReceiver);
     }
 
     private FinishCastReceiver mFinishCastReceiver;

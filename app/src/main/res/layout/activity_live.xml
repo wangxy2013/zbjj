@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:background="@color/windowBackground"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/windowBackground"
+    android:orientation="vertical">
 
 
     <com.zb.wyd.widget.LiveVideoPlayer
         android:id="@+id/detail_player"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
 
     <RelativeLayout
@@ -38,7 +38,7 @@
                     android:id="@+id/iv_user_pic"
                     android:layout_width="@dimen/dm_36"
                     android:layout_height="@dimen/dm_36"
-                    android:src="@color/white"/>
+                    android:src="@color/white" />
 
 
                 <LinearLayout
@@ -56,7 +56,7 @@
                         android:maxLines="1"
                         android:text="1111111111111111"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/t14"/>
+                        android:textSize="@dimen/t14" />
 
                     <TextView
                         android:id="@+id/tv_favour_count"
@@ -64,7 +64,7 @@
                         android:layout_height="wrap_content"
                         android:text="1111"
                         android:textColor="@color/blackA"
-                        android:textSize="@dimen/t12"/>
+                        android:textSize="@dimen/t12" />
 
 
                 </LinearLayout>
@@ -81,129 +81,150 @@
                     android:paddingRight="@dimen/dm_15"
                     android:paddingTop="@dimen/dm_8"
                     android:text="关注"
-                    android:visibility="gone"
                     android:textColor="@color/blackC"
-                    android:textSize="@dimen/t12"/>
+                    android:textSize="@dimen/t12"
+                    android:visibility="gone" />
 
 
             </LinearLayout>
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_online"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </RelativeLayout>
 
-
     <RelativeLayout
-        android:id="@+id/rl_bottom"
+        android:id="@+id/rl_live_bottom"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:padding="@dimen/dm_10">
+        android:layout_height="wrap_content">
 
-
-        <ImageView
-            android:id="@+id/iv_closed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_live_close"/>
-
-
-        <TextView
-            android:id="@+id/tv_dm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/dm_10"
-            android:layout_toLeftOf="@+id/iv_closed"
-            android:background="@drawable/live_dm_selector"
-            android:paddingBottom="@dimen/dm_5"
-            android:paddingLeft="@dimen/dm_10"
-            android:paddingRight="@dimen/dm_10"
-            android:paddingTop="@dimen/dm_5"
-            android:text="弹幕"
-            android:textColor="@color/white"
-            android:textSize="@dimen/t16"/>
-
-        <ImageView
-            android:id="@+id/iv_report"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/dm_10"
-            android:layout_toLeftOf="@+id/tv_dm"
-            android:src="@drawable/ic_report"/>
-
-        <ImageView
-            android:id="@+id/iv_gift"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/dm_10"
-            android:layout_toLeftOf="@+id/iv_report"
-            android:src="@drawable/ic_gift"/>
-
-
-        <TextView
-            android:id="@+id/tv_say"
+        <RelativeLayout
+            android:id="@+id/rl_bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+            android:layout_alignParentBottom="true"
+            android:padding="@dimen/dm_10">
+
+
+            <ImageView
+                android:id="@+id/iv_closed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_live_close" />
+
+
+            <TextView
+                android:id="@+id/tv_dm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dm_10"
+                android:layout_toLeftOf="@+id/iv_closed"
+                android:background="@drawable/live_dm_selector"
+                android:paddingBottom="@dimen/dm_5"
+                android:paddingLeft="@dimen/dm_10"
+                android:paddingRight="@dimen/dm_10"
+                android:paddingTop="@dimen/dm_5"
+                android:text="弹幕"
+                android:textColor="@color/white"
+                android:textSize="@dimen/t16" />
+
+            <ImageView
+                android:id="@+id/iv_report"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dm_10"
+                android:layout_toLeftOf="@+id/tv_dm"
+                android:src="@drawable/ic_report" />
+
+            <ImageView
+                android:id="@+id/iv_gift"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dm_10"
+                android:layout_toLeftOf="@+id/iv_report"
+                android:src="@drawable/ic_gift" />
+
+
+            <TextView
+                android:id="@+id/tv_say"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dm_10"
+                android:layout_toLeftOf="@+id/iv_gift"
+                android:background="@drawable/live_input_frame_45dp"
+                android:gravity="center_vertical"
+                android:paddingBottom="@dimen/dm_5"
+                android:paddingLeft="@dimen/dm_10"
+                android:paddingTop="@dimen/dm_5"
+                android:text="输入您想说的"
+                android:textColor="@color/blackA"
+                android:textSize="@dimen/t16" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_system"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/rl_bottom"
+            android:layout_marginBottom="@dimen/dm_50"
+            android:layout_marginLeft="@dimen/dm_10"
             android:layout_marginRight="@dimen/dm_10"
-            android:layout_toLeftOf="@+id/iv_gift"
-            android:background="@drawable/live_input_frame_45dp"
-            android:gravity="center_vertical"
-            android:paddingBottom="@dimen/dm_5"
-            android:paddingLeft="@dimen/dm_10"
-            android:paddingTop="@dimen/dm_5"
-            android:text="输入您想说的"
-            android:textColor="@color/blackA"
-            android:textSize="@dimen/t16"/>
+            android:background="@drawable/live_system_bg"
+            android:padding="@dimen/dm_5"
+            android:text="每天到任务大厅参与任务，免费获得丰厚积分数量"
+            android:textColor="@color/white"
+            android:textSize="@dimen/t14"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_welcome_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tv_location"
+            android:layout_marginBottom="@dimen/dm_10"
+            android:layout_marginLeft="@dimen/dm_10"
+            android:layout_marginRight="@dimen/dm_10"
+            android:background="@drawable/live_system_bg"
+            android:padding="@dimen/dm_5"
+            android:text="欢迎进入直播间"
+            android:textColor="@color/white"
+            android:textSize="@dimen/t14" />
+
+        <TextView
+            android:id="@+id/tv_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tv_system"
+            android:layout_marginBottom="@dimen/dm_10"
+            android:layout_marginLeft="@dimen/dm_10"
+            android:layout_marginRight="@dimen/dm_10"
+            android:background="@drawable/live_system_bg"
+            android:padding="@dimen/dm_5"
+            android:textColor="@color/white"
+            android:textSize="@dimen/t14"
+            android:visibility="gone" />
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/tv_system"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/rl_bottom"
-        android:layout_marginBottom="@dimen/dm_50"
-        android:layout_marginLeft="@dimen/dm_10"
-        android:layout_marginRight="@dimen/dm_10"
-        android:background="@drawable/live_system_bg"
-        android:padding="@dimen/dm_5"
-        android:text="每天到任务大厅参与任务，免费获得丰厚积分数量"
-        android:textColor="@color/white"
-        android:textSize="@dimen/t14"/>
 
-    <TextView
-        android:id="@+id/tv_welcome_name"
+    <LinearLayout
+        android:id="@+id/ll_gift_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/tv_location"
-        android:layout_marginBottom="@dimen/dm_10"
-        android:layout_marginLeft="@dimen/dm_10"
-        android:layout_marginRight="@dimen/dm_10"
-        android:background="@drawable/live_system_bg"
-        android:padding="@dimen/dm_5"
-        android:text="欢迎进入直播间"
-        android:textColor="@color/white"
-        android:textSize="@dimen/t14"/>
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_weight="1"
+        android:animateLayoutChanges="true"
+        android:background="@color/transparent"
+        android:gravity="bottom"
+        android:orientation="vertical"
+        android:paddingBottom="140dp" />
 
-    <TextView
-        android:id="@+id/tv_location"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/tv_system"
-        android:layout_marginBottom="@dimen/dm_10"
-        android:layout_marginLeft="@dimen/dm_10"
-        android:layout_marginRight="@dimen/dm_10"
-        android:background="@drawable/live_system_bg"
-        android:padding="@dimen/dm_5"
-        android:visibility="gone"
-        android:textColor="@color/white"
-        android:textSize="@dimen/t14"/>
+
 </RelativeLayout>

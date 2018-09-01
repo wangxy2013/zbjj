@@ -7,10 +7,8 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,17 +27,14 @@ import com.zb.wyd.activity.LoginActivity;
 import com.zb.wyd.activity.MainActivity;
 import com.zb.wyd.activity.MessageListActivity;
 import com.zb.wyd.activity.MyCollectionActivity;
-import com.zb.wyd.activity.RecoveryPwdActivity;
 import com.zb.wyd.activity.UserDetailActivity;
 import com.zb.wyd.activity.WealthListActivity;
 import com.zb.wyd.activity.WebViewActivity;
-import com.zb.wyd.activity.WelComeActivity;
+import com.zb.wyd.entity.FortuneInfo;
 import com.zb.wyd.entity.UserInfo;
 import com.zb.wyd.http.DataRequest;
 import com.zb.wyd.http.HttpRequest;
 import com.zb.wyd.http.IRequestListener;
-import com.zb.wyd.json.LoginHandler;
-import com.zb.wyd.json.ResultHandler;
 import com.zb.wyd.json.UserInfoHandler;
 import com.zb.wyd.utils.APPUtils;
 import com.zb.wyd.utils.ConfigManager;
@@ -49,10 +44,9 @@ import com.zb.wyd.utils.ToastUtil;
 import com.zb.wyd.utils.Urls;
 import com.zb.wyd.widget.CircleImageView;
 
-import java.lang.reflect.Member;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -112,6 +106,7 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
     private View rootView = null;
     private Unbinder unbinder;
     private UserInfo userInfo;
+
     private static final String      GET_USER_DETAIL = "get_user_detail";
     private static final int         REQUEST_SUCCESS = 0x01;
     private static final int         REQUEST_FAIL    = 0x02;
@@ -131,7 +126,7 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
                     if (null != userInfo)
                     {
                         String unick = userInfo.getUnick();
-                        String fortune = userInfo.getFortune();
+                        FortuneInfo fortune = userInfo.getFortuneInfo();
                         String vip_level = userInfo.getVip_level();
                         ConfigManager.instance().setUserRole(Integer.parseInt(userInfo.getRole()));
                         ImageLoader.getInstance().displayImage(userInfo.getUface(), ivUserPic);
@@ -145,7 +140,10 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
                         }
 
                         tvUserLevel.setText("V" + vip_level);
-                        tvWealth.setText(fortune);
+                        if(null !=fortune)
+                        {
+                            tvWealth.setText(fortune.getGift());
+                        }
 
                         if ("-".equals(userInfo.getEmail()))
                         {
@@ -320,7 +318,8 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
         {
             if (MyApplication.getInstance().isLogin())
             {
-                startActivity(new Intent(getActivity(), WealthListActivity.class).putExtra("fortune", tvWealth.getText().toString()));
+                startActivity(new Intent(getActivity(), WealthListActivity.class)
+                        .putExtra("fortune",userInfo.getFortuneInfo()));
             }
             else
             {

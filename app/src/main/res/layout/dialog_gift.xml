@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#aa2E2B29"
+    android:orientation="vertical">
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dm_15">
+
+
+        <RelativeLayout
+            android:layout_width="@dimen/dm_120"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:background="@drawable/gift_black_frame_45dp"
+            android:gravity="center_vertical"
+            android:paddingBottom="@dimen/dm_5"
+            android:paddingLeft="@dimen/dm_10"
+            android:paddingTop="@dimen/dm_5">
+
+
+            <ImageView
+                android:id="@+id/iv_masonry"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_masonry" />
+
+            <TextView
+                android:id="@+id/tv_gift_price"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="@dimen/dm_3"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/iv_masonry"
+                android:text="0"
+                android:textColor="@color/yellow"
+                android:textSize="@dimen/t14" />
+
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/common_yellow_45dp"
+            android:paddingBottom="@dimen/dm_5"
+            android:paddingLeft="@dimen/dm_15"
+            android:paddingRight="@dimen/dm_15"
+            android:paddingTop="@dimen/dm_5"
+            android:text="赠送"
+            android:textColor="@color/black"
+            android:textSize="@dimen/t14" />
+    </RelativeLayout>
+
+
+</LinearLayout>

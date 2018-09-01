@@ -47,6 +47,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * 描述：一句话简单描述
@@ -67,6 +68,10 @@ public class UserDetailActivity extends BaseActivity implements IRequestListener
     RelativeLayout  llUserNick;
     @BindView(R.id.ll_user_pwd)
     RelativeLayout  llUserPwd;
+    @BindView(R.id.tv_phone_status)
+    TextView        tvPhoneStatus;
+    @BindView(R.id.ll_bind_phone)
+    RelativeLayout  llBindPhone;
 
     private UserInfo userInfo;
 
@@ -146,6 +151,7 @@ public class UserDetailActivity extends BaseActivity implements IRequestListener
         llUserPic.setOnClickListener(this);
         llUserNick.setOnClickListener(this);
         llUserPwd.setOnClickListener(this);
+        llBindPhone.setOnClickListener(this);
     }
 
     @Override
@@ -206,9 +212,13 @@ public class UserDetailActivity extends BaseActivity implements IRequestListener
         {
             startActivityForResult(new Intent(UserDetailActivity.this, ModifyUserActivity.class), MODIFY_USER_NICK_CODE);
         }
-        else if(v ==llUserPwd)
+        else if (v == llUserPwd)
         {
-            startActivity(new Intent(UserDetailActivity.this,ModifyPwdActivity.class));
+            startActivity(new Intent(UserDetailActivity.this, ModifyPwdActivity.class));
+
+        }
+        else if(v == llBindPhone)
+        {
 
         }
     }
@@ -490,5 +500,13 @@ public class UserDetailActivity extends BaseActivity implements IRequestListener
                 mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
             }
         }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
     }
 }

@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * 描述：重置密码
@@ -74,7 +73,7 @@ public class RecoveryPwdActivity extends BaseActivity implements IRequestListene
     ImageView    ivBg;
 
 
-    private boolean isFitst = true;
+    //private boolean isFitst = true;
 
     private int time = 60;
     private int    count;
@@ -201,6 +200,7 @@ public class RecoveryPwdActivity extends BaseActivity implements IRequestListene
     @Override
     protected void initViewData()
     {
+        btnSubmit.setText("提交");
         ImageLoader.getInstance().displayImage(ConfigManager.instance().getBgLogin(), ivBg);
     }
 
@@ -233,8 +233,8 @@ public class RecoveryPwdActivity extends BaseActivity implements IRequestListene
         }
         else if (v == btnSubmit)
         {
-            if (isFitst)
-            {
+//            if (isFitst)
+//            {
                 String email = etAccount.getText().toString();
 
                 if (!StringUtils.checkEmail(email))
@@ -251,34 +251,34 @@ public class RecoveryPwdActivity extends BaseActivity implements IRequestListene
                     return;
 
                 }
-                llFirst.setVisibility(View.GONE);
-                llNext.setVisibility(View.VISIBLE);
-                isFitst = false;
-                btnSubmit.setText("提交");
-
-            }
-            else
-            {
-
-                String email = etAccount.getText().toString();
-
-                if (!StringUtils.checkEmail(email))
-                {
-                    ToastUtil.show(this, "请输入正确的邮箱");
-                    return;
-                }
+//                llFirst.setVisibility(View.GONE);
+//                llNext.setVisibility(View.VISIBLE);
+              //  isFitst = false;
 
 
-                String code = etInvitation.getText().toString();
+//            }
+//            else
+//            {
 
-                if (TextUtils.isEmpty(code))
-                {
-                    if (!StringUtils.checkEmail(email))
-                    {
-                        ToastUtil.show(this, "请输入验证码");
-                        return;
-                    }
-                }
+//                String email = etAccount.getText().toString();
+//
+//                if (!StringUtils.checkEmail(email))
+//                {
+//                    ToastUtil.show(this, "请输入正确的邮箱");
+//                    return;
+//                }
+//
+//
+//                String code = etInvitation.getText().toString();
+//
+//                if (TextUtils.isEmpty(code))
+//                {
+//                    if (!StringUtils.checkEmail(email))
+//                    {
+//                        ToastUtil.show(this, "请输入验证码");
+//                        return;
+//                    }
+//                }
 
                 pwd = etPwd.getText().toString();
                 String pwd1 = etPwd1.getText().toString();
@@ -305,7 +305,7 @@ public class RecoveryPwdActivity extends BaseActivity implements IRequestListene
                 valuePairs.put("repasswd", pwd);
                 DataRequest.instance().request(this, Urls.getUserForgotUrl(), this, HttpRequest.POST, USER_FORGOT, valuePairs,
                         new ResultHandler());
-            }
+       //     }
 
         }
         else if (v == llQq)

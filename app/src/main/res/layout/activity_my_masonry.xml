@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/windowBackground"
+              android:orientation="vertical">
+
+    <include layout="@layout/layout_head"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/yellow"
+        android:orientation="vertical"
+        android:padding="@dimen/dm_15">
+
+
+        <TextView
+            android:id="@+id/tv_recharge_balance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="0"
+            android:textColor="@color/blackC"
+            android:textSize="@dimen/t24"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="余额"
+            android:textColor="@color/blackA"
+            android:textSize="@dimen/t16"/>
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:background="@color/white"
+        android:padding="@dimen/dm_15"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:textSize="@dimen/t16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="选择充值额度"
+            android:layout_centerVertical="true"
+            android:textColor="@color/blackB"/>
+
+        <TextView
+            android:id="@+id/tv_member"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:textSize="@dimen/t14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="开通会员"
+            android:textColor="@color/blackB"/>
+
+    </RelativeLayout>
+
+<View
+    android:background="@color/line"
+    android:layout_marginLeft="@dimen/dm_15"
+    android:layout_marginRight="15dp"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dm_1"/>
+
+    <RelativeLayout
+        android:background="@color/white"
+        android:id="@+id/rl_money30"
+        android:padding="@dimen/dm_15"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/iv_masonry"
+            android:src="@drawable/ic_masonry"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_toRightOf="@+id/iv_masonry"
+            android:textSize="@dimen/t16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dm_5"
+            android:text="300"
+            android:layout_centerVertical="true"
+            android:textColor="@color/blackB"/>
+
+        <TextView
+            android:id="@+id/tv_masonry30"
+            android:gravity="center"
+            android:padding="@dimen/dm_5"
+            android:layout_alignParentRight="true"
+            android:text="¥30.00"
+            android:background="@drawable/cash_bg_selector"
+            android:textSize="@dimen/t14"
+            android:layout_centerVertical="true"
+            android:textColor="@color/blackB"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+    <View
+        android:background="@color/line"
+        android:layout_marginLeft="@dimen/dm_15"
+        android:layout_marginRight="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dm_1"/>
+
+    <RelativeLayout
+        android:background="@color/white"
+        android:id="@+id/rl_money50"
+        android:padding="@dimen/dm_15"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/iv_masonry50"
+            android:src="@drawable/ic_masonry"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_toRightOf="@+id/iv_masonry50"
+            android:textSize="@dimen/t16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dm_5"
+            android:text="500"
+            android:layout_centerVertical="true"
+            android:textColor="@color/blackB"/>
+
+        <TextView
+            android:id="@+id/tv_masonry50"
+            android:padding="@dimen/dm_5"
+            android:gravity="center"
+            android:layout_alignParentRight="true"
+            android:text="¥50.00"
+            android:background="@drawable/cash_bg_selector"
+            android:textSize="@dimen/t14"
+            android:layout_centerVertical="true"
+            android:textColor="@color/blackB"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+    <View
+        android:background="@color/line"
+        android:layout_marginLeft="@dimen/dm_15"
+        android:layout_marginRight="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dm_1"/>
+
+    <RelativeLayout
+        android:background="@color/white"
+        android:id="@+id/rl_money100"
+        android:padding="@dimen/dm_15"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/iv_masonry100"
+            android:src="@drawable/ic_masonry"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_toRightOf="@+id/iv_masonry100"
+            android:textSize="@dimen/t16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dm_5"
+            android:text="1000"
+            android:layout_centerVertical="true"
+            android:textColor="@color/blackB"/>
+
+        <TextView
+            android:id="@+id/tv_masonry100"
+            android:padding="@dimen/dm_5"
+            android:gravity="center"
+            android:layout_alignParentRight="true"
+            android:text="¥100.00"
+            android:background="@drawable/cash_bg_selector"
+            android:textSize="@dimen/t14"
+            android:layout_centerVertical="true"
+            android:textColor="@color/blackB"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+    <View
+        android:background="@color/line"
+        android:layout_marginLeft="@dimen/dm_15"
+        android:layout_marginRight="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dm_1"/>
+
+    <RelativeLayout
+        android:background="@color/white"
+        android:id="@+id/rl_money200"
+        android:padding="@dimen/dm_15"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/iv_masonry200"
+            android:src="@drawable/ic_masonry"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_toRightOf="@+id/iv_masonry200"
+            android:textSize="@dimen/t16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dm_5"
+            android:text="2000"
+            android:layout_centerVertical="true"
+            android:textColor="@color/blackB"/>
+
+        <TextView
+            android:id="@+id/tv_masonry200"
+            android:padding="@dimen/dm_5"
+            android:layout_alignParentRight="true"
+            android:text="¥200.00"
+            android:gravity="center"
+            android:background="@drawable/cash_bg_selector"
+            android:textSize="@dimen/t14"
+            android:layout_centerVertical="true"
+            android:textColor="@color/blackB"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+    <View
+        android:background="@color/line"
+        android:layout_marginLeft="@dimen/dm_15"
+        android:layout_marginRight="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dm_1"/>
+    <RelativeLayout
+        android:background="@color/white"
+        android:padding="@dimen/dm_15"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:textSize="@dimen/t16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="更多金额"
+            android:layout_centerVertical="true"
+            android:textColor="@color/blackB"/>
+
+        <EditText
+            android:digits="0123456789"
+            android:maxLength="4"
+            android:inputType="number"
+            android:background="@color/transparent"
+           android:id="@+id/et_money"
+            android:layout_alignParentRight="true"
+            android:textSize="@dimen/t14"
+           android:hint="请输入10-1000"
+            android:layout_centerVertical="true"
+            android:textColor="@color/blackB"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btn_submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dm_10"
+        android:layout_marginRight="@dimen/dm_10"
+        android:layout_marginTop="@dimen/dm_15"
+        android:background="@drawable/common_yellow_5dp"
+        android:text="确定充值"
+        android:textColor="@color/blackC"
+        android:textSize="@dimen/t16" />
+
+</LinearLayout>

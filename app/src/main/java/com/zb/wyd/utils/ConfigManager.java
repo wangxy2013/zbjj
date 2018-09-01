@@ -53,7 +53,7 @@ public class ConfigManager
     private static final String REG_CLOSED = "reg_closed";
     private static final String IP_LOOK_UP = "ip_look_up";
     private static final String   VIP_LEVEL  = "vip_level";
-
+    private static final String   VIP_TYPE  = "VIP_TYPE";
     private static final String ZDY_DOMAIN_NAME = "zdy_domain_name";
 
     private static final String USER_ROLE = "user_role";
@@ -370,6 +370,16 @@ public class ConfigManager
         return mSharedPreferences.getString(UPLOAD_URL, "") ;
     }
 
+
+    public void setVipType(int str)
+    {
+        mSharedPreferences.edit().putInt(VIP_TYPE, str).commit();
+    }
+
+    public int getVipType()
+    {
+        return mSharedPreferences.getInt(VIP_TYPE, 0);
+    }
 
 }
 

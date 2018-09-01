@@ -1,61 +1,65 @@
 package com.zb.wyd.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.zb.wyd.R;
-import com.zb.wyd.adapter.WealthAdapter;
-import com.zb.wyd.entity.WealthInfo;
-import com.zb.wyd.http.DataRequest;
-import com.zb.wyd.http.HttpRequest;
+import com.zb.wyd.adapter.MyViewPagerAdapter;
+import com.zb.wyd.entity.FortuneInfo;
+import com.zb.wyd.fragment.CashRecordFragment;
+import com.zb.wyd.fragment.CommissionRecordFragment;
+import com.zb.wyd.fragment.IntegralRecordFragment;
 import com.zb.wyd.http.IRequestListener;
-import com.zb.wyd.json.WealthInfoListHandler;
-import com.zb.wyd.utils.ConstantUtil;
 import com.zb.wyd.utils.ToastUtil;
-import com.zb.wyd.utils.Urls;
-import com.zb.wyd.widget.list.refresh.PullToRefreshBase;
-import com.zb.wyd.widget.list.refresh.PullToRefreshRecyclerView;
+import com.zb.wyd.widget.AutoFitTextView;
 import com.zb.wyd.widget.statusbar.StatusBarUtil;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
+
+import static com.zb.wyd.utils.APPUtils.dip2px;
 
 /**
  */
-public class WealthListActivity extends BaseActivity implements PullToRefreshBase.OnRefreshListener<RecyclerView>, View.OnClickListener, IRequestListener
+public class WealthListActivity extends BaseActivity implements View.OnClickListener, IRequestListener
 {
     @BindView(R.id.iv_back)
-    ImageView                 mBackIv;
+    ImageView mBackIv;
     @BindView(R.id.tv_title)
-    TextView                  tvTitle;
-    @BindView(R.id.pullToRefreshRecyclerView)
-    PullToRefreshRecyclerView mPullToRefreshRecyclerView;
-    @BindView(R.id.tv_fortune)
-    TextView                  tvFortune;
-    private RecyclerView mRecyclerView; //
+    TextView  tvTitle;
 
-    private WealthAdapter mWealthAdapter;
-    private List<WealthInfo> mWealthInfoList = new ArrayList<>();
-
-    private int pn = 1;
-    private int mRefreshStatus;
 
     private static final String GET_WEALTH_LIST = "get_wealth_list";
 
     private static final int REQUEST_SUCCESS = 0x01;
     private static final int REQUEST_FAIL    = 0x02;
+    @BindView(R.id.tv_submit)
+    TextView  tvSubmit;
+    @BindView(R.id.tv_recharge_balance)
+    TextView  tvRechargeBalance;
+    @BindView(R.id.tv_income_balance)
+    TextView  tvIncomeBalance;
+    @BindView(R.id.tv_fortune)
+    TextView  tvFortune;
+    @BindView(R.id.tabLayout)
+    TabLayout mTabLayout;
+    @BindView(R.id.viewpager)
+    ViewPager mViewPager;
 
+    private List<String> tabs = new ArrayList<>(); //标签名称
+
+    private FortuneInfo fortuneInfo;
     @SuppressLint("HandlerLeak")
     private BaseHandler mHandler = new BaseHandler(this)
     {
@@ -66,9 +70,7 @@ public class WealthListActivity extends BaseActivity implements PullToRefreshBas
             switch (msg.what)
             {
                 case REQUEST_SUCCESS:
-                    WealthInfoListHandler mWealthInfoListHandler = (WealthInfoListHandler) msg.obj;
-                    mWealthInfoList.addAll(mWealthInfoListHandler.getWealthInfoList());
-                    mWealthAdapter.notifyDataSetChanged();
+
                     break;
 
                 case REQUEST_FAIL:
@@ -84,6 +86,10 @@ public class WealthListActivity extends BaseActivity implements PullToRefreshBas
     @Override
     protected void initData()
     {
+        tabs.add("积分记录");
+        tabs.add("现金记录");
+        tabs.add("佣金记录");
+        fortuneInfo = (FortuneInfo) getIntent().getSerializableExtra("fortune");
     }
 
     @Override
@@ -99,50 +105,68 @@ public class WealthListActivity extends BaseActivity implements PullToRefreshBas
     protected void initEvent()
     {
         mBackIv.setOnClickListener(this);
-        mPullToRefreshRecyclerView.setOnRefreshListener(this);
-        mPullToRefreshRecyclerView.setPullRefreshEnabled(true);
+        tvSubmit.setOnClickListener(this);
     }
 
     @Override
     protected void initViewData()
     {
         tvTitle.setText("我的财富");
-        tvFortune.setText(getIntent().getStringExtra("fortune"));
+        tvSubmit.setText("充值");
+        tvSubmit.setVisibility(View.VISIBLE);
 
-        mRecyclerView = mPullToRefreshRecyclerView.getRefreshableView();
-        mPullToRefreshRecyclerView.setPullLoadEnabled(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        mWealthAdapter = new WealthAdapter(mWealthInfoList);
-        mRecyclerView.setAdapter(mWealthAdapter);
-        getWealthList();
+        if (null != fortuneInfo)
+        {
+            tvFortune.setText(fortuneInfo.getGift());
+            tvRechargeBalance.setText(fortuneInfo.getCash());
+            tvIncomeBalance.setText(fortuneInfo.getRebate());
+        }
+
+        MyViewPagerAdapter viewPagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager());
+        viewPagerAdapter.addFragment(new IntegralRecordFragment(), "积分记录");//添加Fragment
+        viewPagerAdapter.addFragment(new CashRecordFragment(), "现金记录");
+        viewPagerAdapter.addFragment(new CommissionRecordFragment(), "佣金记录");
+        mViewPager.setAdapter(viewPagerAdapter);//设置适配器
+        mViewPager.setOffscreenPageLimit(1);
+        mTabLayout.addTab(mTabLayout.newTab().setText("积分记录"));//给TabLayout添加Tab
+        mTabLayout.addTab(mTabLayout.newTab().setText("现金记录"));
+        mTabLayout.addTab(mTabLayout.newTab().setText("佣金记录"));
+        mTabLayout.setupWithViewPager(mViewPager);//给TabLayout设置关联ViewPager，如果设置了ViewPager，那么ViewPagerAdapter中的getPageTitle()方法返回的就是Tab上的标题
+        setTabView();
+        reflex(mTabLayout);
+
 
     }
 
+    private ViewHolder holder;
 
-    private void getWealthList()
+    /**
+     * 设置Tab的样式
+     */
+    private void setTabView()
     {
-        Map<String, String> valuePairs = new HashMap<>();
-        valuePairs.put("pn", pn + "");
-        valuePairs.put("num", "15");
-        DataRequest.instance().request(WealthListActivity.this, Urls.getFortuneDetailUrl(), this, HttpRequest.GET, GET_WEALTH_LIST, valuePairs,
-                new WealthInfoListHandler());
+        holder = null;
+        for (int i = 0; i < 3; i++)
+        {
+            //依次获取标签
+            TabLayout.Tab tab = mTabLayout.getTabAt(i);
+            //为每个标签设置布局
+            tab.setCustomView(R.layout.item_tab);
+            holder = new ViewHolder(tab.getCustomView());
+            //为标签填充数据
+            holder.tvTabName.setText(tabs.get(i));
+        }
     }
 
-    @Override
-    public void onPullDownToRefresh(PullToRefreshBase<RecyclerView> refreshView)
-    {
-        mWealthInfoList.clear();
-        pn = 1;
-        mRefreshStatus = 0;
-        getWealthList();
-    }
 
-    @Override
-    public void onPullUpToRefresh(PullToRefreshBase<RecyclerView> refreshView)
+    class ViewHolder
     {
-        pn += 1;
-        mRefreshStatus = 1;
-        getWealthList();
+        AutoFitTextView tvTabName;
+
+        public ViewHolder(View tabView)
+        {
+            tvTabName = (AutoFitTextView) tabView.findViewById(R.id.tv_tab_name);
+        }
     }
 
 
@@ -153,39 +177,77 @@ public class WealthListActivity extends BaseActivity implements PullToRefreshBas
         {
             finish();
         }
+        else if (v == tvSubmit)
+        {
+            startActivity(new Intent(WealthListActivity.this, MyMasonryActivity.class).putExtra("CASH", fortuneInfo.getCash()));
+        }
+
+    }
+
+
+    public void reflex(final TabLayout tabLayout)
+    {
+        //了解源码得知 线的宽度是根据 tabView的宽度来设置的
+        tabLayout.post(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                try
+                {
+                    //拿到tabLayout的mTabStrip属性
+                    LinearLayout mTabStrip = (LinearLayout) tabLayout.getChildAt(0);
+
+                    int dp10 = dip2px(tabLayout.getContext(), 10);
+
+                    for (int i = 0; i < mTabStrip.getChildCount(); i++)
+                    {
+                        View tabView = mTabStrip.getChildAt(i);
+
+                        //拿到tabView的mTextView属性  tab的字数不固定一定用反射取mTextView
+                        Field mTextViewField = tabView.getClass().getDeclaredField("mTextView");
+                        mTextViewField.setAccessible(true);
+
+                        TextView mTextView = (TextView) mTextViewField.get(tabView);
+
+                        tabView.setPadding(0, 0, 0, 0);
+
+                        //因为我想要的效果是   字多宽线就多宽，所以测量mTextView的宽度
+                        int width = 0;
+                        width = mTextView.getWidth();
+                        if (width == 0)
+                        {
+                            mTextView.measure(0, 0);
+                            width = mTextView.getMeasuredWidth();
+                        }
+
+                        //设置tab左右间距为10dp  注意这里不能使用Padding 因为源码中线的宽度是根据 tabView的宽度来设置的
+                        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) tabView.getLayoutParams();
+                        params.width = width;
+                        params.leftMargin = dp10;
+                        params.rightMargin = dp10;
+                        tabView.setLayoutParams(params);
+
+                        tabView.invalidate();
+                    }
+
+                } catch (NoSuchFieldException e)
+                {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
 
     }
 
     @Override
     public void notify(String action, String resultCode, String resultMsg, Object obj)
     {
-        if (mRefreshStatus == 1)
-        {
-            mPullToRefreshRecyclerView.onPullUpRefreshComplete();
-        }
-        else
-        {
-            mPullToRefreshRecyclerView.onPullDownRefreshComplete();
-        }
 
-        if (GET_WEALTH_LIST.equals(action))
-        {
-            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
-            {
-                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_SUCCESS, obj));
-            }
-            else
-            {
-                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
-            }
-        }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
+
 }

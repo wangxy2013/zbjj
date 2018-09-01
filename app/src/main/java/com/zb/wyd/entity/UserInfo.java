@@ -31,10 +31,11 @@ public class UserInfo implements Serializable
     private String vip_expire;//
     private String login_time;//
     private String login_ip;//
-    private String fortune;//
+   // private String fortune;//
     private String unick;//
     private String total_score;
 
+    private FortuneInfo fortuneInfo;
     public UserInfo() {}
 
     public UserInfo(JSONObject obj)
@@ -49,7 +50,7 @@ public class UserInfo implements Serializable
         this.vip_expire = obj.optString("vip_expire");
         this.login_time = obj.optString("login_time");
         this.login_ip = obj.optString("login_ip");
-        this.fortune = obj.optString("fortune");
+      //  this.fortune = obj.optString("fortune");
         this.total_score = obj.optString("total_score");
         this.has_favorite = obj.optString("has_favorite");
 
@@ -245,16 +246,6 @@ public class UserInfo implements Serializable
         this.login_ip = login_ip;
     }
 
-    public String getFortune()
-    {
-        return fortune;
-    }
-
-    public void setFortune(String fortune)
-    {
-        this.fortune = fortune;
-    }
-
     public String getUnick()
     {
         return unick;
@@ -283,5 +274,15 @@ public class UserInfo implements Serializable
     public void setHas_favorite(String has_favorite)
     {
         this.has_favorite = has_favorite;
+    }
+
+    public FortuneInfo getFortuneInfo()
+    {
+        return fortuneInfo;
+    }
+
+    public void setFortuneInfo(FortuneInfo fortuneInfo)
+    {
+        this.fortuneInfo = fortuneInfo;
     }
 }

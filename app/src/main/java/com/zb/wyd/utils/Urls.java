@@ -187,7 +187,10 @@ public class Urls
     {
         return  ConfigManager.instance().getDomainName() + "/fortune/order_log";
     }
-
+    public static String getFortuneOrderDetailUrl()
+    {
+        return  ConfigManager.instance().getDomainName() + "/fortune/order";
+    }
 
     public static String getRankingUrl()
     {
@@ -286,6 +289,16 @@ public class Urls
         return  ConfigManager.instance().getDomainName() + "/user/reset_uname";
     }
 
+    public static String getPhoneCodeUrl()
+    {
+        return  ConfigManager.instance().getDomainName() + "/data/scode";
+    }
+
+
+    public static String getPayUrl(int amount ,String product,String mobile_id )
+    {
+        return  ConfigManager.instance().getDomainName() + "/paypal?auth="+ ConfigManager.instance().getUniqueCode() +"&amount="+amount+"&product="+product+"&mobile_id=" + mobile_id+ "&device=and";
+    }
 
 }
 

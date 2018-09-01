@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@color/windowBackground"
               android:orientation="vertical">
+
     <include layout="@layout/layout_head"/>
 
     <LinearLayout
@@ -13,29 +15,123 @@
         android:orientation="vertical"
         android:padding="@dimen/dm_15">
 
-        <TextView
-            android:id="@+id/tv_fortune"
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="11111111"
-            android:textStyle="bold"
-            android:textColor="@color/blackC"
-            android:textSize="@dimen/t22"/>
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="充值余额"
+                android:textColor="@color/blackB"
+                android:textSize="@dimen/t14"/>
+
+            <ImageView
+                android:id="@+id/iv_question"
+                android:layout_marginLeft="@dimen/dm_5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_question"/>
+        </LinearLayout>
 
         <TextView
+            android:id="@+id/tv_recharge_balance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textColor="@color/blackC"
+            android:textSize="@dimen/t22"
+            android:textStyle="bold"/>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dm_5"
-            android:gravity="center"
-            android:text="积分"
-            android:textColor="@color/blackB"
-            android:textSize="@dimen/t14"/>
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="收入余额"
+                        android:textColor="@color/blackB"
+                        android:textSize="@dimen/t14"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_reflect"/>
+                </LinearLayout>
+
+
+                <TextView
+                    android:id="@+id/tv_income_balance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="@color/blackB"
+                    android:textSize="@dimen/t18"/>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="积分余额"
+                    android:textColor="@color/blackB"
+                    android:textSize="@dimen/t14"/>
+
+                <TextView
+                    android:id="@+id/tv_fortune"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="@color/blackB"
+                    android:textSize="@dimen/t18"/>
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
 
     </LinearLayout>
 
-    <com.zb.wyd.widget.list.refresh.PullToRefreshRecyclerView
-        android:id="@+id/pullToRefreshRecyclerView"
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/white"
+        app:tabIndicatorColor="@color/blackC"
+        app:tabSelectedTextColor="@color/blackC"
+        app:tabTextAppearance="@style/MyTabLayoutTextAppearance"
+        app:tabTextColor="@color/blackB"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </LinearLayout>

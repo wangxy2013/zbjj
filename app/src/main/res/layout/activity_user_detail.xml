@@ -109,5 +109,36 @@
 
 
     </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="@dimen/dm_10"
+        android:layout_marginRight="@dimen/dm_10"
+        android:background="@color/line"/>
+    <RelativeLayout
+        android:id="@+id/ll_bind_phone"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dm_60"
+        android:layout_marginRight="@dimen/dm_10"
+        android:background="@color/white"
+        android:paddingLeft="@dimen/dm_10">
 
+        <TextView
+            android:id="@+id/tv_phone_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="绑定手机"
+            android:textColor="@color/blackC"
+            android:textSize="@dimen/t16"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_arrow_right_48"/>
+
+
+    </RelativeLayout>
 </LinearLayout>

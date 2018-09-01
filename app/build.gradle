@@ -4,7 +4,7 @@ android {
         config {
             keyAlias 'wyd'
             keyPassword 'wyd2018'
-            storeFile file('F:/otherPro/WYD/app/wyd.jks')
+            storeFile file('wyd.jks')
             storePassword 'wyd2018'
         }
     }
@@ -76,4 +76,5 @@ dependencies {
     compile 'com.umeng.sdk:analytics:7.5.0'
     compile 'org.java-websocket:Java-WebSocket:1.3.0'
     implementation 'com.github.DingMouRen:LayoutManagerGroup:1e6f4f96eb'
+    compile 'org.java-websocket:Java-WebSocket:1.3.0'
 }

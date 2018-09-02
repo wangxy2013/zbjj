@@ -9,7 +9,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/visitor-release" />
+            <option value="$PROJECT_DIR$/visitor-20180822" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

@@ -66,6 +66,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -80,30 +82,30 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     @BindView(R.id.iv_user_pic)
     CircleImageView ivUserPic;
     @BindView(R.id.tv_user_name)
-    TextView tvUserName;
+    TextView        tvUserName;
     @BindView(R.id.tv_favour_count)
-    TextView tvFavourCount;
+    TextView        tvFavourCount;
     @BindView(R.id.tv_follow)
-    TextView tvFollow;
+    TextView        tvFollow;
     @BindView(R.id.rv_online)
-    RecyclerView rvOnline;
+    RecyclerView    rvOnline;
 
     @BindView(R.id.rl_content)
     RelativeLayout mContentLayout;
     @BindView(R.id.iv_closed)
-    ImageView ivClosed;
+    ImageView      ivClosed;
     @BindView(R.id.tv_dm)
-    TextView tvDm;
+    TextView       tvDm;
     @BindView(R.id.iv_report)
-    ImageView ivReport;
+    ImageView      ivReport;
     @BindView(R.id.iv_gift)
-    ImageView ivGift;
+    ImageView      ivGift;
     @BindView(R.id.tv_system)
-    TextView tvSystem;
+    TextView       tvSystem;
     @BindView(R.id.tv_welcome_name)
-    TextView tvWelcomeName;
+    TextView       tvWelcomeName;
     @BindView(R.id.tv_say)
-    TextView tvSay;
+    TextView       tvSay;
 
     @BindView(R.id.tv_location)
     TextView tvLocation;
@@ -112,7 +114,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     @BindView(R.id.rl_live_bottom)
     RelativeLayout mLiveBottomLayout;
     @BindView(R.id.ll_gift_container)
-    LinearLayout llGiftContainer;
+    LinearLayout   llGiftContainer;
 
     private String biz_id, location;
     private long startTime, endTime;
@@ -125,29 +127,29 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     private List<GiftInfo> giftInfoList = new ArrayList<>();
 
 
-    private static final String GET_USER_INFO = "get_user_info";
-    private static final String GET_LIVE_PRICE = "get_live_price";
-    private static final String GET_LIVE_STREAM = "get_live_stream";
-    private static final String GET_ONLINER = "get_onliner";
-    private static final String BUY_LIVE = "buy_live";
-    private static final String FAVORITE_LIKE = "favorite_like";
-    private final String UN_FAVORITE_LIKE = "un_favorite_like";
-    private static final int REQUEST_SUCCESS = 0x01;
-    private static final int REQUEST_FAIL = 0x02;
-    private static final int GET_LIVE_PRICE_SUCCESS = 0x03;
-    private static final int BUY_LIVE_SUCCESS = 0x05;
-    private static final int SET_STATISTICS = 0x06;
-    private static final int GET_ONLINER_SUCCESS = 0x07;
-    private static final int GET_ONLINER_REQUEST = 0x08;
-    private static final int GET_STREAM_REQUEST = 0x09;
-    private static final int GET_ANCHOR_REQUEST = 0x10;
-    private static final int FAVORITE_LIKE_SUCCESS = 0x11;
-    private static final int UN_FAVORITE_LIKE_SUCCESS = 0x15;
-    private static final int FAVORITE_LIKE_FAIL = 0x14;
-    private static final int GET_ANCHOR_SUCCESS = 0x12;
-    private static final int SHOW_SYSTEM_TV = 0x13;
+    private static final String        GET_USER_INFO            = "get_user_info";
+    private static final String        GET_LIVE_PRICE           = "get_live_price";
+    private static final String        GET_LIVE_STREAM          = "get_live_stream";
+    private static final String        GET_ONLINER              = "get_onliner";
+    private static final String        BUY_LIVE                 = "buy_live";
+    private static final String        FAVORITE_LIKE            = "favorite_like";
+    private final        String        UN_FAVORITE_LIKE         = "un_favorite_like";
+    private static final int           REQUEST_SUCCESS          = 0x01;
+    private static final int           REQUEST_FAIL             = 0x02;
+    private static final int           GET_LIVE_PRICE_SUCCESS   = 0x03;
+    private static final int           BUY_LIVE_SUCCESS         = 0x05;
+    private static final int           SET_STATISTICS           = 0x06;
+    private static final int           GET_ONLINER_SUCCESS      = 0x07;
+    private static final int           GET_ONLINER_REQUEST      = 0x08;
+    private static final int           GET_STREAM_REQUEST       = 0x09;
+    private static final int           GET_ANCHOR_REQUEST       = 0x10;
+    private static final int           FAVORITE_LIKE_SUCCESS    = 0x11;
+    private static final int           UN_FAVORITE_LIKE_SUCCESS = 0x15;
+    private static final int           FAVORITE_LIKE_FAIL       = 0x14;
+    private static final int           GET_ANCHOR_SUCCESS       = 0x12;
+    private static final int           SHOW_SYSTEM_TV           = 0x13;
     @SuppressLint("HandlerLeak")
-    private NoLeakHandler mHandler = new NoLeakHandler(LiveActivity.this)
+    private              NoLeakHandler mHandler                 = new NoLeakHandler(LiveActivity.this)
     {
         @Override
         public void handleMessage(Message msg)
@@ -307,7 +309,8 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         String[] giftNameArr = getResources().getStringArray(R.array.gift_name);
         String[] giftPriceArr = getResources().getStringArray(R.array.gift_price);
         String[] giftStyleArr = getResources().getStringArray(R.array.gift_style);
-        int[] giftDrawableArr = new int[]{R.drawable.ic_gift_pear, R.drawable.ic_gift_666, R.drawable.ic_gift_blanana, R.drawable.ic_gift_cannon, R.drawable.ic_gift_ring, R.drawable.ic_gift_car, R.drawable.ic_gift_car1, R.drawable.ic_gift_love};
+        int[] giftDrawableArr = new int[]{R.drawable.ic_gift_pear, R.drawable.ic_gift_666, R.drawable.ic_gift_blanana, R.drawable.ic_gift_cannon, R.drawable
+                .ic_gift_ring, R.drawable.ic_gift_car, R.drawable.ic_gift_car1, R.drawable.ic_gift_love};
 
         for (int i = 0; i < giftNameArr.length; i++)
         {
@@ -556,7 +559,8 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "live");
-        DataRequest.instance().request(LiveActivity.this, Urls.getLivePriceUrl(), this, HttpRequest.GET, GET_LIVE_PRICE, valuePairs, new LivePriceInfoHandler());
+        DataRequest.instance().request(LiveActivity.this, Urls.getLivePriceUrl(), this, HttpRequest.GET, GET_LIVE_PRICE, valuePairs, new LivePriceInfoHandler
+                ());
 
     }
 
@@ -615,7 +619,8 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "live");
-        DataRequest.instance().request(LiveActivity.this, Urls.getCollectionRequestUrl(), this, HttpRequest.POST, FAVORITE_LIKE, valuePairs, new ResultHandler());
+        DataRequest.instance().request(LiveActivity.this, Urls.getCollectionRequestUrl(), this, HttpRequest.POST, FAVORITE_LIKE, valuePairs, new
+                ResultHandler());
     }
 
     private void unFavoriteLike()
@@ -624,7 +629,8 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "live");
-        DataRequest.instance().request(LiveActivity.this, Urls.getFavoriteUnLikeUrl(), this, HttpRequest.POST, UN_FAVORITE_LIKE, valuePairs, new ResultHandler());
+        DataRequest.instance().request(LiveActivity.this, Urls.getFavoriteUnLikeUrl(), this, HttpRequest.POST, UN_FAVORITE_LIKE, valuePairs, new
+                ResultHandler());
     }
 
     private boolean dmShow = true;
@@ -743,9 +749,24 @@ public class LiveActivity extends BaseActivity implements IRequestListener
 
     private WebSocketClient mSocketClient;
 
+  private  Timer     timer = new Timer();
+   private  TimerTask task;
+
 
     private void initWebSocket()
     {
+        task  = new TimerTask()
+        {
+            @Override
+            public void run()
+            {
+                if (null != mSocketClient)
+                {
+                    mSocketClient.send("ping");
+                }
+            }
+        };
+
         new Thread(new Runnable()
         {
             @Override
@@ -763,6 +784,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                         {
                             Log.d("picher_log", "打开通道" + handshakedata.getHttpStatus());
                             // handler.obtainMessage(0, message).sendToTarget();
+                            timer.schedule(task,0,30000);
                         }
 
                         @Override
@@ -787,8 +809,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                     };
                     mSocketClient.connect();
 
-                }
-                catch (URISyntaxException e)
+                } catch (URISyntaxException e)
                 {
                     e.printStackTrace();
                 }
@@ -897,14 +918,6 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
-
 
     private static class NoLeakHandler extends Handler
     {
@@ -925,7 +938,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
 
     /***************** 礼物 ***********************************************/
 
-    private Dialog mGiftDialog;
+    private Dialog      mGiftDialog;
     private GiftAdapter giftAdapter;
 
     private int giftSelectedItem = -1;
@@ -976,7 +989,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                     }
                     else
                     {
-                        giftInfoList.get(position).setSelected(false);
+                        giftInfoList.get(i).setSelected(false);
                     }
                 }
 

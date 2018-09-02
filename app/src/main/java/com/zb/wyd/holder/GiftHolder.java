@@ -56,16 +56,7 @@ public class GiftHolder extends RecyclerView.ViewHolder
             mMasonryIv.setVisibility(View.VISIBLE);
         }
 
-//        if(giftInfo.isSelected())
-//        {
-//            mItemLayout.setSelected(true);
-//        }
-//        else
-//        {
-//            mItemLayout.setSelected(false);
-//        }
-
-
+        mItemLayout.setSelected(giftInfo.isSelected());
         mItemLayout.setOnClickListener(new View.OnClickListener()
         {
             @Override

@@ -217,9 +217,9 @@ public class UserDetailActivity extends BaseActivity implements IRequestListener
             startActivity(new Intent(UserDetailActivity.this, ModifyPwdActivity.class));
 
         }
-        else if(v == llBindPhone)
+        else if (v == llBindPhone)
         {
-
+            startActivity(new Intent(UserDetailActivity.this, BindPhoneActivity.class));
         }
     }
 

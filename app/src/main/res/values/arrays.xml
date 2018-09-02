@@ -35,12 +35,21 @@
         <item>66</item>
         <item>88</item>
         <item>288</item>
-        <item>520</item>
-        <item>5200</item>
-        <item>9800</item>
-        <item>131400</item>
+        <item>30</item>
+        <item>600</item>
+        <item>999</item>
+        <item>1314</item>
     </string-array>
-
+    <string-array name="gift_id">
+        <item>pear</item>
+        <item>niuniu</item>
+        <item>xiangjiao</item>
+        <item>pao</item>
+        <item>jiezhi</item>
+        <item>car</item>
+        <item>pinkcar</item>
+        <item>love9</item>
+    </string-array>
     <string-array name="gift_style">
         <item>0</item>
         <item>0</item>

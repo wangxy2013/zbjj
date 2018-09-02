@@ -14,7 +14,6 @@
     <style name="AppTheme" parent="BaseTheme"/>
 
 
-
     <style name="window_animation">
         <!--打开新的activity 用的动画-->
         <item name="android:activityOpenEnterAnimation">@anim/window_open_enter</item>
@@ -55,7 +54,6 @@
     </style>
 
 
-
     <style name="CustomProgressDialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowIsFloating">true</item>
@@ -78,15 +76,11 @@
 
     <style name="DialogStyle" parent="@android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item>
-        <!--  边框-->
         <item name="android:windowIsFloating">true</item>
-        <!--是否浮现在activity之上-->
         <item name="android:windowIsTranslucent">false</item>
-        <!--半透明-->
         <item name="android:windowNoTitle">true</item>
-        <!--无标题-->
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:backgroundDimEnabled">false</item>
     </style>
 
 
@@ -100,15 +94,11 @@
     </style>
 
 
-
     <style name="foodRatingBar" parent="@android:style/Widget.RatingBar">
         <item name="android:progressDrawable">@drawable/ratingstars</item>
         <item name="android:minHeight">@dimen/dm_22</item>
         <item name="android:maxHeight">@dimen/dm_22</item>
     </style>
-
-
-
 
 
     <style name="MyDialogStyle">

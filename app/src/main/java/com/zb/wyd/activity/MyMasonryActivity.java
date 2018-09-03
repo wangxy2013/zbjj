@@ -28,15 +28,15 @@ import butterknife.BindView;
 public class MyMasonryActivity extends BaseActivity
 {
     @BindView(R.id.iv_back)
-    ImageView      ivBack;
+    ImageView ivBack;
     @BindView(R.id.tv_title)
-    TextView       tvTitle;
+    TextView tvTitle;
     @BindView(R.id.tv_submit)
-    TextView       tvSubmit;
+    TextView tvSubmit;
     @BindView(R.id.tv_recharge_balance)
-    TextView       tvRechargeBalance;
+    TextView tvRechargeBalance;
     @BindView(R.id.tv_member)
-    TextView       tvMember;
+    TextView tvMember;
     @BindView(R.id.rl_money30)
     RelativeLayout rlMoney30;
     @BindView(R.id.rl_money50)
@@ -46,17 +46,17 @@ public class MyMasonryActivity extends BaseActivity
     @BindView(R.id.rl_money200)
     RelativeLayout rlMoney200;
     @BindView(R.id.et_money)
-    EditText       etMoney;
+    EditText etMoney;
     @BindView(R.id.btn_submit)
-    Button         btnSubmit;
+    Button btnSubmit;
     @BindView(R.id.tv_masonry30)
-    TextView       tvMasonry30;
+    TextView tvMasonry30;
     @BindView(R.id.tv_masonry50)
-    TextView       tvMasonry50;
+    TextView tvMasonry50;
     @BindView(R.id.tv_masonry100)
-    TextView       tvMasonry100;
+    TextView tvMasonry100;
     @BindView(R.id.tv_masonry200)
-    TextView       tvMasonry200;
+    TextView tvMasonry200;
 
     private int money;
     private List<TextView> tvMasonryList = new ArrayList<TextView>();
@@ -170,16 +170,19 @@ public class MyMasonryActivity extends BaseActivity
             return;
         }
         String url = Urls.getPayUrl(money, "payin", APPUtils.getDeviceId(this));
-        Uri uri = Uri.parse(url);
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        startActivity(intent);
+        //        Uri uri = Uri.parse(url);
+        //        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        //        startActivity(intent);
+
+
+        startActivity(new Intent(MyMasonryActivity.this, WebViewActivity.class).putExtra(WebViewActivity.EXTRA_TITLE, "充值").putExtra(WebViewActivity.IS_SETTITLE, true).putExtra(WebViewActivity.EXTRA_URL, url));
+
 
     }
 
     private void changMoney(int index)
     {
-        if(index!=4)
-        etMoney.setText("");
+        if (index != 4) etMoney.setText("");
         for (int i = 0; i < tvMasonryList.size(); i++)
         {
             if (i == index)

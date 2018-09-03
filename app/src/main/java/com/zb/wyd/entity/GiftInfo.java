@@ -9,7 +9,7 @@ public class GiftInfo
     private String giftStyle;
 
     private String giftPrice;
-
+    private String giftId;
     private boolean isSelected;
 
 
@@ -61,5 +61,15 @@ public class GiftInfo
     public void setSelected(boolean selected)
     {
         isSelected = selected;
+    }
+
+    public String getGiftId()
+    {
+        return giftId;
+    }
+
+    public void setGiftId(String giftId)
+    {
+        this.giftId = giftId;
     }
 }

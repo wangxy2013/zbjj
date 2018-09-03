@@ -46,20 +46,20 @@ public class VideoPlayActivity1 extends BaseActivity implements IRequestListener
     //  private OrientationUtils orientationUtils;
 
     private VideoInfo mVideoInfo;
-    private String    videoName, biz_id;
-    private String      videoUri;
+    private String videoName, biz_id;
+    private String videoUri;
     private ChannelInfo mChannelInfo;
-    private static final String      GET_VIDEO_PRICE         = "get_live_price";
-    private static final String      GET_VIDEO_STREAM        = "get_video_stream";
-    private static final String      BUY_VIDEO               = "buy_live";
-    private static final int         REQUEST_SUCCESS         = 0x01;
-    private static final int         REQUEST_FAIL            = 0x02;
-    private static final int         GET_VIDEO_PRICE_SUCCESS = 0x03;
-    private static final int         BUY_VIDEO_SUCCESS       = 0x05;
-    private static final int         SET_STATISTICS          = 0x06;
-    private static final int         GET_STREAM_REQUEST      = 0x09;
+    private static final String GET_VIDEO_PRICE = "get_live_price";
+    private static final String GET_VIDEO_STREAM = "get_video_stream";
+    private static final String BUY_VIDEO = "buy_live";
+    private static final int REQUEST_SUCCESS = 0x01;
+    private static final int REQUEST_FAIL = 0x02;
+    private static final int GET_VIDEO_PRICE_SUCCESS = 0x03;
+    private static final int BUY_VIDEO_SUCCESS = 0x05;
+    private static final int SET_STATISTICS = 0x06;
+    private static final int GET_STREAM_REQUEST = 0x09;
     @SuppressLint("HandlerLeak")
-    private              BaseHandler mHandler                = new BaseHandler(VideoPlayActivity1.this)
+    private BaseHandler mHandler = new BaseHandler(VideoPlayActivity1.this)
     {
         @Override
         public void handleMessage(Message msg)
@@ -113,7 +113,8 @@ public class VideoPlayActivity1 extends BaseActivity implements IRequestListener
                                 }
                                 else//去做任务
                                 {
-                                    sendBroadcast(new Intent(MainActivity.TAB_TASK));
+                                    //sendBroadcast(new Intent(MainActivity.TAB_TASK));
+                                    startActivity(new Intent(VideoPlayActivity1.this, TaskActivity.class));
                                     finish();
                                 }
                             }
@@ -153,8 +154,7 @@ public class VideoPlayActivity1 extends BaseActivity implements IRequestListener
     protected void initViews(Bundle savedInstanceState)
     {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_video_play);
     }
 
@@ -408,8 +408,7 @@ public class VideoPlayActivity1 extends BaseActivity implements IRequestListener
         showProgressDialog();
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
-        DataRequest.instance().request(VideoPlayActivity1.this, Urls.getVideoStreamUrl(), this, HttpRequest.POST, GET_VIDEO_STREAM, valuePairs,
-                new VideoStreamHandler());
+        DataRequest.instance().request(VideoPlayActivity1.this, Urls.getVideoStreamUrl(), this, HttpRequest.POST, GET_VIDEO_STREAM, valuePairs, new VideoStreamHandler());
     }
 
 
@@ -418,8 +417,7 @@ public class VideoPlayActivity1 extends BaseActivity implements IRequestListener
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "video");
-        DataRequest.instance().request(VideoPlayActivity1.this, Urls.getVideoPriceUrl(), this, HttpRequest.POST, GET_VIDEO_PRICE, valuePairs,
-                new LivePriceInfoHandler());
+        DataRequest.instance().request(VideoPlayActivity1.this, Urls.getVideoPriceUrl(), this, HttpRequest.POST, GET_VIDEO_PRICE, valuePairs, new LivePriceInfoHandler());
 
     }
 
@@ -440,8 +438,7 @@ public class VideoPlayActivity1 extends BaseActivity implements IRequestListener
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "video");
         valuePairs.put("finger", finger);
-        DataRequest.instance().request(VideoPlayActivity1.this, Urls.getBuyLiveUrl(), this, HttpRequest.POST, BUY_VIDEO, valuePairs,
-                new ResultHandler());
+        DataRequest.instance().request(VideoPlayActivity1.this, Urls.getBuyLiveUrl(), this, HttpRequest.POST, BUY_VIDEO, valuePairs, new ResultHandler());
     }
 
     @Override

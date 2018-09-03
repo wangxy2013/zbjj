@@ -235,6 +235,17 @@ public class WebViewActivity extends Activity
 
         }
 
+
+        @JavascriptInterface
+        public void openOuterWeb(String url)
+        {
+            Uri uri = Uri.parse(url);
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(intent);
+        }
+
+
+
         @JavascriptInterface
         public void onQQ(String qq)
         {

@@ -12,6 +12,8 @@ public class WealthInfo
     private int coupon;
     private String direct;
     private int cash;
+
+
     public WealthInfo(JSONObject object)
     {
         this.title = object.optString("remark");

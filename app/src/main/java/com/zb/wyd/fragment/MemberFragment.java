@@ -27,6 +27,7 @@ import com.zb.wyd.activity.LoginActivity;
 import com.zb.wyd.activity.MainActivity;
 import com.zb.wyd.activity.MessageListActivity;
 import com.zb.wyd.activity.MyCollectionActivity;
+import com.zb.wyd.activity.TaskActivity;
 import com.zb.wyd.activity.UserDetailActivity;
 import com.zb.wyd.activity.WealthListActivity;
 import com.zb.wyd.activity.WebViewActivity;
@@ -102,6 +103,9 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
 
     @BindView(R.id.rl_setting)
     RelativeLayout rlSetting;
+
+    @BindView(R.id.rl_task)
+    RelativeLayout rlTask;
 
     private View rootView = null;
     private Unbinder unbinder;
@@ -212,6 +216,7 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
         rlUser.setOnClickListener(this);
         rlSetting.setOnClickListener(this);
         rlExtension.setOnClickListener(this);
+        rlTask.setOnClickListener(this);
     }
 
     @Override
@@ -385,6 +390,18 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
                         .putExtra(WebViewActivity.IS_SETTITLE, true)
                         .putExtra(WebViewActivity.EXTRA_URL, Urls.getInviteUrl())
                 );
+            }
+            else
+            {
+                startActivity(new Intent(getActivity(), LoginActivity.class));
+            }
+
+        }
+        else if(v == rlTask)
+        {
+            if (MyApplication.getInstance().isLogin())
+            {
+                startActivity(new Intent(getActivity(), TaskActivity.class));
             }
             else
             {

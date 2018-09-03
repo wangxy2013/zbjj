@@ -38,22 +38,24 @@ public class MainActivity extends BaseActivity
 
     @BindView(android.R.id.tabhost)
     FragmentTabHost fragmentTabHost;
-    public static final String TAB_TASK = "tab_task";
+    public static final String TAB_LIVE = "tab_live";
+    public static final String TAB_VIDEO = "tab_video";
 
-    private String texts[]       = {"直播", "视频", "自拍", "任务", "会员"};
+    private String texts[]       = {"直播", "视频", "自拍", "会员"};
     private int    imageButton[] = {
             R.drawable.ic_live_selector, R.drawable.ic_video_selector,
-            R.drawable.ic_photo_selector, R.drawable.ic_task_selector, R.drawable.ic_member_selector};
+            R.drawable.ic_photo_selector,  R.drawable.ic_member_selector};
 
 
-    private Class fragmentArray[] = {LiveFragment.class, VideoFragment.class, SelfieFragment.class, TaskFragment.class, MemberFragment.class};
+    private Class fragmentArray[] = {LiveFragment.class, VideoFragment.class, SelfieFragment.class,  MemberFragment.class};
 
     @Override
     protected void initData()
     {
         mMyBroadCastReceiver = new MyBroadCastReceiver();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(TAB_TASK);
+        intentFilter.addAction(TAB_LIVE);
+        intentFilter.addAction(TAB_VIDEO);
         registerReceiver(mMyBroadCastReceiver, intentFilter);
     }
 
@@ -228,14 +230,27 @@ public class MainActivity extends BaseActivity
         public void onReceive(Context context, Intent intent)
         {
 
-            if (TAB_TASK.contentEquals(intent.getAction()))
+            if (TAB_LIVE.contentEquals(intent.getAction()))
             {
                 fragmentTabHost.postDelayed(new Runnable()
                 {
                     @Override
                     public void run()
                     {
-                        fragmentTabHost.setCurrentTab(3);
+                        fragmentTabHost.setCurrentTab(0);
+
+                    }
+                }, 100);
+
+            }
+            else  if (TAB_VIDEO.contentEquals(intent.getAction()))
+            {
+                fragmentTabHost.postDelayed(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        fragmentTabHost.setCurrentTab(1);
 
                     }
                 }, 100);

@@ -124,9 +124,13 @@ public class MemberActivity extends BaseActivity
                     break;
             }
             String url = Urls.getPayUrl(money,product, APPUtils.getDeviceId(this));
-            Uri uri = Uri.parse(url);
-            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-            startActivity(intent);
+//            Uri uri = Uri.parse(url);
+//            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+//            startActivity(intent);
+
+            startActivity(new Intent(MemberActivity.this, WebViewActivity.class)
+                    .putExtra(WebViewActivity.EXTRA_TITLE, "会员")
+                    .putExtra(WebViewActivity.IS_SETTITLE, true).putExtra(WebViewActivity.EXTRA_URL, url));
         }
     }
 }

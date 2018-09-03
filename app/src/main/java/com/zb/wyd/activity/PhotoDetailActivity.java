@@ -425,7 +425,8 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
                     }
                     else//去做任务
                     {
-                        sendBroadcast(new Intent(MainActivity.TAB_TASK));
+                       // sendBroadcast(new Intent(MainActivity.TAB_TASK));
+                        startActivity(new Intent(PhotoDetailActivity.this,TaskActivity.class));
                         finish();
                     }
                 }

@@ -29,6 +29,7 @@ import com.shuyu.gsyvideoplayer.listener.VideoAllCallBack;
 import com.zb.wyd.R;
 import com.zb.wyd.adapter.GiftAdapter;
 import com.zb.wyd.adapter.OnlineAdapter;
+import com.zb.wyd.entity.ChatInfo;
 import com.zb.wyd.entity.GiftInfo;
 import com.zb.wyd.entity.LiveInfo;
 import com.zb.wyd.entity.PriceInfo;
@@ -59,6 +60,8 @@ import com.zb.wyd.widget.gift.LPAnimationManager;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft_10;
 import org.java_websocket.handshake.ServerHandshake;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 import java.net.URI;
@@ -156,6 +159,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     private static final int GET_FORTUNE_GIFT_SUCCESS = 0x16;
     private static final int FORTUNE_BUY_SUCCESS = 0x17;
     private static final int GET_FORTUNE_GIFT_FAIL = 0x18;
+    private static final int FORTUNE_BUY_SUCCESS_FAIL = 0x19;
 
     @SuppressLint("HandlerLeak")
     private NoLeakHandler mHandler = new NoLeakHandler(LiveActivity.this)
@@ -308,15 +312,15 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                     break;
 
                 case GET_FORTUNE_GIFT_SUCCESS:
-                    break;
 
-
-                case FORTUNE_BUY_SUCCESS:
+                    LivePriceInfoHandler mHandler1 = (LivePriceInfoHandler) msg.obj;
+                    PriceInfo mPriceInfo = mHandler1.getLivePriceInfo();
+                    if (null != mPriceInfo) buyGift(mPriceInfo.getId(), mPriceInfo.getFinger());
                     break;
 
                 case GET_FORTUNE_GIFT_FAIL:
 
-                    ResultHandler resultHandler = (ResultHandler) msg.obj;
+                    LivePriceInfoHandler resultHandler = (LivePriceInfoHandler) msg.obj;
                     String resultCode = resultHandler.getResultCode();
 
                     //1102  余额不足，引导充值
@@ -355,6 +359,16 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                             }
                         });
                     }
+                    break;
+
+                case FORTUNE_BUY_SUCCESS:
+
+                    ToastUtil.show(LiveActivity.this, "感谢您的支持");
+
+
+                    break;
+                case FORTUNE_BUY_SUCCESS_FAIL:
+                    ToastUtil.show(LiveActivity.this, msg.obj.toString());
                     break;
             }
         }
@@ -792,12 +806,12 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     protected void onRestart()
     {
         super.onRestart();
-//        videoPlayer.onVideoReset();
-//        if (!TextUtils.isEmpty(playUrl))
-//        {
-//            videoPlayer.setUp(playUrl, false, "");
-//            videoPlayer.startPlayLogic();
-//        }
+        //        videoPlayer.onVideoReset();
+        //        if (!TextUtils.isEmpty(playUrl))
+        //        {
+        //            videoPlayer.setUp(playUrl, false, "");
+        //            videoPlayer.startPlayLogic();
+        //        }
     }
 
     @Override
@@ -845,7 +859,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
             {
                 try
                 {
-                    String wsUri = "ws://103.70.225.116:9501/" + ConfigManager.instance().getUniqueCode() + "?biz_id=" + biz_id;
+                    String wsUri = ConfigManager.instance().getChatUrl() + "/" + ConfigManager.instance().getUniqueCode() + "?biz_id=" + biz_id;
 
                     Log.e("wsUri", "wsUri-->" + wsUri);
                     mSocketClient = new WebSocketClient(new URI(wsUri), new Draft_10())
@@ -863,6 +877,33 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                         {
                             Log.d("picher_log", "接收消息" + message);
                             // handler.obtainMessage(0, message).sendToTarget();
+
+                            if (!TextUtils.isEmpty(message))
+                            {
+                                try
+                                {
+                                    ChatInfo chatInfo = new ChatInfo(new JSONObject(message));
+
+                                    if (null != chatInfo)
+                                    {
+
+
+                                        String action = chatInfo.getAction();
+                                        String data = chatInfo.getData();
+                                        //礼物
+                                        if ("gift".equals(action))
+                                        {
+                                            LPAnimationManager.addAnimalMessage(new AnimMessage("text888", "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1535970862163&di=0377e4e36736def1164bcf979dd5099d&imgtype=0&src=http%3A%2F%2Ftx.haiqq.com%2Fuploads%2Fallimg%2F170926%2F0I51033O-0.jpg", 10, "666",R.drawable.ic_gift_blanana));
+                                        }
+
+                                    }
+
+                                }
+                                catch (JSONException e)
+                                {
+                                    e.printStackTrace();
+                                }
+                            }
                         }
 
                         @Override
@@ -877,8 +918,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                         {
                             Log.d("picher_log", "链接错误");
                         }
-                    };
-                    mSocketClient.connect();
+                    }; mSocketClient.connect();
 
                 }
                 catch (URISyntaxException e)
@@ -1000,6 +1040,21 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                 mHandler.sendMessage(mHandler.obtainMessage(GET_FORTUNE_GIFT_FAIL, obj));
             }
         }
+
+        else if (FORTUNE_BUY.equals(action))
+        {
+            hideProgressDialog();
+            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(FORTUNE_BUY_SUCCESS, obj));
+            }
+            else
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(FORTUNE_BUY_SUCCESS_FAIL, resultMsg));
+            }
+        }
+
+
     }
 
 
@@ -1134,7 +1189,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         mGiftDialog.dismiss();
 
         GiftInfo giftInfo = giftInfoList.get(giftSelectedItem);
-        getFortuneGiftUrl(giftInfo.getGiftId());
+        getFortuneGift(giftInfo.getGiftId());
 
 
         //
@@ -1152,25 +1207,22 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     }
 
 
-    private String giftId;
-
-    public String getGiftId()
+    private void getFortuneGift(String giftid)
     {
-        return giftId;
-    }
-
-    public void setGiftId(String giftId)
-    {
-        this.giftId = giftId;
-    }
-
-    private void getFortuneGiftUrl(String giftid)
-    {
-        setGiftId(giftid);
         showProgressDialog();
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("giftid", giftid);
-        DataRequest.instance().request(LiveActivity.this, Urls.getFortuneGiftUrl(), this, HttpRequest.POST, GET_FORTUNE_GIFT, valuePairs, new ResultHandler());
+        DataRequest.instance().request(LiveActivity.this, Urls.getFortuneGiftUrl(), this, HttpRequest.POST, GET_FORTUNE_GIFT, valuePairs, new LivePriceInfoHandler());
+    }
+
+
+    private void buyGift(String giftId, String finger)
+    {
+        Map<String, String> valuePairs = new HashMap<>();
+        valuePairs.put("biz_id", giftId);
+        valuePairs.put("co_biz", "gift");
+        valuePairs.put("finger", finger);
+        DataRequest.instance().request(LiveActivity.this, Urls.getFortuneBuyUrl(), this, HttpRequest.POST, FORTUNE_BUY, valuePairs, new ResultHandler());
     }
     /***************** 礼物 ***********************************************/
 }

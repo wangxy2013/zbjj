@@ -222,9 +222,9 @@
         android:layout_weight="1"
         android:animateLayoutChanges="true"
         android:background="@color/transparent"
-        android:gravity="bottom"
+        android:gravity="center_vertical"
         android:orientation="vertical"
-        android:paddingBottom="140dp" />
+        />
 
 
 </RelativeLayout>

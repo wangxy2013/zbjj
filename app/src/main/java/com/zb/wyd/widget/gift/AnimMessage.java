@@ -19,12 +19,15 @@ public class AnimMessage {
     private String couponName;
     private String giftName;
     private String giftTitle;
+    private int  giftDrawableId;
     public AnimMessage(){}
-    public AnimMessage(String userName, String headUrl, int giftNum, String giftname){
+    public AnimMessage(String userName, String headUrl, int giftNum, String giftname,int giftDrawableId){
         this.userName = userName;
         this.giftNum = giftNum;
         this.giftDesc = giftDesc;
         this.giftName = giftname;
+        this.headUrl = headUrl;
+        this.giftDrawableId = giftDrawableId;
     }
 
     public String getGiftType() {
@@ -114,5 +117,15 @@ public class AnimMessage {
 
     public void setGiftTitle(String giftTitle) {
         this.giftTitle = giftTitle;
+    }
+
+    public int getGiftDrawableId()
+    {
+        return giftDrawableId;
+    }
+
+    public void setGiftDrawableId(int giftDrawableId)
+    {
+        this.giftDrawableId = giftDrawableId;
     }
 }

@@ -21,6 +21,7 @@ public class VersionInfo
     private String emai;//
     private String crossfire;
     private String upload;
+    private String chat;
 
     public VersionInfo(JSONObject obj)
     {
@@ -42,6 +43,7 @@ public class VersionInfo
         this.crossfire = obj.optString("crossfire");
         this.text = obj.optString("text");
         this.reg_closed = obj.optBoolean("reg_close");
+        this.chat = obj.optString("chat");
         forcedup = "1";
 
     }
@@ -214,5 +216,15 @@ public class VersionInfo
     public void setIplookup(String iplookup)
     {
         this.iplookup = iplookup;
+    }
+
+    public String getChat()
+    {
+        return chat;
+    }
+
+    public void setChat(String chat)
+    {
+        this.chat = chat;
     }
 }

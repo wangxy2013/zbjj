@@ -54,22 +54,21 @@ public class VersionManager implements IRequestListener
     /* 下载包安装路径 */
     private static final String savePath = "/sdcard/wyd/";
 
-    private static final String saveFileName = savePath
-            + "jlsp.apk";
+    private static final String saveFileName = savePath + "jlsp.apk";
 
     /* 进度条与通知ui刷新的handler和msg常量 */
     private ProgressBar mProgress;
 
-    private static final int    DOWN_UPDATE     = 0x01;
-    private static final int    DOWN_OVER       = 0x02;
-    private static final int    REQUEST_SUCCESS = 0x03;
-    private static final int    REQUEST_FAIL    = 0x04;
-    private static final int    BATDU_SUCCESS   = 0x05;
-    private static final String GET_VERSION     = "get_version";
-    private static final String GET_BAIDU       = "get_baidu";
+    private static final int DOWN_UPDATE = 0x01;
+    private static final int DOWN_OVER = 0x02;
+    private static final int REQUEST_SUCCESS = 0x03;
+    private static final int REQUEST_FAIL = 0x04;
+    private static final int BATDU_SUCCESS = 0x05;
+    private static final String GET_VERSION = "get_version";
+    private static final String GET_BAIDU = "get_baidu";
     private static final String TEST_DOMAINNAME = "test_domainname";
 
-    private static final int TEST_DOMAINNAME_FAIL    = 0x06;
+    private static final int TEST_DOMAINNAME_FAIL = 0x06;
     private static final int TEST_DOMAINNAME_SUCCESS = 0x07;
 
     private int progress;
@@ -113,7 +112,7 @@ public class VersionManager implements IRequestListener
                         ConfigManager.instance().setRegClosed(mVersionInfo.isReg_closed());
                         ConfigManager.instance().setIpLookUp(mVersionInfo.getIplookup());
                         ConfigManager.instance().setUploadUrl(mVersionInfo.getUpload());
-
+                        ConfigManager.instance().setChatUrl(mVersionInfo.getChat());
                         if (!StringUtils.stringIsEmpty(mVersionInfo.getText()))
                         {
                             ClipboardManager cm = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
@@ -127,9 +126,9 @@ public class VersionManager implements IRequestListener
                     break;
 
                 case REQUEST_FAIL:
-//                    Map<String, String> valuePairs = new HashMap<>();
-//                    DataRequest.instance().request(mContext, "https://www.baidu.com", VersionManager.this, HttpRequest.GET, GET_BAIDU, valuePairs,
-//                            new BaiduHandler());
+                    //                    Map<String, String> valuePairs = new HashMap<>();
+                    //                    DataRequest.instance().request(mContext, "https://www.baidu.com", VersionManager.this, HttpRequest.GET, GET_BAIDU, valuePairs,
+                    //                            new BaiduHandler());
                     break;
 
                 case BATDU_SUCCESS:
@@ -168,18 +167,18 @@ public class VersionManager implements IRequestListener
     private String domianName[];
     private int p = 0;
 
-    private String  mDomainName ;
+    private String mDomainName;
+
     private void testDomainName()
     {
         LogUtil.e("DomainName", "PPPPPPPPPPPPPPPP->" + p);
         if (p < domianName.length)
         {
-            mDomainName= domianName[p];
+            mDomainName = domianName[p];
             p++;
 
             Map<String, String> valuePairs1 = new HashMap<>();
-            DataRequest.instance().request(mContext, Urls.getVersionUrl(), VersionManager.this, HttpRequest.GET, TEST_DOMAINNAME, valuePairs1,
-                    new VersionInfoHandler());
+            DataRequest.instance().request(mContext, Urls.getVersionUrl(), VersionManager.this, HttpRequest.GET, TEST_DOMAINNAME, valuePairs1, new VersionInfoHandler());
         }
         else
         {
@@ -209,8 +208,7 @@ public class VersionManager implements IRequestListener
     public void init()
     {
         Map<String, String> valuePairs = new HashMap<>();
-        DataRequest.instance().request(mContext, Urls.getVersionUrl(), this, HttpRequest.GET, GET_VERSION, valuePairs,
-                new VersionInfoHandler());
+        DataRequest.instance().request(mContext, Urls.getVersionUrl(), this, HttpRequest.GET, GET_VERSION, valuePairs, new VersionInfoHandler());
     }
 
     private void showNoticeDialog(final VersionInfo mVersionBean)
@@ -274,8 +272,7 @@ public class VersionManager implements IRequestListener
             {
                 URL url = new URL(apkUrl);
 
-                HttpURLConnection conn = (HttpURLConnection) url
-                        .openConnection();
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.connect();
                 int length = conn.getContentLength();
                 InputStream is = conn.getInputStream();
@@ -306,14 +303,17 @@ public class VersionManager implements IRequestListener
                         break;
                     }
                     fos.write(buf, 0, numread);
-                } while (!interceptFlag);// 点击取消就停止下载.
+                }
+                while (!interceptFlag);// 点击取消就停止下载.
 
                 fos.close();
                 is.close();
-            } catch (MalformedURLException e)
+            }
+            catch (MalformedURLException e)
             {
                 e.printStackTrace();
-            } catch (IOException e)
+            }
+            catch (IOException e)
             {
                 e.printStackTrace();
             }
@@ -345,8 +345,7 @@ public class VersionManager implements IRequestListener
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
         {
-            Uri apkUri =
-                    FileProvider.getUriForFile(mContext, "com.zb.wyd.fileprovider", apkfile);
+            Uri apkUri = FileProvider.getUriForFile(mContext, "com.zb.wyd.fileprovider", apkfile);
 
             Intent intent = new Intent(Intent.ACTION_VIEW);
             // 由于没有在Activity环境下启动Activity,设置下面的标签
@@ -359,8 +358,7 @@ public class VersionManager implements IRequestListener
         else
         {
             Intent i = new Intent(Intent.ACTION_VIEW);
-            i.setDataAndType(Uri.parse("file://" + apkfile.toString()),
-                    "application/vnd.android.package-archive");
+            i.setDataAndType(Uri.parse("file://" + apkfile.toString()), "application/vnd.android.package-archive");
             mContext.startActivity(i);
         }
 
@@ -371,13 +369,13 @@ public class VersionManager implements IRequestListener
      * 跳转到设置-允许安装未知来源-页面
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void startInstallPermissionSettingActivity() {
+    private void startInstallPermissionSettingActivity()
+    {
         //注意这个是8.0新API
         Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mContext.startActivity(intent);
     }
-
 
 
     @Override

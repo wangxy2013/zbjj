@@ -53,7 +53,7 @@
                 android:textSize="10sp" />
         </LinearLayout>
     </RelativeLayout>
-    <ImageView
+    <com.zb.wyd.widget.CircleImageView
         android:id="@+id/user_icon"
         android:layout_width="38dp"
         android:layout_height="38dp"

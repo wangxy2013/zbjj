@@ -59,6 +59,8 @@ public class ConfigManager
     private static final String USER_ROLE = "user_role";
 
     private static final String UPLOAD_URL = "upload_url";
+
+    private static final String CHAT_URL = "chat_url";
     /**
      * 返回实例
      *
@@ -381,5 +383,16 @@ public class ConfigManager
         return mSharedPreferences.getInt(VIP_TYPE, 0);
     }
 
+
+
+    public void setChatUrl(String str)
+    {
+        mSharedPreferences.edit().putString(CHAT_URL, str).commit();
+    }
+
+    public String getChatUrl()
+    {
+        return mSharedPreferences.getString(CHAT_URL, "");
+    }
 }
 

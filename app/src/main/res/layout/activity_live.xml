@@ -139,6 +139,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/dm_10"
+                android:visibility="gone"
                 android:layout_toLeftOf="@+id/tv_dm"
                 android:src="@drawable/ic_report" />
 
@@ -152,8 +153,8 @@
                 android:src="@drawable/ic_gift" />
 
 
-            <TextView
-                android:id="@+id/tv_say"
+            <EditText
+                android:id="@+id/et_say"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -163,9 +164,11 @@
                 android:gravity="center_vertical"
                 android:paddingBottom="@dimen/dm_5"
                 android:paddingLeft="@dimen/dm_10"
+                android:singleLine="true"
                 android:paddingTop="@dimen/dm_5"
-                android:text="输入您想说的"
-                android:textColor="@color/blackA"
+                android:imeOptions="actionSend"
+                android:hint="输入您想说的"
+                android:textColor="@color/black"
                 android:textSize="@dimen/t16" />
         </RelativeLayout>
 

@@ -13,11 +13,15 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -108,8 +112,8 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     TextView tvSystem;
     @BindView(R.id.tv_welcome_name)
     TextView tvWelcomeName;
-    @BindView(R.id.tv_say)
-    TextView tvSay;
+    @BindView(R.id.et_say)
+    EditText etSay;
 
     @BindView(R.id.tv_location)
     TextView tvLocation;
@@ -418,9 +422,32 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         ivClosed.setOnClickListener(this);
         ivGift.setOnClickListener(this);
         ivReport.setOnClickListener(this);
-        tvSay.setOnClickListener(this);
         tvDm.setOnClickListener(this);
         ivUserPic.setOnClickListener(this);
+        etSay.setOnEditorActionListener(new EditText.OnEditorActionListener()
+        {
+
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
+            {
+                if (actionId == EditorInfo.IME_ACTION_DONE)
+                {
+                    InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
+
+                    String sendMsg = etSay.getText().toString();
+
+                    if (!TextUtils.isEmpty(sendMsg))
+                    {
+                        mSocketClient.send(sendMsg);
+                    }
+                    return true;
+                }
+                return false;
+            }
+
+        });
     }
 
     @Override
@@ -741,7 +768,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                 tvDm.setSelected(true);
             }
         }
-        else if (v == tvSay || v == ivReport)
+        else if (v == ivReport)
         {
 
             ToastUtil.show(LiveActivity.this, "该功能内测中，只能内测用户使用");
@@ -893,7 +920,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                                         //礼物
                                         if ("gift".equals(action))
                                         {
-                                            LPAnimationManager.addAnimalMessage(new AnimMessage("text888", "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1535970862163&di=0377e4e36736def1164bcf979dd5099d&imgtype=0&src=http%3A%2F%2Ftx.haiqq.com%2Fuploads%2Fallimg%2F170926%2F0I51033O-0.jpg", 10, "666",R.drawable.ic_gift_blanana));
+                                            LPAnimationManager.addAnimalMessage(new AnimMessage("text888", "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1535970862163&di=0377e4e36736def1164bcf979dd5099d&imgtype=0&src=http%3A%2F%2Ftx.haiqq.com%2Fuploads%2Fallimg%2F170926%2F0I51033O-0.jpg", 10, "666", R.drawable.ic_gift_blanana));
                                         }
 
                                     }
@@ -918,7 +945,8 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                         {
                             Log.d("picher_log", "链接错误");
                         }
-                    }; mSocketClient.connect();
+                    };
+                    mSocketClient.connect();
 
                 }
                 catch (URISyntaxException e)

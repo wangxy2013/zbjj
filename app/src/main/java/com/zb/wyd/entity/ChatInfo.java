@@ -9,12 +9,22 @@ public class ChatInfo
     private String action;
     private String type;
 
+    private UserInfo userInfo;
+
 
     public ChatInfo(JSONObject obj)
     {
         this.data = obj.optString("data");
         this.action = obj.optString("action");
         this.type = obj.optString("type");
+
+        JSONObject userObj = obj.optJSONObject("userinfo");
+
+        if(null != userObj)
+        {
+            UserInfo mUserInfo = new UserInfo(userObj);
+            setUserInfo(mUserInfo);
+        }
     }
 
     public String getData()
@@ -45,5 +55,15 @@ public class ChatInfo
     public void setType(String type)
     {
         this.type = type;
+    }
+
+    public UserInfo getUserInfo()
+    {
+        return userInfo;
+    }
+
+    public void setUserInfo(UserInfo userInfo)
+    {
+        this.userInfo = userInfo;
     }
 }

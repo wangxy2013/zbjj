@@ -86,7 +86,6 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.2'
     compile 'com.umeng.sdk:common:1.5.0'
     compile 'com.umeng.sdk:analytics:7.5.0'
-
     implementation 'com.github.DingMouRen:LayoutManagerGroup:1e6f4f96eb'
-    compile files('libs/websocket.jar')
+    implementation files('libs/websocket.jar')
 }

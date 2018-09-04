@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/dm_3"
+    android:background="@drawable/live_system_bg"
+    android:orientation="vertical"
+    android:padding="@dimen/dm_5">
+
+
+    <com.zb.wyd.widget.CircleImageView
+        android:id="@+id/iv_user_pic"
+        android:layout_width="@dimen/dm_36"
+        android:layout_height="@dimen/dm_36"
+        android:layout_centerVertical="true" />
+
+    <TextView
+        android:layout_toRightOf="@+id/iv_user_pic"
+        android:id="@+id/tv_user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:textColor="@color/orange"
+        android:textSize="@dimen/t14" />
+
+    <TextView
+        android:layout_toRightOf="@+id/tv_user_name"
+        android:id="@+id/tv_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+
+        android:textColor="@color/white"
+        android:textSize="@dimen/t14" />
+
+</RelativeLayout>

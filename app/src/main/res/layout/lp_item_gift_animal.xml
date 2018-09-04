@@ -65,6 +65,7 @@
         android:id="@+id/ivgift"
         android:layout_width="80dp"
         android:layout_height="80dp"
+        android:scaleType="centerInside"
         android:layout_marginLeft="110dp"
         android:layout_marginTop="-6dp"
         android:visibility="invisible"

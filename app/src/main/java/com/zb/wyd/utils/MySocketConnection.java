@@ -15,13 +15,15 @@ public class MySocketConnection extends WebSocketConnection
 {
     private String TAG = "MySocketConnection";
 
-    private boolean        isForced      = false;
+    private boolean isForced = false;
     private SocketListener mChatListener = null;
 
 
     private String url;
 
-    private MySocketConnection() {}
+    private MySocketConnection()
+    {
+    }
 
     private static MySocketConnection single = null;
 
@@ -81,9 +83,10 @@ public class MySocketConnection extends WebSocketConnection
 
                         try
                         {
-                            Thread.sleep(3000);
+                            Thread.sleep(30000);
                             startConnection(url);
-                        } catch (InterruptedException e)
+                        }
+                        catch (InterruptedException e)
                         {
                             e.printStackTrace();
                         }
@@ -92,7 +95,8 @@ public class MySocketConnection extends WebSocketConnection
 
                 }
             }, mWebSocketOptions);
-        } catch (WebSocketException e)
+        }
+        catch (WebSocketException e)
         {
             e.printStackTrace();
             // ContextUtil.toast("WebSocketException");
@@ -102,9 +106,10 @@ public class MySocketConnection extends WebSocketConnection
 
                 try
                 {
-                    Thread.sleep(15000);
+                    Thread.sleep(30000);
                     startConnection(url);
-                } catch (InterruptedException e1)
+                }
+                catch (InterruptedException e1)
                 {
                     e.printStackTrace();
                 }

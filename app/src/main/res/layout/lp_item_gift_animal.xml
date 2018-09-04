@@ -2,75 +2,75 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    >
+    android:layout_height="wrap_content">
+
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="-18dp"
         android:paddingLeft="10dp">
-    <RelativeLayout
-        android:id="@+id/rlparent"
-        android:layout_width="185dp"
-        android:layout_height="40dp"
-        android:visibility="gone"
-        android:layout_centerVertical="true"
-        android:background="@drawable/bg_radius_animal_surrender"
-        android:paddingRight="15dp">
 
-        <LinearLayout
-            android:id="@+id/text_bg"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:paddingBottom="3dp"
-            android:paddingLeft="45dp"
-            android:paddingTop="3dp"
-           >
+        <RelativeLayout
+            android:id="@+id/rlparent"
+            android:layout_width="185dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:background="@drawable/bg_radius_animal_surrender"
+            android:paddingRight="15dp"
+            android:visibility="gone">
 
-            <TextView
-                android:id="@+id/send_user"
+            <LinearLayout
+                android:id="@+id/text_bg"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Johnny"
-                android:textColor="@android:color/white"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:layout_marginRight="40dp"
-                android:textSize="12sp" />
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:paddingBottom="3dp"
+                android:paddingLeft="45dp"
+                android:paddingTop="3dp">
 
-            <TextView
-                android:id="@+id/gift_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="送出"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:layout_marginTop="2dp"
-                android:layout_marginRight="10dp"
-                android:textColor="@android:color/white"
-                android:textSize="10sp" />
-        </LinearLayout>
-    </RelativeLayout>
-    <com.zb.wyd.widget.CircleImageView
-        android:id="@+id/user_icon"
-        android:layout_width="38dp"
-        android:layout_height="38dp"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="1dp"
-        android:src="@drawable/ic_user"
-        />
-    <ImageView
-        android:id="@+id/ivgift"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:scaleType="centerInside"
-        android:layout_marginLeft="110dp"
-        android:layout_marginTop="-6dp"
-        android:visibility="invisible"
-        />
-    <!--<com.zb.wyd.widget.gift.MagicTextView-->
+                <TextView
+                    android:id="@+id/send_user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="40dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="Johnny"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/gift_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="2dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="送出"
+                    android:textColor="@android:color/white"
+                    android:textSize="10sp" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <com.zb.wyd.widget.CircleImageView
+            android:id="@+id/user_icon"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="1dp"
+            android:src="@drawable/ic_user" />
+
+        <ImageView
+            android:id="@+id/ivgift"
+            android:layout_width="@dimen/dm_90"
+            android:layout_height="@dimen/dm_100"
+            android:layout_marginLeft="110dp"
+            android:layout_marginTop="-6dp"
+            android:scaleType="centerInside"
+            android:visibility="invisible" />
+        <!--<com.zb.wyd.widget.gift.MagicTextView-->
         <!--android:id="@+id/giftNum"-->
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="wrap_content"-->

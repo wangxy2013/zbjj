@@ -469,7 +469,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                             UserInfo userInfo = new UserInfo();
                             userInfo.setUface(ConfigManager.instance().getUserPic());
                             String userName = ConfigManager.instance().getUserNickName();
-                            userInfo.setUname(TextUtils.isEmpty(userName) ? ConfigManager.instance().getUserName() : userName);
+                            userInfo.setUnick(TextUtils.isEmpty(userName) ? ConfigManager.instance().getUserName() : userName);
                             userInfo.setVip_level(ConfigManager.instance().getVipLevelVIE() + "");
                             chatInfo.setUserInfo(userInfo);
                             mChatInfoList.add(chatInfo);
@@ -1066,7 +1066,9 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                 mMySocketConnection.startConnection(wsUri);
 
             }
-        }).start();
+        }).
+
+                start();
     }
 
 

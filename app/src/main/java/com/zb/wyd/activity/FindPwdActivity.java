@@ -39,7 +39,7 @@ import butterknife.BindView;
 /**
  * 描述：重置密码
  */
-public class RecoveryPwdActivity extends BaseActivity implements IRequestListener
+public class FindPwdActivity extends BaseActivity implements IRequestListener
 {
     @BindView(R.id.iv_back)
     ImageView    ivBack;
@@ -87,7 +87,7 @@ public class RecoveryPwdActivity extends BaseActivity implements IRequestListene
     private static final int    GET_EMAIL_CODE_SUCCESS = 0X04;
 
     @SuppressLint("HandlerLeak")
-    private BaseHandler mHandler = new BaseHandler(RecoveryPwdActivity.this)
+    private BaseHandler mHandler = new BaseHandler(FindPwdActivity.this)
     {
         @Override
         public void handleMessage(Message msg)
@@ -96,14 +96,14 @@ public class RecoveryPwdActivity extends BaseActivity implements IRequestListene
             switch (msg.what)
             {
                 case REQUEST_SUCCESS:
-                    ToastUtil.show(RecoveryPwdActivity.this, "密码找回成功");
+                    ToastUtil.show(FindPwdActivity.this, "密码找回成功");
                     ConfigManager.instance().setUserPwd(pwd);
                     finish();
                     break;
 
 
                 case REQUEST_FAIL:
-                    ToastUtil.show(RecoveryPwdActivity.this, msg.obj.toString());
+                    ToastUtil.show(FindPwdActivity.this, msg.obj.toString());
                     break;
 
 
@@ -127,7 +127,7 @@ public class RecoveryPwdActivity extends BaseActivity implements IRequestListene
                     break;
 
                 case GET_EMAIL_CODE_SUCCESS:
-                    ToastUtil.show(RecoveryPwdActivity.this, "验证码已发送至邮箱");
+                    ToastUtil.show(FindPwdActivity.this, "验证码已发送");
                     ResultHandler resultHandler = (ResultHandler) msg.obj;
                     token = resultHandler.getContent();
                     etAccount.setEnabled(false);
@@ -147,9 +147,9 @@ public class RecoveryPwdActivity extends BaseActivity implements IRequestListene
     @Override
     protected void initViews(Bundle savedInstanceState)
     {
-        setContentView(R.layout.activity_recovery_pwd);
-        StatusBarUtil.transparencyBar(RecoveryPwdActivity.this);
-        StatusBarUtil.StatusBarLightMode(RecoveryPwdActivity.this, false);
+        setContentView(R.layout.activity_find_pwd);
+        StatusBarUtil.transparencyBar(FindPwdActivity.this);
+        StatusBarUtil.StatusBarLightMode(FindPwdActivity.this, false);
     }
 
     @Override
@@ -216,34 +216,41 @@ public class RecoveryPwdActivity extends BaseActivity implements IRequestListene
         }
         else if (v == tvCode)
         {
-            String email = etAccount.getText().toString();
+            String phone = etAccount.getText().toString();
 
-            if (!StringUtils.checkEmail(email))
+            if (TextUtils.isEmpty(phone)||phone.length()<11)
             {
-                ToastUtil.show(this, "请输入正确的邮箱");
+                ToastUtil.show(this, "请输入正确的手机");
                 return;
             }
 
             tvCode.setEnabled(false);
             showProgressDialog();
             Map<String, String> valuePairs = new HashMap<>();
-            valuePairs.put("email", email);
+            valuePairs.put("phone", phone);
             valuePairs.put("action", "forgot");
-            DataRequest.instance().request(this, Urls.getEmailCodeUrl(), this, HttpRequest.POST, GET_EMAIL_CODE, valuePairs,
+            DataRequest.instance().request(this, Urls.getPhoneCodeUrl(), this, HttpRequest.POST, GET_EMAIL_CODE, valuePairs,
                     new ResultHandler());
         }
         else if (v == btnSubmit)
         {
 //            if (isFitst)
 //            {
-                String email = etAccount.getText().toString();
+//                String email = etAccount.getText().toString();
+//
+//                if (!StringUtils.checkEmail(email))
+//                {
+//                    ToastUtil.show(this, "请输入正确的邮箱");
+//                    return;
+//                }
 
-                if (!StringUtils.checkEmail(email))
-                {
-                    ToastUtil.show(this, "请输入正确的邮箱");
-                    return;
-                }
+            String phone = etAccount.getText().toString();
 
+            if (TextUtils.isEmpty(phone)||phone.length()<11)
+            {
+                ToastUtil.show(this, "请输入正确的手机");
+                return;
+            }
                 String code = etInvitation.getText().toString();
 
                 if (TextUtils.isEmpty(code))
@@ -287,19 +294,19 @@ public class RecoveryPwdActivity extends BaseActivity implements IRequestListene
 
                 if (TextUtils.isEmpty(pwd) || pwd.length() < 6)
                 {
-                    ToastUtil.show(RecoveryPwdActivity.this, "请输入6-18位密码");
+                    ToastUtil.show(FindPwdActivity.this, "请输入6-18位密码");
                     return;
                 }
 
                 if (!pwd.equals(pwd1))
                 {
-                    ToastUtil.show(RecoveryPwdActivity.this, "请保持2次密码输入一致");
+                    ToastUtil.show(FindPwdActivity.this, "请保持2次密码输入一致");
                     return;
                 }
 
                 showProgressDialog();
                 Map<String, String> valuePairs = new HashMap<>();
-                valuePairs.put("email", email);
+                valuePairs.put("phone", phone);
                 valuePairs.put("vcode", code);
                 valuePairs.put("token", token);
                 valuePairs.put("passwd", pwd);
@@ -327,7 +334,7 @@ public class RecoveryPwdActivity extends BaseActivity implements IRequestListene
                 }
                 else
                 {
-                    ToastUtil.show(RecoveryPwdActivity.this,"请先安装QQ");
+                    ToastUtil.show(FindPwdActivity.this,"请先安装QQ");
                 }
             }
         }

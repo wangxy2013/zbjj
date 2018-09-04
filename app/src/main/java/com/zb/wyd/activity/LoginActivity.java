@@ -192,7 +192,9 @@ public class LoginActivity extends BaseActivity implements IRequestListener
         }
         else if (v == btnRegister)
         {
-            startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+            //startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+            startActivity(new Intent(LoginActivity.this, PhoneRegisterActivity.class));
+
         }
         else if (v == ivBack)
         {
@@ -200,7 +202,8 @@ public class LoginActivity extends BaseActivity implements IRequestListener
         }
         else if (v == tvRecoveryPwd)
         {
-            startActivity(new Intent(LoginActivity.this, RecoveryPwdActivity.class));
+           // startActivity(new Intent(LoginActivity.this, RecoveryPwdActivity.class));
+            startActivity(new Intent(LoginActivity.this, FindPwdActivity.class));
 
         }
         else if(v == tvRestUname)
@@ -231,11 +234,5 @@ public class LoginActivity extends BaseActivity implements IRequestListener
     }
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
+
 }

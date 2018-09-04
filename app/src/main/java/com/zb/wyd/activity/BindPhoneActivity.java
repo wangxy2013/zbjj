@@ -1,6 +1,7 @@
 package com.zb.wyd.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.Message;
 import android.text.TextUtils;
@@ -16,6 +17,7 @@ import com.zb.wyd.http.HttpRequest;
 import com.zb.wyd.http.IRequestListener;
 import com.zb.wyd.json.ResultHandler;
 import com.zb.wyd.utils.ConstantUtil;
+import com.zb.wyd.utils.DialogUtils;
 import com.zb.wyd.utils.StringUtils;
 import com.zb.wyd.utils.ToastUtil;
 import com.zb.wyd.utils.Urls;
@@ -90,6 +92,7 @@ public class BindPhoneActivity extends BaseActivity implements IRequestListener
                     }
                     else
                     {
+                        etPhone.setEnabled(true);
                         tvCode.setEnabled(true);
                         tvCode.setText("发送验证码");
                     }
@@ -97,7 +100,7 @@ public class BindPhoneActivity extends BaseActivity implements IRequestListener
                     break;
 
                 case GET_EMAIL_CODE_SUCCESS:
-                    ToastUtil.show(BindPhoneActivity.this, "验证码已发送至邮箱");
+                    ToastUtil.show(BindPhoneActivity.this, "验证码已发");
                     ResultHandler resultHandler = (ResultHandler) msg.obj;
                     token = resultHandler.getContent();
                     etPhone.setEnabled(false);
@@ -182,14 +185,22 @@ public class BindPhoneActivity extends BaseActivity implements IRequestListener
             }
 
 
-            tvCode.setEnabled(false);
+            DialogUtils.showToastDialog2Button(this, "绑定手机后，将只能使用手机号码和密码登录", new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                    tvCode.setEnabled(false);
 
-            showProgressDialog();
-            Map<String, String> valuePairs = new HashMap<>();
-            valuePairs.put("phone", phone);
-            valuePairs.put("action", "bind");
-            DataRequest.instance().request(this, Urls.getPhoneCodeUrl(), this, HttpRequest.POST, GET_PHONE_CODE, valuePairs,
-                    new ResultHandler());
+                    showProgressDialog();
+                    Map<String, String> valuePairs = new HashMap<>();
+                    valuePairs.put("phone", phone);
+                    valuePairs.put("action", "bind");
+                    DataRequest.instance().request(BindPhoneActivity.this, Urls.getPhoneCodeUrl(), BindPhoneActivity.this, HttpRequest.POST, GET_PHONE_CODE, valuePairs,
+                            new ResultHandler());
+                }
+            });
+
+
 
         }
     }

@@ -13,7 +13,16 @@
 
     <style name="AppTheme" parent="BaseTheme"/>
 
-
+    <style name="ActivityTheme" parent="Theme.AppCompat.Light">
+        <!-- Customize your theme here. -->
+        <item name="android:windowAnimationStyle">@style/window_animation</item>
+        <item name="android:textColorHint">#aaaaaa</item>
+        <item name="android:dialogTheme">@style/dialogTheme</item>
+        <item name="android:alertDialogTheme">@style/alertDialog</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowBackground">@color/white</item>
+    </style>
     <style name="window_animation">
         <!--打开新的activity 用的动画-->
         <item name="android:activityOpenEnterAnimation">@anim/window_open_enter</item>

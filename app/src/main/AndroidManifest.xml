@@ -160,6 +160,7 @@
             android:name=".activity.WebViewActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
+            android:theme="@style/ActivityTheme"
             android:process=":remote"
             android:windowSoftInputMode="stateHidden|adjustPan"/>
         <activity

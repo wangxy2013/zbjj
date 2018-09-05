@@ -150,7 +150,7 @@ public class UserDetailActivity extends BaseActivity implements IRequestListener
                         {
                             tvPhoneStatus.setTextColor(ContextCompat.getColor(UserDetailActivity.this, R.color.blackC));
                             tvPhoneStatus.setText("绑定手机");
-                            llBindPhone.setEnabled(false);
+                            llBindPhone.setEnabled(true);
                         }
                     }
                     break;

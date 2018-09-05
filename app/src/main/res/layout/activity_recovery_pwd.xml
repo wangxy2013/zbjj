@@ -62,9 +62,12 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/dm_5"
+                    android:maxLength="11"
+                    android:digits="0123456789"
+                    android:inputType="phone"
                     android:layout_toRightOf="@+id/iv_account"
                     android:background="@color/transparent"
-                    android:hint="请输入邮箱"
+                    android:hint="请输手机号"
                     android:textColor="@drawable/login_font_selector"
                     android:textColorHint="@color/white"
                     android:textSize="@dimen/t16"/>

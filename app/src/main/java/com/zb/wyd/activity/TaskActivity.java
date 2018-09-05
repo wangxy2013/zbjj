@@ -64,23 +64,23 @@ public class TaskActivity extends BaseActivity implements IRequestListener
 
 
     private List<TaskInfo> mIncompleteList = new ArrayList<>();
-    private List<TaskInfo> mCompleteList   = new ArrayList<>();
+    private List<TaskInfo> mCompleteList = new ArrayList<>();
 
 
     private TaskAdapter mIncompleteAdapter;
     private TaskAdapter mCompleteAdapter;
 
-    private static final String      GET_USER_DETAIL      = "get_user_detail";
-    private static final String      USER_SIGN_REQUEST    = "user_sign_request";
-    private static final String      GET_TASK_REQUEST     = "get_task_request";
-    private static final int         REQUEST_SUCCESS      = 0x01;
-    private static final int         REQUEST_FAIL         = 0x02;
-    private static final int         USER_SIGN_SUCCESS    = 0x03;
-    private static final int         GET_TASK_CODE        = 0x04;
-    private static final int         GET_TASK_SUCCESS     = 0x05;
-    private static final int         GET_USER_DETAIL_CODE = 0x06;
+    private static final String GET_USER_DETAIL = "get_user_detail";
+    private static final String USER_SIGN_REQUEST = "user_sign_request";
+    private static final String GET_TASK_REQUEST = "get_task_request";
+    private static final int REQUEST_SUCCESS = 0x01;
+    private static final int REQUEST_FAIL = 0x02;
+    private static final int USER_SIGN_SUCCESS = 0x03;
+    private static final int GET_TASK_CODE = 0x04;
+    private static final int GET_TASK_SUCCESS = 0x05;
+    private static final int GET_USER_DETAIL_CODE = 0x06;
     @SuppressLint("HandlerLeak")
-    private              BaseHandler mHandler             = new BaseHandler(TaskActivity.this)
+    private BaseHandler mHandler = new BaseHandler(TaskActivity.this)
     {
         @Override
         public void handleMessage(Message msg)
@@ -154,6 +154,7 @@ public class TaskActivity extends BaseActivity implements IRequestListener
             }
         }
     };
+
     @Override
     protected void initData()
     {
@@ -171,6 +172,7 @@ public class TaskActivity extends BaseActivity implements IRequestListener
     @Override
     protected void initEvent()
     {
+        ivBack.setOnClickListener(this);
         tvSignIn.setOnClickListener(this);
         ivDetail.setOnClickListener(this);
     }
@@ -200,8 +202,8 @@ public class TaskActivity extends BaseActivity implements IRequestListener
                 }
                 else if ("live://index".equals(mTaskInfo.getAction()))
                 {
-                   sendBroadcast(new Intent(MainActivity.TAB_LIVE));
-                   finish();
+                    sendBroadcast(new Intent(MainActivity.TAB_LIVE));
+                    finish();
                 }
                 else if (mTaskInfo.getAction().startsWith("video"))
                 {
@@ -215,11 +217,7 @@ public class TaskActivity extends BaseActivity implements IRequestListener
 
                 else if (mTaskInfo.getAction().startsWith("http") || mTaskInfo.getAction().startsWith("https"))
                 {
-                    startActivity(new Intent(TaskActivity.this, WebViewActivity.class)
-                            .putExtra(WebViewActivity.EXTRA_TITLE, mTaskInfo.getTname())
-                            .putExtra(WebViewActivity.IS_SETTITLE, true)
-                            .putExtra(WebViewActivity.EXTRA_URL, mTaskInfo.getAction())
-                    );
+                    startActivity(new Intent(TaskActivity.this, WebViewActivity.class).putExtra(WebViewActivity.EXTRA_TITLE, mTaskInfo.getTname()).putExtra(WebViewActivity.IS_SETTITLE, true).putExtra(WebViewActivity.EXTRA_URL, mTaskInfo.getAction()));
                 }
 
 
@@ -249,15 +247,13 @@ public class TaskActivity extends BaseActivity implements IRequestListener
     private void getUserDetail()
     {
         Map<String, String> valuePairs = new HashMap<>();
-        DataRequest.instance().request(TaskActivity.this, Urls.getUserInfoUrl(), this, HttpRequest.GET, GET_USER_DETAIL, valuePairs,
-                new UserInfoHandler());
+        DataRequest.instance().request(TaskActivity.this, Urls.getUserInfoUrl(), this, HttpRequest.GET, GET_USER_DETAIL, valuePairs, new UserInfoHandler());
     }
 
     private void getTaskList()
     {
         Map<String, String> valuePairs = new HashMap<>();
-        DataRequest.instance().request(TaskActivity.this, Urls.getTaskUrl(), this, HttpRequest.GET, GET_TASK_REQUEST, valuePairs,
-                new TaskInfoListHandler());
+        DataRequest.instance().request(TaskActivity.this, Urls.getTaskUrl(), this, HttpRequest.GET, GET_TASK_REQUEST, valuePairs, new TaskInfoListHandler());
     }
 
     @Override
@@ -279,12 +275,15 @@ public class TaskActivity extends BaseActivity implements IRequestListener
         {
             showProgressDialog();
             Map<String, String> valuePairs = new HashMap<>();
-            DataRequest.instance().request(TaskActivity.this, Urls.getUserSignUrl(), this, HttpRequest.POST, USER_SIGN_REQUEST, valuePairs,
-                    new SignInfoHandler());
+            DataRequest.instance().request(TaskActivity.this, Urls.getUserSignUrl(), this, HttpRequest.POST, USER_SIGN_REQUEST, valuePairs, new SignInfoHandler());
         }
         else if (v == ivDetail)
         {
             startActivity(new Intent(TaskActivity.this, RankingActivity.class));
+        }
+        else if (v == ivBack)
+        {
+            finish();
         }
     }
 

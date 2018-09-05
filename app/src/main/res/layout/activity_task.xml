@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:padding="@dimen/dm_8"
-            android:src="@drawable/ic_back_white" />
+            android:src="@drawable/ic_black_back" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -93,6 +93,7 @@
             android:paddingBottom="@dimen/dm_8"
             android:paddingLeft="@dimen/dm_20"
             android:paddingRight="@dimen/dm_20"
+            android:visibility="gone"
             android:paddingTop="@dimen/dm_8"
             android:text="签到"
             android:textColor="@color/blackC"

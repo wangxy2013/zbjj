@@ -1,6 +1,8 @@
 package com.zb.wyd.activity;
 
 import android.app.Activity;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -26,6 +28,7 @@ import com.zb.wyd.utils.APPUtils;
 import com.zb.wyd.utils.ConfigManager;
 import com.zb.wyd.utils.LogUtil;
 import com.zb.wyd.utils.StringUtils;
+import com.zb.wyd.utils.ToastUtil;
 import com.zb.wyd.widget.statusbar.StatusBarUtil;
 
 import java.io.File;
@@ -244,7 +247,13 @@ public class WebViewActivity extends Activity
             startActivity(intent);
         }
 
-
+        @JavascriptInterface
+        public void copy(String text)
+        {
+            ToastUtil.show(WebViewActivity.this,"内容已复制到剪贴板");
+            ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            cm.setText(text);
+        }
 
         @JavascriptInterface
         public void onQQ(String qq)
@@ -284,11 +293,11 @@ public class WebViewActivity extends Activity
         @JavascriptInterface
         public void videolist(String cat_id)
         {
-            if(!TextUtils.isEmpty(cat_id))
-            startActivity(new Intent(WebViewActivity.this, VidoeListActivity.class)
-                    .putExtra("sort", "new")
-                    .putExtra("cta_id", cat_id)
-            );
+            if (!TextUtils.isEmpty(cat_id))
+                startActivity(new Intent(WebViewActivity.this, VidoeListActivity.class)
+                        .putExtra("sort", "new")
+                        .putExtra("cta_id", cat_id)
+                );
         }
 
         @JavascriptInterface

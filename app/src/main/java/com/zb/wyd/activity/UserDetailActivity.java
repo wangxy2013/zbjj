@@ -33,6 +33,8 @@ import com.zb.wyd.http.HttpRequest;
 import com.zb.wyd.http.IRequestListener;
 import com.zb.wyd.json.PhotoInfoHandler;
 import com.zb.wyd.json.ResultHandler;
+import com.zb.wyd.json.UserInfoHandler;
+import com.zb.wyd.utils.ConfigManager;
 import com.zb.wyd.utils.ConstantUtil;
 import com.zb.wyd.utils.ImageUtils;
 import com.zb.wyd.utils.LogUtil;
@@ -75,12 +77,13 @@ public class UserDetailActivity extends BaseActivity implements IRequestListener
 
     private UserInfo userInfo;
 
-
+    private static final String GET_USER_DETAIL    = "get_user_detail";
     private static final String SAVE_USER_INFO     = "save_user_info";
     private static final String UPLOAD_USER_PIC    = "upload_user_pic";
     private static final int    REQUEST_SUCCESS    = 0x01;
     private static final int    REQUEST_FAIL       = 0x02;
     private static final int    UPLOAD_PIC_SUCCESS = 0x03;
+    private static final int    GET_USER_SUCCESS   = 0x04;
 
     private SelectPicturePopupWindow mSelectPicturePopupWindow;
     private                Bitmap bitmap                                 = null;
@@ -126,6 +129,32 @@ public class UserDetailActivity extends BaseActivity implements IRequestListener
 
                     break;
 
+                case GET_USER_SUCCESS:
+                    UserInfoHandler mUserInfoHandler = (UserInfoHandler) msg.obj;
+                    userInfo = mUserInfoHandler.getUserInfo();
+
+                    if (null != userInfo)
+                    {
+                        ImageLoader.getInstance().displayImage(userInfo.getUface(), ivUserPic);
+                        tvUserNick.setText(userInfo.getUnick());
+
+
+                        if (userInfo.getEmail().equals(userInfo.getUname()))
+                        {
+                            tvPhoneStatus.setText("已绑定手机" + userInfo.getUname() + "不支持换不绑");
+                            tvPhoneStatus.setTextColor(ContextCompat.getColor(UserDetailActivity.this, R.color.hint_edit));
+                            llBindPhone.setEnabled(false);
+                            ConfigManager.instance().setUserName(userInfo.getUname());
+                        }
+                        else
+                        {
+                            tvPhoneStatus.setTextColor(ContextCompat.getColor(UserDetailActivity.this, R.color.blackC));
+                            tvPhoneStatus.setText("绑定手机");
+                            llBindPhone.setEnabled(false);
+                        }
+                    }
+                    break;
+
             }
         }
     };
@@ -160,14 +189,6 @@ public class UserDetailActivity extends BaseActivity implements IRequestListener
         tvTitle.setText("个人信息");
         ivBack.setOnClickListener(this);
 
-        if (null != userInfo)
-        {
-            ImageLoader.getInstance().displayImage(userInfo.getUface(), ivUserPic);
-            tvUserNick.setText(userInfo.getUnick());
-
-        }
-
-
         mSelectPicturePopupWindow = new SelectPicturePopupWindow(UserDetailActivity.this);
         mSelectPicturePopupWindow.setOnSelectedListener(new SelectPicturePopupWindow.OnSelectedListener()
         {
@@ -194,6 +215,15 @@ public class UserDetailActivity extends BaseActivity implements IRequestListener
 
         mDestinationUri = Uri.fromFile(new File(getCacheDir(), "cropImage.jpeg"));
         mTempPhotoPath = Environment.getExternalStorageDirectory() + File.separator + "photo.jpeg";
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        Map<String, String> valuePairs = new HashMap<>();
+        DataRequest.instance().request(UserDetailActivity.this, Urls.getUserInfoUrl(), this, HttpRequest.GET, GET_USER_DETAIL, valuePairs,
+                new UserInfoHandler());
     }
 
     @Override
@@ -494,6 +524,17 @@ public class UserDetailActivity extends BaseActivity implements IRequestListener
             if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
             {
                 mHandler.sendMessage(mHandler.obtainMessage(REQUEST_SUCCESS, obj));
+            }
+            else
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
+            }
+        }
+        else if (GET_USER_DETAIL.equals(action))
+        {
+            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(GET_USER_SUCCESS, obj));
             }
             else
             {

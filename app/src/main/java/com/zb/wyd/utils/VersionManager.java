@@ -227,6 +227,12 @@ public class VersionManager implements IRequestListener
                     {
                         showDownloadDialog();
                     }
+                    else if("3".equals(content))
+                    {
+                        Uri uri = Uri.parse(apkUrl);
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        mContext.startActivity(intent);
+                    }
                     else
                     {
                         if ("1".equals(mVersionBean.getForcedup()))

@@ -3,6 +3,7 @@ package com.zb.wyd.utils;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Paint;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -36,6 +37,10 @@ public class DialogUtils
         TextView mContent = (TextView) view.findViewById(R.id.tv_content);
         Button mSubmitBtn = (Button) view.findViewById(R.id.btn_submit);
         Button mCancelBtn = (Button) view.findViewById(R.id.btn_cancel);
+        TextView mLinkTv = (TextView) view.findViewById(R.id.tv_link);
+        mLinkTv.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
+        mLinkTv.getPaint().setAntiAlias(true);//抗锯齿
+
 
         mContent.setText(content);
         mSubmitBtn.setOnClickListener(new View.OnClickListener()
@@ -58,6 +63,16 @@ public class DialogUtils
                 listener.onSubmit("2");
             }
         });
+
+        mLinkTv.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                listener.onSubmit("3");
+            }
+        });
+
         //Dialog部分
         Window mWindow = dialog.getWindow();
         WindowManager.LayoutParams lp = mWindow.getAttributes();

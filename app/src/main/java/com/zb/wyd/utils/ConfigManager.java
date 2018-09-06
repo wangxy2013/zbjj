@@ -61,6 +61,8 @@ public class ConfigManager
     private static final String UPLOAD_URL = "upload_url";
 
     private static final String CHAT_URL = "chat_url";
+
+    private static final String VALID_VIP = "valid_vip";
     /**
      * 返回实例
      *
@@ -393,6 +395,16 @@ public class ConfigManager
     public String getChatUrl()
     {
         return mSharedPreferences.getString(CHAT_URL, "");
+    }
+
+    public void setValid_vip(boolean str)
+    {
+        mSharedPreferences.edit().putBoolean(VALID_VIP, str).commit();
+    }
+
+    public boolean getValid_vip()
+    {
+        return mSharedPreferences.getBoolean(VALID_VIP, false);
     }
 }
 

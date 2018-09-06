@@ -88,4 +88,5 @@ dependencies {
     compile 'com.umeng.sdk:analytics:7.5.0'
     implementation 'com.github.DingMouRen:LayoutManagerGroup:1e6f4f96eb'
     implementation files('libs/websocket.jar')
+    compile 'com.github.zrunker:ZTextView:v1.0.2'
 }

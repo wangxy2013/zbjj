@@ -4,6 +4,7 @@ import android.app.Application;
 import android.os.StrictMode;
 
 import com.umeng.commonsdk.UMConfigure;
+import com.zb.wyd.entity.NoticeInfo;
 import com.zb.wyd.utils.APPUtils;
 import com.zb.wyd.utils.ConfigManager;
 import com.zb.wyd.utils.StringUtils;
@@ -18,9 +19,15 @@ public class MyApplication extends Application
 {
     private List<Integer> photoDataList = new ArrayList<>();
     private static MyApplication instance;
+    private List<NoticeInfo> noticeList = new ArrayList<>();
 
-    public static MyApplication getInstance() {return instance;}
-    private String  location;
+
+    public static MyApplication getInstance()
+    {
+        return instance;
+    }
+
+    private String location;
 
     @Override
     public void onCreate()
@@ -44,7 +51,7 @@ public class MyApplication extends Application
 
     private void initPhotoData()
     {
-        for (int i = 0; i < 1000; i++)
+        for (int i = 0; i < 10000; i++)
         {
             int randmon = (int) (Math.random() * 200);
             photoDataList.add(randmon);
@@ -79,4 +86,13 @@ public class MyApplication extends Application
     }
 
 
+    public List<NoticeInfo> getNoticeList()
+    {
+        return noticeList;
+    }
+
+    public void setNoticeList(List<NoticeInfo> noticeList)
+    {
+        this.noticeList = noticeList;
+    }
 }

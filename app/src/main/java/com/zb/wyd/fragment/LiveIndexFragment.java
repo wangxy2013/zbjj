@@ -4,11 +4,17 @@ package com.zb.wyd.fragment;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.Html;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,29 +26,26 @@ import com.donkingliang.banner.CustomBanner;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zb.wyd.MyApplication;
 import com.zb.wyd.R;
-import com.zb.wyd.activity.AddPhotoActivity;
 import com.zb.wyd.activity.BaseHandler;
 import com.zb.wyd.activity.LiveActivity;
 import com.zb.wyd.activity.LoginActivity;
 import com.zb.wyd.activity.PhotoDetailActivity;
 import com.zb.wyd.activity.VideoPlayActivity;
-import com.zb.wyd.activity.VidoeListActivity;
 import com.zb.wyd.activity.WebViewActivity;
 import com.zb.wyd.adapter.NewAdapter;
 import com.zb.wyd.adapter.RecommendAdapter;
 import com.zb.wyd.entity.AdInfo;
 import com.zb.wyd.entity.LiveInfo;
-import com.zb.wyd.entity.LocationInfo;
+import com.zb.wyd.entity.NoticeInfo;
 import com.zb.wyd.entity.VideoInfo;
 import com.zb.wyd.http.DataRequest;
 import com.zb.wyd.http.HttpRequest;
 import com.zb.wyd.http.IRequestListener;
 import com.zb.wyd.json.AdInfoListHandler;
 import com.zb.wyd.json.LiveInfoListHandler;
-import com.zb.wyd.json.LocationInfoHandler;
+import com.zb.wyd.json.NoticeListHandler;
 import com.zb.wyd.listener.MyItemClickListener;
 import com.zb.wyd.utils.APPUtils;
-import com.zb.wyd.utils.ConfigManager;
 import com.zb.wyd.utils.ConstantUtil;
 import com.zb.wyd.utils.Urls;
 import com.zb.wyd.widget.FullyGridLayoutManager;
@@ -50,6 +53,7 @@ import com.zb.wyd.widget.MaxRecyclerView;
 import com.zb.wyd.widget.VerticalSwipeRefreshLayout;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,6 +61,8 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import cc.ibooker.ztextviewlib.AutoVerticalScrollTextView;
+import cc.ibooker.ztextviewlib.AutoVerticalScrollTextViewUtil;
 
 /**
  * 描述：一句话简单描述
@@ -64,46 +70,56 @@ import butterknife.Unbinder;
 public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, IRequestListener, View.OnClickListener
 {
 
+
+    @BindView(R.id.tv_notice)
+    AutoVerticalScrollTextView tvNotice;
+
     @BindView(R.id.banner)
-    CustomBanner               mBanner;
+    CustomBanner mBanner;
     @BindView(R.id.rl_all_recommend)
-    RelativeLayout             rlAllRecommend;
+    RelativeLayout rlAllRecommend;
     @BindView(R.id.rv_recommend)
-    MaxRecyclerView            rvRecommend;
+    MaxRecyclerView rvRecommend;
     @BindView(R.id.rl_all_new)
-    RelativeLayout             rlAllHotLayout;
+    RelativeLayout rlAllHotLayout;
     @BindView(R.id.rv_new)
-    MaxRecyclerView            rvHot;
+    MaxRecyclerView rvHot;
     @BindView(R.id.swipeRefresh)
     VerticalSwipeRefreshLayout mSwipeRefreshLayout;
     private View rootView = null;
     private Unbinder unbinder;
-    private List<String>   picList      = new ArrayList<>();
+
+
+    private List<String> picList = new ArrayList<>();
     private List<LiveInfo> freeLiveList = new ArrayList<>();
-    private List<LiveInfo> newLiveList  = new ArrayList<>();
-    private List<AdInfo>   adInfoList   = new ArrayList<>();
+    private List<LiveInfo> newLiveList = new ArrayList<>();
+    private List<AdInfo> adInfoList = new ArrayList<>();
     private RecommendAdapter mRecommendAdapter;
-    private NewAdapter       mHotAdapter;
-    private int              getFreeCount, getHotCount;
+    private NewAdapter mHotAdapter;
+    private int getFreeCount, getHotCount;
+
+    private AutoVerticalScrollTextViewUtil aUtil;
 
 
-    private static final String GET_LOCATION          = "get_location";
-    private static final String GET_FREE_LIVE         = "get_free_live";
-    private static final String GET_HOT_LIVE          = "get_hot_live";
-    private static final String GET_AD_LIST           = "get_ad_list";
-    private static final int    GET_FREE_LIVE_SUCCESS = 0x01;
-    private static final int    REQUEST_FAIL          = 0x02;
-    private static final int    GET_HOT_LIVE_SUCCESS  = 0x03;
+    private static final String GET_NOTICE = "get_notice";
+    private static final String GET_LOCATION = "get_location";
+    private static final String GET_FREE_LIVE = "get_free_live";
+    private static final String GET_HOT_LIVE = "get_hot_live";
+    private static final String GET_AD_LIST = "get_ad_list";
+    private static final int GET_FREE_LIVE_SUCCESS = 0x01;
+    private static final int REQUEST_FAIL = 0x02;
+    private static final int GET_HOT_LIVE_SUCCESS = 0x03;
 
-    private static final int GET_AD_LIST_CODE   = 0X10;
+    private static final int GET_AD_LIST_CODE = 0X10;
     private static final int GET_FREE_LIVE_CODE = 0X11;
-    private static final int GET_HOT_LIVE_CODE  = 0X12;
+    private static final int GET_HOT_LIVE_CODE = 0X12;
+    private static final int GET_NOTICE_LIST_CODE = 0X15;
 
-
-    private static final int GET_FREE_LIVE_FAIL  = 0X13;
-    private static final int GET_HOT_LIVE_FAIL   = 0X14;
+    private static final int GET_FREE_LIVE_FAIL = 0X13;
+    private static final int GET_HOT_LIVE_FAIL = 0X14;
     private static final int GET_AD_LIST_SUCCESS = 0x04;
 
+    private static final int GET_NOTICE_LIST_SUCCESS = 0x06;
 
 
     @SuppressLint("HandlerLeak")
@@ -122,7 +138,7 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
                     freeLiveList.addAll(mLiveInfoListHandler.getUserInfoList());
                     mRecommendAdapter.notifyDataSetChanged();
 
-                    if(freeLiveList.isEmpty())
+                    if (freeLiveList.isEmpty())
                     {
                         rlAllRecommend.setVisibility(View.GONE);
                     }
@@ -190,6 +206,40 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
                         mHandler.sendEmptyMessage(GET_HOT_LIVE_CODE);
                     }
                     break;
+
+                case GET_NOTICE_LIST_CODE:
+                    getNoticeList();
+                    break;
+
+                case GET_NOTICE_LIST_SUCCESS:
+                    NoticeListHandler mNoticeListHandler = (NoticeListHandler) msg.obj;
+                    List<NoticeInfo> noticeInfoList = mNoticeListHandler.getNoticeInfoList();
+                    MyApplication.getInstance().setNoticeList(noticeInfoList);
+
+
+                    ArrayList<CharSequence> list = new ArrayList<>();
+                    for (int i = 0; i < noticeInfoList.size(); i++)
+                    {
+
+                        list.add(Html.fromHtml("<font color='" + noticeInfoList.get(i).getColor() + "'>" + noticeInfoList.get(i).getFrontContent() + "</font>"));
+
+                    }
+
+                    // 初始化
+                    aUtil = new AutoVerticalScrollTextViewUtil(tvNotice, list);
+                    // 设置上下滚动事件间隔
+                    aUtil.setDuration(5000).start();
+                    aUtil.setOnMyClickListener(new AutoVerticalScrollTextViewUtil.OnMyClickListener()
+                    {
+                        @Override
+                        public void onMyClickListener(int i, CharSequence charSequence)
+                        {
+                            NoticeInfo mNoticeInfo = noticeInfoList.get(i);
+                            if (null != mNoticeInfo) adClick(mNoticeInfo.getLink());
+                        }
+                    });
+                    break;
+
             }
         }
     };
@@ -237,7 +287,6 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
     @Override
     protected void initViews()
     {
-
     }
 
     @Override
@@ -245,6 +294,7 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
     {
         mSwipeRefreshLayout.setOnRefreshListener(this);
         rlAllHotLayout.setOnClickListener(this);
+
     }
 
     @Override
@@ -286,10 +336,7 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
                     //                    Bundle b = new Bundle();
                     //                    b.putSerializable("LiveInfo", mLiveInfo);
                     //                    startActivity(new Intent(getActivity(), LiveActivity.class).putExtras(b));
-                    startActivity(new Intent(getActivity(), LiveActivity.class)
-                            .putExtra("biz_id", mLiveInfo.getId())
-                            .putExtra("location", mLiveInfo.getLocation())
-                    );
+                    startActivity(new Intent(getActivity(), LiveActivity.class).putExtra("biz_id", mLiveInfo.getId()).putExtra("location", mLiveInfo.getLocation()));
 
                 }
                 else
@@ -300,6 +347,7 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
         });
         rvHot.setLayoutManager(new FullyGridLayoutManager(getActivity(), 2));
         rvHot.setAdapter(mHotAdapter);
+
 
     }
 
@@ -317,7 +365,8 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
     private void loadData()
     {
         mHandler.sendEmptyMessage(GET_FREE_LIVE_CODE);
-         mHandler.sendEmptyMessage(GET_HOT_LIVE_CODE);
+        mHandler.sendEmptyMessage(GET_HOT_LIVE_CODE);
+        mHandler.sendEmptyMessage(GET_NOTICE_LIST_CODE);
 
     }
 
@@ -325,15 +374,19 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
     {
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("pos_id", "1");
-        DataRequest.instance().request(getActivity(), Urls.getAdListUrl(), this, HttpRequest.GET, GET_AD_LIST, valuePairs,
-                new AdInfoListHandler());
+        DataRequest.instance().request(getActivity(), Urls.getAdListUrl(), this, HttpRequest.GET, GET_AD_LIST, valuePairs, new AdInfoListHandler());
+    }
+
+    private void getNoticeList()
+    {
+        Map<String, String> valuePairs = new HashMap<>();
+        DataRequest.instance().request(getActivity(), Urls.getNoticeUrl(), this, HttpRequest.GET, GET_NOTICE, valuePairs, new NoticeListHandler());
     }
 
     private void getFreeLive()
     {
         Map<String, String> valuePairs = new HashMap<>();
-        DataRequest.instance().request(getActivity(), Urls.getFreeLive(), this, HttpRequest.GET, GET_FREE_LIVE, valuePairs,
-                new LiveInfoListHandler());
+        DataRequest.instance().request(getActivity(), Urls.getFreeLive(), this, HttpRequest.GET, GET_FREE_LIVE, valuePairs, new LiveInfoListHandler());
     }
 
     private void getHotLive()
@@ -343,15 +396,14 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
         valuePairs.put("num", "20");
         valuePairs.put("location", MyApplication.getInstance().getLocation());
         valuePairs.put("sort", "hot");
-        DataRequest.instance().request(getActivity(), Urls.getNewLive(), this, HttpRequest.GET, GET_HOT_LIVE, valuePairs,
-                new LiveInfoListHandler());
+        DataRequest.instance().request(getActivity(), Urls.getNewLive(), this, HttpRequest.GET, GET_HOT_LIVE, valuePairs, new LiveInfoListHandler());
     }
 
     private void initAd()
     {
         int width = APPUtils.getScreenWidth(getActivity());
         int height = (int) (width * 0.4);
-        if(null ==mBanner)
+        if (null == mBanner)
         {
             return;
         }
@@ -417,40 +469,43 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
                 //position 轮播图的第几个项
                 //str 轮播图当前项对应的数据
                 AdInfo mAdInfo = adInfoList.get(position);
-                if (!TextUtils.isEmpty(mAdInfo.getLink()))
-                {
-                    if (mAdInfo.getLink().startsWith("video://"))
-                    {
-                        String id = mAdInfo.getLink().replace("video://", "");
-                        VideoInfo mVideoInfo = new VideoInfo();
-                        mVideoInfo.setId(id);
-                        mVideoInfo.setV_name("点播");
-                        Bundle b = new Bundle();
-                        b.putSerializable("VideoInfo", mVideoInfo);
-                        startActivity(new Intent(getActivity(), VideoPlayActivity.class).putExtras(b));
-                    }
-                    else if (mAdInfo.getLink().startsWith("live://"))
-                    {
-                        String id = mAdInfo.getLink().replace("live://", "");
-                        startActivity(new Intent(getActivity(), LiveActivity.class).putExtra("biz_id", id));
-                    }
-                    else if (mAdInfo.getLink().startsWith("photo://"))
-                    {
-                        String id = mAdInfo.getLink().replace("photo://", "");
-                        startActivity(new Intent(getActivity(), PhotoDetailActivity.class).putExtra("biz_id", id));
-                    }
-                    else if (mAdInfo.getLink().startsWith("http"))
-                    {
-                        startActivity(new Intent(getActivity(), WebViewActivity.class)
-                                .putExtra(WebViewActivity.EXTRA_TITLE, mAdInfo.getAname())
-                                .putExtra(WebViewActivity.IS_SETTITLE, true)
-                                .putExtra(WebViewActivity.EXTRA_URL, mAdInfo.getLink())
-                        );
-                    }
-                }
+                adClick(mAdInfo.getLink());
             }
         });
 
+    }
+
+
+    private void adClick(String link)
+    {
+        if (!TextUtils.isEmpty(link))
+        {
+            if (link.startsWith("video://"))
+            {
+                String id = link.replace("video://", "");
+                VideoInfo mVideoInfo = new VideoInfo();
+                mVideoInfo.setId(id);
+                mVideoInfo.setV_name("点播");
+                Bundle b = new Bundle();
+                b.putSerializable("VideoInfo", mVideoInfo);
+                startActivity(new Intent(getActivity(), VideoPlayActivity.class).putExtras(b));
+            }
+            else if (link.startsWith("live://"))
+            {
+                String id = link.replace("live://", "");
+                startActivity(new Intent(getActivity(), LiveActivity.class).putExtra("biz_id", id));
+            }
+            else if (link.startsWith("photo://"))
+            {
+                String id = link.replace("photo://", "");
+                startActivity(new Intent(getActivity(), PhotoDetailActivity.class).putExtra("biz_id", id));
+            }
+            else if (link.startsWith("http"))
+            {
+                startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra(WebViewActivity.EXTRA_TITLE, "详情")
+                        .putExtra(WebViewActivity.IS_SETTITLE, true).putExtra(WebViewActivity.EXTRA_URL, link));
+            }
+        }
     }
 
     @Override
@@ -507,8 +562,13 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
                 mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
             }
         }
-
-
+        else if (GET_NOTICE.equals(action))
+        {
+            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(GET_NOTICE_LIST_SUCCESS, obj));
+            }
+        }
 
     }
 
@@ -529,6 +589,11 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
         {
             unbinder.unbind();
             unbinder = null;
+        }
+
+        if (null != aUtil)
+        {
+            aUtil.stop();
         }
         mHandler.removeCallbacksAndMessages(null);
     }

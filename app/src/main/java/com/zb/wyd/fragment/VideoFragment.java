@@ -10,6 +10,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +35,7 @@ import com.zb.wyd.adapter.IntegerAreaAdapter;
 import com.zb.wyd.adapter.VideoAdapter;
 import com.zb.wyd.entity.AdInfo;
 import com.zb.wyd.entity.CataInfo;
+import com.zb.wyd.entity.NoticeInfo;
 import com.zb.wyd.entity.VideoInfo;
 import com.zb.wyd.http.DataRequest;
 import com.zb.wyd.http.HttpRequest;
@@ -59,6 +61,8 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import cc.ibooker.ztextviewlib.AutoVerticalScrollTextView;
+import cc.ibooker.ztextviewlib.AutoVerticalScrollTextViewUtil;
 
 /**
  * 描述：一句话简单描述
@@ -66,7 +70,8 @@ import butterknife.Unbinder;
 public class VideoFragment extends BaseFragment implements IRequestListener, View.OnClickListener, PullToRefreshBase.OnRefreshListener<RecyclerView>,
         SwipeRefreshLayout.OnRefreshListener
 {
-
+    @BindView(R.id.tv_notice)
+    AutoVerticalScrollTextView tvNotice;
     @BindView(R.id.banner)
     CustomBanner               mBanner;
     @BindView(R.id.iv_show)
@@ -88,7 +93,7 @@ public class VideoFragment extends BaseFragment implements IRequestListener, Vie
     private CataAdapter mCataAdapter;
     private View rootView = null;
     private Unbinder unbinder;
-
+    private AutoVerticalScrollTextViewUtil aUtil;
 
     private List<String> picList    = new ArrayList<>();
     private List<AdInfo> adInfoList = new ArrayList<>();
@@ -190,6 +195,30 @@ public class VideoFragment extends BaseFragment implements IRequestListener, Vie
                     {
                         initAd();
                     }
+                    List<NoticeInfo> noticeInfoList = MyApplication.getInstance().getNoticeList();
+
+                    ArrayList<CharSequence> list = new ArrayList<>();
+                    for (int i = 0; i < noticeInfoList.size(); i++)
+                    {
+
+                        list.add(Html.fromHtml("<font color='" + noticeInfoList.get(i).getColor() + "'>" + noticeInfoList.get(i).getFrontContent() + "</font>"));
+
+                    }
+
+                    // 初始化
+                    aUtil = new AutoVerticalScrollTextViewUtil(tvNotice, list);
+                    // 设置上下滚动事件间隔
+                    aUtil.setDuration(5000).start();
+                    aUtil.setOnMyClickListener(new AutoVerticalScrollTextViewUtil.OnMyClickListener()
+                    {
+                        @Override
+                        public void onMyClickListener(int i, CharSequence charSequence)
+                        {
+                            NoticeInfo mNoticeInfo = noticeInfoList.get(i);
+                            if (null != mNoticeInfo)
+                                adClick(mNoticeInfo.getLink());
+                        }
+                    });
                     break;
                 case GET_AD_lIST_CODE:
                     getAdList();
@@ -199,7 +228,37 @@ public class VideoFragment extends BaseFragment implements IRequestListener, Vie
         }
     };
 
-
+    private void adClick(String link)
+    {
+        if (!TextUtils.isEmpty(link))
+        {
+            if (link.startsWith("video://"))
+            {
+                String id = link.replace("video://", "");
+                VideoInfo mVideoInfo = new VideoInfo();
+                mVideoInfo.setId(id);
+                mVideoInfo.setV_name("点播");
+                Bundle b = new Bundle();
+                b.putSerializable("VideoInfo", mVideoInfo);
+                startActivity(new Intent(getActivity(), VideoPlayActivity.class).putExtras(b));
+            }
+            else if (link.startsWith("live://"))
+            {
+                String id = link.replace("live://", "");
+                startActivity(new Intent(getActivity(), LiveActivity.class).putExtra("biz_id", id));
+            }
+            else if (link.startsWith("photo://"))
+            {
+                String id = link.replace("photo://", "");
+                startActivity(new Intent(getActivity(), PhotoDetailActivity.class).putExtra("biz_id", id));
+            }
+            else if (link.startsWith("http"))
+            {
+                startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra(WebViewActivity.EXTRA_TITLE, "详情")
+                        .putExtra(WebViewActivity.IS_SETTITLE, true).putExtra(WebViewActivity.EXTRA_URL, link));
+            }
+        }
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -474,6 +533,10 @@ public class VideoFragment extends BaseFragment implements IRequestListener, Vie
         {
             unbinder.unbind();
             unbinder = null;
+        }
+        if (null != aUtil)
+        {
+            aUtil.stop();
         }
     }
 

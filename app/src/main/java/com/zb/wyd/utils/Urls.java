@@ -319,5 +319,15 @@ public class Urls
         return ConfigManager.instance().getDomainName() + "/fortune/buy";
     }
 
+
+    //获取消息
+    public static String getNoticeUrl()
+    {
+        return ConfigManager.instance().getDomainName() + "/msg/notice";
+    }
+
+
+
+
 }
 

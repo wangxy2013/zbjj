@@ -116,6 +116,12 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
 
     @BindView(R.id.rl_task)
     RelativeLayout rlTask;
+    @BindView(R.id.iv_member_type)
+    ImageView ivMemberType;
+    @BindView(R.id.tv_vip_level)
+    TextView tvVipLevel;
+    @BindView(R.id.tv_end_time)
+    TextView tvEndTime;
 
     private View rootView = null;
     private Unbinder unbinder;
@@ -144,6 +150,8 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
                         String unick = userInfo.getUnick();
                         FortuneInfo fortune = userInfo.getFortuneInfo();
                         String vip_level = userInfo.getVip_level();
+                        int vip_type = userInfo.getVip_type();
+                        String vip_expire = userInfo.getVip_expire();
                         ConfigManager.instance().setUserRole(Integer.parseInt(userInfo.getRole()));
                         ImageLoader.getInstance().displayImage(userInfo.getUface(), ivUserPic);
                         if ("-".equals(unick) || StringUtils.stringIsEmpty(unick))
@@ -169,6 +177,66 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
                         {
                             tvEmail.setText(userInfo.getEmail());
                         }
+
+                        tvVipLevel.setText("VIP" + vip_level);
+
+                        switch (vip_type)
+                        {
+                            //普通会员
+                            case 0:
+                                tvUserStatus.setText("开通会员");
+                                tvEndTime.setText("您还不是会员");
+                                ivMemberType.setVisibility(View.GONE);
+                                break;
+
+                            //包月
+                            case 1:
+                                if(userInfo.isValid_vip())
+                                {
+                                    ivMemberType.setVisibility(View.VISIBLE);
+                                    ivMemberType.setImageResource(R.drawable.ic_member_month);
+                                }
+                                else
+                                {
+                                    ivMemberType.setVisibility(View.GONE);
+                                }
+                                tvEndTime.setText("有效期:" + vip_expire);
+                                tvUserStatus.setText("续费会员");
+                                break;
+
+                            //包季
+                            case 2:
+                                if(userInfo.isValid_vip())
+                                {
+                                    ivMemberType.setVisibility(View.VISIBLE);
+                                    ivMemberType.setImageResource(R.drawable.ic_member_jidu);
+                                }
+                                else
+                                {
+                                    ivMemberType.setVisibility(View.GONE);
+
+                                }
+                                tvUserStatus.setText("续费会员");
+                                tvEndTime.setText("有效期:" + vip_expire);
+                                break;
+
+                            //包年
+                            case 3:
+                                if(userInfo.isValid_vip())
+                                {
+                                    ivMemberType.setVisibility(View.VISIBLE);
+                                    ivMemberType.setImageResource(R.drawable.ic_member_year);
+                                }
+                                else
+                                {
+                                    ivMemberType.setVisibility(View.GONE);
+
+                                }
+                                tvUserStatus.setText("续费会员");
+                                tvEndTime.setText("有效期:" + vip_expire);
+                                break;
+                        }
+
 
                     }
                     break;
@@ -402,7 +470,11 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
             //                }
             //            }
 
-            startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra(WebViewActivity.EXTRA_TITLE, "帮助中心").putExtra(WebViewActivity.IS_SETTITLE, true).putExtra(WebViewActivity.EXTRA_URL, Urls.getSrviceUrl()));
+            startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra(WebViewActivity.EXTRA_TITLE, "帮助中心")
+                    .putExtra(WebViewActivity.IS_SETTITLE, true)
+                    .putExtra("TYPE", "CUSTOMER")
+                    .putExtra(WebViewActivity.EXTRA_URL, Urls.getSrviceUrl())
+            );
 
 
         }
@@ -417,15 +489,16 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
         }
         else if (v == rlExtension)
         {
-            if (MyApplication.getInstance().isLogin())
-            {
-                startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra(WebViewActivity.EXTRA_TITLE, "我的推广").putExtra(WebViewActivity.IS_SETTITLE, true).putExtra(WebViewActivity.EXTRA_URL, Urls.getInviteUrl()));
-            }
-            else
-            {
-                startActivity(new Intent(getActivity(), LoginActivity.class));
-            }
+//            if (MyApplication.getInstance().isLogin())
+//            {
+//                startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra(WebViewActivity.EXTRA_TITLE, "我的推广").putExtra(WebViewActivity.IS_SETTITLE, true).putExtra(WebViewActivity.EXTRA_URL, Urls.getInviteUrl()));
+//            }
+//            else
+//            {
+//                startActivity(new Intent(getActivity(), LoginActivity.class));
+//            }
 
+            ToastUtil.show(getActivity(),"功能开发中");
         }
         else if (v == rlTask)
         {
@@ -497,4 +570,5 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
 
 
     }
+
 }

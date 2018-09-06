@@ -1,5 +1,7 @@
 package com.zb.wyd.entity;
 
+import com.zb.wyd.utils.ConfigManager;
+
 import org.json.JSONObject;
 
 import java.io.Serializable;
@@ -29,14 +31,19 @@ public class UserInfo implements Serializable
     private String role;//
     private String vip_level;//
     private String vip_expire;//
+    private int vip_type;
     private String login_time;//
     private String login_ip;//
-   // private String fortune;//
+    // private String fortune;//
     private String unick;//
     private String total_score;
 
+    private boolean valid_vip;
     private FortuneInfo fortuneInfo;
-    public UserInfo() {}
+
+    public UserInfo()
+    {
+    }
 
     public UserInfo(JSONObject obj)
     {
@@ -50,10 +57,10 @@ public class UserInfo implements Serializable
         this.vip_expire = obj.optString("vip_expire");
         this.login_time = obj.optString("login_time");
         this.login_ip = obj.optString("login_ip");
-      //  this.fortune = obj.optString("fortune");
+        //  this.fortune = obj.optString("fortune");
         this.total_score = obj.optString("total_score");
         this.has_favorite = obj.optString("has_favorite");
-
+        this.vip_type = obj.optInt("vip_type") ;
         this.id = obj.optString("id");
         this.uface = obj.optString("uface");
         this.nick = obj.optString("nick");
@@ -63,6 +70,10 @@ public class UserInfo implements Serializable
         this.update_time = obj.optString("update_time");
         this.online = obj.optString("online");
         this.is_live = obj.optString("is_live");
+        this.valid_vip = obj.optBoolean("valid_vip");
+        this.vip_type = obj.optInt("vip_type");
+
+        ConfigManager.instance().setValid_vip(obj.optBoolean("valid_vip"));
 
     }
 
@@ -284,5 +295,25 @@ public class UserInfo implements Serializable
     public void setFortuneInfo(FortuneInfo fortuneInfo)
     {
         this.fortuneInfo = fortuneInfo;
+    }
+
+    public int getVip_type()
+    {
+        return vip_type;
+    }
+
+    public void setVip_type(int vip_type)
+    {
+        this.vip_type = vip_type;
+    }
+
+    public boolean isValid_vip()
+    {
+        return valid_vip;
+    }
+
+    public void setValid_vip(boolean valid_vip)
+    {
+        this.valid_vip = valid_vip;
     }
 }

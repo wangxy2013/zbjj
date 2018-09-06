@@ -10,6 +10,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +35,7 @@ import com.zb.wyd.adapter.SelfieAdapter;
 import com.zb.wyd.entity.AdInfo;
 import com.zb.wyd.entity.CataInfo;
 import com.zb.wyd.entity.LiveInfo;
+import com.zb.wyd.entity.NoticeInfo;
 import com.zb.wyd.entity.SelfieInfo;
 import com.zb.wyd.entity.VideoInfo;
 import com.zb.wyd.http.DataRequest;
@@ -63,12 +65,16 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import cc.ibooker.ztextviewlib.AutoVerticalScrollTextView;
+import cc.ibooker.ztextviewlib.AutoVerticalScrollTextViewUtil;
 
 /**
  * 描述：自拍
  */
 public class SelfieFragment extends BaseFragment implements IRequestListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener
 {
+    @BindView(R.id.tv_notice)
+    AutoVerticalScrollTextView tvNotice;
 
     @BindView(R.id.banner)
     CustomBanner               mBanner;
@@ -90,10 +96,9 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
     VerticalSwipeRefreshLayout mSwipeRefreshLayout;
     private List<CataInfo> cataInfoList = new ArrayList<>();
     private CataAdapter mCataAdapter;
-
+    private AutoVerticalScrollTextViewUtil aUtil;
 
     private int getPhotoCount;
-
     private List<SelfieInfo> selfieInfoList = new ArrayList<>();
     private SelfieAdapter mSelfieAdapter;
 
@@ -198,6 +203,30 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
                     {
                         initAd();
                     }
+                    List<NoticeInfo> noticeInfoList = MyApplication.getInstance().getNoticeList();
+
+                    ArrayList<CharSequence> list = new ArrayList<>();
+                    for (int i = 0; i < noticeInfoList.size(); i++)
+                    {
+
+                        list.add(Html.fromHtml("<font color='" + noticeInfoList.get(i).getColor() + "'>" + noticeInfoList.get(i).getFrontContent() + "</font>"));
+
+                    }
+
+                    // 初始化
+                    aUtil = new AutoVerticalScrollTextViewUtil(tvNotice, list);
+                    // 设置上下滚动事件间隔
+                    aUtil.setDuration(5000).start();
+                    aUtil.setOnMyClickListener(new AutoVerticalScrollTextViewUtil.OnMyClickListener()
+                    {
+                        @Override
+                        public void onMyClickListener(int i, CharSequence charSequence)
+                        {
+                            NoticeInfo mNoticeInfo = noticeInfoList.get(i);
+                            if (null != mNoticeInfo)
+                                adClick(mNoticeInfo.getLink());
+                        }
+                    });
                     break;
 
                 case GET_AD_LIST_CODE:
@@ -207,7 +236,37 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
         }
     };
 
-
+    private void adClick(String link)
+    {
+        if (!TextUtils.isEmpty(link))
+        {
+            if (link.startsWith("video://"))
+            {
+                String id = link.replace("video://", "");
+                VideoInfo mVideoInfo = new VideoInfo();
+                mVideoInfo.setId(id);
+                mVideoInfo.setV_name("点播");
+                Bundle b = new Bundle();
+                b.putSerializable("VideoInfo", mVideoInfo);
+                startActivity(new Intent(getActivity(), VideoPlayActivity.class).putExtras(b));
+            }
+            else if (link.startsWith("live://"))
+            {
+                String id = link.replace("live://", "");
+                startActivity(new Intent(getActivity(), LiveActivity.class).putExtra("biz_id", id));
+            }
+            else if (link.startsWith("photo://"))
+            {
+                String id = link.replace("photo://", "");
+                startActivity(new Intent(getActivity(), PhotoDetailActivity.class).putExtra("biz_id", id));
+            }
+            else if (link.startsWith("http"))
+            {
+                startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra(WebViewActivity.EXTRA_TITLE, "详情")
+                        .putExtra(WebViewActivity.IS_SETTITLE, true).putExtra(WebViewActivity.EXTRA_URL, link));
+            }
+        }
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -492,37 +551,38 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
                 //position 轮播图的第几个项
                 //str 轮播图当前项对应的数据
                 AdInfo mAdInfo = adInfoList.get(position);
-                if (!TextUtils.isEmpty(mAdInfo.getLink()))
-                {
-                    if (mAdInfo.getLink().startsWith("video://"))
-                    {
-                        String id = mAdInfo.getLink().replace("video://", "");
-                        VideoInfo mVideoInfo = new VideoInfo();
-                        mVideoInfo.setId(id);
-                        mVideoInfo.setV_name("点播");
-                        Bundle b = new Bundle();
-                        b.putSerializable("VideoInfo", mVideoInfo);
-                        startActivity(new Intent(getActivity(), VideoPlayActivity.class).putExtras(b));
-                    }
-                    else if (mAdInfo.getLink().startsWith("live://"))
-                    {
-                        String id = mAdInfo.getLink().replace("live://", "");
-                        startActivity(new Intent(getActivity(), LiveActivity.class).putExtra("biz_id", id));
-                    }
-                    else if (mAdInfo.getLink().startsWith("photo://"))
-                    {
-                        String id = mAdInfo.getLink().replace("photo://", "");
-                        startActivity(new Intent(getActivity(), PhotoDetailActivity.class).putExtra("biz_id", id));
-                    }
-                    else if (mAdInfo.getLink().startsWith("http"))
-                    {
-                        startActivity(new Intent(getActivity(), WebViewActivity.class)
-                                .putExtra(WebViewActivity.EXTRA_TITLE, mAdInfo.getAname())
-                                .putExtra(WebViewActivity.IS_SETTITLE, true)
-                                .putExtra(WebViewActivity.EXTRA_URL, mAdInfo.getLink())
-                        );
-                    }
-                }
+                adClick(mAdInfo.getLink());
+//                if (!TextUtils.isEmpty(mAdInfo.getLink()))
+//                {
+//                    if (mAdInfo.getLink().startsWith("video://"))
+//                    {
+//                        String id = mAdInfo.getLink().replace("video://", "");
+//                        VideoInfo mVideoInfo = new VideoInfo();
+//                        mVideoInfo.setId(id);
+//                        mVideoInfo.setV_name("点播");
+//                        Bundle b = new Bundle();
+//                        b.putSerializable("VideoInfo", mVideoInfo);
+//                        startActivity(new Intent(getActivity(), VideoPlayActivity.class).putExtras(b));
+//                    }
+//                    else if (mAdInfo.getLink().startsWith("live://"))
+//                    {
+//                        String id = mAdInfo.getLink().replace("live://", "");
+//                        startActivity(new Intent(getActivity(), LiveActivity.class).putExtra("biz_id", id));
+//                    }
+//                    else if (mAdInfo.getLink().startsWith("photo://"))
+//                    {
+//                        String id = mAdInfo.getLink().replace("photo://", "");
+//                        startActivity(new Intent(getActivity(), PhotoDetailActivity.class).putExtra("biz_id", id));
+//                    }
+//                    else if (mAdInfo.getLink().startsWith("http"))
+//                    {
+//                        startActivity(new Intent(getActivity(), WebViewActivity.class)
+//                                .putExtra(WebViewActivity.EXTRA_TITLE, mAdInfo.getAname())
+//                                .putExtra(WebViewActivity.IS_SETTITLE, true)
+//                                .putExtra(WebViewActivity.EXTRA_URL, mAdInfo.getLink())
+//                        );
+//                    }
+//                }
             }
         });
 
@@ -536,6 +596,10 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
         {
             unbinder.unbind();
             unbinder = null;
+        }
+        if (null != aUtil)
+        {
+            aUtil.stop();
         }
         mHandler.removeCallbacksAndMessages(null);
     }

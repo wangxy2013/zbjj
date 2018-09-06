@@ -46,12 +46,12 @@ public class SpaceImageDetailActivity extends BaseActivity
     private int mHeight;
     private SmoothImageView mSmoothImageView = null;
     private ImageView mDownloadIv;
-    private String    mImgUrl;
+    private String mImgUrl;
 
-    private static final int         SHOW_PROGRESSDIALOG = 0x01;
-    private static final int         HIDE_PROGRESSDIALOG = 0x02;
+    private static final int SHOW_PROGRESSDIALOG = 0x01;
+    private static final int HIDE_PROGRESSDIALOG = 0x02;
     @SuppressLint("HandlerLeak")
-    private              BaseHandler mHandler            = new BaseHandler(SpaceImageDetailActivity.this)
+    private BaseHandler mHandler = new BaseHandler(SpaceImageDetailActivity.this)
     {
         @Override
         public void handleMessage(Message msg)
@@ -157,7 +157,7 @@ public class SpaceImageDetailActivity extends BaseActivity
             public void onClick(View v)
             {
 
-                if (ConfigManager.instance().getVipLevelVIE() <= 0)
+                if (ConfigManager.instance().getVipLevelVIE() <= 0 && !ConfigManager.instance().getValid_vip())
                 {
                     DialogUtils.showPromptDialog(SpaceImageDetailActivity.this, "VIP可下载", new MyItemClickListener()
                     {
@@ -199,7 +199,8 @@ public class SpaceImageDetailActivity extends BaseActivity
                                         msg.what = HIDE_PROGRESSDIALOG;
                                         mHandler.sendMessage(msg);
                                     }
-                                } catch (IOException e)
+                                }
+                                catch (IOException e)
                                 {
                                     e.printStackTrace();
                                     Message msg = new Message();
@@ -272,10 +273,12 @@ public class SpaceImageDetailActivity extends BaseActivity
             bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
             fos.flush();
             fos.close();
-        } catch (FileNotFoundException e)
+        }
+        catch (FileNotFoundException e)
         {
             e.printStackTrace();
-        } catch (IOException e)
+        }
+        catch (IOException e)
         {
             e.printStackTrace();
         }
@@ -283,9 +286,9 @@ public class SpaceImageDetailActivity extends BaseActivity
         // 其次把文件插入到系统图库
         try
         {
-            MediaStore.Images.Media.insertImage(getContentResolver(),
-                    file.getAbsolutePath(), fileName, null);
-        } catch (FileNotFoundException e)
+            MediaStore.Images.Media.insertImage(getContentResolver(), file.getAbsolutePath(), fileName, null);
+        }
+        catch (FileNotFoundException e)
         {
             e.printStackTrace();
         }

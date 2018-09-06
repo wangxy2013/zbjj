@@ -31,6 +31,8 @@ public class LoginHandler extends JsonHandler
                 ConfigManager.instance().setVipType(obj.optInt("vip_type"));
                 ConfigManager.instance().setUserRole(obj.optInt("role"));
                 ConfigManager.instance().setUserPic(obj.optString("uface"));
+                ConfigManager.instance().setValid_vip(obj.optBoolean("valid_vip"));
+
             }
 
 

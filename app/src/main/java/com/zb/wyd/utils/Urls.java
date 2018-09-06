@@ -327,6 +327,11 @@ public class Urls
     }
 
 
+    //获取消息
+    public static String getMsgReportUrl()
+    {
+        return ConfigManager.instance().getDomainName() + "/msg/report";
+    }
 
 
 }

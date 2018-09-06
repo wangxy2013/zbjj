@@ -485,52 +485,117 @@ public class DialogUtils
         dialog.show();
     }
 
+    /**
+     * 温馨提示
+     *
+     * @return
+     */
+    public static void showReportDialog(Context mContext, MyOnClickListener.OnSubmitListener listener)
+    {
+        final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
+        dialog.setCancelable(false);
+        View v = LayoutInflater.from(mContext).inflate(R.layout.dialog_repot_msg, null);
+        dialog.setContentView(v);
+        v.findViewById(R.id.tv_msg1).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                listener.onSubmit("1");
+                dialog.dismiss();
+            }
+        });
+        v.findViewById(R.id.tv_msg2).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                listener.onSubmit("2");
+                dialog.dismiss();
+            }
+        });
+        v.findViewById(R.id.tv_msg3).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                listener.onSubmit("3");
+                dialog.dismiss();
+            }
+        });
+        v.findViewById(R.id.tv_msg4).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                listener.onSubmit("4");
+                dialog.dismiss();
+            }
+        });
 
-//    /**
-//     * 礼物
-//     *
-//     * @return
-//     */
-//    public static void showGiftDialog(Context mContext, List<GiftInfo> giftInfoList)
-//    {
-//        final Dialog dialog = new Dialog(mContext, R.style.DialogStyle);
-//        dialog.setCancelable(true);
-//        View v = LayoutInflater.from(mContext).inflate(R.layout.dialog_gift, null);
-//        dialog.setContentView(v);
-//
-//        RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
-//
-//        recyclerView.setLayoutManager(new FullyGridLayoutManager(mContext, 4));
-//
-//        GiftAdapter giftAdapter = new GiftAdapter(mContext, giftInfoList, new MyItemClickListener()
-//        {
-//            @Override
-//            public void onItemClick(View view, int position)
-//            {
-//                for (int i = 0; i < giftInfoList.size(); i++)
-//                {
-//                    if (i == position)
-//                    {
-//                        giftInfoList.get(position).setSelected(true);
-//                    }
-//                    else
-//                    {
-//                        giftInfoList.get(position).setSelected(false);
-//                    }
-//                }
-//
-//            }
-//        });
-//        recyclerView.setAdapter(giftAdapter);
-//
-//
-//        //Dialog部分
-//        Window mWindow = dialog.getWindow();
-//        WindowManager.LayoutParams lp = mWindow.getAttributes();
-//        lp.gravity = Gravity.BOTTOM;
-//        lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
-//        mWindow.setAttributes(lp);
-//        dialog.show();
-//    }
+        v.findViewById(R.id.tv_cancel).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                dialog.dismiss();
+            }
+        });
+
+
+        //Dialog部分
+        Window mWindow = dialog.getWindow();
+        WindowManager.LayoutParams lp = mWindow.getAttributes();
+        lp.gravity = Gravity.CENTER;
+        lp.width = APPUtils.getScreenWidth(mContext) * 3 / 5;
+        mWindow.setAttributes(lp);
+        dialog.show();
+    }
+    //    /**
+    //     * 礼物
+    //     *
+    //     * @return
+    //     */
+    //    public static void showGiftDialog(Context mContext, List<GiftInfo> giftInfoList)
+    //    {
+    //        final Dialog dialog = new Dialog(mContext, R.style.DialogStyle);
+    //        dialog.setCancelable(true);
+    //        View v = LayoutInflater.from(mContext).inflate(R.layout.dialog_gift, null);
+    //        dialog.setContentView(v);
+    //
+    //        RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
+    //
+    //        recyclerView.setLayoutManager(new FullyGridLayoutManager(mContext, 4));
+    //
+    //        GiftAdapter giftAdapter = new GiftAdapter(mContext, giftInfoList, new MyItemClickListener()
+    //        {
+    //            @Override
+    //            public void onItemClick(View view, int position)
+    //            {
+    //                for (int i = 0; i < giftInfoList.size(); i++)
+    //                {
+    //                    if (i == position)
+    //                    {
+    //                        giftInfoList.get(position).setSelected(true);
+    //                    }
+    //                    else
+    //                    {
+    //                        giftInfoList.get(position).setSelected(false);
+    //                    }
+    //                }
+    //
+    //            }
+    //        });
+    //        recyclerView.setAdapter(giftAdapter);
+    //
+    //
+    //        //Dialog部分
+    //        Window mWindow = dialog.getWindow();
+    //        WindowManager.LayoutParams lp = mWindow.getAttributes();
+    //        lp.gravity = Gravity.BOTTOM;
+    //        lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
+    //        mWindow.setAttributes(lp);
+    //        dialog.show();
+    //    }
 
 }

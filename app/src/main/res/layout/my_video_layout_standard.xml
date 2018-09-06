@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/black">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black">
 
     <RelativeLayout
         android:id="@+id/surface_container"
@@ -23,7 +23,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:background="#000000"
-        android:scaleType="fitCenter"/>
+        android:scaleType="fitCenter" />
 
     <LinearLayout
         android:id="@+id/layout_bottom"
@@ -38,60 +38,62 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-        <LinearLayout
-            android:layout_toLeftOf="@+id/iv_setting"
-            android:id="@+id/sp_layout"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/current"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:text="00:00"
-                android:textColor="#ffffff"/>
 
-            <SeekBar
-                android:id="@+id/progress"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:id="@+id/sp_layout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1.0"
-                android:background="@null"
-                android:max="100"
-                android:maxHeight="4dp"
-                android:minHeight="4dp"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp"
-                android:progressDrawable="@drawable/video_seek_progress"
-                android:thumb="@drawable/video_seek_thumb"/>
+                android:layout_toLeftOf="@+id/iv_setting"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/total"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="16dp"
-                android:text="00:00"
-                android:textColor="#ffffff"/>
+                <TextView
+                    android:id="@+id/current"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:text="00:00"
+                    android:textColor="#ffffff" />
+
+                <SeekBar
+                    android:id="@+id/progress"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1.0"
+                    android:background="@null"
+                    android:max="100"
+                    android:maxHeight="4dp"
+                    android:minHeight="4dp"
+                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp"
+                    android:progressDrawable="@drawable/video_seek_progress"
+                    android:thumb="@drawable/video_seek_thumb" />
+
+                <TextView
+                    android:id="@+id/total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="16dp"
+                    android:text="00:00"
+                    android:textColor="#ffffff" />
+
+                <ImageView
+                    android:id="@+id/fullscreen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:paddingRight="16dp"
+                    android:scaleType="center"
+                    android:src="@drawable/video_enlarge" />
+
+            </LinearLayout>
 
             <ImageView
-                android:id="@+id/fullscreen"
+                android:id="@+id/iv_setting"
                 android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:paddingRight="16dp"
-                android:scaleType="center"
-                android:src="@drawable/video_enlarge"/>
-
-        </LinearLayout>
-
-        <ImageView
-            android:layout_alignParentRight="true"
-            android:id="@+id/iv_setting"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/dm_15"
-            android:src="@drawable/ic_setting"/>
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/dm_15"
+                android:src="@drawable/ic_setting" />
         </RelativeLayout>
     </LinearLayout>
 
@@ -102,7 +104,7 @@
         android:layout_height="1.5dp"
         android:layout_alignParentBottom="true"
         android:max="100"
-        android:progressDrawable="@drawable/video_progress"/>
+        android:progressDrawable="@drawable/video_progress" />
 
     <ImageView
         android:id="@+id/back_tiny"
@@ -110,7 +112,7 @@
         android:layout_height="24dp"
         android:layout_marginLeft="6dp"
         android:layout_marginTop="6dp"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/layout_top"
@@ -118,6 +120,7 @@
         android:layout_height="48dp"
         android:background="@drawable/video_title_bg"
         android:gravity="center_vertical">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="48dp">
@@ -130,7 +133,7 @@
                 android:layout_centerVertical="true"
                 android:paddingLeft="10dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/video_back"/>
+                android:src="@drawable/video_back" />
 
             <TextView
                 android:id="@+id/title"
@@ -142,26 +145,38 @@
                 android:maxLines="1"
                 android:paddingLeft="10dp"
                 android:textColor="@android:color/white"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
 
             <ImageView
-                android:id="@+id/iv_collection"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/iv_report"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:scaleType="centerInside"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/dm_10"
-                android:src="@drawable/ic_video_collection_selector"/>
+                android:src="@drawable/ic_report" />
+
+            <ImageView
+                android:id="@+id/iv_collection"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:scaleType="centerInside"
+                android:layout_marginRight="@dimen/dm_10"
+                android:layout_toLeftOf="@+id/iv_report"
+                android:src="@drawable/ic_video_collection_selector" />
 
 
             <ImageView
                 android:id="@+id/iv_share"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="30dp"
+                android:scaleType="centerInside"
+                android:layout_height="30dp"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/dm_10"
                 android:layout_toLeftOf="@+id/iv_collection"
-                android:src="@drawable/ic_share_on"/>
+                android:src="@drawable/ic_share_on" />
 
         </RelativeLayout>
     </LinearLayout>
@@ -170,13 +185,13 @@
     <LinearLayout
         android:id="@+id/ll_channel"
         android:layout_width="180dp"
-        android:visibility="gone"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_marginTop="@dimen/dm_10"
         android:background="#32696969"
         android:orientation="vertical"
-        android:padding="@dimen/dm_10">
+        android:padding="@dimen/dm_10"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
@@ -186,11 +201,12 @@
             android:text="选择线路"
             android:textColor="@color/white"
             android:textSize="@dimen/t16"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/white"/>
+            android:background="@color/white" />
 
         <TextView
             android:id="@+id/tv_cm"
@@ -200,11 +216,12 @@
             android:padding="@dimen/dm_15"
             android:text="默认"
             android:textColor="@drawable/channel_font_selector"
-            android:textSize="@dimen/t14"/>
+            android:textSize="@dimen/t14" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/white"/>
+            android:background="@color/white" />
 
         <TextView
             android:id="@+id/tv_yd"
@@ -214,11 +231,12 @@
             android:padding="@dimen/dm_15"
             android:text="移动网络"
             android:textColor="@drawable/channel_font_selector"
-            android:textSize="@dimen/t14"/>
+            android:textSize="@dimen/t14" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/white"/>
+            android:background="@color/white" />
 
         <TextView
             android:id="@+id/tv_dx"
@@ -228,7 +246,7 @@
             android:padding="@dimen/dm_15"
             android:text="电信网络"
             android:textColor="@drawable/channel_font_selector"
-            android:textSize="@dimen/t14"/>
+            android:textSize="@dimen/t14" />
 
 
     </LinearLayout>
@@ -239,7 +257,7 @@
         android:layout_height="28dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:visibility="invisible"/>
+        android:visibility="invisible" />
 
     <moe.codeest.enviews.ENPlayView
         android:id="@+id/start"
@@ -247,7 +265,7 @@
         android:layout_height="60dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_gravity="center_vertical"/>
+        android:layout_gravity="center_vertical" />
 
 
     <ImageView
@@ -258,7 +276,7 @@
         android:paddingTop="10dp"
         android:scaleType="centerInside"
         android:src="@drawable/video_small_close"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/lock_screen"
@@ -269,6 +287,6 @@
         android:layout_marginRight="50dp"
         android:scaleType="centerInside"
         android:src="@drawable/unlock"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 </RelativeLayout>

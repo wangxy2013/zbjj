@@ -17,9 +17,9 @@ public class MySocketConnection extends WebSocketConnection
 
     private boolean isForced = false;
     private SocketListener mChatListener = null;
-
-
     private String url;
+
+
 
     private MySocketConnection()
     {
@@ -77,6 +77,7 @@ public class MySocketConnection extends WebSocketConnection
                 @Override
                 public void onClose(int code, String reason)//断开链接
                 {
+                    mChatListener.OnError("聊天链接异常，可退出重进");
                     if (!isForced)
                     {
                         LogUtil.e("TAG", "重新连接");

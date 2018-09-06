@@ -174,6 +174,8 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     private static final int GET_FORTUNE_GIFT_FAIL = 0x18;
     private static final int FORTUNE_BUY_SUCCESS_FAIL = 0x19;
     private static final int WEBSOCKET_CONNECT = 0x20;
+
+    private static final int SHOW_TOAST = 0X21;
     @SuppressLint("HandlerLeak")
     private NoLeakHandler mHandler = new NoLeakHandler(LiveActivity.this)
     {
@@ -391,6 +393,10 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                         webSocketConnentCount++;
                         initWebSocket();
                     }
+                    break;
+
+                case SHOW_TOAST:
+                    ToastUtil.show(LiveActivity.this, msg.obj.toString());
                     break;
             }
         }
@@ -927,8 +933,9 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         endTime = System.currentTimeMillis();
         long duration = (endTime - startTime) / 100;
         setStatistics(duration);
-        mHandler.removeCallbacksAndMessages(null);
 
+        mHandler.removeCallbacksAndMessages(null);
+        mHandler = null;
         if (mMySocketConnection != null)
         {
             mMySocketConnection.setForced(true);
@@ -1059,6 +1066,15 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                                 e.printStackTrace();
                             }
                         }
+                    }
+
+                    @Override
+                    public void OnError(String msg)
+                    {
+                        Message mMessage = new Message();
+                        mMessage.obj = msg;
+                        mMessage.what = SHOW_TOAST;
+                        if (null != mHandler) mHandler.sendMessageDelayed(mMessage, 1 * 1000);
                     }
                 });
 

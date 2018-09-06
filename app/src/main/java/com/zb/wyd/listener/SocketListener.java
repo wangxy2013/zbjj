@@ -7,4 +7,7 @@ public interface SocketListener
     public void OnOpend();
     public void OnPushMsg(String msg);
 
+    public void OnError(String msg);
+
+
 }

@@ -191,49 +191,56 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
 
                             //包月
                             case 1:
-                                if(userInfo.isValid_vip())
+                                if (userInfo.isValid_vip())
                                 {
                                     ivMemberType.setVisibility(View.VISIBLE);
                                     ivMemberType.setImageResource(R.drawable.ic_member_month);
+                                    tvEndTime.setText("有效期:" + vip_expire);
+                                    tvUserStatus.setText("续费会员");
                                 }
                                 else
                                 {
                                     ivMemberType.setVisibility(View.GONE);
+                                    tvUserStatus.setText("开通会员");
+                                    tvEndTime.setText("您还不是会员");
                                 }
-                                tvEndTime.setText("有效期:" + vip_expire);
-                                tvUserStatus.setText("续费会员");
+
                                 break;
 
                             //包季
                             case 2:
-                                if(userInfo.isValid_vip())
+                                if (userInfo.isValid_vip())
                                 {
                                     ivMemberType.setVisibility(View.VISIBLE);
                                     ivMemberType.setImageResource(R.drawable.ic_member_jidu);
+                                    tvUserStatus.setText("续费会员");
+                                    tvEndTime.setText("有效期:" + vip_expire);
                                 }
                                 else
                                 {
                                     ivMemberType.setVisibility(View.GONE);
-
+                                    tvUserStatus.setText("开通会员");
+                                    tvEndTime.setText("您还不是会员");
                                 }
-                                tvUserStatus.setText("续费会员");
-                                tvEndTime.setText("有效期:" + vip_expire);
+
                                 break;
 
                             //包年
                             case 3:
-                                if(userInfo.isValid_vip())
+                                if (userInfo.isValid_vip())
                                 {
                                     ivMemberType.setVisibility(View.VISIBLE);
                                     ivMemberType.setImageResource(R.drawable.ic_member_year);
+                                    tvUserStatus.setText("续费会员");
+                                    tvEndTime.setText("有效期:" + vip_expire);
                                 }
                                 else
                                 {
                                     ivMemberType.setVisibility(View.GONE);
-
+                                    tvUserStatus.setText("开通会员");
+                                    tvEndTime.setText("您还不是会员");
                                 }
-                                tvUserStatus.setText("续费会员");
-                                tvEndTime.setText("有效期:" + vip_expire);
+
                                 break;
                         }
 
@@ -470,11 +477,7 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
             //                }
             //            }
 
-            startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra(WebViewActivity.EXTRA_TITLE, "帮助中心")
-                    .putExtra(WebViewActivity.IS_SETTITLE, true)
-                    .putExtra("TYPE", "CUSTOMER")
-                    .putExtra(WebViewActivity.EXTRA_URL, Urls.getSrviceUrl())
-            );
+            startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra(WebViewActivity.EXTRA_TITLE, "帮助中心").putExtra(WebViewActivity.IS_SETTITLE, true).putExtra("TYPE", "CUSTOMER").putExtra(WebViewActivity.EXTRA_URL, Urls.getSrviceUrl()));
 
 
         }
@@ -489,16 +492,16 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
         }
         else if (v == rlExtension)
         {
-//            if (MyApplication.getInstance().isLogin())
-//            {
-//                startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra(WebViewActivity.EXTRA_TITLE, "我的推广").putExtra(WebViewActivity.IS_SETTITLE, true).putExtra(WebViewActivity.EXTRA_URL, Urls.getInviteUrl()));
-//            }
-//            else
-//            {
-//                startActivity(new Intent(getActivity(), LoginActivity.class));
-//            }
+            //            if (MyApplication.getInstance().isLogin())
+            //            {
+            //                startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra(WebViewActivity.EXTRA_TITLE, "我的推广").putExtra(WebViewActivity.IS_SETTITLE, true).putExtra(WebViewActivity.EXTRA_URL, Urls.getInviteUrl()));
+            //            }
+            //            else
+            //            {
+            //                startActivity(new Intent(getActivity(), LoginActivity.class));
+            //            }
 
-            ToastUtil.show(getActivity(),"功能开发中");
+            ToastUtil.show(getActivity(), "功能开发中");
         }
         else if (v == rlTask)
         {

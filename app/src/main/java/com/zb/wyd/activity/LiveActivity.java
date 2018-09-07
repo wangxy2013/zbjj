@@ -462,7 +462,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
 
                     String sendMsg = etSay.getText().toString();
 
-                    if (!TextUtils.isEmpty(sendMsg))
+                    if (!TextUtils.isEmpty(sendMsg)&& null !=mMySocketConnection && mMySocketConnection.isConnected())
                     {
                         String sendContent = "{\"type\":\"say\",\"data\":\"" + sendMsg + "\",\"action\":\"\"}";
                         LogUtil.e("TAG", "sendContent-->" + sendContent);

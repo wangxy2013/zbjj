@@ -20,6 +20,7 @@ import com.zb.wyd.fragment.IntegralRecordFragment;
 import com.zb.wyd.http.IRequestListener;
 import com.zb.wyd.utils.ToastUtil;
 import com.zb.wyd.widget.AutoFitTextView;
+import com.zb.wyd.widget.BalancePopupWindow;
 import com.zb.wyd.widget.statusbar.StatusBarUtil;
 
 import java.lang.reflect.Field;
@@ -38,8 +39,12 @@ public class WealthListActivity extends BaseActivity implements View.OnClickList
     ImageView mBackIv;
     @BindView(R.id.tv_title)
     TextView  tvTitle;
+    @BindView(R.id.ll_balance)
+    LinearLayout mBalanceLayout;
 
 
+    @BindView(R.id.iv_question)
+    ImageView ivQuestion;
     private static final String GET_WEALTH_LIST = "get_wealth_list";
 
     private static final int REQUEST_SUCCESS = 0x01;
@@ -106,6 +111,7 @@ public class WealthListActivity extends BaseActivity implements View.OnClickList
     {
         mBackIv.setOnClickListener(this);
         tvSubmit.setOnClickListener(this);
+        ivQuestion.setOnClickListener(this);
     }
 
     @Override
@@ -181,7 +187,11 @@ public class WealthListActivity extends BaseActivity implements View.OnClickList
         {
             startActivity(new Intent(WealthListActivity.this, MyMasonryActivity.class).putExtra("CASH", fortuneInfo.getCash()));
         }
-
+        else if (v == ivQuestion)
+        {
+            BalancePopupWindow  mBalancePopupWindow = new BalancePopupWindow(this);
+            mBalancePopupWindow.showAsDropDown(mBalanceLayout);
+        }
     }
 
 

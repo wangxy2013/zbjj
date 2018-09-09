@@ -82,15 +82,15 @@ public class MySocketConnection extends WebSocketConnection
                     {
                         LogUtil.e("TAG", "重新连接");
 
-                        try
-                        {
-                            Thread.sleep(30000);
-                            startConnection(url);
-                        }
-                        catch (InterruptedException e)
-                        {
-                            e.printStackTrace();
-                        }
+//                        try
+//                        {
+//                            Thread.sleep(30000);
+//                            startConnection(url);
+//                        }
+//                        catch (InterruptedException e)
+//                        {
+//                            e.printStackTrace();
+//                        }
 
                     }
 
@@ -101,19 +101,20 @@ public class MySocketConnection extends WebSocketConnection
         {
             e.printStackTrace();
             // ContextUtil.toast("WebSocketException");
+            mChatListener.OnError("聊天链接异常，可退出重进");
             if (!isForced)
             {
-                LogUtil.e("TAG", "重新连接");
+                LogUtil.e("TAG", "重新连接111");
 
-                try
-                {
-                    Thread.sleep(30000);
-                    startConnection(url);
-                }
-                catch (InterruptedException e1)
-                {
-                    e.printStackTrace();
-                }
+//                try
+//                {
+//                    Thread.sleep(30000);
+//                    startConnection(url);
+//                }
+//                catch (InterruptedException e1)
+//                {
+//                    e.printStackTrace();
+//                }
 
             }
 

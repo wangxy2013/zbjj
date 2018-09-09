@@ -31,15 +31,17 @@ public class UserInfo implements Serializable
     private String role;//
     private String vip_level;//
     private String vip_expire;//
-    private int vip_type;
+    private int    vip_type;
     private String login_time;//
     private String login_ip;//
     // private String fortune;//
     private String unick;//
     private String total_score;
 
-    private boolean valid_vip;
+    private boolean     valid_vip;
     private FortuneInfo fortuneInfo;
+
+    private boolean has_sign;
 
     public UserInfo()
     {
@@ -60,7 +62,7 @@ public class UserInfo implements Serializable
         //  this.fortune = obj.optString("fortune");
         this.total_score = obj.optString("total_score");
         this.has_favorite = obj.optString("has_favorite");
-        this.vip_type = obj.optInt("vip_type") ;
+        this.vip_type = obj.optInt("vip_type");
         this.id = obj.optString("id");
         this.uface = obj.optString("uface");
         this.nick = obj.optString("nick");
@@ -72,9 +74,19 @@ public class UserInfo implements Serializable
         this.is_live = obj.optString("is_live");
         this.valid_vip = obj.optBoolean("valid_vip");
         this.vip_type = obj.optInt("vip_type");
-
+        this.has_sign = obj.optBoolean("has_sign");
         ConfigManager.instance().setValid_vip(obj.optBoolean("valid_vip"));
 
+    }
+
+    public boolean isHas_sign()
+    {
+        return has_sign;
+    }
+
+    public void setHas_sign(boolean has_sign)
+    {
+        this.has_sign = has_sign;
     }
 
     public String getId()

@@ -246,7 +246,10 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
 
                         }
 
-                        allPic.addAll(freePic);
+                        if(chargePic.isEmpty())
+                        {
+                            allPic.addAll(freePic);
+                        }
                         allPic.addAll(chargePic);
                         mPhotoAdapter.notifyDataSetChanged();
 

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -133,7 +134,8 @@ public class DialogUtils
         Dialog loadingDialog = new Dialog(context, R.style.MyDialogStyle);// 创建自定义样式dialog
         loadingDialog.setCancelable(true); // 是否可以按“返回键”消失
         loadingDialog.setCanceledOnTouchOutside(false); // 点击加载框以外的区域
-        loadingDialog.setContentView(layout, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));// 设置布局
+        loadingDialog.setContentView(layout, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        // 设置布局
         /**
          *将显示Dialog的方法封装在这里面
          */
@@ -192,7 +194,8 @@ public class DialogUtils
      *
      * @return
      */
-    public static Dialog showToastDialog2Button(Context mContext, String str, String buttonStr, final View.OnClickListener onClickListener, final View.OnClickListener onClickListener1)
+    public static Dialog showToastDialog2Button(Context mContext, String str, String buttonStr, final View.OnClickListener onClickListener, final View
+            .OnClickListener onClickListener1)
     {
         final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
         dialog.setCancelable(false);
@@ -237,7 +240,8 @@ public class DialogUtils
      *
      * @return
      */
-    public static Dialog showLivePriceDialog(Context mContext, PriceInfo mLivePriceInfo, final View.OnClickListener cancelListener, final MyOnClickListener.OnSubmitListener listener)
+    public static Dialog showLivePriceDialog(Context mContext, PriceInfo mLivePriceInfo, final View.OnClickListener cancelListener, final MyOnClickListener
+            .OnSubmitListener listener)
     {
         final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
         dialog.setCancelable(false);
@@ -246,6 +250,7 @@ public class DialogUtils
         TextView priceTv = (TextView) v.findViewById(R.id.tv_price);
         TextView userMoneyTv = (TextView) v.findViewById(R.id.tv_user_money);
         TextView msgTv = (TextView) v.findViewById(R.id.tv_msg);
+        ImageView mClosedIv = (ImageView) v.findViewById(R.id.iv_closed);
         TextView cancelTv = (TextView) v.findViewById(R.id.tv_cancel);
         TextView submitTv = (TextView) v.findViewById(R.id.tv_submit);
         Double userMoney = Double.parseDouble(mLivePriceInfo.getUser_money());
@@ -265,7 +270,7 @@ public class DialogUtils
         if (userMoney >= price)
         {
             userMoneyTv.setText("剩余积分:" + mLivePriceInfo.getUser_money());
-            submitTv.setText("确认兑换");
+            submitTv.setText("购买VIP");
         }
         else
         {
@@ -280,18 +285,7 @@ public class DialogUtils
             public void onClick(View v)
             {
                 dialog.dismiss();
-                cancelListener.onClick(v);
-            }
-        });
-
-
-        submitTv.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                dialog.dismiss();
-
+                // cancelListener.onClick(v);
                 if (userMoney >= price)
                 {
                     listener.onSubmit("1");
@@ -300,7 +294,25 @@ public class DialogUtils
                 {
                     listener.onSubmit("2");
                 }
+            }
+        });
 
+        mClosedIv.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+                cancelListener.onClick(v);
+            }
+        });
+        submitTv.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+                listener.onSubmit("3");
             }
         });
 
@@ -320,7 +332,8 @@ public class DialogUtils
      *
      * @return
      */
-    public static Dialog showVideoPriceDialog(Context mContext, PriceInfo mLivePriceInfo, final View.OnClickListener cancelListener, final MyOnClickListener.OnSubmitListener listener)
+    public static Dialog showVideoPriceDialog(Context mContext, PriceInfo mLivePriceInfo, final View.OnClickListener cancelListener, final MyOnClickListener
+            .OnSubmitListener listener)
     {
         final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
         dialog.setCancelable(false);

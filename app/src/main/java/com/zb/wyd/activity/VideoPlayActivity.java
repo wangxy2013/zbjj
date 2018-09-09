@@ -41,6 +41,7 @@ import com.zb.wyd.utils.LogUtil;
 import com.zb.wyd.utils.SystemUtil;
 import com.zb.wyd.utils.ToastUtil;
 import com.zb.wyd.utils.Urls;
+import com.zb.wyd.widget.ChannelPopupWindow;
 import com.zb.wyd.widget.MyVideoPlayer;
 
 import java.util.HashMap;
@@ -73,6 +74,8 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
     private String shareCnontent;
     private long startTime, endTime;
     private String errorMsg = "网络异常";
+
+    private ChannelPopupWindow mChannelPopupWindow;
 
     private static final String MSG_REPORT = "msg_report";
     private static final String GET_SHARE = "GET_SHARE";
@@ -473,7 +476,33 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
                 LogUtil.e("TAG", "播放错误111111111111111111111111111111111111111111111111111");
                 errorMsg = s;
                 ToastUtil.show(VideoPlayActivity.this, "该网络暂无法播放，请切换网络重试");
-                mChannelLayout.setVisibility(View.VISIBLE);
+               // mChannelLayout.setVisibility(View.VISIBLE);
+
+                if(null ==mChannelPopupWindow )
+                {
+                    mChannelPopupWindow = new ChannelPopupWindow(VideoPlayActivity.this, new MyItemClickListener()
+                    {
+                        @Override
+                        public void onItemClick(View view, int position)
+                        {
+                            switch (position)
+                            {
+                                case 1:
+                                    playVideo(mChannelInfo.getCm() + videoUri);
+                                    break;
+                                case 2:
+                                    playVideo(mChannelInfo.getYd() + videoUri);
+                                    break;
+
+                                case 3:
+                                    playVideo(mChannelInfo.getDx() + videoUri);
+                                    break;
+                            }
+                        }
+                    });
+                }
+                mChannelPopupWindow.showAsDropDown(mShareIv);
+
                 videoPlayer.showSettingWidget();
                 //                DialogUtils.showChannelDialog(VideoPlayActivity.this, new MyItemClickListener()
                 //                {

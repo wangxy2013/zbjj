@@ -64,43 +64,43 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
 {
 
     @BindView(R.id.iv_edit)
-    ImageView ivEdit;
+    ImageView       ivEdit;
     @BindView(R.id.iv_user_pic)
     CircleImageView ivUserPic;
     @BindView(R.id.tv_user_name)
-    TextView tvUserName;
+    TextView        tvUserName;
     @BindView(R.id.tv_user_type)
-    TextView tvUserType;
+    TextView        tvUserType;
     @BindView(R.id.tv_user_sex)
-    TextView tvUserSex;
+    TextView        tvUserSex;
     @BindView(R.id.tv_user_level)
-    TextView tvUserLevel;
+    TextView        tvUserLevel;
     @BindView(R.id.rl_user)
-    RelativeLayout rlUser;
+    RelativeLayout  rlUser;
     @BindView(R.id.tv_wealth)
-    TextView tvWealth;
+    TextView        tvWealth;
     @BindView(R.id.rl_wealth)
-    RelativeLayout rlWealth;
+    RelativeLayout  rlWealth;
     @BindView(R.id.tv_email)
-    TextView tvEmail;
+    TextView        tvEmail;
     @BindView(R.id.rl_email)
-    RelativeLayout rlEmail;
+    RelativeLayout  rlEmail;
     @BindView(R.id.tv_message)
-    TextView tvMessage;
+    TextView        tvMessage;
     @BindView(R.id.rl_message)
-    RelativeLayout rlMessage;
+    RelativeLayout  rlMessage;
     @BindView(R.id.tv_collection)
-    TextView tvCollection;
+    TextView        tvCollection;
     @BindView(R.id.rl_collection)
-    RelativeLayout rlCollection;
+    RelativeLayout  rlCollection;
     @BindView(R.id.tv_customer)
-    TextView tvCustomer;
+    TextView        tvCustomer;
     @BindView(R.id.rl_customer)
-    RelativeLayout rlCustomer;
+    RelativeLayout  rlCustomer;
     @BindView(R.id.rl_extension)
-    RelativeLayout rlExtension;
+    RelativeLayout  rlExtension;
     @BindView(R.id.tv_version)
-    TextView tvVersion;
+    TextView        tvVersion;
 
     @BindView(R.id.tv_user_status)
     TextView tvUserStatus;
@@ -117,23 +117,23 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
     @BindView(R.id.rl_task)
     RelativeLayout rlTask;
     @BindView(R.id.iv_member_type)
-    ImageView ivMemberType;
+    ImageView      ivMemberType;
     @BindView(R.id.tv_vip_level)
-    TextView tvVipLevel;
+    TextView       tvVipLevel;
     @BindView(R.id.tv_end_time)
-    TextView tvEndTime;
+    TextView       tvEndTime;
 
     private View rootView = null;
     private Unbinder unbinder;
     private UserInfo userInfo;
 
-    private static final String USER_SIGN_REQUEST = "user_sign_request";
-    private static final String GET_USER_DETAIL = "get_user_detail";
-    private static final int REQUEST_SUCCESS = 0x01;
-    private static final int REQUEST_FAIL = 0x02;
-    private static final int USER_SIGN_SUCCESS = 0x03;
+    private static final String      USER_SIGN_REQUEST = "user_sign_request";
+    private static final String      GET_USER_DETAIL   = "get_user_detail";
+    private static final int         REQUEST_SUCCESS   = 0x01;
+    private static final int         REQUEST_FAIL      = 0x02;
+    private static final int         USER_SIGN_SUCCESS = 0x03;
     @SuppressLint("HandlerLeak")
-    private BaseHandler mHandler = new BaseHandler(getActivity())
+    private              BaseHandler mHandler          = new BaseHandler(getActivity())
     {
         @Override
         public void handleMessage(Message msg)
@@ -180,6 +180,14 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
 
                         tvVipLevel.setText("VIP" + vip_level);
 
+                        if (userInfo.isHas_sign())
+                        {
+                            tvSignIn.setText("已签到");
+                        }
+                        else
+                        {
+                            tvSignIn.setText("签到");
+                        }
                         switch (vip_type)
                         {
                             //普通会员
@@ -477,7 +485,8 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
             //                }
             //            }
 
-            startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra(WebViewActivity.EXTRA_TITLE, "帮助中心").putExtra(WebViewActivity.IS_SETTITLE, true).putExtra("TYPE", "CUSTOMER").putExtra(WebViewActivity.EXTRA_URL, Urls.getSrviceUrl()));
+            startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra(WebViewActivity.EXTRA_TITLE, "帮助中心").putExtra(WebViewActivity
+                    .IS_SETTITLE, true).putExtra("TYPE", "CUSTOMER").putExtra(WebViewActivity.EXTRA_URL, Urls.getSrviceUrl()));
 
 
         }
@@ -494,7 +503,8 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
         {
             //            if (MyApplication.getInstance().isLogin())
             //            {
-            //                startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra(WebViewActivity.EXTRA_TITLE, "我的推广").putExtra(WebViewActivity.IS_SETTITLE, true).putExtra(WebViewActivity.EXTRA_URL, Urls.getInviteUrl()));
+            //                startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra(WebViewActivity.EXTRA_TITLE, "我的推广").putExtra
+            // (WebViewActivity.IS_SETTITLE, true).putExtra(WebViewActivity.EXTRA_URL, Urls.getInviteUrl()));
             //            }
             //            else
             //            {
@@ -520,7 +530,8 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
             if (MyApplication.getInstance().isLogin())
             {
                 Map<String, String> valuePairs = new HashMap<>();
-                DataRequest.instance().request(getActivity(), Urls.getUserSignUrl(), this, HttpRequest.POST, USER_SIGN_REQUEST, valuePairs, new SignInfoHandler());
+                DataRequest.instance().request(getActivity(), Urls.getUserSignUrl(), this, HttpRequest.POST, USER_SIGN_REQUEST, valuePairs, new
+                        SignInfoHandler());
             }
             else
             {

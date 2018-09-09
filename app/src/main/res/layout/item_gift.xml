@@ -12,7 +12,7 @@
     <ImageView
         android:id="@+id/iv_gift_pic"
         android:layout_width="@dimen/dm_80"
-        android:layout_height="@dimen/dm_80"
+        android:layout_height="@dimen/dm_60"
         android:scaleType="center"
         android:src="@drawable/ic_gift_666" />
 
@@ -22,6 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="666"
+        android:visibility="gone"
         android:textColor="@color/white"
         android:textSize="@dimen/t14" />
 
@@ -29,7 +30,7 @@
         android:layout_marginBottom="@dimen/dm_10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dm_10">
+     >
 
 
         <ImageView

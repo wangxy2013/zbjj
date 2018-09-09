@@ -96,7 +96,7 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
     private final        int         REQUEST_FAIL             = 0x02;
     private final        int         GET_VIDEO_PRICE_SUCCESS  = 0x03;
     private final        int         FAVORITE_LIKE_SUCCESS    = 0x08;
-    private final        int         UN_FAVORITE_LIKE_SUCCESS    = 0x09;
+    private final        int         UN_FAVORITE_LIKE_SUCCESS = 0x09;
     private final        int         GET_SHARE_CODE           = 0x11;
     private final        int         GET_SHARE_SUCCESS        = 0x12;
     private final        int         GET_TASK_SHARE_CODE      = 0x13;
@@ -205,7 +205,7 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
                                 else//去做任务
                                 {
                                     //sendBroadcast(new Intent(MainActivity.TAB_TASK));
-                                    startActivity(new Intent(DyVideoActivity.this,TaskActivity.class));
+                                    startActivity(new Intent(DyVideoActivity.this, TaskActivity.class));
                                     finish();
                                 }
                             }
@@ -268,7 +268,7 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
                         public void onClick(View v)
                         {
                             //sendBroadcast(new Intent(MainActivity.TAB_TASK));
-                            startActivity(new Intent(DyVideoActivity.this,TaskActivity.class));
+                            startActivity(new Intent(DyVideoActivity.this, TaskActivity.class));
                             finish();
                         }
                     }, new View.OnClickListener()
@@ -372,7 +372,7 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
 
         }
 
-        DialogUtils.showToastDialog2Button(this, "观看短视频需要积分兑换，如继续观看，将默认扣费，不再提醒。", "继续观看", new View.OnClickListener()
+        DialogUtils.showDyTipsDialog(this, new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -380,14 +380,16 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
 
                 ivCover.animate().alpha(0).setDuration(1000).start();
                 loadData();
-
             }
         }, new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                finish();
+
+                startActivity(new Intent(DyVideoActivity.this, MemberActivity.class));
+
+
             }
         }).show();
     }
@@ -571,7 +573,7 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
             {
                 getLivePrice();
             }
-            else if("1102".equals(resultCode))
+            else if ("1102".equals(resultCode))
             {
                 hideProgressDialog();
                 mHandler.sendMessage(mHandler.obtainMessage(GET_VIDEO_STREAM_FAIL, resultMsg));

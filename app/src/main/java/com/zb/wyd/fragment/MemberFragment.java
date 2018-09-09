@@ -166,7 +166,7 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
                         tvUserLevel.setText("V" + vip_level);
                         if (null != fortune)
                         {
-                            tvWealth.setText(fortune.getGift());
+                          //  tvWealth.setText(fortune.getGift());
                         }
 
                         if ("-".equals(userInfo.getEmail()))
@@ -334,7 +334,7 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
     @Override
     protected void initViewData()
     {
-        tvCustomer.setText(ConfigManager.instance().getSystemQq());
+      //  tvCustomer.setText(ConfigManager.instance().getSystemQq());
         tvVersion.setText("版本:V" + APPUtils.getVersionName(getActivity()));
     }
 
@@ -511,7 +511,9 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
             //                startActivity(new Intent(getActivity(), LoginActivity.class));
             //            }
 
-            ToastUtil.show(getActivity(), "功能开发中");
+          //
+            startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra(WebViewActivity.EXTRA_TITLE, "兑换取现").putExtra(WebViewActivity
+                    .IS_SETTITLE, true).putExtra(WebViewActivity.EXTRA_URL, Urls.getWithdrawUrl(APPUtils.getDeviceId(getActivity()))));
         }
         else if (v == rlTask)
         {

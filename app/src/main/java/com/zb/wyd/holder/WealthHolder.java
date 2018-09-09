@@ -1,6 +1,7 @@
 package com.zb.wyd.holder;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -32,13 +33,29 @@ public class WealthHolder extends RecyclerView.ViewHolder
         mTimeTv.setText(mWealthInfo.getTime());
         mTitleTv.setText(mWealthInfo.getTitle());
 
-        if("-1".equals(mWealthInfo.getDirect()))
+
+        if (TextUtils.isEmpty(mWealthInfo.getDirect()))
         {
-            mDescTv.setText("-" + (mWealthInfo.getCash() +mWealthInfo.getCoupon()));
+            if(mWealthInfo.getCash()<0)
+            {
+                mDescTv.setText(mWealthInfo.getCash() + "");
+            }
+            else
+            {
+                mDescTv.setText("+"+mWealthInfo.getCash());
+            }
+
         }
         else
         {
-            mDescTv.setText("+" + (mWealthInfo.getCash() +mWealthInfo.getCoupon()));
+            if ("-1".equals(mWealthInfo.getDirect()))
+            {
+                mDescTv.setText("-" + (mWealthInfo.getCash() + mWealthInfo.getCoupon()));
+            }
+            else
+            {
+                mDescTv.setText("+" + (mWealthInfo.getCash() + mWealthInfo.getCoupon()));
+            }
         }
 
     }

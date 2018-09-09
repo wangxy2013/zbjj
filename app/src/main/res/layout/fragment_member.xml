@@ -305,6 +305,15 @@
                     android:layout_centerVertical="true"
                     android:src="@drawable/ic_arrow_right_48" />
 
+                <TextView
+                    android:textSize="@dimen/t14"
+                    android:textColor="@color/blackB"
+                    android:text="赚积分"
+                    android:layout_marginRight="@dimen/dm_5"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/iv_arrow9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
             </RelativeLayout>
 
@@ -349,7 +358,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/dm_5"
                     android:layout_toLeftOf="@+id/iv_arrow1"
-                    android:text="0"
+                    android:text="查余额 查账单"
                     android:textColor="@color/blackB"
                     android:textSize="@dimen/t14" />
             </RelativeLayout>
@@ -538,8 +547,9 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/dm_5"
+                    android:text="万能的客服"
                     android:layout_toLeftOf="@+id/iv_arrow5"
-                    android:textColor="@color/redA"
+                    android:textColor="@color/blackB"
                     android:textSize="@dimen/t14" />
             </RelativeLayout>
 

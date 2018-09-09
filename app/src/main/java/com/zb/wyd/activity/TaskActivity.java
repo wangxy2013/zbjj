@@ -15,6 +15,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zb.wyd.MyApplication;
 import com.zb.wyd.R;
 import com.zb.wyd.adapter.TaskAdapter;
+import com.zb.wyd.entity.FortuneInfo;
 import com.zb.wyd.entity.SignInfo;
 import com.zb.wyd.entity.TaskInfo;
 import com.zb.wyd.entity.UserInfo;
@@ -53,8 +54,6 @@ public class TaskActivity extends BaseActivity implements IRequestListener
     TextView tvUserFortune;
     @BindView(R.id.tv_signIn)
     TextView tvSignIn;
-    @BindView(R.id.rl_user)
-    RelativeLayout rlUser;
     @BindView(R.id.rv_task_incomplete)
     MaxRecyclerView rvTaskIncomplete;
     @BindView(R.id.ll_task1)
@@ -62,6 +61,8 @@ public class TaskActivity extends BaseActivity implements IRequestListener
     @BindView(R.id.rv_task_complete)
     MaxRecyclerView rvTaskComplete;
 
+    @BindView(R.id.tv_balance)
+    TextView tvBalance;
 
     private List<TaskInfo> mIncompleteList = new ArrayList<>();
     private List<TaskInfo> mCompleteList = new ArrayList<>();
@@ -97,6 +98,13 @@ public class TaskActivity extends BaseActivity implements IRequestListener
                     {
                         ImageLoader.getInstance().displayImage(userInfo.getUface(), ivUserPic);
                         tvUserFortune.setText(userInfo.getTotal_score());
+
+                        FortuneInfo fortuneInfo = userInfo.getFortuneInfo();
+
+                        if(null !=fortuneInfo)
+                        {
+                            tvBalance.setText(fortuneInfo.getGift());
+                        }
                     }
                     break;
 

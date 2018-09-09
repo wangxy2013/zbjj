@@ -271,11 +271,13 @@ public class DialogUtils
         {
             userMoneyTv.setText("剩余积分:" + mLivePriceInfo.getUser_money());
             submitTv.setText("购买VIP");
+            cancelTv.setText("积分兑换");
         }
         else
         {
             userMoneyTv.setText("您的积分不足!");
-            submitTv.setText("去做任务");
+            submitTv.setText("购买VIP");
+            cancelTv.setText("去做任务");
         }
 
 
@@ -579,51 +581,49 @@ public class DialogUtils
         mWindow.setAttributes(lp);
         dialog.show();
     }
-    //    /**
-    //     * 礼物
-    //     *
-    //     * @return
-    //     */
-    //    public static void showGiftDialog(Context mContext, List<GiftInfo> giftInfoList)
-    //    {
-    //        final Dialog dialog = new Dialog(mContext, R.style.DialogStyle);
-    //        dialog.setCancelable(true);
-    //        View v = LayoutInflater.from(mContext).inflate(R.layout.dialog_gift, null);
-    //        dialog.setContentView(v);
-    //
-    //        RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
-    //
-    //        recyclerView.setLayoutManager(new FullyGridLayoutManager(mContext, 4));
-    //
-    //        GiftAdapter giftAdapter = new GiftAdapter(mContext, giftInfoList, new MyItemClickListener()
-    //        {
-    //            @Override
-    //            public void onItemClick(View view, int position)
-    //            {
-    //                for (int i = 0; i < giftInfoList.size(); i++)
-    //                {
-    //                    if (i == position)
-    //                    {
-    //                        giftInfoList.get(position).setSelected(true);
-    //                    }
-    //                    else
-    //                    {
-    //                        giftInfoList.get(position).setSelected(false);
-    //                    }
-    //                }
-    //
-    //            }
-    //        });
-    //        recyclerView.setAdapter(giftAdapter);
-    //
-    //
-    //        //Dialog部分
-    //        Window mWindow = dialog.getWindow();
-    //        WindowManager.LayoutParams lp = mWindow.getAttributes();
-    //        lp.gravity = Gravity.BOTTOM;
-    //        lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
-    //        mWindow.setAttributes(lp);
-    //        dialog.show();
-    //    }
+    /**
+     * 温馨提示
+     *
+     * @return
+     */
+    public static Dialog showDyTipsDialog(Context mContext, final View.OnClickListener cancelListener, final  View.OnClickListener
+            listener)
+    {
+        final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
+        dialog.setCancelable(false);
+        View v = LayoutInflater.from(mContext).inflate(R.layout.dialog_dy_live_price, null);
+        dialog.setContentView(v);
+
+        TextView cancelTv = (TextView) v.findViewById(R.id.tv_cancel);
+        TextView submitTv = (TextView) v.findViewById(R.id.tv_submit);
+
+        cancelTv.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+                cancelListener.onClick(v);
+            }
+        });
+
+        submitTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+                listener.onClick(v);
+            }
+        });
+
+        //Dialog部分
+        Window mWindow = dialog.getWindow();
+        WindowManager.LayoutParams lp = mWindow.getAttributes();
+        lp.gravity = Gravity.CENTER;
+        lp.width = APPUtils.getScreenWidth(mContext) * 7 / 8;
+        mWindow.setAttributes(lp);
+        return dialog;
+    }
+
 
 }

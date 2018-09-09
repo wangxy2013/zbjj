@@ -101,7 +101,7 @@ public class MySocketConnection extends WebSocketConnection
         {
             e.printStackTrace();
             // ContextUtil.toast("WebSocketException");
-            mChatListener.OnError("聊天链接异常，可退出重进");
+            mChatListener.OnError("聊天链接异常，重新连接中...");
             if (!isForced)
             {
                 LogUtil.e("TAG", "重新连接111");

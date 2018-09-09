@@ -42,8 +42,9 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/rl_user"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/yellow"
@@ -53,11 +54,13 @@
             android:id="@+id/iv_user_pic"
             android:layout_width="@dimen/dm_72"
             android:layout_height="@dimen/dm_72"
+            android:visibility="gone"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_user_head" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/dm_10"
@@ -67,8 +70,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="累计获得积分"
-                android:textColor="@color/white"
+                android:text="累计获取"
+                android:textColor="@color/blackB"
                 android:textSize="@dimen/t18" />
 
             <TextView
@@ -77,12 +80,38 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dm_5"
                 android:text="0"
-                android:textColor="@color/white"
+                android:textColor="@color/blackC"
+                android:textSize="@dimen/t18"
+            />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dm_10"
+            android:layout_toRightOf="@+id/iv_user_pic"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="积分余额"
+                android:textColor="@color/blackB"
+                android:textSize="@dimen/t18" />
+
+            <TextView
+                android:id="@+id/tv_balance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dm_5"
+                android:text="0"
+                android:textColor="@color/blackC"
                 android:textSize="@dimen/t18"
                 android:textStyle="bold" />
 
         </LinearLayout>
-
         <TextView
             android:id="@+id/tv_signIn"
             android:layout_width="wrap_content"
@@ -98,7 +127,7 @@
             android:text="签到"
             android:textColor="@color/blackC"
             android:textSize="@dimen/t18" />
-    </RelativeLayout>
+    </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"

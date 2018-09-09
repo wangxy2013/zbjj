@@ -93,7 +93,7 @@ public class WealthListActivity extends BaseActivity implements View.OnClickList
     {
         tabs.add("积分记录");
         tabs.add("现金记录");
-        tabs.add("佣金记录");
+      //  tabs.add("佣金记录");
         fortuneInfo = (FortuneInfo) getIntent().getSerializableExtra("fortune");
     }
 
@@ -131,12 +131,12 @@ public class WealthListActivity extends BaseActivity implements View.OnClickList
         MyViewPagerAdapter viewPagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager());
         viewPagerAdapter.addFragment(new IntegralRecordFragment(), "积分记录");//添加Fragment
         viewPagerAdapter.addFragment(new CashRecordFragment(), "现金记录");
-        viewPagerAdapter.addFragment(new CommissionRecordFragment(), "佣金记录");
+       // viewPagerAdapter.addFragment(new CommissionRecordFragment(), "佣金记录");
         mViewPager.setAdapter(viewPagerAdapter);//设置适配器
         mViewPager.setOffscreenPageLimit(1);
         mTabLayout.addTab(mTabLayout.newTab().setText("积分记录"));//给TabLayout添加Tab
         mTabLayout.addTab(mTabLayout.newTab().setText("现金记录"));
-        mTabLayout.addTab(mTabLayout.newTab().setText("佣金记录"));
+       // mTabLayout.addTab(mTabLayout.newTab().setText("佣金记录"));
         mTabLayout.setupWithViewPager(mViewPager);//给TabLayout设置关联ViewPager，如果设置了ViewPager，那么ViewPagerAdapter中的getPageTitle()方法返回的就是Tab上的标题
         setTabView();
         reflex(mTabLayout);
@@ -152,7 +152,7 @@ public class WealthListActivity extends BaseActivity implements View.OnClickList
     private void setTabView()
     {
         holder = null;
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 2; i++)
         {
             //依次获取标签
             TabLayout.Tab tab = mTabLayout.getTabAt(i);

@@ -67,15 +67,20 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:src="@drawable/ic_notice" />
-                <cc.ibooker.ztextviewlib.AutoVerticalScrollTextView
+                <com.zb.wyd.widget.MarqueeTextView
                     android:id="@+id/tv_notice"
                     android:layout_width="match_parent"
-                    android:layout_toRightOf="@+id/iv_notice"
-                    android:layout_centerVertical="true"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/dm_5"
-                    android:background="@android:color/white"
-                    android:text="@string/app_name" />
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/iv_notice"
+                    android:ellipsize="marquee"
+                    android:focusable="true"
+                    android:textColor="@color/redA"
+                    android:focusableInTouchMode="true"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:singleLine="true"
+
+                    />
 
             </RelativeLayout>
             <View

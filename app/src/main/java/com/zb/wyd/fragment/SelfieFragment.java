@@ -54,6 +54,7 @@ import com.zb.wyd.utils.DialogUtils;
 import com.zb.wyd.utils.ToastUtil;
 import com.zb.wyd.utils.Urls;
 import com.zb.wyd.widget.CataPopupWindow;
+import com.zb.wyd.widget.MarqueeTextView;
 import com.zb.wyd.widget.MaxRecyclerView;
 import com.zb.wyd.widget.VerticalSwipeRefreshLayout;
 
@@ -74,7 +75,7 @@ import cc.ibooker.ztextviewlib.AutoVerticalScrollTextViewUtil;
 public class SelfieFragment extends BaseFragment implements IRequestListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener
 {
     @BindView(R.id.tv_notice)
-    AutoVerticalScrollTextView tvNotice;
+    MarqueeTextView tvNotice;
 
     @BindView(R.id.banner)
     CustomBanner               mBanner;
@@ -205,28 +206,28 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
                     }
                     List<NoticeInfo> noticeInfoList = MyApplication.getInstance().getNoticeList();
 
-                    ArrayList<CharSequence> list = new ArrayList<>();
-                    for (int i = 0; i < noticeInfoList.size(); i++)
+                    StringBuffer sb = new StringBuffer();
+                    if (noticeInfoList.size() < 3)
                     {
-
-                        list.add(Html.fromHtml("<font color='" + noticeInfoList.get(i).getColor() + "'>" + noticeInfoList.get(i).getFrontContent() + "</font>"));
-
+                        for (int i = 0; i < 3; i++)
+                        {
+                            for (int j = 0; j < noticeInfoList.size(); j++)
+                            {
+                                sb.append(noticeInfoList.get(j).getFrontContent());
+                                sb.append("                 ");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int j = 0; j < noticeInfoList.size(); j++)
+                        {
+                            sb.append(noticeInfoList.get(j).getFrontContent());
+                            sb.append("                 ");
+                        }
                     }
 
-                    // 初始化
-                    aUtil = new AutoVerticalScrollTextViewUtil(tvNotice, list);
-                    // 设置上下滚动事件间隔
-                    aUtil.setDuration(5000).start();
-                    aUtil.setOnMyClickListener(new AutoVerticalScrollTextViewUtil.OnMyClickListener()
-                    {
-                        @Override
-                        public void onMyClickListener(int i, CharSequence charSequence)
-                        {
-                            NoticeInfo mNoticeInfo = noticeInfoList.get(i);
-                            if (null != mNoticeInfo)
-                                adClick(mNoticeInfo.getLink());
-                        }
-                    });
+                    tvNotice.setText(sb.toString());
                     break;
 
                 case GET_AD_LIST_CODE:
@@ -235,6 +236,12 @@ public class SelfieFragment extends BaseFragment implements IRequestListener, Vi
             }
         }
     };
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        tvNotice.requestFocus();
+    }
 
     private void adClick(String link)
     {

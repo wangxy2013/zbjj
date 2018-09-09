@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.dalong.marqueeview.MarqueeView;
 import com.donkingliang.banner.CustomBanner;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zb.wyd.MyApplication;
@@ -49,6 +50,7 @@ import com.zb.wyd.utils.APPUtils;
 import com.zb.wyd.utils.ConstantUtil;
 import com.zb.wyd.utils.Urls;
 import com.zb.wyd.widget.FullyGridLayoutManager;
+import com.zb.wyd.widget.MarqueeTextView;
 import com.zb.wyd.widget.MaxRecyclerView;
 import com.zb.wyd.widget.VerticalSwipeRefreshLayout;
 
@@ -72,51 +74,49 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
 
 
     @BindView(R.id.tv_notice)
-    AutoVerticalScrollTextView tvNotice;
+    MarqueeTextView tvNotice;
 
     @BindView(R.id.banner)
-    CustomBanner mBanner;
+    CustomBanner               mBanner;
     @BindView(R.id.rl_all_recommend)
-    RelativeLayout rlAllRecommend;
+    RelativeLayout             rlAllRecommend;
     @BindView(R.id.rv_recommend)
-    MaxRecyclerView rvRecommend;
+    MaxRecyclerView            rvRecommend;
     @BindView(R.id.rl_all_new)
-    RelativeLayout rlAllHotLayout;
+    RelativeLayout             rlAllHotLayout;
     @BindView(R.id.rv_new)
-    MaxRecyclerView rvHot;
+    MaxRecyclerView            rvHot;
     @BindView(R.id.swipeRefresh)
     VerticalSwipeRefreshLayout mSwipeRefreshLayout;
     private View rootView = null;
     private Unbinder unbinder;
 
 
-    private List<String> picList = new ArrayList<>();
+    private List<String>   picList      = new ArrayList<>();
     private List<LiveInfo> freeLiveList = new ArrayList<>();
-    private List<LiveInfo> newLiveList = new ArrayList<>();
-    private List<AdInfo> adInfoList = new ArrayList<>();
+    private List<LiveInfo> newLiveList  = new ArrayList<>();
+    private List<AdInfo>   adInfoList   = new ArrayList<>();
     private RecommendAdapter mRecommendAdapter;
-    private NewAdapter mHotAdapter;
-    private int getFreeCount, getHotCount;
-
-    private AutoVerticalScrollTextViewUtil aUtil;
+    private NewAdapter       mHotAdapter;
+    private int              getFreeCount, getHotCount;
 
 
-    private static final String GET_NOTICE = "get_notice";
-    private static final String GET_LOCATION = "get_location";
-    private static final String GET_FREE_LIVE = "get_free_live";
-    private static final String GET_HOT_LIVE = "get_hot_live";
-    private static final String GET_AD_LIST = "get_ad_list";
-    private static final int GET_FREE_LIVE_SUCCESS = 0x01;
-    private static final int REQUEST_FAIL = 0x02;
-    private static final int GET_HOT_LIVE_SUCCESS = 0x03;
+    private static final String GET_NOTICE            = "get_notice";
+    private static final String GET_LOCATION          = "get_location";
+    private static final String GET_FREE_LIVE         = "get_free_live";
+    private static final String GET_HOT_LIVE          = "get_hot_live";
+    private static final String GET_AD_LIST           = "get_ad_list";
+    private static final int    GET_FREE_LIVE_SUCCESS = 0x01;
+    private static final int    REQUEST_FAIL          = 0x02;
+    private static final int    GET_HOT_LIVE_SUCCESS  = 0x03;
 
-    private static final int GET_AD_LIST_CODE = 0X10;
-    private static final int GET_FREE_LIVE_CODE = 0X11;
-    private static final int GET_HOT_LIVE_CODE = 0X12;
+    private static final int GET_AD_LIST_CODE     = 0X10;
+    private static final int GET_FREE_LIVE_CODE   = 0X11;
+    private static final int GET_HOT_LIVE_CODE    = 0X12;
     private static final int GET_NOTICE_LIST_CODE = 0X15;
 
-    private static final int GET_FREE_LIVE_FAIL = 0X13;
-    private static final int GET_HOT_LIVE_FAIL = 0X14;
+    private static final int GET_FREE_LIVE_FAIL  = 0X13;
+    private static final int GET_HOT_LIVE_FAIL   = 0X14;
     private static final int GET_AD_LIST_SUCCESS = 0x04;
 
     private static final int GET_NOTICE_LIST_SUCCESS = 0x06;
@@ -215,29 +215,28 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
                     NoticeListHandler mNoticeListHandler = (NoticeListHandler) msg.obj;
                     List<NoticeInfo> noticeInfoList = mNoticeListHandler.getNoticeInfoList();
                     MyApplication.getInstance().setNoticeList(noticeInfoList);
-
-
-                    ArrayList<CharSequence> list = new ArrayList<>();
-                    for (int i = 0; i < noticeInfoList.size(); i++)
+                    StringBuffer sb = new StringBuffer();
+                    if (noticeInfoList.size() < 3)
                     {
-
-                        list.add(Html.fromHtml("<font color='" + noticeInfoList.get(i).getColor() + "'>" + noticeInfoList.get(i).getFrontContent() + "</font>"));
-
+                        for (int i = 0; i < 3; i++)
+                        {
+                            for (int j = 0; j < noticeInfoList.size(); j++)
+                            {
+                                sb.append(noticeInfoList.get(j).getFrontContent());
+                                sb.append("                 ");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int j = 0; j < noticeInfoList.size(); j++)
+                        {
+                            sb.append(noticeInfoList.get(j).getFrontContent());
+                            sb.append("                 ");
+                        }
                     }
 
-                    // 初始化
-                    aUtil = new AutoVerticalScrollTextViewUtil(tvNotice, list);
-                    // 设置上下滚动事件间隔
-                    aUtil.setDuration(5000).start();
-                    aUtil.setOnMyClickListener(new AutoVerticalScrollTextViewUtil.OnMyClickListener()
-                    {
-                        @Override
-                        public void onMyClickListener(int i, CharSequence charSequence)
-                        {
-                            NoticeInfo mNoticeInfo = noticeInfoList.get(i);
-                            if (null != mNoticeInfo) adClick(mNoticeInfo.getLink());
-                        }
-                    });
+                    tvNotice.setText(sb.toString());
                     break;
 
             }
@@ -294,7 +293,6 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
     {
         mSwipeRefreshLayout.setOnRefreshListener(this);
         rlAllHotLayout.setOnClickListener(this);
-
     }
 
     @Override
@@ -336,7 +334,8 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
                     //                    Bundle b = new Bundle();
                     //                    b.putSerializable("LiveInfo", mLiveInfo);
                     //                    startActivity(new Intent(getActivity(), LiveActivity.class).putExtras(b));
-                    startActivity(new Intent(getActivity(), LiveActivity.class).putExtra("biz_id", mLiveInfo.getId()).putExtra("location", mLiveInfo.getLocation()));
+                    startActivity(new Intent(getActivity(), LiveActivity.class).putExtra("biz_id", mLiveInfo.getId()).putExtra("location", mLiveInfo
+                            .getLocation()));
 
                 }
                 else
@@ -349,6 +348,14 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
         rvHot.setAdapter(mHotAdapter);
 
 
+    }
+
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        tvNotice.requestFocus();
     }
 
     public void setUserVisibleHint(boolean isVisibleToUser)
@@ -591,10 +598,6 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
             unbinder = null;
         }
 
-        if (null != aUtil)
-        {
-            aUtil.stop();
-        }
         mHandler.removeCallbacksAndMessages(null);
     }
 }

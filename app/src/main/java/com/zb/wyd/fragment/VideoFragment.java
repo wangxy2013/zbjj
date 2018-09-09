@@ -49,6 +49,7 @@ import com.zb.wyd.utils.ConstantUtil;
 import com.zb.wyd.utils.ToastUtil;
 import com.zb.wyd.utils.Urls;
 import com.zb.wyd.widget.CataPopupWindow;
+import com.zb.wyd.widget.MarqueeTextView;
 import com.zb.wyd.widget.VerticalSwipeRefreshLayout;
 import com.zb.wyd.widget.list.refresh.PullToRefreshBase;
 import com.zb.wyd.widget.list.refresh.PullToRefreshRecyclerView;
@@ -71,21 +72,21 @@ public class VideoFragment extends BaseFragment implements IRequestListener, Vie
         SwipeRefreshLayout.OnRefreshListener
 {
     @BindView(R.id.tv_notice)
-    AutoVerticalScrollTextView tvNotice;
+    MarqueeTextView        tvNotice;
     @BindView(R.id.banner)
-    CustomBanner               mBanner;
+    CustomBanner              mBanner;
     @BindView(R.id.iv_show)
-    ImageView                  ivMore;
+    ImageView                 ivMore;
     @BindView(R.id.rv_cata)
-    RecyclerView               rvCata;
+    RecyclerView              rvCata;
     @BindView(R.id.topView)
-    View                       topView;
+    View                      topView;
     @BindView(R.id.tv_new)
-    TextView                   tvNew;
+    TextView                  tvNew;
     @BindView(R.id.tv_collection)
-    TextView                   tvCollection;
+    TextView                  tvCollection;
     @BindView(R.id.pullToRefreshRecyclerView)
-    PullToRefreshRecyclerView  mPullToRefreshRecyclerView;
+    PullToRefreshRecyclerView mPullToRefreshRecyclerView;
     @BindView(R.id.swipeRefresh)
     VerticalSwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -93,7 +94,6 @@ public class VideoFragment extends BaseFragment implements IRequestListener, Vie
     private CataAdapter mCataAdapter;
     private View rootView = null;
     private Unbinder unbinder;
-    private AutoVerticalScrollTextViewUtil aUtil;
 
     private List<String> picList    = new ArrayList<>();
     private List<AdInfo> adInfoList = new ArrayList<>();
@@ -197,28 +197,30 @@ public class VideoFragment extends BaseFragment implements IRequestListener, Vie
                     }
                     List<NoticeInfo> noticeInfoList = MyApplication.getInstance().getNoticeList();
 
-                    ArrayList<CharSequence> list = new ArrayList<>();
-                    for (int i = 0; i < noticeInfoList.size(); i++)
+                    StringBuffer sb = new StringBuffer();
+                    if (noticeInfoList.size() < 3)
                     {
-
-                        list.add(Html.fromHtml("<font color='" + noticeInfoList.get(i).getColor() + "'>" + noticeInfoList.get(i).getFrontContent() + "</font>"));
-
+                        for (int i = 0; i < 3; i++)
+                        {
+                            for (int j = 0; j < noticeInfoList.size(); j++)
+                            {
+                                sb.append(noticeInfoList.get(j).getFrontContent());
+                                sb.append("                 ");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int j = 0; j < noticeInfoList.size(); j++)
+                        {
+                            sb.append(noticeInfoList.get(j).getFrontContent());
+                            sb.append("                 ");
+                        }
                     }
 
-                    // 初始化
-                    aUtil = new AutoVerticalScrollTextViewUtil(tvNotice, list);
-                    // 设置上下滚动事件间隔
-                    aUtil.setDuration(5000).start();
-                    aUtil.setOnMyClickListener(new AutoVerticalScrollTextViewUtil.OnMyClickListener()
-                    {
-                        @Override
-                        public void onMyClickListener(int i, CharSequence charSequence)
-                        {
-                            NoticeInfo mNoticeInfo = noticeInfoList.get(i);
-                            if (null != mNoticeInfo)
-                                adClick(mNoticeInfo.getLink());
-                        }
-                    });
+                    tvNotice.setText(sb.toString());
+
+
                     break;
                 case GET_AD_lIST_CODE:
                     getAdList();
@@ -534,12 +536,15 @@ public class VideoFragment extends BaseFragment implements IRequestListener, Vie
             unbinder.unbind();
             unbinder = null;
         }
-        if (null != aUtil)
-        {
-            aUtil.stop();
-        }
+
     }
 
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        tvNotice.requestFocus();
+    }
 
     @Override
     public void notify(String action, String resultCode, String resultMsg, Object obj)

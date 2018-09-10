@@ -62,50 +62,50 @@ import butterknife.ButterKnife;
 /**
  * 描述：一句话简单描述
  */
-public class DyVideoActivity extends BaseActivity implements IRequestListener, PullToRefreshBase.OnRefreshListener<RecyclerView>,
-        SwipeRefreshLayout.OnRefreshListener
+public class DyVideoActivity extends BaseActivity implements IRequestListener, PullToRefreshBase
+        .OnRefreshListener<RecyclerView>, SwipeRefreshLayout.OnRefreshListener
 {
     @BindView(R.id.swipeRefresh)
     VerticalSwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.pullToRefreshRecyclerView)
-    PullToRefreshRecyclerView  mPullToRefreshRecyclerView;
+    PullToRefreshRecyclerView mPullToRefreshRecyclerView;
     @BindView(R.id.iv_cover)
-    ImageView                  ivCover;
+    ImageView ivCover;
 
     private int pn = 1;
     private int mRefreshStatus;
 
-    private String                 videoUri;
-    private MyAdapter              mAdapter;
+    private String videoUri;
+    private MyAdapter mAdapter;
     private ViewPagerLayoutManager mLayoutManager;
-    private RecyclerView           mRecyclerView; //
-    private       List<VideoInfo> videoInfoList  = new ArrayList<>();
-    private final String          GET_VIDEO_LIST = "get_douyin_list";
+    private RecyclerView mRecyclerView; //
+    private List<VideoInfo> videoInfoList = new ArrayList<>();
+    private final String GET_VIDEO_LIST = "get_douyin_list";
 
     private int love_postion;
 
     private String shareCnontent;
-    private final        String      GET_SHARE                = "GET_SHARE";
-    private final        String      FAVORITE_LIKE            = "favorite_like";
-    private final        String      UN_FAVORITE_LIKE         = "un_favorite_like";
-    private final        String      GET_VIDEO_PRICE          = "get_live_price";
-    private final        String      GET_VIDEO_STREAM         = "get_dy_video_stream";
-    private final        String      BUY_VIDEO                = "buy_live";
-    private final        String      GET_TASK_SHARE           = "GET_TASK_SHARE";
-    private final        int         REQUEST_SUCCESS          = 0x01;
-    private final        int         REQUEST_FAIL             = 0x02;
-    private final        int         GET_VIDEO_PRICE_SUCCESS  = 0x03;
-    private final        int         FAVORITE_LIKE_SUCCESS    = 0x08;
-    private final        int         UN_FAVORITE_LIKE_SUCCESS = 0x09;
-    private final        int         GET_SHARE_CODE           = 0x11;
-    private final        int         GET_SHARE_SUCCESS        = 0x12;
-    private final        int         GET_TASK_SHARE_CODE      = 0x13;
-    private final        int         GET_TASK_SHARE_SUCCESS   = 0x14;
-    private final        int         GET_VIDEO_STREAM_FAIL    = 0X15;
-    private static final int         GET_VIDEO_LIST_SUCCESS   = 0x21;
-    private static final int         SHARE_PHOTO_REQUEST_CODE = 0x91;
+    private final String GET_SHARE = "GET_SHARE";
+    private final String FAVORITE_LIKE = "favorite_like";
+    private final String UN_FAVORITE_LIKE = "un_favorite_like";
+    private final String GET_VIDEO_PRICE = "get_live_price";
+    private final String GET_VIDEO_STREAM = "get_dy_video_stream";
+    private final String BUY_VIDEO = "buy_live";
+    private final String GET_TASK_SHARE = "GET_TASK_SHARE";
+    private final int REQUEST_SUCCESS = 0x01;
+    private final int REQUEST_FAIL = 0x02;
+    private final int GET_VIDEO_PRICE_SUCCESS = 0x03;
+    private final int FAVORITE_LIKE_SUCCESS = 0x08;
+    private final int UN_FAVORITE_LIKE_SUCCESS = 0x09;
+    private final int GET_SHARE_CODE = 0x11;
+    private final int GET_SHARE_SUCCESS = 0x12;
+    private final int GET_TASK_SHARE_CODE = 0x13;
+    private final int GET_TASK_SHARE_SUCCESS = 0x14;
+    private final int GET_VIDEO_STREAM_FAIL = 0X15;
+    private static final int GET_VIDEO_LIST_SUCCESS = 0x21;
+    private static final int SHARE_PHOTO_REQUEST_CODE = 0x91;
     @SuppressLint("HandlerLeak")
-    private              BaseHandler mHandler                 = new BaseHandler(DyVideoActivity.this)
+    private BaseHandler mHandler = new BaseHandler(DyVideoActivity.this)
     {
         @Override
         public void handleMessage(Message msg)
@@ -121,9 +121,11 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
 
                         for (int i = 0; i < videoInfoList.size(); i++)
                         {
-                            if (mVideoStreamHandler.getBiz_id().equals(videoInfoList.get(i).getId()))
+                            if (mVideoStreamHandler.getBiz_id().equals(videoInfoList.get(i).getId
+                                    ()))
                             {
-                                videoInfoList.get(i).setHas_favorite(mVideoStreamHandler.getHas_favorite());
+                                videoInfoList.get(i).setHas_favorite(mVideoStreamHandler
+                                        .getHas_favorite());
                             }
                         }
 
@@ -138,15 +140,19 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
 
                     if (pn == 1)
                     {
-                        VideoInfo mVideoInfo = (VideoInfo) getIntent().getSerializableExtra("VideoInfo");
+                        VideoInfo mVideoInfo = (VideoInfo) getIntent().getSerializableExtra
+                                ("VideoInfo");
                         if (null != mVideoInfo)
                         {
                             videoInfoList.add(mVideoInfo);
-                            for (int i = 0; i < mVideoInfoListHandler.getVideoInfoList().size(); i++)
+                            for (int i = 0; i < mVideoInfoListHandler.getVideoInfoList().size();
+                                 i++)
                             {
-                                if (!mVideoInfo.getId().equals(mVideoInfoListHandler.getVideoInfoList().get(i).getId()))
+                                if (!mVideoInfo.getId().equals(mVideoInfoListHandler
+                                        .getVideoInfoList().get(i).getId()))
                                 {
-                                    videoInfoList.add(mVideoInfoListHandler.getVideoInfoList().get(i));
+                                    videoInfoList.add(mVideoInfoListHandler.getVideoInfoList()
+                                            .get(i));
                                 }
                             }
                         }
@@ -183,7 +189,8 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
 
                     if (null != mLivePriceInfo)
                     {
-                        DialogUtils.showVideoPriceDialog(DyVideoActivity.this, mLivePriceInfo, new View.OnClickListener()
+                        DialogUtils.showVideoPriceDialog(DyVideoActivity.this, mLivePriceInfo,
+                                new View.OnClickListener()
                         {
                             @Override
                             public void onClick(View v)
@@ -205,7 +212,8 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
                                 else//去做任务
                                 {
                                     //sendBroadcast(new Intent(MainActivity.TAB_TASK));
-                                    startActivity(new Intent(DyVideoActivity.this, TaskActivity.class));
+                                    startActivity(new Intent(DyVideoActivity.this, TaskActivity
+                                            .class));
                                     finish();
                                 }
                             }
@@ -240,7 +248,8 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
                         Intent intent1 = new Intent(Intent.ACTION_SEND);
                         intent1.putExtra(Intent.EXTRA_TEXT, shareCnontent);
                         intent1.setType("text/plain");
-                        startActivityForResult(Intent.createChooser(intent1, "分享"), SHARE_PHOTO_REQUEST_CODE);
+                        startActivityForResult(Intent.createChooser(intent1, "分享"),
+                                SHARE_PHOTO_REQUEST_CODE);
                     }
                     break;
 
@@ -262,7 +271,8 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
                     break;
 
                 case GET_VIDEO_STREAM_FAIL:
-                    DialogUtils.showToastDialog2Button(DyVideoActivity.this, msg.obj.toString(), "去做任务", new View.OnClickListener()
+                    DialogUtils.showToastDialog2Button(DyVideoActivity.this, msg.obj.toString(),
+                            "去做任务", new View.OnClickListener()
                     {
                         @Override
                         public void onClick(View v)
@@ -294,8 +304,8 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
     protected void initViews(Bundle savedInstanceState)
     {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager
+                .LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_dy_video_play);
     }
 
@@ -318,8 +328,8 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy)
             {
-                int topRowVerticalPosition =
-                        (recyclerView == null || recyclerView.getChildCount() == 0) ? 0 : recyclerView.getChildAt(0).getTop();
+                int topRowVerticalPosition = (recyclerView == null || recyclerView.getChildCount
+                        () == 0) ? 0 : recyclerView.getChildAt(0).getTop();
                 mSwipeRefreshLayout.setEnabled(topRowVerticalPosition >= 0);
             }
 
@@ -388,8 +398,16 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
             {
 
                 startActivity(new Intent(DyVideoActivity.this, MemberActivity.class));
+                finish();
 
 
+            }
+        }, new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                finish();
             }
         }).show();
     }
@@ -408,8 +426,8 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
         showProgressDialog();
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
-        DataRequest.instance().request(DyVideoActivity.this, Urls.getDyVideoStreamUrl(), this, HttpRequest.GET, GET_VIDEO_STREAM, valuePairs,
-                new DyVideoStreamHandler());
+        DataRequest.instance().request(DyVideoActivity.this, Urls.getDyVideoStreamUrl(), this,
+                HttpRequest.GET, GET_VIDEO_STREAM, valuePairs, new DyVideoStreamHandler());
     }
 
     private void getShareUrl(String biz_id)
@@ -417,8 +435,8 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "douyin");
-        DataRequest.instance().request(DyVideoActivity.this, Urls.getShareUrl(), this, HttpRequest.GET, GET_SHARE, valuePairs,
-                new ShareInfoHandler());
+        DataRequest.instance().request(DyVideoActivity.this, Urls.getShareUrl(), this,
+                HttpRequest.GET, GET_SHARE, valuePairs, new ShareInfoHandler());
     }
 
     private void getTaskShareUrl(String biz_id)
@@ -426,8 +444,8 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "douyin");
-        DataRequest.instance().request(DyVideoActivity.this, Urls.getTaskShareUrl(), this, HttpRequest.GET, GET_TASK_SHARE, valuePairs,
-                new SignInfoHandler());
+        DataRequest.instance().request(DyVideoActivity.this, Urls.getTaskShareUrl(), this,
+                HttpRequest.GET, GET_TASK_SHARE, valuePairs, new SignInfoHandler());
     }
 
     private void initListener()
@@ -481,8 +499,8 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "douyin");
-        DataRequest.instance().request(DyVideoActivity.this, Urls.getCollectionRequestUrl(), this, HttpRequest.POST, FAVORITE_LIKE, valuePairs,
-                new ResultHandler());
+        DataRequest.instance().request(DyVideoActivity.this, Urls.getCollectionRequestUrl(),
+                this, HttpRequest.POST, FAVORITE_LIKE, valuePairs, new ResultHandler());
     }
 
     private void unFavoriteLike(String biz_id)
@@ -491,8 +509,8 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "douyin");
-        DataRequest.instance().request(DyVideoActivity.this, Urls.getFavoriteUnLikeUrl(), this, HttpRequest.POST, UN_FAVORITE_LIKE, valuePairs,
-                new ResultHandler());
+        DataRequest.instance().request(DyVideoActivity.this, Urls.getFavoriteUnLikeUrl(), this,
+                HttpRequest.POST, UN_FAVORITE_LIKE, valuePairs, new ResultHandler());
     }
 
     private void playVideo(String videoUri)
@@ -525,8 +543,8 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("pn", pn + "");
         valuePairs.put("num", "20");
-        DataRequest.instance().request(this, Urls.getDouyinListUrl(), this, HttpRequest.GET, GET_VIDEO_LIST, valuePairs,
-                new VideoInfoListHandler());
+        DataRequest.instance().request(this, Urls.getDouyinListUrl(), this, HttpRequest.GET,
+                GET_VIDEO_LIST, valuePairs, new VideoInfoListHandler());
     }
 
     private void getLivePrice()
@@ -536,8 +554,8 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
             Map<String, String> valuePairs = new HashMap<>();
             valuePairs.put("biz_id", mBiz_id);
             valuePairs.put("co_biz", "douyin");
-            DataRequest.instance().request(DyVideoActivity.this, Urls.getVideoPriceUrl(), this, HttpRequest.POST, GET_VIDEO_PRICE, valuePairs,
-                    new LivePriceInfoHandler());
+            DataRequest.instance().request(DyVideoActivity.this, Urls.getVideoPriceUrl(), this,
+                    HttpRequest.POST, GET_VIDEO_PRICE, valuePairs, new LivePriceInfoHandler());
         }
     }
 
@@ -706,7 +724,8 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
         private MyItemClickListener mLinener1;
         private MyItemClickListener mLinener2;
 
-        public MyAdapter(List<VideoInfo> videoInfoList, MyItemClickListener mLinener1, MyItemClickListener mLinener2)
+        public MyAdapter(List<VideoInfo> videoInfoList, MyItemClickListener mLinener1,
+                         MyItemClickListener mLinener2)
         {
             this.videoInfoList = videoInfoList;
             this.mLinener1 = mLinener1;
@@ -717,7 +736,8 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
         {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_dy_video_play, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout
+                    .item_dy_video_play, parent, false);
             return new ViewHolder(view);
         }
 
@@ -942,14 +962,14 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
 
         public class ViewHolder extends RecyclerView.ViewHolder
         {
-            ImageView       img_love;
-            ImageView       img_share;
+            ImageView img_love;
+            ImageView img_share;
             CircleImageView img_head;
-            TextView        love_count;
-            TextView        tv_title;
-            TextView        tv_tips;
-            ImageView       img_thumb;
-            DyVideoPlayer   videoView;
+            TextView love_count;
+            TextView tv_title;
+            TextView tv_tips;
+            ImageView img_thumb;
+            DyVideoPlayer videoView;
             //  RelativeLayout rootView;
 
             public ViewHolder(View itemView)
@@ -973,8 +993,7 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
     {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d("DemoActivity", "requestCode=" + requestCode + " resultCode=" + resultCode);
-        if ((int) (Math.random() * 100) <= 80)
-            mHandler.sendEmptyMessage(GET_TASK_SHARE_CODE);
+        if ((int) (Math.random() * 100) <= 80) mHandler.sendEmptyMessage(GET_TASK_SHARE_CODE);
 
     }
 }

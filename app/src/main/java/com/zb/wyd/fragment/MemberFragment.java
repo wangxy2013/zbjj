@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -169,13 +170,19 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
                           //  tvWealth.setText(fortune.getGift());
                         }
 
-                        if ("-".equals(userInfo.getEmail()))
+//                        if ("-".equals(userInfo.getEmail()))
+//                        {
+//                            tvEmail.setText("未认证");
+//                        }
+//                        else
+//                        {
+//                            tvEmail.setText(userInfo.getEmail());
+//                        }
+
+
+                        if(!TextUtils.isEmpty(userInfo.getEmail())&&userInfo.getEmail().length()!=11)
                         {
-                            tvEmail.setText("未认证");
-                        }
-                        else
-                        {
-                            tvEmail.setText(userInfo.getEmail());
+                            ToastUtil.show(getActivity(),"请绑定手机保证账号安全");
                         }
 
                         tvVipLevel.setText("VIP" + vip_level);

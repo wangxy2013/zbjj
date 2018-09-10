@@ -18,11 +18,12 @@ import com.zb.wyd.listener.MyItemClickListener;
 public class ChannelPopupWindow extends PopupWindow
 {
 
-    private View        mMenuView;
+    private View mMenuView;
     private TextView mYdTv, mDxTv, mCmTv;
 
     private MyItemClickListener listener;
-    public ChannelPopupWindow(Context context,MyItemClickListener listener)
+
+    public ChannelPopupWindow(Context context, MyItemClickListener listener)
     {
         super(context);
         this.listener = listener;
@@ -31,9 +32,12 @@ public class ChannelPopupWindow extends PopupWindow
         mYdTv = (TextView) mMenuView.findViewById(R.id.tv_yd);
         mDxTv = (TextView) mMenuView.findViewById(R.id.tv_dx);
         mCmTv = (TextView) mMenuView.findViewById(R.id.tv_cm);
+        mCmTv.setSelected(true);
+        mYdTv.setSelected(false);
+        mDxTv.setSelected(false);
         this.setContentView(mMenuView);
         //自定义基础，设置我们显示控件的宽，高，焦点，点击外部关闭PopupWindow操作
-        this.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        this.setWidth(800);
         this.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         this.setFocusable(true);
         this.setOutsideTouchable(true);
@@ -44,27 +48,38 @@ public class ChannelPopupWindow extends PopupWindow
         this.setBackgroundDrawable(colorDrawable);
 
 
-
-        mCmTv.setOnClickListener(new View.OnClickListener() {
+        mCmTv.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View v)
             {
-                listener.onItemClick(v,1);
+                listener.onItemClick(v, 1);
+                mCmTv.setSelected(true);
+                mYdTv.setSelected(false);
+                mDxTv.setSelected(false);
             }
         });
-        mYdTv.setOnClickListener(new View.OnClickListener() {
+        mYdTv.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View v)
             {
-                listener.onItemClick(v,2);
+                listener.onItemClick(v, 2);
+                mCmTv.setSelected(false);
+                mYdTv.setSelected(true);
+                mDxTv.setSelected(false);
             }
         });
 
-        mDxTv.setOnClickListener(new View.OnClickListener() {
+        mDxTv.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View v)
             {
-                listener.onItemClick(v,3);
+                listener.onItemClick(v, 3);
+                mCmTv.setSelected(false);
+                mYdTv.setSelected(false);
+                mDxTv.setSelected(true);
             }
         });
     }

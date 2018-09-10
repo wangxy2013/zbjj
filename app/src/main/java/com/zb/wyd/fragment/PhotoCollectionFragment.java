@@ -17,11 +17,13 @@ import com.zb.wyd.R;
 import com.zb.wyd.activity.BaseHandler;
 import com.zb.wyd.activity.LoginActivity;
 import com.zb.wyd.activity.PhotoDetailActivity;
+import com.zb.wyd.adapter.CollectionSelfieAdapter;
 import com.zb.wyd.adapter.SelfieAdapter;
 import com.zb.wyd.entity.SelfieInfo;
 import com.zb.wyd.http.DataRequest;
 import com.zb.wyd.http.HttpRequest;
 import com.zb.wyd.http.IRequestListener;
+import com.zb.wyd.json.ResultHandler;
 import com.zb.wyd.json.SelfieInfoListHandler;
 import com.zb.wyd.listener.MyItemClickListener;
 import com.zb.wyd.utils.ConstantUtil;
@@ -42,7 +44,8 @@ import butterknife.Unbinder;
 /**
  * 描述：收藏自拍列表
  */
-public class PhotoCollectionFragment extends BaseFragment implements PullToRefreshBase.OnRefreshListener<RecyclerView>, IRequestListener, View.OnClickListener
+public class PhotoCollectionFragment extends BaseFragment implements PullToRefreshBase.OnRefreshListener<RecyclerView>, IRequestListener, View
+        .OnClickListener
 {
     @BindView(R.id.refreshRecyclerView)
     PullToRefreshRecyclerView mPullToRefreshRecyclerView;
@@ -52,14 +55,14 @@ public class PhotoCollectionFragment extends BaseFragment implements PullToRefre
 
 
     private List<SelfieInfo> selfieInfoList = new ArrayList<>();
-    private SelfieAdapter mSelfieAdapter;
+    private CollectionSelfieAdapter mSelfieAdapter;
     private View rootView = null;
     private Unbinder unbinder;
     private static final String GET_PHOTO_LIST = "get_photo_list";
-
+    private final String UN_FAVORITE_LIKE = "un_favorite_like";
     private static final int REQUEST_SUCCESS = 0x01;
-    private static final int REQUEST_FAIL    = 0x02;
-
+    private static final int REQUEST_FAIL = 0x02;
+    private final int UN_FAVORITE_LIKE_SUCCESS = 0x03;
     @SuppressLint("HandlerLeak")
     private BaseHandler mHandler = new BaseHandler(getActivity())
     {
@@ -82,6 +85,12 @@ public class PhotoCollectionFragment extends BaseFragment implements PullToRefre
                 case REQUEST_FAIL:
                     ToastUtil.show(getActivity(), msg.obj.toString());
 
+                    break;
+
+                case UN_FAVORITE_LIKE_SUCCESS:
+                    ToastUtil.show(getActivity(), "删除成功");
+                    selfieInfoList.clear();
+                    loadData();
                     break;
 
 
@@ -185,8 +194,7 @@ public class PhotoCollectionFragment extends BaseFragment implements PullToRefre
         int maxVal = Integer.MIN_VALUE;
         for (int i = 0; i < size; i++)
         {
-            if (arr[i] > maxVal)
-                maxVal = arr[i];
+            if (arr[i] > maxVal) maxVal = arr[i];
         }
         return maxVal;
     }
@@ -200,7 +208,7 @@ public class PhotoCollectionFragment extends BaseFragment implements PullToRefre
         mPullToRefreshRecyclerView.setPullRefreshEnabled(true);
 
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        mSelfieAdapter = new SelfieAdapter(selfieInfoList, getActivity(), new MyItemClickListener()
+        mSelfieAdapter = new CollectionSelfieAdapter(selfieInfoList, getActivity(), new MyItemClickListener()
         {
             @Override
             public void onItemClick(View view, int position)
@@ -216,6 +224,13 @@ public class PhotoCollectionFragment extends BaseFragment implements PullToRefre
                 }
 
             }
+        }, new MyItemClickListener()
+        {
+            @Override
+            public void onItemClick(View view, int position)
+            {
+                unFavoriteLike(selfieInfoList.get(position).getId());
+            }
         });
         mRecyclerView.setAdapter(mSelfieAdapter);
         loadData();
@@ -228,8 +243,18 @@ public class PhotoCollectionFragment extends BaseFragment implements PullToRefre
         valuePairs.put("pn", pn + "");
         valuePairs.put("num", "20");
         valuePairs.put("co_biz", "photo");
-        DataRequest.instance().request(getActivity(), Urls.getFavoritUrl(), this, HttpRequest.GET, GET_PHOTO_LIST, valuePairs,
-                new SelfieInfoListHandler());
+        DataRequest.instance().request(getActivity(), Urls.getFavoritUrl(), this, HttpRequest.GET, GET_PHOTO_LIST, valuePairs, new
+                SelfieInfoListHandler());
+    }
+
+    private void unFavoriteLike(String biz_id)
+    {
+        showProgressDialog(getActivity());
+        Map<String, String> valuePairs = new HashMap<>();
+        valuePairs.put("biz_id", biz_id);
+        valuePairs.put("co_biz", "photo");
+        DataRequest.instance().request(getActivity(), Urls.getFavoriteUnLikeUrl(), this, HttpRequest.POST, UN_FAVORITE_LIKE, valuePairs, new
+                ResultHandler());
     }
 
 
@@ -261,6 +286,18 @@ public class PhotoCollectionFragment extends BaseFragment implements PullToRefre
             if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
             {
                 mHandler.sendMessage(mHandler.obtainMessage(REQUEST_SUCCESS, obj));
+            }
+            else
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
+            }
+        }
+        else if (UN_FAVORITE_LIKE.equals(action))
+        {
+            hideProgressDialog(getActivity());
+            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(UN_FAVORITE_LIKE_SUCCESS, obj));
             }
             else
             {

@@ -1,42 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/windowBackground"
-              android:orientation="vertical">
-    <include layout="@layout/layout_head"/>
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/windowBackground"
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_head" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="46dp"
-        android:layout_marginLeft="@dimen/dm_10"
-        android:layout_marginRight="@dimen/dm_15"
-        android:layout_marginTop="@dimen/dm_15"
-        android:background="@drawable/gray_frame_5dp"
-        >
-        <ImageView
-            android:id="@+id/iv_code"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/dm_10"
-            android:src="@drawable/ic_invitation_off"/>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dm_15">
 
-
-
-
-        <EditText
-            android:id="@+id/et_name"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="46dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/dm_10"
-            android:layout_toRightOf="@+id/iv_code"
-            android:background="@color/transparent"
-            android:hint="域名设置"
+            android:layout_toLeftOf="@+id/btn_test"
+            android:background="@drawable/gray_frame_5dp">
+
+            <ImageView
+                android:id="@+id/iv_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dm_10"
+                android:src="@drawable/ic_invitation_off" />
+
+
+            <EditText
+                android:id="@+id/et_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dm_10"
+                android:layout_toRightOf="@+id/iv_code"
+                android:background="@color/transparent"
+                android:hint="域名设置"
+                android:textColor="@color/blackC"
+                android:textSize="@dimen/t14" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/btn_test"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dm_45"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dm_10"
+            android:layout_marginRight="@dimen/dm_10"
+            android:background="@drawable/common_yellow_5dp"
+            android:text="检测"
             android:textColor="@color/blackC"
-            android:textSize="@dimen/t14"/>
+            android:textSize="@dimen/t16" />
+
     </RelativeLayout>
+
 
     <Button
         android:id="@+id/btn_submit"
@@ -48,16 +68,45 @@
         android:background="@drawable/common_yellow_5dp"
         android:text="保存"
         android:textColor="@color/blackC"
-        android:textSize="@dimen/t16"/>
+        android:textSize="@dimen/t16" />
 
 
     <TextView
         android:id="@+id/tv_email"
         android:layout_width="match_parent"
-        android:padding="@dimen/dm_15"
         android:layout_height="wrap_content"
+        android:padding="@dimen/dm_15"
         android:text="防丢邮箱,发邮件到xjshangmen@gmail.com获取最新地址，请谨慎正确的设置域名 "
         android:textColor="@color/blackA"
-        android:textSize="@dimen/t14"/>
+        android:textSize="@dimen/t14" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/ll_content"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#642aa515"
+        android:padding="@dimen/dm_15">
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/green"
+            android:textSize="@dimen/t14"
+            />
+
+        <TextView
+            android:layout_marginTop="@dimen/dm_5"
+            android:id="@+id/tv_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/green"
+            android:textSize="@dimen/t14"
+            />
+
+    </LinearLayout>
+
 
 </LinearLayout>

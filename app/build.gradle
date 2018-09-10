@@ -31,8 +31,8 @@ android {
         applicationId "com.zb.wyd"
         minSdkVersion 22
         targetSdkVersion 26
-        versionCode 25100
-        versionName "2.5.1"
+        versionCode 26000
+        versionName "2.6.0"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

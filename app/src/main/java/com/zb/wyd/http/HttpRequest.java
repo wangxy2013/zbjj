@@ -1,15 +1,11 @@
 package com.zb.wyd.http;
 
 import android.content.Context;
-import android.util.Log;
 
-
-import com.zb.wyd.MyApplication;
 import com.zb.wyd.json.JsonHandler;
 import com.zb.wyd.utils.APPUtils;
 import com.zb.wyd.utils.ConfigManager;
 import com.zb.wyd.utils.LogUtil;
-import com.zb.wyd.utils.ToastUtil;
 
 import java.io.File;
 import java.util.HashMap;
@@ -29,17 +25,17 @@ public class HttpRequest implements Runnable
 {
 
 
-    public static final int GET     = 0;
-    public static final int POST    = 2;
-    public static final int UPLOAD  = 3;
-    private             int mAction = GET;
+    public static final int GET = 0;
+    public static final int POST = 2;
+    public static final int UPLOAD = 3;
+    private int mAction = GET;
 
-    private String              mType;
-    private String              urlRequest;
+    private String mType;
+    private String urlRequest;
     private Map<String, String> valuePair;
     private IRequestListener mIRequestListener = null;
-    private JsonHandler      mHandler          = null;
-    private File    mFile;
+    private JsonHandler mHandler = null;
+    private File mFile;
     private Context mContext;
 
     public HttpRequest(int action, String type, String url, IRequestListener listener, JsonHandler handler)
@@ -51,8 +47,7 @@ public class HttpRequest implements Runnable
         mHandler = handler;
     }
 
-    public HttpRequest(Context mContext, int action, String type, String url, Map<String, String> valuePairs,
-                       IRequestListener listener, JsonHandler handler)
+    public HttpRequest(Context mContext, int action, String type, String url, Map<String, String> valuePairs, IRequestListener listener, JsonHandler handler)
     {
         this(action, type, url, listener, handler);
         this.mContext = mContext;
@@ -77,8 +72,7 @@ public class HttpRequest implements Runnable
         }
     }
 
-    public HttpRequest(Context mContext, int action, String type, String url, Map<String, String> valuePairs, File mFile,
-                       IRequestListener listener, JsonHandler handler)
+    public HttpRequest(Context mContext, int action, String type, String url, Map<String, String> valuePairs, File mFile, IRequestListener listener, JsonHandler handler)
     {
         this(mContext, action, type, url, valuePairs, listener, handler);
         this.mFile = mFile;
@@ -86,8 +80,7 @@ public class HttpRequest implements Runnable
 
     public void run()
     {
-        Object result = doRequest();
-        Log.e("tag", "response result : " + result);
+        Response result = doRequest();
         try
         {
 
@@ -99,7 +92,7 @@ public class HttpRequest implements Runnable
                 {
                     if (mHandler != null)
                     {
-                        mHandler.parseJson(mContext, result.toString());
+                        mHandler.parseJson(mContext, result);
                         mIRequestListener.notify(mType, mHandler.getResultCode(), mHandler.getResultMsg(), mHandler);
                     }
 
@@ -109,17 +102,19 @@ public class HttpRequest implements Runnable
                     mIRequestListener.notify(mType, "-1", "网络请求失败...", null);
                 }
             }
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             e.printStackTrace();
         }
 
     }
 
-    public Object doRequest()
+    public Response doRequest()
     {
         try
         {
+           // System.setProperty("http.keepAlive", "false");
             if (mAction == GET)
             {
                 return doGet();
@@ -132,7 +127,8 @@ public class HttpRequest implements Runnable
             {
                 return doUpload();
             }
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -142,7 +138,7 @@ public class HttpRequest implements Runnable
     }
 
 
-    private String doGet() throws Exception
+    private Response doGet() throws Exception
     {
         OkHttpClient mOkHttpClient = new OkHttpClient();
         // mOkHttpClient.setConnectTimeout(10, TimeUnit.SECONDS);
@@ -151,19 +147,25 @@ public class HttpRequest implements Runnable
         //        mOkHttpClient.newBuilder().writeTimeout(10, TimeUnit.SECONDS);
         urlRequest = urlRequest + concatParams();
         LogUtil.e("TAG", urlRequest);
-        Request request = new Request.Builder().url(urlRequest).build();
+        Request request = new Request.Builder()
+                .url(urlRequest)
+                .addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
+                .addHeader("Accept-Encoding", "gzip, deflate")
+                .addHeader("Connection", "close")
+                .addHeader("Accept", "*/*")
+                .build();
         Response response = mOkHttpClient.newCall(request).execute();// execute
         if (response.isSuccessful())
         {
             System.out.println(response.code());
-            String body = response.body().string();
-            return body;
+            //String body = response.body().string();
+            return response;
         }
         return null;
     }
 
 
-    private String doPost() throws Exception
+    private Response doPost() throws Exception
     {
 
         LogUtil.e("TAG", urlRequest + concatParams());
@@ -204,16 +206,14 @@ public class HttpRequest implements Runnable
         RequestBody requestBody = builder.build();
 
         //当写请求头的时候，使用 header(name, value) 可以设置唯一的name、value。如果已经有值，旧的将被移除，然后添加新的。使用 addHeader(name, value) 可以添加多值（添加，不移除已有的）。
-        Request request = new Request.Builder().url(urlRequest).header("User-Agent", "OkHttp Headers.java")
-                .addHeader("Accept", "application/json; q=0.5").addHeader("Accept", "application/vnd.github.v3+json")
-                .post(requestBody).build();
+        Request request = new Request.Builder().url(urlRequest).header("User-Agent", "OkHttp Headers.java").addHeader("Accept", "application/json; q=0.5").addHeader("Accept", "application/vnd.github.v3+json").post(requestBody).build();
 
         Response response = mOkHttpClient.newCall(request).execute();// execute
         if (response.isSuccessful())
         {
             System.out.println(response.code());
-            String body = response.body().string();
-            return body;
+            //String body = response.body().string();
+            return response;
 
         }
         else
@@ -224,7 +224,7 @@ public class HttpRequest implements Runnable
     }
 
 
-    private String doUpload() throws Exception
+    private Response doUpload() throws Exception
     {
 
 
@@ -240,18 +240,15 @@ public class HttpRequest implements Runnable
 
         }
 
-        Request request = new Request.Builder().url(urlRequest)
-                .addHeader("User-Agent", "android")
-                .header("Content-Type", "text/html; charset=utf-8;")
-                .post(requestBody.build())//传参数、文件或者混合，改一下就行请求体就行
+        Request request = new Request.Builder().url(urlRequest).addHeader("User-Agent", "android").header("Content-Type", "text/html; charset=utf-8;").post(requestBody.build())//传参数、文件或者混合，改一下就行请求体就行
                 .build();
 
         Response response = client.newCall(request).execute();// execute
         if (response.isSuccessful())
         {
             System.out.println(response.code());
-            String body = response.body().string();
-            return body;
+            //String body = response.body().string();
+            return response;
 
         }
         return null;

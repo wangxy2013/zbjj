@@ -80,7 +80,7 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
     private static final String MSG_REPORT = "msg_report";
     private static final String GET_SHARE = "GET_SHARE";
     private static final String FAVORITE_LIKE = "favorite_like";
-    private final String UN_FAVORITE_LIKE = "un_favorite_like";
+    private static final String UN_FAVORITE_LIKE = "un_favorite_like";
     private static final String GET_VIDEO_PRICE = "get_live_price";
     private static final String GET_VIDEO_STREAM = "get_video_stream";
     private static final String BUY_VIDEO = "buy_live";
@@ -92,7 +92,7 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
     private static final int SET_STATISTICS = 0x06;
     private static final int GET_STREAM_REQUEST = 0x09;
     private static final int FAVORITE_LIKE_SUCCESS = 0x08;
-    private final int UN_FAVORITE_LIKE_SUCCESS = 0x10;
+    private static final int UN_FAVORITE_LIKE_SUCCESS = 0x10;
     private static final int GET_SHARE_CODE = 0x11;
     private static final int GET_SHARE_SUCCESS = 0x12;
     private static final int GET_TASK_SHARE_CODE = 0x13;
@@ -476,9 +476,9 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
                 LogUtil.e("TAG", "播放错误111111111111111111111111111111111111111111111111111");
                 errorMsg = s;
                 ToastUtil.show(VideoPlayActivity.this, "该网络暂无法播放，请切换网络重试");
-               // mChannelLayout.setVisibility(View.VISIBLE);
+                // mChannelLayout.setVisibility(View.VISIBLE);
 
-                if(null ==mChannelPopupWindow )
+                if (null == mChannelPopupWindow)
                 {
                     mChannelPopupWindow = new ChannelPopupWindow(VideoPlayActivity.this, new MyItemClickListener()
                     {
@@ -562,7 +562,8 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         showProgressDialog();
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
-        DataRequest.instance().request(VideoPlayActivity.this, Urls.getVideoStreamUrl(), this, HttpRequest.GET, GET_VIDEO_STREAM, valuePairs, new VideoStreamHandler());
+        DataRequest.instance().request(VideoPlayActivity.this, Urls.getVideoStreamUrl(), this, HttpRequest.GET, GET_VIDEO_STREAM, valuePairs, new
+                VideoStreamHandler());
     }
 
 
@@ -571,7 +572,8 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "video");
-        DataRequest.instance().request(VideoPlayActivity.this, Urls.getVideoPriceUrl(), this, HttpRequest.POST, GET_VIDEO_PRICE, valuePairs, new LivePriceInfoHandler());
+        DataRequest.instance().request(VideoPlayActivity.this, Urls.getVideoPriceUrl(), this, HttpRequest.POST, GET_VIDEO_PRICE, valuePairs, new
+                LivePriceInfoHandler());
 
     }
 
@@ -582,7 +584,8 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "video");
         valuePairs.put("duration", String.valueOf(duration));
-        DataRequest.instance().request(VideoPlayActivity.this, Urls.getStatisticsUrl(), this, HttpRequest.POST, "SET_STATISTICS", valuePairs, new ResultHandler());
+        DataRequest.instance().request(VideoPlayActivity.this, Urls.getStatisticsUrl(), this, HttpRequest.POST, "SET_STATISTICS", valuePairs, new
+                ResultHandler());
     }
 
     private void playVideo(String uri)
@@ -604,7 +607,8 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "video");
         valuePairs.put("finger", finger);
-        DataRequest.instance().request(VideoPlayActivity.this, Urls.getBuyLiveUrl(), this, HttpRequest.POST, BUY_VIDEO, valuePairs, new ResultHandler());
+        DataRequest.instance().request(VideoPlayActivity.this, Urls.getBuyLiveUrl(), this, HttpRequest.POST, BUY_VIDEO, valuePairs, new
+                ResultHandler());
     }
 
     private void getTaskShareUrl()
@@ -612,7 +616,8 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "video");
-        DataRequest.instance().request(VideoPlayActivity.this, Urls.getTaskShareUrl(), this, HttpRequest.GET, GET_TASK_SHARE, valuePairs, new SignInfoHandler());
+        DataRequest.instance().request(VideoPlayActivity.this, Urls.getTaskShareUrl(), this, HttpRequest.GET, GET_TASK_SHARE, valuePairs, new
+                SignInfoHandler());
     }
 
     private void getShareUrl()
@@ -620,7 +625,8 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "video");
-        DataRequest.instance().request(VideoPlayActivity.this, Urls.getShareUrl(), this, HttpRequest.GET, GET_SHARE, valuePairs, new ShareInfoHandler());
+        DataRequest.instance().request(VideoPlayActivity.this, Urls.getShareUrl(), this, HttpRequest.GET, GET_SHARE, valuePairs, new
+                ShareInfoHandler());
     }
 
     @Override
@@ -713,12 +719,14 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
     private void reportMsg(String msg)
     {
         showProgressDialog();
-        String content = "{\"model\":\"" + SystemUtil.getSystemModel() + "\",\"error\":\"" + msg + "\",\"sys\":\"" + SystemUtil.getSystemVersion() + "\",\"video_id\":\"" + biz_id + "\"}";
+        String content = "{\"model\":\"" + SystemUtil.getSystemModel() + "\",\"error\":\"" + msg + "\",\"sys\":\"" + SystemUtil.getSystemVersion()
+                + "\",\"video_id\":\"" + biz_id + "\"}";
         LogUtil.e("TAG", "error-->" + content);
 
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("content", content);
-        DataRequest.instance().request(VideoPlayActivity.this, Urls.getMsgReportUrl(), this, HttpRequest.POST, MSG_REPORT, valuePairs, new ResultHandler());
+        DataRequest.instance().request(VideoPlayActivity.this, Urls.getMsgReportUrl(), this, HttpRequest.POST, MSG_REPORT, valuePairs, new
+                ResultHandler());
 
     }
 
@@ -729,7 +737,8 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "video");
-        DataRequest.instance().request(VideoPlayActivity.this, Urls.getCollectionRequestUrl(), this, HttpRequest.POST, FAVORITE_LIKE, valuePairs, new ResultHandler());
+        DataRequest.instance().request(VideoPlayActivity.this, Urls.getCollectionRequestUrl(), this, HttpRequest.POST, FAVORITE_LIKE, valuePairs,
+                new ResultHandler());
     }
 
     private void unFavoriteLike()
@@ -738,7 +747,8 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "video");
-        DataRequest.instance().request(VideoPlayActivity.this, Urls.getFavoriteUnLikeUrl(), this, HttpRequest.POST, UN_FAVORITE_LIKE, valuePairs, new ResultHandler());
+        DataRequest.instance().request(VideoPlayActivity.this, Urls.getFavoriteUnLikeUrl(), this, HttpRequest.POST, UN_FAVORITE_LIKE, valuePairs,
+                new ResultHandler());
     }
 
     @Override

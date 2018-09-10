@@ -35,6 +35,7 @@ import com.zb.wyd.adapter.ChatAdapter;
 import com.zb.wyd.adapter.GiftAdapter;
 import com.zb.wyd.adapter.OnlineAdapter;
 import com.zb.wyd.entity.ChatInfo;
+import com.zb.wyd.entity.FortuneInfo;
 import com.zb.wyd.entity.GiftInfo;
 import com.zb.wyd.entity.LiveInfo;
 import com.zb.wyd.entity.PriceInfo;
@@ -91,26 +92,26 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     @BindView(R.id.iv_user_pic)
     CircleImageView ivUserPic;
     @BindView(R.id.tv_user_name)
-    TextView        tvUserName;
+    TextView tvUserName;
     @BindView(R.id.tv_favour_count)
-    TextView        tvFavourCount;
+    TextView tvFavourCount;
     @BindView(R.id.tv_follow)
-    TextView        tvFollow;
+    TextView tvFollow;
     @BindView(R.id.rv_online)
-    RecyclerView    rvOnline;
+    RecyclerView rvOnline;
 
     @BindView(R.id.rl_content)
     RelativeLayout mContentLayout;
     @BindView(R.id.iv_closed)
-    ImageView      ivClosed;
+    ImageView ivClosed;
     @BindView(R.id.tv_dm)
-    TextView       tvDm;
+    TextView tvDm;
     @BindView(R.id.iv_report)
-    ImageView      ivReport;
+    ImageView ivReport;
     @BindView(R.id.iv_gift)
-    ImageView      ivGift;
+    ImageView ivGift;
     @BindView(R.id.et_say)
-    EditText       etSay;
+    EditText etSay;
 
     @BindView(R.id.tv_location)
     TextView tvLocation;
@@ -119,7 +120,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     @BindView(R.id.rl_live_bottom)
     RelativeLayout mLiveBottomLayout;
     @BindView(R.id.ll_gift_container)
-    LinearLayout   llGiftContainer;
+    LinearLayout llGiftContainer;
 
     @BindView(R.id.rv_system)
     RecyclerView mSystemRecyclerView;
@@ -132,52 +133,58 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     private String playUrl;
 
     private int webSocketConnentCount = 0;
-    private String  has_favorite;
+    private String has_favorite;
     private boolean dmShow;
     private List<UserInfo> onlineList = new ArrayList<>();
     private OnlineAdapter mOnlineAdapter;
     private List<GiftInfo> giftInfoList = new ArrayList<>();
 
     private List<ChatInfo> mSystemChatInfoList = new ArrayList<>();
-    private List<ChatInfo> mChatInfoList       = new ArrayList<>();
+    private List<ChatInfo> mChatInfoList = new ArrayList<>();
 
     private ChatAdapter mSystemChatAdapter;
     private ChatAdapter mChatAdapter;
+    private int mCashCount;//砖石
+    private int mGiftCount;//积分点
+    private int mGiftPrice;
+
+    private static final String GET_USER_DETAIL = "get_user_detail";
+    private static final String GET_ANCHOR_INFO = "get_anchor_info";
+    private static final String GET_LIVE_PRICE = "get_live_price";
+    private static final String GET_LIVE_STREAM = "get_live_stream";
+    private static final String GET_ONLINER = "get_onliner";
+    private static final String BUY_LIVE = "buy_live";
+    private static final String FAVORITE_LIKE = "favorite_like";
+    private final String UN_FAVORITE_LIKE = "un_favorite_like";
+    private final String GET_FORTUNE_GIFT = "get_fortune_gift";
+    private final String FORTUNE_BUY = "fortune_buy";
 
 
-    private static final String GET_USER_INFO    = "get_user_info";
-    private static final String GET_LIVE_PRICE   = "get_live_price";
-    private static final String GET_LIVE_STREAM  = "get_live_stream";
-    private static final String GET_ONLINER      = "get_onliner";
-    private static final String BUY_LIVE         = "buy_live";
-    private static final String FAVORITE_LIKE    = "favorite_like";
-    private final        String UN_FAVORITE_LIKE = "un_favorite_like";
-    private final        String GET_FORTUNE_GIFT = "get_fortune_gift";
-    private final        String FORTUNE_BUY      = "fortune_buy";
-
-    private static final int REQUEST_SUCCESS          = 0x01;
-    private static final int REQUEST_FAIL             = 0x02;
-    private static final int GET_LIVE_PRICE_SUCCESS   = 0x03;
-    private static final int BUY_LIVE_SUCCESS         = 0x05;
-    private static final int SET_STATISTICS           = 0x06;
-    private static final int GET_ONLINER_SUCCESS      = 0x07;
-    private static final int GET_ONLINER_REQUEST      = 0x08;
-    private static final int GET_STREAM_REQUEST       = 0x09;
-    private static final int GET_ANCHOR_REQUEST       = 0x10;
-    private static final int FAVORITE_LIKE_SUCCESS    = 0x11;
+    private static final int REQUEST_SUCCESS = 0x01;
+    private static final int REQUEST_FAIL = 0x02;
+    private static final int GET_LIVE_PRICE_SUCCESS = 0x03;
+    private static final int BUY_LIVE_SUCCESS = 0x05;
+    private static final int SET_STATISTICS = 0x06;
+    private static final int GET_ONLINER_SUCCESS = 0x07;
+    private static final int GET_ONLINER_REQUEST = 0x08;
+    private static final int GET_STREAM_REQUEST = 0x09;
+    private static final int GET_ANCHOR_REQUEST = 0x10;
+    private static final int FAVORITE_LIKE_SUCCESS = 0x11;
     private static final int UN_FAVORITE_LIKE_SUCCESS = 0x15;
-    private static final int FAVORITE_LIKE_FAIL       = 0x14;
-    private static final int GET_ANCHOR_SUCCESS       = 0x12;
+    private static final int FAVORITE_LIKE_FAIL = 0x14;
+    private static final int GET_ANCHOR_SUCCESS = 0x12;
     //    private static final int SHOW_SYSTEM_TV = 0x13;
     private static final int GET_FORTUNE_GIFT_SUCCESS = 0x16;
-    private static final int FORTUNE_BUY_SUCCESS      = 0x17;
-    private static final int GET_FORTUNE_GIFT_FAIL    = 0x18;
+    private static final int FORTUNE_BUY_SUCCESS = 0x17;
+    private static final int GET_FORTUNE_GIFT_FAIL = 0x18;
     private static final int FORTUNE_BUY_SUCCESS_FAIL = 0x19;
-    private static final int WEBSOCKET_CONNECT        = 0x20;
+    private static final int WEBSOCKET_CONNECT = 0x20;
+    private static final int SHOW_TOAST = 0X21;
+    private static final int GET_USER_DETAIL_REQUEST = 0X022;
+    private static final int GET_USER_DETAIL_SUCCESS = 0X023;
 
-    private static final int           SHOW_TOAST = 0X21;
     @SuppressLint("HandlerLeak")
-    private              NoLeakHandler mHandler   = new NoLeakHandler(LiveActivity.this)
+    private NoLeakHandler mHandler = new NoLeakHandler(LiveActivity.this)
     {
         @Override
         public void handleMessage(Message msg)
@@ -196,12 +203,14 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                         videoPlayer.setUp(playUrl, false, "");
                         videoPlayer.startPlayLogic();
                         mHandler.sendEmptyMessageDelayed(WEBSOCKET_CONNECT, 1 * 1000);
+                        mHandler.sendEmptyMessage(GET_USER_DETAIL_REQUEST);
                     }
                     break;
 
 
                 case REQUEST_FAIL:
-                    DialogUtils.showPromptDialog(LiveActivity.this, msg.obj.toString(), new MyItemClickListener()
+                    DialogUtils.showPromptDialog(LiveActivity.this, msg.obj.toString(), new
+                            MyItemClickListener()
                     {
                         @Override
                         public void onItemClick(View view, int position)
@@ -218,7 +227,8 @@ public class LiveActivity extends BaseActivity implements IRequestListener
 
                     if (null != mLivePriceInfo)
                     {
-                        DialogUtils.showLivePriceDialog(LiveActivity.this, mLivePriceInfo, new View.OnClickListener()
+                        DialogUtils.showLivePriceDialog(LiveActivity.this, mLivePriceInfo, new
+                                View.OnClickListener()
                         {
                             @Override
                             public void onClick(View v)
@@ -240,13 +250,15 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                                 //购买VIP
                                 else if ("3".equals(content))
                                 {
-                                    startActivity(new Intent(LiveActivity.this, MemberActivity.class));
+                                    startActivity(new Intent(LiveActivity.this, MemberActivity
+                                            .class));
                                 }
                                 else//去做任务
                                 {
 
                                     // sendBroadcast(new Intent(MainActivity.TAB_TASK));
-                                    startActivity(new Intent(LiveActivity.this, TaskActivity.class));
+                                    startActivity(new Intent(LiveActivity.this, TaskActivity
+                                            .class));
                                     finish();
                                 }
                             }
@@ -279,7 +291,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                     break;
 
                 case GET_ANCHOR_REQUEST:
-                    getUserInfo();
+                    getAnchorInfo();
 
                     break;
 
@@ -298,9 +310,9 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                     break;
                 case GET_ANCHOR_SUCCESS:
 
-                    UserInfoHandler mUserInfoHandler = (UserInfoHandler) msg.obj;
+                    UserInfoHandler mAnchorHandler = (UserInfoHandler) msg.obj;
 
-                    UserInfo mUserInfo = mUserInfoHandler.getUserInfo();
+                    UserInfo mUserInfo = mAnchorHandler.getUserInfo();
 
                     if (null != mUserInfo)
                     {
@@ -349,18 +361,21 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                     //1113 需要邀请5人（此刻需要引导去任务大厅）
                     if ("1102".equals(resultCode))
                     {
-                        DialogUtils.showToastDialog2Button(LiveActivity.this, resultHandler.getResultMsg(), new View.OnClickListener()
+                        DialogUtils.showToastDialog2Button(LiveActivity.this, resultHandler
+                                .getResultMsg(), new View.OnClickListener()
                         {
                             @Override
                             public void onClick(View view)
                             {
-                                startActivity(new Intent(LiveActivity.this, MyMasonryActivity.class));
+                                startActivity(new Intent(LiveActivity.this, MyMasonryActivity
+                                        .class));
                             }
                         });
                     }
                     else if ("1112".equals(resultCode))
                     {
-                        DialogUtils.showToastDialog2Button(LiveActivity.this, resultHandler.getResultMsg(), new View.OnClickListener()
+                        DialogUtils.showToastDialog2Button(LiveActivity.this, resultHandler
+                                .getResultMsg(), new View.OnClickListener()
                         {
                             @Override
                             public void onClick(View view)
@@ -371,7 +386,8 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                     }
                     else if ("1113".equals(resultCode))
                     {
-                        DialogUtils.showToastDialog2Button(LiveActivity.this, resultHandler.getResultMsg(), new View.OnClickListener()
+                        DialogUtils.showToastDialog2Button(LiveActivity.this, resultHandler
+                                .getResultMsg(), new View.OnClickListener()
                         {
                             @Override
                             public void onClick(View view)
@@ -384,6 +400,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
 
                 case FORTUNE_BUY_SUCCESS:
 
+                    mGiftCount -= mGiftPrice;
                     ToastUtil.show(LiveActivity.this, "感谢您的支持");
 
 
@@ -404,9 +421,32 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                     ToastUtil.show(LiveActivity.this, msg.obj.toString());
                     initWebSocket();
                     break;
+
+                case GET_USER_DETAIL_REQUEST:
+                    getUserDetail();
+                    break;
+
+                case GET_USER_DETAIL_SUCCESS:
+                    UserInfoHandler mUserInfoHandler = (UserInfoHandler) msg.obj;
+                    UserInfo userInfo = mUserInfoHandler.getUserInfo();
+
+                    if (null != userInfo)
+                    {
+
+                        FortuneInfo fortuneInfo = userInfo.getFortuneInfo();
+
+                        if (null != fortuneInfo)
+                        {
+                            mCashCount = Integer.parseInt(fortuneInfo.getCash());
+                            mGiftCount = Integer.parseInt(fortuneInfo.getGift());
+                        }
+
+                    }
+                    break;
             }
         }
     };
+
 
     @Override
     protected void initData()
@@ -419,9 +459,9 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         String[] giftPriceArr = getResources().getStringArray(R.array.gift_price);
         String[] giftStyleArr = getResources().getStringArray(R.array.gift_style);
         String[] giftIdArr = getResources().getStringArray(R.array.gift_id);
-        int[] giftDrawableArr = new int[]{
-                R.drawable.ic_gift_pear, R.drawable.ic_gift_666, R.drawable.ic_gift_blanana, R.drawable.ic_gift_cannon, R.drawable
-                .ic_gift_ring, R.drawable.ic_gift_car, R.drawable.ic_gift_car1, R.drawable.ic_gift_love};
+        int[] giftDrawableArr = new int[]{R.drawable.ic_gift_pear, R.drawable.ic_gift_666, R
+                .drawable.ic_gift_blanana, R.drawable.ic_gift_cannon, R.drawable.ic_gift_ring, R
+                .drawable.ic_gift_car, R.drawable.ic_gift_car1, R.drawable.ic_gift_love};
 
         for (int i = 0; i < giftNameArr.length; i++)
         {
@@ -442,7 +482,8 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     protected void initViews(Bundle savedInstanceState)
     {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager
+                .LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_live);
     }
 
@@ -464,15 +505,18 @@ public class LiveActivity extends BaseActivity implements IRequestListener
             {
                 if (actionId == EditorInfo.IME_ACTION_SEND)
                 {
-                    InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService
+                            (Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
 
                     String sendMsg = etSay.getText().toString();
 
-                    if (!TextUtils.isEmpty(sendMsg) && null != mMySocketConnection && mMySocketConnection.isConnected())
+                    if (!TextUtils.isEmpty(sendMsg) && null != mMySocketConnection &&
+                            mMySocketConnection.isConnected())
                     {
-                        String sendContent = "{\"type\":\"say\",\"data\":\"" + sendMsg + "\",\"action\":\"\"}";
+                        String sendContent = "{\"type\":\"say\",\"data\":\"" + sendMsg + "\"," +
+                                "\"action\":\"\"}";
                         LogUtil.e("TAG", "sendContent-->" + sendContent);
                         mMySocketConnection.sendTextMessage(sendContent);
                         etSay.setText("");
@@ -483,14 +527,16 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                             UserInfo userInfo = new UserInfo();
                             userInfo.setUface(ConfigManager.instance().getUserPic());
                             String userName = ConfigManager.instance().getUserNickName();
-                            userInfo.setUnick(TextUtils.isEmpty(userName) ? ConfigManager.instance().getUserName() : userName);
+                            userInfo.setUnick(TextUtils.isEmpty(userName) ? ConfigManager
+                                    .instance().getUserName() : userName);
                             userInfo.setVip_level(ConfigManager.instance().getVipLevelVIE() + "");
                             chatInfo.setUserInfo(userInfo);
                             mChatInfoList.add(chatInfo);
                             mChatAdapter.notifyItemChanged(mChatInfoList.size());
                             mChatRecyclerView.scrollToPosition(mChatInfoList.size() - 1);
                             //                                    }
-                        } catch (JSONException e)
+                        }
+                        catch (JSONException e)
                         {
                             e.printStackTrace();
                         }
@@ -700,7 +746,6 @@ public class LiveActivity extends BaseActivity implements IRequestListener
 
         mHandler.sendEmptyMessage(GET_ONLINER_REQUEST);
         mHandler.sendEmptyMessage(GET_ANCHOR_REQUEST);
-
         LPAnimationManager.init(this);
         LPAnimationManager.addGiftContainer(llGiftContainer);
 
@@ -711,7 +756,8 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     private void initChat()
     {
 
-        mSystemRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        mSystemRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager
+                .VERTICAL, false));
         mSystemChatAdapter = new ChatAdapter(mSystemChatInfoList, new MyItemClickListener()
         {
             @Override
@@ -729,10 +775,13 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                     finish();
                 }
 
-                else if (chatInfo.getAction().startsWith("http") || chatInfo.getAction().startsWith("https"))
+                else if (chatInfo.getAction().startsWith("http") || chatInfo.getAction()
+                        .startsWith("https"))
                 {
-                    startActivity(new Intent(LiveActivity.this, WebViewActivity.class).putExtra(WebViewActivity.EXTRA_TITLE, "详情").putExtra(WebViewActivity
-                            .IS_SETTITLE, true).putExtra(WebViewActivity.EXTRA_URL, chatInfo.getAction()));
+                    startActivity(new Intent(LiveActivity.this, WebViewActivity.class).putExtra
+                            (WebViewActivity.EXTRA_TITLE, "详情").putExtra(WebViewActivity
+                            .IS_SETTITLE, true).putExtra(WebViewActivity.EXTRA_URL, chatInfo
+                            .getAction()));
                 }
 
             }
@@ -740,7 +789,8 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         mSystemRecyclerView.setAdapter(mSystemChatAdapter);
 
 
-        mChatRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        mChatRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager
+                .VERTICAL, false));
         mChatAdapter = new ChatAdapter(mChatInfoList, new MyItemClickListener()
         {
             @Override
@@ -753,13 +803,21 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         mChatRecyclerView.setAdapter(mChatAdapter);
     }
 
+
+    private void getUserDetail()
+    {
+        Map<String, String> valuePairs = new HashMap<>();
+        DataRequest.instance().request(LiveActivity.this, Urls.getUserInfoUrl(), this,
+                HttpRequest.GET, GET_USER_DETAIL, valuePairs, new UserInfoHandler());
+    }
+
     private void getLivePrice()
     {
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "live");
-        DataRequest.instance().request(LiveActivity.this, Urls.getLivePriceUrl(), this, HttpRequest.GET, GET_LIVE_PRICE, valuePairs, new LivePriceInfoHandler
-                ());
+        DataRequest.instance().request(LiveActivity.this, Urls.getLivePriceUrl(), this,
+                HttpRequest.GET, GET_LIVE_PRICE, valuePairs, new LivePriceInfoHandler());
 
     }
 
@@ -769,7 +827,8 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         showProgressDialog();
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
-        DataRequest.instance().request(LiveActivity.this, Urls.getLiveStreamUrl(), this, HttpRequest.GET, GET_LIVE_STREAM, valuePairs, new LiveInfoHandler());
+        DataRequest.instance().request(LiveActivity.this, Urls.getLiveStreamUrl(), this,
+                HttpRequest.GET, GET_LIVE_STREAM, valuePairs, new LiveInfoHandler());
     }
 
     //兑换
@@ -780,7 +839,8 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "live");
         valuePairs.put("finger", finger);
-        DataRequest.instance().request(LiveActivity.this, Urls.getBuyLiveUrl(), this, HttpRequest.POST, BUY_LIVE, valuePairs, new ResultHandler());
+        DataRequest.instance().request(LiveActivity.this, Urls.getBuyLiveUrl(), this, HttpRequest
+                .POST, BUY_LIVE, valuePairs, new ResultHandler());
     }
 
 
@@ -791,14 +851,16 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "live");
         valuePairs.put("duration", String.valueOf(duration));
-        DataRequest.instance().request(LiveActivity.this, Urls.getStatisticsUrl(), this, HttpRequest.POST, "SET_STATISTICS", valuePairs, new ResultHandler());
+        DataRequest.instance().request(LiveActivity.this, Urls.getStatisticsUrl(), this,
+                HttpRequest.POST, "SET_STATISTICS", valuePairs, new ResultHandler());
     }
 
-    private void getUserInfo()
+    private void getAnchorInfo()
     {
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
-        DataRequest.instance().request(LiveActivity.this, Urls.getAnchorDetailUrl(), this, HttpRequest.GET, GET_USER_INFO, valuePairs, new UserInfoHandler());
+        DataRequest.instance().request(LiveActivity.this, Urls.getAnchorDetailUrl(), this,
+                HttpRequest.GET, GET_ANCHOR_INFO, valuePairs, new UserInfoHandler());
     }
 
     private void getOnLiner()
@@ -807,7 +869,8 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "live");
-        DataRequest.instance().request(LiveActivity.this, Urls.getOnlinerUrl(), this, HttpRequest.GET, GET_ONLINER, valuePairs, new OnlinerListHandler());
+        DataRequest.instance().request(LiveActivity.this, Urls.getOnlinerUrl(), this, HttpRequest
+                .GET, GET_ONLINER, valuePairs, new OnlinerListHandler());
 
 
     }
@@ -818,8 +881,8 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "live");
-        DataRequest.instance().request(LiveActivity.this, Urls.getCollectionRequestUrl(), this, HttpRequest.POST, FAVORITE_LIKE, valuePairs, new
-                ResultHandler());
+        DataRequest.instance().request(LiveActivity.this, Urls.getCollectionRequestUrl(), this,
+                HttpRequest.POST, FAVORITE_LIKE, valuePairs, new ResultHandler());
     }
 
     private void unFavoriteLike()
@@ -828,8 +891,8 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "live");
-        DataRequest.instance().request(LiveActivity.this, Urls.getFavoriteUnLikeUrl(), this, HttpRequest.POST, UN_FAVORITE_LIKE, valuePairs, new
-                ResultHandler());
+        DataRequest.instance().request(LiveActivity.this, Urls.getFavoriteUnLikeUrl(), this,
+                HttpRequest.POST, UN_FAVORITE_LIKE, valuePairs, new ResultHandler());
     }
 
 
@@ -871,7 +934,8 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         }
         else if (v == ivClosed)
         {
-            DialogUtils.showToastDialog2Button(LiveActivity.this, "是否退出观看该直播", new View.OnClickListener()
+            DialogUtils.showToastDialog2Button(LiveActivity.this, "是否退出观看该直播", new View
+                    .OnClickListener()
             {
                 @Override
                 public void onClick(View v)
@@ -889,19 +953,16 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         }
         else if (v == ivGift)
         {
-            if (null == mGiftDialog)
-            {
-                mGiftDialog = showGiftDialog(LiveActivity.this, giftInfoList);
+            mGiftDialog = showGiftDialog(LiveActivity.this, giftInfoList);
 
-                mGiftDialog.setOnDismissListener(new DialogInterface.OnDismissListener()
+            mGiftDialog.setOnDismissListener(new DialogInterface.OnDismissListener()
+            {
+                @Override
+                public void onDismiss(DialogInterface dialogInterface)
                 {
-                    @Override
-                    public void onDismiss(DialogInterface dialogInterface)
-                    {
-                        mLiveBottomLayout.setVisibility(View.VISIBLE);
-                    }
-                });
-            }
+                    mLiveBottomLayout.setVisibility(View.VISIBLE);
+                }
+            });
 
             mLiveBottomLayout.setVisibility(View.GONE);
             mGiftDialog.show();
@@ -1025,7 +1086,8 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                                     {
                                         mChatInfoList.add(chatInfo);
                                         mChatAdapter.notifyItemChanged(mChatInfoList.size());
-                                        mChatRecyclerView.scrollToPosition(mChatInfoList.size() - 1);
+                                        mChatRecyclerView.scrollToPosition(mChatInfoList.size() -
+                                                1);
                                         //                                    }
                                     }
                                     else
@@ -1037,13 +1099,16 @@ public class LiveActivity extends BaseActivity implements IRequestListener
 
                                             String giftStr = chatInfo.getData();
 
-                                            if (!TextUtils.isEmpty(giftStr) && giftStr.contains("@"))
+                                            if (!TextUtils.isEmpty(giftStr) && giftStr.contains
+                                                    ("@"))
                                             {
                                                 String gift[] = giftStr.split("@");
                                                 if (null != userInfo)
                                                 {
-                                                    LPAnimationManager.addAnimalMessage(new AnimMessage(userInfo.getUnick(), userInfo.getFace(), 1,
-                                                            getGifName(gift[1]), getGiftDrawable(gift[1])));
+                                                    LPAnimationManager.addAnimalMessage(new
+                                                            AnimMessage(userInfo.getUnick(),
+                                                            userInfo.getFace(), 1, getGifName
+                                                            (gift[1]), getGiftDrawable(gift[1])));
                                                 }
                                             }
 
@@ -1053,7 +1118,8 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                                         {
                                             if ("liveads".equals(chatInfo.getAction()))
                                             {
-                                                ToastUtil.show(LiveActivity.this, chatInfo.getData());
+                                                ToastUtil.show(LiveActivity.this, chatInfo
+                                                        .getData());
                                                 finish();
                                             }
                                             else
@@ -1065,8 +1131,10 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                                                 }
 
                                                 mChatInfoList.add(chatInfo);
-                                                mChatAdapter.notifyItemChanged(mChatInfoList.size());
-                                                mChatRecyclerView.scrollToPosition(mChatInfoList.size() - 1);
+                                                mChatAdapter.notifyItemChanged(mChatInfoList.size
+                                                        ());
+                                                mChatRecyclerView.scrollToPosition(mChatInfoList
+                                                        .size() - 1);
                                             }
 
                                         }
@@ -1075,7 +1143,8 @@ public class LiveActivity extends BaseActivity implements IRequestListener
 
                                 }
 
-                            } catch (JSONException e)
+                            }
+                            catch (JSONException e)
                             {
                                 e.printStackTrace();
                             }
@@ -1094,7 +1163,8 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                     }
                 });
 
-                String wsUri = ConfigManager.instance().getChatUrl() + "/" + ConfigManager.instance().getUniqueCode() + "?biz_id=" + biz_id;
+                String wsUri = ConfigManager.instance().getChatUrl() + "/" + ConfigManager
+                        .instance().getUniqueCode() + "?biz_id=" + biz_id;
                 mMySocketConnection.startConnection(wsUri);
 
             }
@@ -1191,7 +1261,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                 mHandler.sendMessage(mHandler.obtainMessage(FAVORITE_LIKE_FAIL, resultMsg));
             }
         }
-        else if (GET_USER_INFO.equals(action))
+        else if (GET_ANCHOR_INFO.equals(action))
         {
             if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
             {
@@ -1227,6 +1297,17 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                 mHandler.sendMessage(mHandler.obtainMessage(FORTUNE_BUY_SUCCESS_FAIL, resultMsg));
             }
         }
+        else if (GET_USER_DETAIL.equals(action))
+        {
+            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(GET_USER_DETAIL_SUCCESS, obj));
+            }
+            //            else
+            //            {
+            //                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
+            //            }
+        }
 
 
     }
@@ -1251,7 +1332,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
 
     /***************** 礼物 ***********************************************/
 
-    private Dialog      mGiftDialog;
+    private Dialog mGiftDialog;
     private GiftAdapter giftAdapter;
 
     private int giftSelectedItem = -1;
@@ -1268,8 +1349,13 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         View v = LayoutInflater.from(mContext).inflate(R.layout.dialog_gift, null);
         dialog.setContentView(v);
 
-        TextView tvGiftPrice = (TextView) v.findViewById(R.id.tv_gift_price);
-        ImageView ivMasonry = (ImageView) v.findViewById(R.id.iv_masonry);
+        TextView tvGift = (TextView) v.findViewById(R.id.tv_gift);
+        TextView tvCash = (TextView) v.findViewById(R.id.tv_cash);
+
+        tvGift.setText("积分:" + mGiftCount);
+        tvCash.setText(mCashCount + "");
+
+        //  ImageView ivMasonry = (ImageView) v.findViewById(R.id.iv_masonry);
         TextView tvSubmit = (TextView) v.findViewById(R.id.tv_submit);
 
         tvSubmit.setOnClickListener(new View.OnClickListener()
@@ -1286,7 +1372,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         recyclerView.setLayoutManager(new FullyGridLayoutManager(mContext, 4));
 
 
-        changeGiftPrice(tvGiftPrice, ivMasonry);
+        //changeGiftPrice(tvGiftPrice, ivMasonry);
         giftAdapter = new GiftAdapter(mContext, giftInfoList, new MyItemClickListener()
         {
             @Override
@@ -1311,7 +1397,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                     giftAdapter.notifyDataSetChanged();
                 }
 
-                changeGiftPrice(tvGiftPrice, ivMasonry);
+                //changeGiftPrice(tvGiftPrice, ivMasonry);
 
             }
         });
@@ -1363,20 +1449,24 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         mGiftDialog.dismiss();
 
         GiftInfo giftInfo = giftInfoList.get(giftSelectedItem);
+        mGiftPrice = Integer.parseInt(giftInfo.getGiftPrice());
         getFortuneGift(giftInfo.getGiftId());
 
 
         //
         //        LPAnimationManager.addAnimalMessage(new AnimMessage("yu11", "", 10, "飞机"));
-        //        LPAnimationManager.addAnimalMessage(new AnimMessage("hellokitty11", "", 10, "飞机"));
+        //        LPAnimationManager.addAnimalMessage(new AnimMessage("hellokitty11", "", 10,
+        // "飞机"));
         //        LPAnimationManager.addAnimalMessage(new AnimMessage("我是小学生11", "", 20, "红包"));
         //
         //        LPAnimationManager.addAnimalMessage(new AnimMessage("yu22", "", 10, "飞机"));
-        //        LPAnimationManager.addAnimalMessage(new AnimMessage("hellokitty22", "", 10, "飞机"));
+        //        LPAnimationManager.addAnimalMessage(new AnimMessage("hellokitty22", "", 10,
+        // "飞机"));
         //        LPAnimationManager.addAnimalMessage(new AnimMessage("我是小学生22", "", 20, "红包"));
         //
         //        LPAnimationManager.addAnimalMessage(new AnimMessage("yu33", "", 10, "飞机"));
-        //        LPAnimationManager.addAnimalMessage(new AnimMessage("hellokitty33", "", 10, "飞机"));
+        //        LPAnimationManager.addAnimalMessage(new AnimMessage("hellokitty33", "", 10,
+        // "飞机"));
         //        LPAnimationManager.addAnimalMessage(new AnimMessage("我是小学生33", "", 20, "红包"));
     }
 
@@ -1386,8 +1476,8 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         showProgressDialog();
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("giftid", giftid);
-        DataRequest.instance().request(LiveActivity.this, Urls.getFortuneGiftUrl(), this, HttpRequest.POST, GET_FORTUNE_GIFT, valuePairs, new
-                LivePriceInfoHandler());
+        DataRequest.instance().request(LiveActivity.this, Urls.getFortuneGiftUrl(), this,
+                HttpRequest.POST, GET_FORTUNE_GIFT, valuePairs, new LivePriceInfoHandler());
     }
 
 
@@ -1397,7 +1487,8 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         valuePairs.put("biz_id", giftId);
         valuePairs.put("co_biz", "gift");
         valuePairs.put("finger", finger);
-        DataRequest.instance().request(LiveActivity.this, Urls.getFortuneBuyUrl(), this, HttpRequest.POST, FORTUNE_BUY, valuePairs, new ResultHandler());
+        DataRequest.instance().request(LiveActivity.this, Urls.getFortuneBuyUrl(), this,
+                HttpRequest.POST, FORTUNE_BUY, valuePairs, new ResultHandler());
     }
 
     /***************** 礼物 ***********************************************/
@@ -1422,9 +1513,9 @@ public class LiveActivity extends BaseActivity implements IRequestListener
 
     private int getGiftDrawable(String giftId)
     {
-        int[] giftDrawableArr = new int[]{
-                R.drawable.ic_gift_pear, R.drawable.ic_gift_666, R.drawable.ic_gift_blanana, R.drawable.ic_gift_cannon, R.drawable
-                .ic_gift_ring, R.drawable.ic_gift_car, R.drawable.ic_gift_car1, R.drawable.ic_gift_love};
+        int[] giftDrawableArr = new int[]{R.drawable.ic_gift_pear, R.drawable.ic_gift_666, R
+                .drawable.ic_gift_blanana, R.drawable.ic_gift_cannon, R.drawable.ic_gift_ring, R
+                .drawable.ic_gift_car, R.drawable.ic_gift_car1, R.drawable.ic_gift_love};
         String[] giftIdArr = getResources().getStringArray(R.array.gift_id);
         int mDrawableId = giftDrawableArr[0];
         for (int i = 0; i < giftIdArr.length; i++)

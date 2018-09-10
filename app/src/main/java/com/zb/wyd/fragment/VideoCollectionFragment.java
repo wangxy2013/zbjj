@@ -16,6 +16,7 @@ import com.zb.wyd.activity.BaseHandler;
 import com.zb.wyd.activity.LiveActivity;
 import com.zb.wyd.activity.VideoPlayActivity;
 import com.zb.wyd.adapter.AnchorAdapter;
+import com.zb.wyd.adapter.CollectionVideoAdapter;
 import com.zb.wyd.adapter.IntegerAreaAdapter;
 import com.zb.wyd.entity.LiveInfo;
 import com.zb.wyd.entity.VideoInfo;
@@ -23,6 +24,7 @@ import com.zb.wyd.http.DataRequest;
 import com.zb.wyd.http.HttpRequest;
 import com.zb.wyd.http.IRequestListener;
 import com.zb.wyd.json.LiveInfoListHandler;
+import com.zb.wyd.json.ResultHandler;
 import com.zb.wyd.json.VideoInfoListHandler;
 import com.zb.wyd.listener.MyItemClickListener;
 import com.zb.wyd.utils.ConstantUtil;
@@ -43,7 +45,8 @@ import butterknife.Unbinder;
 /**
  * 描述：收藏视频
  */
-public class VideoCollectionFragment extends BaseFragment implements PullToRefreshBase.OnRefreshListener<RecyclerView>, IRequestListener, View.OnClickListener
+public class VideoCollectionFragment extends BaseFragment implements PullToRefreshBase.OnRefreshListener<RecyclerView>, IRequestListener, View
+        .OnClickListener
 {
     @BindView(R.id.refreshRecyclerView)
     PullToRefreshRecyclerView mPullToRefreshRecyclerView;
@@ -52,15 +55,16 @@ public class VideoCollectionFragment extends BaseFragment implements PullToRefre
     private int mRefreshStatus;
 
 
-    private IntegerAreaAdapter mAdapter;
+    private CollectionVideoAdapter mAdapter;
     private List<VideoInfo> mVideoInfoList = new ArrayList<>();
-    private View            rootView       = null;
+    private View rootView = null;
     private Unbinder unbinder;
     private static final String GET_ANCHOR_LIST = "get_anchor_list";
+    private static final String UN_FAVORITE_LIKE = "un_favorite_like";
 
     private static final int REQUEST_SUCCESS = 0x01;
-    private static final int REQUEST_FAIL    = 0x02;
-
+    private static final int REQUEST_FAIL = 0x02;
+    private static final int UN_FAVORITE_LIKE_SUCCESS = 0x03;
     @SuppressLint("HandlerLeak")
     private BaseHandler mHandler = new BaseHandler(getActivity())
     {
@@ -82,7 +86,11 @@ public class VideoCollectionFragment extends BaseFragment implements PullToRefre
 
                     break;
 
-
+                case UN_FAVORITE_LIKE_SUCCESS:
+                    ToastUtil.show(getActivity(), "操作成功");
+                    mVideoInfoList.clear();
+                    loadData();
+                    break;
             }
         }
     };
@@ -135,7 +143,7 @@ public class VideoCollectionFragment extends BaseFragment implements PullToRefre
         mPullToRefreshRecyclerView.setPullRefreshEnabled(true);
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 
-        mAdapter = new IntegerAreaAdapter(mVideoInfoList,getActivity(), new MyItemClickListener()
+        mAdapter = new CollectionVideoAdapter(mVideoInfoList, getActivity(), new MyItemClickListener()
         {
             @Override
             public void onItemClick(View view, int position)
@@ -144,8 +152,14 @@ public class VideoCollectionFragment extends BaseFragment implements PullToRefre
                 b.putSerializable("VideoInfo", mVideoInfoList.get(position));
                 startActivity(new Intent(getActivity(), VideoPlayActivity.class).putExtras(b));
             }
-        });
-        mRecyclerView.setAdapter(mAdapter);
+        }, new MyItemClickListener()
+        {
+            @Override
+            public void onItemClick(View view, int position)
+            {
+                unFavoriteLike(mVideoInfoList.get(position).getId());
+            }
+        }); mRecyclerView.setAdapter(mAdapter);
 
     }
 
@@ -160,14 +174,24 @@ public class VideoCollectionFragment extends BaseFragment implements PullToRefre
         loadData();
     }
 
+    private void unFavoriteLike(String biz_id)
+    {
+        showProgressDialog(getActivity());
+        Map<String, String> valuePairs = new HashMap<>();
+        valuePairs.put("biz_id", biz_id);
+        valuePairs.put("co_biz", "video");
+        DataRequest.instance().request(getActivity(), Urls.getFavoriteUnLikeUrl(), this, HttpRequest.POST, UN_FAVORITE_LIKE, valuePairs, new
+                ResultHandler());
+    }
+
     private void loadData()
     {
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("pn", pn + "");
         valuePairs.put("num", "20");
         valuePairs.put("co_biz", "video");
-        DataRequest.instance().request(getActivity(), Urls.getFavoritUrl(), this, HttpRequest.GET, GET_ANCHOR_LIST, valuePairs,
-                new VideoInfoListHandler());
+        DataRequest.instance().request(getActivity(), Urls.getFavoritUrl(), this, HttpRequest.GET, GET_ANCHOR_LIST, valuePairs, new
+                VideoInfoListHandler());
     }
 
 
@@ -199,6 +223,18 @@ public class VideoCollectionFragment extends BaseFragment implements PullToRefre
             if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
             {
                 mHandler.sendMessage(mHandler.obtainMessage(REQUEST_SUCCESS, obj));
+            }
+            else
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
+            }
+        }
+        else if (UN_FAVORITE_LIKE.equals(action))
+        {
+            hideProgressDialog(getActivity());
+            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(UN_FAVORITE_LIKE_SUCCESS, obj));
             }
             else
             {

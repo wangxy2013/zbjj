@@ -19,6 +19,7 @@ import com.zb.wyd.activity.LiveActivity;
 import com.zb.wyd.activity.VideoPlayActivity;
 import com.zb.wyd.activity.VidoeListActivity;
 import com.zb.wyd.adapter.AnchorAdapter;
+import com.zb.wyd.adapter.CollectionAnchorAdapter;
 import com.zb.wyd.adapter.IntegerAreaAdapter;
 import com.zb.wyd.entity.LiveInfo;
 import com.zb.wyd.entity.VideoInfo;
@@ -26,6 +27,7 @@ import com.zb.wyd.http.DataRequest;
 import com.zb.wyd.http.HttpRequest;
 import com.zb.wyd.http.IRequestListener;
 import com.zb.wyd.json.LiveInfoListHandler;
+import com.zb.wyd.json.ResultHandler;
 import com.zb.wyd.json.VideoInfoListHandler;
 import com.zb.wyd.listener.MyItemClickListener;
 import com.zb.wyd.utils.ConstantUtil;
@@ -46,7 +48,8 @@ import butterknife.Unbinder;
 /**
  * 描述：收藏主播列表
  */
-public class AnchorCollectionFragment extends BaseFragment implements PullToRefreshBase.OnRefreshListener<RecyclerView>, IRequestListener, View.OnClickListener
+public class AnchorCollectionFragment extends BaseFragment implements PullToRefreshBase.OnRefreshListener<RecyclerView>, IRequestListener, View
+        .OnClickListener
 {
     @BindView(R.id.refreshRecyclerView)
     PullToRefreshRecyclerView mPullToRefreshRecyclerView;
@@ -55,16 +58,16 @@ public class AnchorCollectionFragment extends BaseFragment implements PullToRefr
     private int mRefreshStatus;
 
 
-
-
     private List<LiveInfo> liveInfoList = new ArrayList<>();
-    private AnchorAdapter mAnchorAdapter;
-    private View            rootView       = null;
+    private CollectionAnchorAdapter mAnchorAdapter;
+    private View rootView = null;
     private Unbinder unbinder;
-    private static final String GET_COLLECTION_VIDEO_LIST = "get_collection_video_list";
+    private static final String GET_COLLECTION_LIVE_LIST = "get_collection_live_list";
+    private final String UN_FAVORITE_LIKE = "un_favorite_like";
 
     private static final int REQUEST_SUCCESS = 0x01;
-    private static final int REQUEST_FAIL    = 0x02;
+    private static final int REQUEST_FAIL = 0x02;
+    private static final int UN_FAVORITE_LIKE_SUCCESS = 0x03;
 
     @SuppressLint("HandlerLeak")
     private BaseHandler mHandler = new BaseHandler(getActivity())
@@ -88,6 +91,11 @@ public class AnchorCollectionFragment extends BaseFragment implements PullToRefr
                 case REQUEST_FAIL:
                     ToastUtil.show(getActivity(), msg.obj.toString());
 
+                    break;
+                case UN_FAVORITE_LIKE_SUCCESS:
+                    ToastUtil.show(getActivity(), "操作成功");
+                    liveInfoList.clear();
+                    loadData();
                     break;
 
 
@@ -144,18 +152,25 @@ public class AnchorCollectionFragment extends BaseFragment implements PullToRefr
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 
 
-        mAnchorAdapter = new AnchorAdapter(liveInfoList, getActivity(), new MyItemClickListener()
+        mAnchorAdapter = new CollectionAnchorAdapter(liveInfoList, getActivity(), new MyItemClickListener()
         {
             @Override
             public void onItemClick(View view, int position)
             {
                 LiveInfo mLiveInfo = liveInfoList.get(position);
-                startActivity(new Intent(getActivity(), LiveActivity.class).putExtra("biz_id",mLiveInfo.getId()));
+                startActivity(new Intent(getActivity(), LiveActivity.class).putExtra("biz_id", mLiveInfo.getId()));
 
+            }
+        }, new MyItemClickListener()
+        {
+            @Override
+            public void onItemClick(View view, int position)
+            {
+                LiveInfo mLiveInfo = liveInfoList.get(position);
+                unFavoriteLike(mLiveInfo.getId());
             }
         });
         mRecyclerView.setAdapter(mAnchorAdapter);
-
 
 
         loadData();
@@ -168,10 +183,19 @@ public class AnchorCollectionFragment extends BaseFragment implements PullToRefr
         valuePairs.put("pn", pn + "");
         valuePairs.put("num", "20");
         valuePairs.put("co_biz", "live");
-        DataRequest.instance().request(getActivity(), Urls.getFavoritUrl(), this, HttpRequest.GET, GET_COLLECTION_VIDEO_LIST, valuePairs,
-                new LiveInfoListHandler());
+        DataRequest.instance().request(getActivity(), Urls.getFavoritUrl(), this, HttpRequest.GET, GET_COLLECTION_LIVE_LIST, valuePairs, new
+                LiveInfoListHandler());
     }
 
+    private void unFavoriteLike(String biz_id)
+    {
+        showProgressDialog(getActivity());
+        Map<String, String> valuePairs = new HashMap<>();
+        valuePairs.put("biz_id", biz_id);
+        valuePairs.put("co_biz", "live");
+        DataRequest.instance().request(getActivity(), Urls.getFavoriteUnLikeUrl(), this, HttpRequest.POST, UN_FAVORITE_LIKE, valuePairs, new
+                ResultHandler());
+    }
 
     @Override
     public void onDestroy()
@@ -196,11 +220,23 @@ public class AnchorCollectionFragment extends BaseFragment implements PullToRefr
             mPullToRefreshRecyclerView.onPullDownRefreshComplete();
         }
 
-        if (GET_COLLECTION_VIDEO_LIST.equals(action))
+        if (GET_COLLECTION_LIVE_LIST.equals(action))
         {
             if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
             {
                 mHandler.sendMessage(mHandler.obtainMessage(REQUEST_SUCCESS, obj));
+            }
+            else
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
+            }
+        }
+        else if (UN_FAVORITE_LIKE.equals(action))
+        {
+            hideProgressDialog(getActivity());
+            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(UN_FAVORITE_LIKE_SUCCESS, obj));
             }
             else
             {

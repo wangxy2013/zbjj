@@ -58,49 +58,47 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
     MyVideoPlayer videoPlayer;
 
     private OrientationUtils orientationUtils;
-    private ImageView mCollectionIv;
-    private ImageView mShareIv;
-    private ImageView mReportIv;
-    private ImageView mSettingIv;
-    private LinearLayout mChannelLayout;
-    private LinearLayout mSeekLayout;
+    private ImageView        mCollectionIv;
+    private ImageView        mShareIv;
+    private ImageView        mReportIv;
+    private ImageView        mSettingIv;
+    private LinearLayout     mSeekLayout;
 
     private String has_favorite = "0";
-    private TextView mYdTv, mDxTv, mCmTv;
     private VideoInfo mVideoInfo;
-    private String videoName, biz_id;
-    private String videoUri;
+    private String    videoName, biz_id;
+    private String      videoUri;
     private ChannelInfo mChannelInfo;
-    private String shareCnontent;
-    private long startTime, endTime;
+    private String      shareCnontent;
+    private long        startTime, endTime;
     private String errorMsg = "网络异常";
 
     private ChannelPopupWindow mChannelPopupWindow;
 
-    private static final String MSG_REPORT = "msg_report";
-    private static final String GET_SHARE = "GET_SHARE";
-    private static final String FAVORITE_LIKE = "favorite_like";
-    private static final String UN_FAVORITE_LIKE = "un_favorite_like";
-    private static final String GET_VIDEO_PRICE = "get_live_price";
-    private static final String GET_VIDEO_STREAM = "get_video_stream";
-    private static final String BUY_VIDEO = "buy_live";
-    private static final String GET_TASK_SHARE = "GET_TASK_SHARE";
-    private static final int REQUEST_SUCCESS = 0x01;
-    private static final int REQUEST_FAIL = 0x02;
-    private static final int GET_VIDEO_PRICE_SUCCESS = 0x03;
-    private static final int BUY_VIDEO_SUCCESS = 0x05;
-    private static final int SET_STATISTICS = 0x06;
-    private static final int GET_STREAM_REQUEST = 0x09;
-    private static final int FAVORITE_LIKE_SUCCESS = 0x08;
-    private static final int UN_FAVORITE_LIKE_SUCCESS = 0x10;
-    private static final int GET_SHARE_CODE = 0x11;
-    private static final int GET_SHARE_SUCCESS = 0x12;
-    private static final int GET_TASK_SHARE_CODE = 0x13;
-    private static final int GET_TASK_SHARE_SUCCESS = 0x14;
-    private static final int SHARE_PHOTO_REQUEST_CODE = 0x91;
-    private static final int MSG_REPORT_SUCCESS = 0x21;
+    private static final String      MSG_REPORT               = "msg_report";
+    private static final String      GET_SHARE                = "GET_SHARE";
+    private static final String      FAVORITE_LIKE            = "favorite_like";
+    private static final String      UN_FAVORITE_LIKE         = "un_favorite_like";
+    private static final String      GET_VIDEO_PRICE          = "get_live_price";
+    private static final String      GET_VIDEO_STREAM         = "get_video_stream";
+    private static final String      BUY_VIDEO                = "buy_live";
+    private static final String      GET_TASK_SHARE           = "GET_TASK_SHARE";
+    private static final int         REQUEST_SUCCESS          = 0x01;
+    private static final int         REQUEST_FAIL             = 0x02;
+    private static final int         GET_VIDEO_PRICE_SUCCESS  = 0x03;
+    private static final int         BUY_VIDEO_SUCCESS        = 0x05;
+    private static final int         SET_STATISTICS           = 0x06;
+    private static final int         GET_STREAM_REQUEST       = 0x09;
+    private static final int         FAVORITE_LIKE_SUCCESS    = 0x08;
+    private static final int         UN_FAVORITE_LIKE_SUCCESS = 0x10;
+    private static final int         GET_SHARE_CODE           = 0x11;
+    private static final int         GET_SHARE_SUCCESS        = 0x12;
+    private static final int         GET_TASK_SHARE_CODE      = 0x13;
+    private static final int         GET_TASK_SHARE_SUCCESS   = 0x14;
+    private static final int         SHARE_PHOTO_REQUEST_CODE = 0x91;
+    private static final int         MSG_REPORT_SUCCESS       = 0x21;
     @SuppressLint("HandlerLeak")
-    private BaseHandler mHandler = new BaseHandler(VideoPlayActivity.this)
+    private              BaseHandler mHandler                 = new BaseHandler(VideoPlayActivity.this)
     {
         @Override
         public void handleMessage(Message msg)
@@ -155,6 +153,8 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
 
                     if (null != mLivePriceInfo)
                     {
+
+
                         DialogUtils.showVideoPriceDialog(VideoPlayActivity.this, mLivePriceInfo, new View.OnClickListener()
                         {
                             @Override
@@ -167,6 +167,7 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
                             @Override
                             public void onSubmit(String content)
                             {
+
                                 if ("1".equals(content))//兑换
                                 {
 
@@ -174,12 +175,20 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
 
 
                                 }
+                                //购买VIP
+                                else if ("3".equals(content))
+                                {
+                                    startActivity(new Intent(VideoPlayActivity.this, MemberActivity .class));
+                                }
                                 else//去做任务
                                 {
-                                    //sendBroadcast(new Intent(MainActivity.TAB_TASK));
-                                    startActivity(new Intent(VideoPlayActivity.this, TaskActivity.class));
+
+                                    // sendBroadcast(new Intent(MainActivity.TAB_TASK));
+                                    startActivity(new Intent(VideoPlayActivity.this, TaskActivity
+                                            .class));
                                     finish();
                                 }
+
                             }
                         }).show();
                     }
@@ -281,20 +290,12 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         mCollectionIv = (ImageView) videoPlayer.findViewById(R.id.iv_collection);
         mShareIv = (ImageView) videoPlayer.findViewById(R.id.iv_share);
         mSettingIv = (ImageView) videoPlayer.findViewById(R.id.iv_setting);
-        mChannelLayout = (LinearLayout) videoPlayer.findViewById(R.id.ll_channel);
-        mYdTv = (TextView) videoPlayer.findViewById(R.id.tv_yd);
-        mDxTv = (TextView) videoPlayer.findViewById(R.id.tv_dx);
-        mCmTv = (TextView) videoPlayer.findViewById(R.id.tv_cm);
         mReportIv = (ImageView) videoPlayer.findViewById(R.id.iv_report);
         mSeekLayout = (LinearLayout) videoPlayer.findViewById(R.id.sp_layout);
-        mCmTv.setSelected(true);
 
         mCollectionIv.setOnClickListener(this);
         mShareIv.setOnClickListener(this);
         mSettingIv.setOnClickListener(this);
-        mYdTv.setOnClickListener(this);
-        mDxTv.setOnClickListener(this);
-        mCmTv.setOnClickListener(this);
         mReportIv.setOnClickListener(this);
 
         //  videoPlayer.setUp(source1, true, "测试视频");
@@ -477,31 +478,7 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
                 errorMsg = s;
                 ToastUtil.show(VideoPlayActivity.this, "该网络暂无法播放，请切换网络重试");
                 // mChannelLayout.setVisibility(View.VISIBLE);
-
-                if (null == mChannelPopupWindow)
-                {
-                    mChannelPopupWindow = new ChannelPopupWindow(VideoPlayActivity.this, new MyItemClickListener()
-                    {
-                        @Override
-                        public void onItemClick(View view, int position)
-                        {
-                            switch (position)
-                            {
-                                case 1:
-                                    playVideo(mChannelInfo.getCm() + videoUri);
-                                    break;
-                                case 2:
-                                    playVideo(mChannelInfo.getYd() + videoUri);
-                                    break;
-
-                                case 3:
-                                    playVideo(mChannelInfo.getDx() + videoUri);
-                                    break;
-                            }
-                        }
-                    });
-                }
-                mChannelPopupWindow.showAsDropDown(mShareIv);
+                showChannelPop();
 
                 videoPlayer.showSettingWidget();
                 //                DialogUtils.showChannelDialog(VideoPlayActivity.this, new MyItemClickListener()
@@ -553,7 +530,7 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
 
             }
         });
-        mHandler.sendEmptyMessage(GET_STREAM_REQUEST);
+
     }
 
 
@@ -629,6 +606,34 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
                 ShareInfoHandler());
     }
 
+    private void showChannelPop()
+    {
+        if (null == mChannelPopupWindow)
+        {
+            mChannelPopupWindow = new ChannelPopupWindow(VideoPlayActivity.this, new MyItemClickListener()
+            {
+                @Override
+                public void onItemClick(View view, int position)
+                {
+                    switch (position)
+                    {
+                        case 1:
+                            playVideo(mChannelInfo.getCm() + videoUri);
+                            break;
+                        case 2:
+                            playVideo(mChannelInfo.getYd() + videoUri);
+                            break;
+
+                        case 3:
+                            playVideo(mChannelInfo.getDx() + videoUri);
+                            break;
+                    }
+                }
+            });
+        }
+        mChannelPopupWindow.showAsDropDown(mShareIv);
+    }
+
     @Override
     public void onClick(View v)
     {
@@ -653,39 +658,7 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         }
         else if (v == mSettingIv)
         {
-            if (mChannelLayout.isShown())
-            {
-                mChannelLayout.setVisibility(View.GONE);
-            }
-            else
-            {
-                mChannelLayout.setVisibility(View.VISIBLE);
-            }
-
-        }
-        else if (v == mYdTv)
-        {
-            mYdTv.setSelected(true);
-            mCmTv.setSelected(false);
-            mDxTv.setSelected(false);
-            mChannelLayout.setVisibility(View.GONE);
-            playVideo(mChannelInfo.getYd() + videoUri);
-        }
-        else if (v == mDxTv)
-        {
-            mYdTv.setSelected(false);
-            mCmTv.setSelected(false);
-            mDxTv.setSelected(true);
-            mChannelLayout.setVisibility(View.GONE);
-            playVideo(mChannelInfo.getDx() + videoUri);
-        }
-        else if (v == mCmTv)
-        {
-            mYdTv.setSelected(false);
-            mCmTv.setSelected(true);
-            mDxTv.setSelected(false);
-            mChannelLayout.setVisibility(View.GONE);
-            playVideo(mChannelInfo.getCm() + videoUri);
+            showChannelPop();
         }
         else if (v == mReportIv)
         {
@@ -755,14 +728,16 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
     protected void onPause()
     {
         super.onPause();
-        videoPlayer.onVideoPause();
+        //videoPlayer.onVideoPause();
     }
 
     @Override
     protected void onResume()
     {
         super.onResume();
-        videoPlayer.onVideoResume();
+        mHandler.sendEmptyMessage(GET_STREAM_REQUEST);
+       // videoPlayer.onVideoResume();
+
     }
 
     @Override

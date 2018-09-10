@@ -350,24 +350,35 @@ public class DialogUtils
         dialog.setContentView(v);
         TextView priceTv = (TextView) v.findViewById(R.id.tv_price);
         TextView userMoneyTv = (TextView) v.findViewById(R.id.tv_user_money);
-
+        TextView msgTv = (TextView) v.findViewById(R.id.tv_msg);
+        ImageView mClosedIv = (ImageView) v.findViewById(R.id.iv_closed);
         TextView cancelTv = (TextView) v.findViewById(R.id.tv_cancel);
         TextView submitTv = (TextView) v.findViewById(R.id.tv_submit);
         Double userMoney = Double.parseDouble(mLivePriceInfo.getUser_money());
         int price = mLivePriceInfo.getOff_amount();
-
+        if (TextUtils.isEmpty(mLivePriceInfo.getMsg()))
+        {
+            msgTv.setVisibility(View.GONE);
+        }
+        else
+        {
+            msgTv.setVisibility(View.VISIBLE);
+            msgTv.setText(mLivePriceInfo.getMsg());
+        }
 
         priceTv.setText(price + "积分");
 
         if (userMoney >= price)
         {
             userMoneyTv.setText("剩余积分:" + mLivePriceInfo.getUser_money());
-            submitTv.setText("确认兑换");
+            submitTv.setText("购买VIP");
+            cancelTv.setText("积分兑换");
         }
         else
         {
             userMoneyTv.setText("您的积分不足!");
-            submitTv.setText("去做任务");
+            submitTv.setText("购买VIP");
+            cancelTv.setText("去做任务");
         }
 
 
@@ -377,18 +388,7 @@ public class DialogUtils
             public void onClick(View v)
             {
                 dialog.dismiss();
-                cancelListener.onClick(v);
-            }
-        });
-
-
-        submitTv.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                dialog.dismiss();
-
+                // cancelListener.onClick(v);
                 if (userMoney >= price)
                 {
                     listener.onSubmit("1");
@@ -397,7 +397,25 @@ public class DialogUtils
                 {
                     listener.onSubmit("2");
                 }
+            }
+        });
 
+        mClosedIv.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+                cancelListener.onClick(v);
+            }
+        });
+        submitTv.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+                listener.onSubmit("3");
             }
         });
 
@@ -410,7 +428,6 @@ public class DialogUtils
         mWindow.setAttributes(lp);
         return dialog;
     }
-
 
     /**
      * 提示框

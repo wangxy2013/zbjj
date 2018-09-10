@@ -419,6 +419,7 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
                 @Override
                 public void onSubmit(String content)
                 {
+
                     if ("1".equals(content))//兑换
                     {
 
@@ -426,12 +427,21 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
 
 
                     }
+                    //购买VIP
+                    else if ("3".equals(content))
+                    {
+                        startActivity(new Intent(PhotoDetailActivity.this, MemberActivity
+                                .class));
+                    }
                     else//去做任务
                     {
-                       // sendBroadcast(new Intent(MainActivity.TAB_TASK));
-                        startActivity(new Intent(PhotoDetailActivity.this,TaskActivity.class));
+
+                        // sendBroadcast(new Intent(MainActivity.TAB_TASK));
+                        startActivity(new Intent(PhotoDetailActivity.this, TaskActivity
+                                .class));
                         finish();
                     }
+
                 }
             }).show();
         }

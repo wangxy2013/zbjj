@@ -86,7 +86,7 @@ public class PhotoInfo
                     }
                     else
                     {
-                        freePic.add(host + charge[i]);
+                        chargePic.add(host + charge[i]);
                     }
                 }
 

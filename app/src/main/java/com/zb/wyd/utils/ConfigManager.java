@@ -49,11 +49,11 @@ public class ConfigManager
 
     private static final String DOMAIN_NAME = "domain_name";
 
-    private static final String CROSSFIRE  = "crossfire";
-    private static final String REG_CLOSED = "reg_closed";
-    private static final String IP_LOOK_UP = "ip_look_up";
-    private static final String   VIP_LEVEL  = "vip_level";
-    private static final String   VIP_TYPE  = "VIP_TYPE";
+    private static final String CROSSFIRE       = "crossfire";
+    private static final String REG_CLOSED      = "reg_closed";
+    private static final String IP_LOOK_UP      = "ip_look_up";
+    private static final String VIP_LEVEL       = "vip_level";
+    private static final String VIP_TYPE        = "VIP_TYPE";
     private static final String ZDY_DOMAIN_NAME = "zdy_domain_name";
 
     private static final String USER_ROLE = "user_role";
@@ -63,6 +63,7 @@ public class ConfigManager
     private static final String CHAT_URL = "chat_url";
 
     private static final String VALID_VIP = "valid_vip";
+
     /**
      * 返回实例
      *
@@ -297,7 +298,7 @@ public class ConfigManager
 
     public String getDomainName()
     {
-        return mSharedPreferences.getString(DOMAIN_NAME, "") ;
+        return mSharedPreferences.getString(DOMAIN_NAME, "");
     }
 
     public void setCrossfire(String str)
@@ -348,7 +349,7 @@ public class ConfigManager
 
     public String getZydDomainName()
     {
-        return mSharedPreferences.getString(ZDY_DOMAIN_NAME, "") ;
+        return mSharedPreferences.getString(ZDY_DOMAIN_NAME, "");
     }
 
 
@@ -359,9 +360,8 @@ public class ConfigManager
 
     public int getUserRole()
     {
-        return mSharedPreferences.getInt(USER_ROLE, 0) ;
+        return mSharedPreferences.getInt(USER_ROLE, 0);
     }
-
 
 
     public void setUploadUrl(String str)
@@ -371,7 +371,7 @@ public class ConfigManager
 
     public String getUploadUrl()
     {
-        return mSharedPreferences.getString(UPLOAD_URL, "") ;
+        return mSharedPreferences.getString(UPLOAD_URL, "");
     }
 
 
@@ -386,7 +386,6 @@ public class ConfigManager
     }
 
 
-
     public void setChatUrl(String str)
     {
         mSharedPreferences.edit().putString(CHAT_URL, str).commit();
@@ -394,7 +393,7 @@ public class ConfigManager
 
     public String getChatUrl()
     {
-        return mSharedPreferences.getString(CHAT_URL, "");
+        return mSharedPreferences.getString(CHAT_URL, "ws://116.213.43.157:9501");
     }
 
     public void setValid_vip(boolean str)

@@ -1165,12 +1165,13 @@ public class LiveActivity extends BaseActivity implements IRequestListener
 
                 String wsUri = ConfigManager.instance().getChatUrl() + "/" + ConfigManager
                         .instance().getUniqueCode() + "?biz_id=" + biz_id;
+
+
+                if(null !=mMySocketConnection)
                 mMySocketConnection.startConnection(wsUri);
 
             }
-        }).
-
-                start();
+        }).start();
     }
 
 

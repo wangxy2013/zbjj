@@ -125,8 +125,8 @@ public class DomainNameActivity extends BaseActivity implements IRequestListener
                 }
 
                 ConfigManager.instance().setZdyDomainName(name);
-                ToastUtil.show(DomainNameActivity.this, "保存成功!");
-                finish();
+                ToastUtil.show(DomainNameActivity.this, "保存成功,重启APP后生效");
+
             }
         });
         btnTest.setOnClickListener(new View.OnClickListener()

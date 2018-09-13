@@ -183,7 +183,7 @@ public class WelComeActivity extends BaseActivity implements IRequestListener
 
     private void initDomainName()
     {
-        boolean test = true;
+        boolean test = false;
         if (test)
         {
             mDomainName = "https://qvjia.com";

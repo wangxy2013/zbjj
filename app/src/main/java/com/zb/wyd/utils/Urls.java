@@ -334,9 +334,9 @@ public class Urls
     }
 
 
-    public static String getWithdrawUrl(String mobile_id)
+    public static String getWithdrawUrl()
     {
-        return ConfigManager.instance().getDomainName() + "/paypal/withdraw?auth=" + ConfigManager.instance().getUniqueCode() + "&mobile_id=" + mobile_id + "&device=and";
+        return ConfigManager.instance().getDomainName() + "/paypal/withdraw";
     }
 }
 

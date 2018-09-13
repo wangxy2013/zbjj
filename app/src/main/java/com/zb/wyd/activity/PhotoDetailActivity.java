@@ -276,10 +276,12 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
 
                     if (mCommentInfoListHandler.getCommentInfoList().size() < 20)
                     {
+                        if(null !=tvMore)
                         tvMore.setVisibility(View.GONE);
                     }
                     else
                     {
+                        if(null !=tvMore)
                         tvMore.setVisibility(View.VISIBLE);
                     }
                     commentInfoList.addAll(mCommentInfoListHandler.getCommentInfoList());

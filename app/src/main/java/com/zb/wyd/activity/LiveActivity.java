@@ -79,6 +79,8 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.net.ssl.SSLContext;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -513,12 +515,12 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                     String sendMsg = etSay.getText().toString();
 
                     if (!TextUtils.isEmpty(sendMsg) && null != mMySocketConnection &&
-                            mMySocketConnection.isConnected())
+                            mMySocketConnection.isOpen())
                     {
                         String sendContent = "{\"type\":\"say\",\"data\":\"" + sendMsg + "\"," +
                                 "\"action\":\"\"}";
                         LogUtil.e("TAG", "sendContent-->" + sendContent);
-                        mMySocketConnection.sendTextMessage(sendContent);
+                        mMySocketConnection.send(sendContent);
                         etSay.setText("");
 
                         try
@@ -1013,7 +1015,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         if (mMySocketConnection != null)
         {
             mMySocketConnection.setForced(true);
-            mMySocketConnection.disconnect();
+            mMySocketConnection.close();
         }
         LPAnimationManager.release();
     }
@@ -1027,15 +1029,17 @@ public class LiveActivity extends BaseActivity implements IRequestListener
 
     private void initWebSocket()
     {
+        String wsUri = ConfigManager.instance().getChatUrl() + "/" + ConfigManager
+                .instance().getUniqueCode() + "?biz_id=" + biz_id;
         webSocketTask = new TimerTask()
         {
             @Override
             public void run()
             {
-                if (null != mMySocketConnection && mMySocketConnection.isConnected())
+                if (null != mMySocketConnection && mMySocketConnection.isOpen())
                 {
 
-                    mMySocketConnection.sendTextMessage("ping");
+                    mMySocketConnection.send("ping");
                 }
             }
         };
@@ -1045,130 +1049,135 @@ public class LiveActivity extends BaseActivity implements IRequestListener
             public void run()
             {
                 mSystemChatInfoList.clear();
-                mMySocketConnection = MySocketConnection.getInstance();
-                mMySocketConnection.setSocketListener(new SocketListener()
+                try
                 {
-                    @Override
-                    public void OnOpend()
+                    mMySocketConnection =new MySocketConnection(new URI(wsUri));
+                    mMySocketConnection.setSocketListener(new SocketListener()
                     {
-                        mChatInfoList.clear();
-                        timer.schedule(webSocketTask, 0, 30000);
-                    }
-
-                    @Override
-                    public void OnPushMsg(String message)
-                    {
-
-                        if (!TextUtils.isEmpty(message))
+                        @Override
+                        public void OnOpend()
                         {
-                            try
+                            LogUtil.e("TAG","ws已打开");
+                            mChatInfoList.clear();
+                            timer.schedule(webSocketTask, 0, 30000);
+                        }
+
+                        @Override
+                        public void OnPushMsg(String message)
+                        {
+
+                            if (!TextUtils.isEmpty(message))
                             {
-                                ChatInfo chatInfo = new ChatInfo(new JSONObject(message));
-
-                                if (null != chatInfo)
+                                try
                                 {
+                                    ChatInfo chatInfo = new ChatInfo(new JSONObject(message));
 
-
-                                    String action = chatInfo.getAction();
-                                    String data = chatInfo.getData();
-                                    String type = chatInfo.getType();
-
-                                    if ("sys".equals(type))
+                                    if (null != chatInfo)
                                     {
-                                        if (mSystemChatInfoList.size() >= 2)
+
+
+                                        String action = chatInfo.getAction();
+                                        String data = chatInfo.getData();
+                                        String type = chatInfo.getType();
+
+                                        if ("sys".equals(type))
                                         {
-                                            mSystemChatInfoList.remove(0);
-                                        }
-                                        mSystemChatInfoList.add(chatInfo);
-                                        mSystemChatAdapter.notifyDataSetChanged();
-                                    }
-                                    else if ("say".equals(type))
-                                    {
-                                        mChatInfoList.add(chatInfo);
-                                        mChatAdapter.notifyItemChanged(mChatInfoList.size());
-                                        mChatRecyclerView.scrollToPosition(mChatInfoList.size() -
-                                                1);
-                                        //                                    }
-                                    }
-                                    else
-                                    {
-                                        //礼物
-                                        if ("gift".equals(action))
-                                        {
-                                            UserInfo userInfo = chatInfo.getUserInfo();
-
-                                            String giftStr = chatInfo.getData();
-
-                                            if (!TextUtils.isEmpty(giftStr) && giftStr.contains
-                                                    ("@"))
+                                            if (mSystemChatInfoList.size() >= 2)
                                             {
-                                                String gift[] = giftStr.split("@");
-                                                if (null != userInfo)
-                                                {
-                                                    LPAnimationManager.addAnimalMessage(new
-                                                            AnimMessage(userInfo.getUnick(),
-                                                            userInfo.getFace(), 1, getGifName
-                                                            (gift[1]), getGiftDrawable(gift[1])));
-                                                }
+                                                mSystemChatInfoList.remove(0);
                                             }
-
-
+                                            mSystemChatInfoList.add(chatInfo);
+                                            mSystemChatAdapter.notifyDataSetChanged();
+                                        }
+                                        else if ("say".equals(type))
+                                        {
+                                            mChatInfoList.add(chatInfo);
+                                            mChatAdapter.notifyItemChanged(mChatInfoList.size());
+                                            mChatRecyclerView.scrollToPosition(mChatInfoList.size() -
+                                                    1);
+                                            //                                    }
                                         }
                                         else
                                         {
-                                            if ("liveads".equals(chatInfo.getAction()))
+                                            //礼物
+                                            if ("gift".equals(action))
                                             {
-                                                ToastUtil.show(LiveActivity.this, chatInfo
-                                                        .getData());
-                                                finish();
+                                                UserInfo userInfo = chatInfo.getUserInfo();
+
+                                                String giftStr = chatInfo.getData();
+
+                                                if (!TextUtils.isEmpty(giftStr) && giftStr.contains
+                                                        ("@"))
+                                                {
+                                                    String gift[] = giftStr.split("@");
+                                                    if (null != userInfo)
+                                                    {
+                                                        LPAnimationManager.addAnimalMessage(new
+                                                                AnimMessage(userInfo.getUnick(),
+                                                                userInfo.getFace(), 1, getGifName
+                                                                (gift[1]), getGiftDrawable(gift[1])));
+                                                    }
+                                                }
+
+
                                             }
                                             else
                                             {
-                                                if ("nosay".equals(action))
+                                                if ("liveads".equals(chatInfo.getAction()))
                                                 {
-                                                    etSay.setHint("禁止聊天");
-                                                    etSay.setEnabled(false);
+                                                    ToastUtil.show(LiveActivity.this, chatInfo
+                                                            .getData());
+                                                    finish();
+                                                }
+                                                else
+                                                {
+                                                    if ("nosay".equals(action))
+                                                    {
+                                                        etSay.setHint("禁止聊天");
+                                                        etSay.setEnabled(false);
+                                                    }
+
+                                                    mChatInfoList.add(chatInfo);
+                                                    mChatAdapter.notifyItemChanged(mChatInfoList.size
+                                                            ());
+                                                    mChatRecyclerView.scrollToPosition(mChatInfoList
+                                                            .size() - 1);
                                                 }
 
-                                                mChatInfoList.add(chatInfo);
-                                                mChatAdapter.notifyItemChanged(mChatInfoList.size
-                                                        ());
-                                                mChatRecyclerView.scrollToPosition(mChatInfoList
-                                                        .size() - 1);
                                             }
-
                                         }
+
+
                                     }
 
-
                                 }
-
-                            }
-                            catch (JSONException e)
-                            {
-                                e.printStackTrace();
+                                catch (JSONException e)
+                                {
+                                    e.printStackTrace();
+                                }
                             }
                         }
-                    }
 
-                    @Override
-                    public void OnError(String msg)
-                    {
-                        Message mMessage = new Message();
-                        mMessage.obj = msg;
-                        mMessage.what = SHOW_TOAST;
-                        if (null != mHandler) mHandler.sendMessageDelayed(mMessage, 10 * 1000);
-
-
-                    }
-                });
-
-                String wsUri = ConfigManager.instance().getChatUrl() + "/" + ConfigManager
-                        .instance().getUniqueCode() + "?biz_id=" + biz_id;
+                        @Override
+                        public void OnError(String msg)
+                        {
+                            Message mMessage = new Message();
+                            mMessage.obj = msg;
+                            mMessage.what = SHOW_TOAST;
+                            if (null != mHandler) mHandler.sendMessageDelayed(mMessage, 10 * 1000);
 
 
-                if(null !=mMySocketConnection)
-                mMySocketConnection.startConnection(wsUri);
+                        }
+                    });
+
+
+
+                    if(null !=mMySocketConnection)
+                        mMySocketConnection.connect();
+                } catch (URISyntaxException e)
+                {
+                    e.printStackTrace();
+                }
 
             }
         }).start();

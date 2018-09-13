@@ -67,7 +67,7 @@
                     android:inputType="phone"
                     android:layout_toRightOf="@+id/iv_account"
                     android:background="@color/transparent"
-                    android:hint="请输手机号"
+                    android:hint="请输入邮箱地址"
                     android:textColor="@drawable/login_font_selector"
                     android:textColorHint="@color/white"
                     android:textSize="@dimen/t16"/>

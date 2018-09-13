@@ -51,8 +51,11 @@ public class LoginActivity extends BaseActivity implements IRequestListener
     Button         btnLogin;
     @BindView(R.id.btn_register)
     Button         btnRegister;
-    @BindView(R.id.tv_recovery_pwd)
+    @BindView(R.id.tv_recovery_pwd_email)
     TextView       tvRecoveryPwd;
+
+    @BindView(R.id.tv_recovery_pwd_phone)
+    TextView       tvRecoveryPwdPhone;
     @BindView(R.id.tv_email)
     TextView       tvEmail;
     @BindView(R.id.rl_main)
@@ -131,6 +134,7 @@ public class LoginActivity extends BaseActivity implements IRequestListener
         tvRecoveryPwd.setOnClickListener(this);
         ivBack.setOnClickListener(this);
         tvRestUname.setOnClickListener(this);
+        tvRecoveryPwdPhone.setOnClickListener(this);
     }
 
     @Override
@@ -196,6 +200,7 @@ public class LoginActivity extends BaseActivity implements IRequestListener
             startActivity(new Intent(LoginActivity.this, PhoneRegisterActivity.class));
 
         }
+
         else if (v == ivBack)
         {
             finish();
@@ -205,6 +210,10 @@ public class LoginActivity extends BaseActivity implements IRequestListener
            startActivity(new Intent(LoginActivity.this, RecoveryPwdActivity.class));
             //startActivity(new Intent(LoginActivity.this, FindPwdActivity.class));
 
+        }
+        else  if(v == tvRecoveryPwdPhone)
+        {
+            startActivity(new Intent(LoginActivity.this, FindPwdActivity.class));
         }
         else if(v == tvRestUname)
         {

@@ -28,6 +28,13 @@ public class DyVideoStreamHandler extends JsonHandler
         return has_favorite;
     }
 
+    private boolean  pay_for;
+
+    public boolean isPay_for()
+    {
+        return pay_for;
+    }
+
     @Override
     protected void parseJson(JSONObject jsonObj) throws Exception
     {
@@ -41,6 +48,7 @@ public class DyVideoStreamHandler extends JsonHandler
                 uri = obj.optString("host") +obj.optString("uri");
                 has_favorite = obj.optString("has_favorite");
                 biz_id = obj.optString("biz_id");
+                pay_for=obj.optBoolean("pay_for");
             }
 
 

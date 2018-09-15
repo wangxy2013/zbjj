@@ -96,7 +96,7 @@ public class TaskActivity extends BaseActivity implements IRequestListener
 
                     if (null != userInfo)
                     {
-                        ImageLoader.getInstance().displayImage(userInfo.getUface(), ivUserPic);
+                      //  ImageLoader.getInstance().displayImage(userInfo.getUface(), ivUserPic);
                         tvUserFortune.setText(userInfo.getTotal_score());
 
                         FortuneInfo fortuneInfo = userInfo.getFortuneInfo();
@@ -137,12 +137,12 @@ public class TaskActivity extends BaseActivity implements IRequestListener
 
                     TaskInfo mTaskInfo = mTaskInfoListHandler.getTaskInfo();
 
-                    if ("1".equals(mTaskInfo.getHas_finish()))
-                    {
-                        tvSignIn.setText("已签到");
-                        tvSignIn.setEnabled(false);
-
-                    }
+//                    if ("1".equals(mTaskInfo.getHas_finish()))
+//                    {
+//                        tvSignIn.setText("已签到");
+//                        tvSignIn.setEnabled(false);
+//
+//                    }
 
                     mIncompleteList.clear();
                     mCompleteList.clear();

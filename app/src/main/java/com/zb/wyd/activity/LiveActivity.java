@@ -1133,6 +1133,8 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                                                 mChatInfoList.add(chatInfo);
                                                 mChatAdapter.notifyItemChanged(mChatInfoList.size
                                                         ());
+
+                                                if(null !=mChatRecyclerView)
                                                 mChatRecyclerView.scrollToPosition(mChatInfoList
                                                         .size() - 1);
                                             }

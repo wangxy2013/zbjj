@@ -18,6 +18,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -135,6 +136,7 @@ public class UserDetailActivity extends BaseActivity implements IRequestListener
 
                     if (null != userInfo)
                     {
+                        if(null != ivUserPic && !TextUtils.isEmpty(userInfo.getUface()))
                         ImageLoader.getInstance().displayImage(userInfo.getUface(), ivUserPic);
                         tvUserNick.setText(userInfo.getUnick());
 

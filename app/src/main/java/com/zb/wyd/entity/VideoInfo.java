@@ -9,23 +9,23 @@ import java.io.Serializable;
  */
 public class VideoInfo implements Serializable
 {
-    private String id;//5
-    private String cata_id;//10
-    private String v_name;//Caribbean)(122912-222)元芸能人のリアルアクメ 優希まこと
-    private String cover;//https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg
-    private String favour_count;//0
-    private String fee_cfg;//0
-    private String fee;//3 private String
+    private String  id;//5
+    private String  cata_id;//10
+    private String  v_name;//Caribbean)(122912-222)元芸能人のリアルアクメ 優希まこと
+    private String  cover;//https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg
+    private String  favour_count;//0
+    private String  fee_cfg;//0
+    private String  fee;//3 private String
     private String  coupon;
-    private String finger;
-    private String cash;
-    private String vip_free;
-    private boolean  isNew;
-    private String add_time;
+    private String  finger;
+    private String  cash;
+    private String  vip_free;
+    private boolean isNew;
+    private String  add_time;
 
-    private String has_favorite;
+    private String   has_favorite;
     private UserInfo userInfo;
-
+    private boolean  pay_for=true;
 
     public VideoInfo() {}
 
@@ -41,8 +41,19 @@ public class VideoInfo implements Serializable
         this.coupon = obj.optString("coupon");
         this.finger = obj.optString("finger");
         this.vip_free = obj.optString("vip_free");
-        this.add_time =obj.optString("add_time");
-        this.cash =obj.optString("cash");
+        this.add_time = obj.optString("add_time");
+        this.cash = obj.optString("cash");
+
+    }
+
+    public boolean isPay_for()
+    {
+        return pay_for;
+    }
+
+    public void setPay_for(boolean pay_for)
+    {
+        this.pay_for = pay_for;
     }
 
     public String getHas_favorite()

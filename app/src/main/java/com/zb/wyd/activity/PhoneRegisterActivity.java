@@ -100,8 +100,11 @@ public class PhoneRegisterActivity extends BaseActivity implements IRequestListe
 
                     if (result >= 0)
                     {
-                        tvCode.setText(result + "S后发送");
-                        mHandler.sendEmptyMessageDelayed(UPDATE_CODE_VIEW, 1000);
+                        if(null  !=tvCode)
+                        {
+                            tvCode.setText(result + "S后发送");
+                            mHandler.sendEmptyMessageDelayed(UPDATE_CODE_VIEW, 1000);
+                        }
                     }
                     else
                     {

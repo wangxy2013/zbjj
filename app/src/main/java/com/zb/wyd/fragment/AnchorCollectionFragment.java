@@ -63,10 +63,10 @@ public class AnchorCollectionFragment extends BaseFragment implements PullToRefr
     private View rootView = null;
     private Unbinder unbinder;
     private static final String GET_COLLECTION_LIVE_LIST = "get_collection_live_list";
-    private final String UN_FAVORITE_LIKE = "un_favorite_like";
+    private final        String UN_FAVORITE_LIKE         = "un_favorite_like";
 
-    private static final int REQUEST_SUCCESS = 0x01;
-    private static final int REQUEST_FAIL = 0x02;
+    private static final int REQUEST_SUCCESS          = 0x01;
+    private static final int REQUEST_FAIL             = 0x02;
     private static final int UN_FAVORITE_LIKE_SUCCESS = 0x03;
 
     @SuppressLint("HandlerLeak")
@@ -81,7 +81,10 @@ public class AnchorCollectionFragment extends BaseFragment implements PullToRefr
                 case REQUEST_SUCCESS:
                     LiveInfoListHandler mOrderListHandler = (LiveInfoListHandler) msg.obj;
 
-
+                    if (pn == 1)
+                    {
+                        liveInfoList.clear();
+                    }
                     liveInfoList.addAll(mOrderListHandler.getUserInfoList());
                     mAnchorAdapter.notifyDataSetChanged();
 
@@ -94,7 +97,7 @@ public class AnchorCollectionFragment extends BaseFragment implements PullToRefr
                     break;
                 case UN_FAVORITE_LIKE_SUCCESS:
                     ToastUtil.show(getActivity(), "操作成功");
-                    liveInfoList.clear();
+                    pn = 1;
                     loadData();
                     break;
 
@@ -166,8 +169,11 @@ public class AnchorCollectionFragment extends BaseFragment implements PullToRefr
             @Override
             public void onItemClick(View view, int position)
             {
-                LiveInfo mLiveInfo = liveInfoList.get(position);
-                unFavoriteLike(mLiveInfo.getId());
+                if (null != liveInfoList && position < (liveInfoList.size()))
+                {
+                    LiveInfo mLiveInfo = liveInfoList.get(position);
+                    unFavoriteLike(mLiveInfo.getId());
+                }
             }
         });
         mRecyclerView.setAdapter(mAnchorAdapter);

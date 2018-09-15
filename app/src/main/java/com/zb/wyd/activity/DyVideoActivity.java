@@ -39,6 +39,7 @@ import com.zb.wyd.json.SignInfoHandler;
 import com.zb.wyd.json.VideoInfoListHandler;
 import com.zb.wyd.listener.MyItemClickListener;
 import com.zb.wyd.listener.MyOnClickListener;
+import com.zb.wyd.utils.ConfigManager;
 import com.zb.wyd.utils.ConstantUtil;
 import com.zb.wyd.utils.DialogUtils;
 import com.zb.wyd.utils.LogUtil;
@@ -126,6 +127,7 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
                             {
                                 videoInfoList.get(i).setHas_favorite(mVideoStreamHandler
                                         .getHas_favorite());
+                                videoInfoList.get(i).setPay_for(mVideoStreamHandler.isPay_for());
                             }
                         }
 
@@ -140,8 +142,7 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
 
                     if (pn == 1)
                     {
-                        VideoInfo mVideoInfo = (VideoInfo) getIntent().getSerializableExtra
-                                ("VideoInfo");
+                        VideoInfo mVideoInfo = (VideoInfo) getIntent().getSerializableExtra("VideoInfo");
                         if (null != mVideoInfo)
                         {
                             videoInfoList.add(mVideoInfo);
@@ -382,34 +383,43 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
 
         }
 
-        DialogUtils.showDyTipsDialog(this, new View.OnClickListener()
+        if(ConfigManager.instance().getValid_vip())
         {
-            @Override
-            public void onClick(View v)
-            {
-
-                ivCover.animate().alpha(0).setDuration(1000).start();
-                loadData();
-            }
-        }, new View.OnClickListener()
+            ivCover.animate().alpha(0).setDuration(1000).start();
+            loadData();
+        }
+        else
         {
-            @Override
-            public void onClick(View v)
+            DialogUtils.showDyTipsDialog(this, new View.OnClickListener()
             {
+                @Override
+                public void onClick(View v)
+                {
 
-                startActivity(new Intent(DyVideoActivity.this, MemberActivity.class));
-                finish();
-
-
-            }
-        }, new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
+                    ivCover.animate().alpha(0).setDuration(1000).start();
+                    loadData();
+                }
+            }, new View.OnClickListener()
             {
-                finish();
-            }
-        }).show();
+                @Override
+                public void onClick(View v)
+                {
+
+                    startActivity(new Intent(DyVideoActivity.this, MemberActivity.class));
+                    finish();
+
+
+                }
+            }, new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    finish();
+                }
+            }).show();
+        }
+
     }
 
     private void loadData()
@@ -747,7 +757,16 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
             VideoInfo videoInfo = videoInfoList.get(position);
             holder.tv_title.setText(videoInfo.getV_name());
             holder.love_count.setText(videoInfo.getFavour_count());
-            holder.tv_tips.setText("本次消费" + videoInfo.getCash() + "积分");
+
+            if(!videoInfo.isPay_for())
+            {
+                holder.tv_tips.setText("本次观看免费");
+            }
+            else
+            {
+                holder.tv_tips.setText("本次消费" + videoInfo.getCash() + "积分");
+            }
+
             UserInfo userInfo = videoInfoList.get(position).getUserInfo();
             if (null != userInfo)
             {

@@ -75,8 +75,6 @@ public class UserInfo implements Serializable
         this.valid_vip = obj.optBoolean("valid_vip");
         this.vip_type = obj.optInt("vip_type");
         this.has_sign = obj.optBoolean("has_sign");
-        ConfigManager.instance().setValid_vip(obj.optBoolean("valid_vip"));
-
     }
 
     public boolean isHas_sign()

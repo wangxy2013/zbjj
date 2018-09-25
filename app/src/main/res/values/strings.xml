@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">佳梨视频</string>
+    <string name="app_name">四虎影库</string>
 
     <string name="label_cancel">取消</string>
     <string name="label_ok">确定</string>
@@ -13,17 +13,7 @@
     <string name="time_month">月</string>
     <string name="time_year">年</string>
     <string name="time_yesterday">昨天</string>
-    <!-- conversation fragment -->
-    <string name="conversation_system">系统消息</string>
-    <string name="conversation_system_friend">新朋友</string>
-    <string name="conversation_system_group">群组消息</string>
-    <string name="conversation_del">删除会话</string>
-    <string name="conversation_draft">[草稿]</string>
 
-    <string name="default_group_name">默认分组</string>
-    <string name="wxts">紧急情况请联系商旅部落客服
-                        \n400-688-1248
-    </string>
 
     <!-- contact fragment -->
     <string name="home_contact_tab">联系人</string>

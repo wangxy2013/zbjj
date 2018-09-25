@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/white"
-              android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <com.zb.wyd.widget.VerticalSwipeRefreshLayout
         android:id="@+id/swipeRefresh"
@@ -21,30 +21,31 @@
                 android:orientation="vertical">
 
 
-                <com.donkingliang.banner.CustomBanner android:id="@+id/banner"
-                                                      xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                      android:layout_width="match_parent"
-                                                      android:layout_height="wrap_content"
-                                                      android:layout_marginTop="@dimen/dm_5"
-                                                      android:visibility="gone"
-                                                      app:indicatorGravity="CENTER"
-                                                      app:indicatorInterval="5dp"
-                                                      app:indicatorSelectRes="@drawable/shape_point_unselect"
-                                                      app:indicatorStyle="ORDINARY"
-                                                      app:indicatorUnSelectRes="@drawable/shape_point_select"/>
+                <com.donkingliang.banner.CustomBanner
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/banner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dm_5"
+                    android:visibility="gone"
+                    app:indicatorGravity="CENTER"
+                    app:indicatorInterval="5dp"
+                    app:indicatorSelectRes="@drawable/shape_point_unselect"
+                    app:indicatorStyle="ORDINARY"
+                    app:indicatorUnSelectRes="@drawable/shape_point_select" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    >
+                    android:background="@color/white">
 
                     <ImageView
                         android:id="@+id/iv_notice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/ic_notice"/>
+                        android:src="@drawable/ic_notice" />
+
                     <com.zb.wyd.widget.MarqueeTextView
                         android:id="@+id/tv_notice"
                         android:layout_width="match_parent"
@@ -53,11 +54,11 @@
                         android:layout_toRightOf="@+id/iv_notice"
                         android:ellipsize="marquee"
                         android:focusable="true"
-                        android:textSize="@dimen/t16"
-                        android:textColor="@color/black"
                         android:focusableInTouchMode="true"
                         android:marqueeRepeatLimit="marquee_forever"
                         android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/t16"
 
                         />
 
@@ -66,7 +67,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dm_10"
-                    android:background="@color/grayE"/>
+                    android:background="@color/grayE" />
 
                 <RelativeLayout
                     android:id="@+id/rl_all_recommend"
@@ -79,13 +80,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/ic_recommend"/>
+                        android:src="@drawable/ic_recommend" />
 
                     <ImageView
                         android:id="@+id/iv_temp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:visibility="gone"/>
+                        android:visibility="gone" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -95,7 +96,7 @@
                         android:layout_toRightOf="@+id/iv_recommend"
                         android:text="限时免费"
                         android:textColor="@color/blackA"
-                        android:textSize="@dimen/t14"/>
+                        android:textSize="@dimen/t14" />
 
                     <RelativeLayout
                         android:layout_width="wrap_content"
@@ -109,7 +110,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
-                            android:src="@drawable/ic_arrow_right"/>
+                            android:src="@drawable/ic_arrow_right" />
 
 
                         <TextView
@@ -120,7 +121,7 @@
                             android:layout_toLeftOf="@+id/iv_recommend_right"
                             android:text="全部"
                             android:textColor="@color/grayA"
-                            android:textSize="@dimen/t14"/>
+                            android:textSize="@dimen/t14" />
                     </RelativeLayout>
                 </RelativeLayout>
 
@@ -128,12 +129,12 @@
                     android:id="@+id/rv_recommend"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="@dimen/dm_5"/>
+                    android:padding="@dimen/dm_5" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dm_10"
-                    android:background="@color/grayE"/>
+                    android:background="@color/grayE" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -145,7 +146,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/ic_new"/>
+                        android:src="@drawable/ic_new" />
 
 
                     <TextView
@@ -156,7 +157,7 @@
                         android:layout_toRightOf="@+id/iv_new"
                         android:text="热门主播"
                         android:textColor="@color/blackA"
-                        android:textSize="@dimen/t14"/>
+                        android:textSize="@dimen/t14" />
 
                     <RelativeLayout
                         android:id="@+id/rl_all_new"
@@ -171,7 +172,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
-                            android:src="@drawable/ic_arrow_right"/>
+                            android:src="@drawable/ic_arrow_right" />
 
 
                         <TextView
@@ -182,7 +183,7 @@
                             android:layout_toLeftOf="@+id/iv_new_right"
                             android:text="全部"
                             android:textColor="@color/grayA"
-                            android:textSize="@dimen/t14"/>
+                            android:textSize="@dimen/t14" />
                     </RelativeLayout>
                 </RelativeLayout>
 
@@ -190,7 +191,7 @@
                     android:id="@+id/rv_new"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="@dimen/dm_5"/>
+                    android:padding="@dimen/dm_5" />
             </LinearLayout>
         </ScrollView>
     </com.zb.wyd.widget.VerticalSwipeRefreshLayout>

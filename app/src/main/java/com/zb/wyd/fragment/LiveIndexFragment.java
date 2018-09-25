@@ -374,6 +374,8 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
         mHandler.sendEmptyMessage(GET_FREE_LIVE_CODE);
         mHandler.sendEmptyMessage(GET_HOT_LIVE_CODE);
         mHandler.sendEmptyMessage(GET_NOTICE_LIST_CODE);
+        if(null !=tvNotice)
+        tvNotice.requestFocus();
 
     }
 

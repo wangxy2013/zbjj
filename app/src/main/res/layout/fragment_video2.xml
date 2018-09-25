@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/topView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dm_1"
+        android:background="@color/yellow" />
+
+    <com.zb.wyd.widget.VerticalSwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/topView">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <com.donkingliang.banner.CustomBanner xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/banner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dm_5"
+                android:visibility="gone"
+                app:indicatorGravity="CENTER"
+                app:indicatorInterval="5dp"
+                app:indicatorSelectRes="@drawable/shape_point_unselect"
+                app:indicatorStyle="ORDINARY"
+                app:indicatorUnSelectRes="@drawable/shape_point_select" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white">
+
+                <ImageView
+                    android:id="@+id/iv_notice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_notice" />
+
+                <com.zb.wyd.widget.MarqueeTextView
+                    android:id="@+id/tv_notice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/iv_notice"
+                    android:ellipsize="marquee"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/t16"
+
+                    />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dm_10"
+                android:background="@color/grayE" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/dm_10">
+
+                <TextView
+                    android:id="@+id/tv_new"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dm_5"
+                    android:layout_weight="1"
+                    android:background="@drawable/anchor_tab_selector"
+                    android:gravity="center"
+                    android:padding="@dimen/dm_8"
+                    android:text="最近更新"
+                    android:textColor="@drawable/anchor_tab_font_selector"
+                    android:textSize="@dimen/t14" />
+
+                <TextView
+                    android:id="@+id/tv_collection"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dm_5"
+                    android:layout_weight="1"
+                    android:background="@drawable/anchor_tab_selector"
+                    android:gravity="center"
+                    android:padding="@dimen/dm_8"
+                    android:text="最多收藏"
+                    android:textColor="@drawable/anchor_tab_font_selector"
+                    android:textSize="@dimen/t14" />
+
+            </LinearLayout>
+
+            <com.zb.wyd.widget.list.refresh.PullToRefreshRecyclerView
+                android:id="@+id/pullToRefreshRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+    </com.zb.wyd.widget.VerticalSwipeRefreshLayout>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_menu_cata"
+        android:layout_width="180dp"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="-180dp"
+        android:background="#e6000000" />
+
+    <ImageView
+        android:id="@+id/iv_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_menu_right" />
+
+
+</RelativeLayout>

@@ -1,6 +1,8 @@
 package com.zb.wyd.fragment;
 
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -14,8 +16,10 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.donkingliang.banner.CustomBanner;
@@ -29,9 +33,11 @@ import com.zb.wyd.activity.PhotoDetailActivity;
 import com.zb.wyd.activity.VideoPlayActivity;
 import com.zb.wyd.activity.WebViewActivity;
 import com.zb.wyd.adapter.CataAdapter;
+import com.zb.wyd.adapter.MenuAdapter;
 import com.zb.wyd.adapter.VideoAdapter;
 import com.zb.wyd.entity.AdInfo;
 import com.zb.wyd.entity.CataInfo;
+import com.zb.wyd.entity.MenuInfo;
 import com.zb.wyd.entity.NoticeInfo;
 import com.zb.wyd.entity.VideoInfo;
 import com.zb.wyd.http.DataRequest;
@@ -39,10 +45,12 @@ import com.zb.wyd.http.HttpRequest;
 import com.zb.wyd.http.IRequestListener;
 import com.zb.wyd.json.AdInfoListHandler;
 import com.zb.wyd.json.CataInfoListHandler;
+import com.zb.wyd.json.MenuListHandler;
 import com.zb.wyd.json.VideoInfoListHandler;
 import com.zb.wyd.listener.MyItemClickListener;
 import com.zb.wyd.utils.APPUtils;
 import com.zb.wyd.utils.ConstantUtil;
+import com.zb.wyd.utils.LogUtil;
 import com.zb.wyd.utils.ToastUtil;
 import com.zb.wyd.utils.Urls;
 import com.zb.wyd.widget.CataPopupWindow;
@@ -63,34 +71,38 @@ import butterknife.Unbinder;
 /**
  * 描述：一句话简单描述
  */
-public class VideoFragment2 extends BaseFragment implements IRequestListener, View.OnClickListener, PullToRefreshBase.OnRefreshListener<RecyclerView>,
-        SwipeRefreshLayout.OnRefreshListener
+public class VideoFragment2 extends BaseFragment implements IRequestListener, View.OnClickListener, PullToRefreshBase
+        .OnRefreshListener<RecyclerView>, SwipeRefreshLayout.OnRefreshListener
 {
     @BindView(R.id.tv_notice)
-    MarqueeTextView        tvNotice;
+    MarqueeTextView tvNotice;
     @BindView(R.id.banner)
-    CustomBanner              mBanner;
-    @BindView(R.id.iv_show)
-    ImageView                 ivMore;
-    @BindView(R.id.rv_cata)
-    RecyclerView              rvCata;
+    CustomBanner mBanner;
+    @BindView(R.id.rv_menu_cata)
+    RecyclerView rvCata;
     @BindView(R.id.topView)
-    View                      topView;
+    View topView;
     @BindView(R.id.tv_new)
-    TextView                  tvNew;
+    TextView tvNew;
     @BindView(R.id.tv_collection)
-    TextView                  tvCollection;
+    TextView tvCollection;
     @BindView(R.id.pullToRefreshRecyclerView)
     PullToRefreshRecyclerView mPullToRefreshRecyclerView;
     @BindView(R.id.swipeRefresh)
     VerticalSwipeRefreshLayout mSwipeRefreshLayout;
 
-    private List<CataInfo> cataInfoList = new ArrayList<>();
-    private CataAdapter mCataAdapter;
+    @BindView(R.id.iv_menu)
+    ImageView ivMenu;
+
+    private boolean isShowMenu = true;
+
+
+    private List<MenuInfo> mMenuInfoList = new ArrayList<>();
+    private MenuAdapter mMenuAdapter;
     private View rootView = null;
     private Unbinder unbinder;
 
-    private List<String> picList    = new ArrayList<>();
+    private List<String> picList = new ArrayList<>();
     private List<AdInfo> adInfoList = new ArrayList<>();
 
     private RecyclerView mRecyclerView; //
@@ -102,25 +114,25 @@ public class VideoFragment2 extends BaseFragment implements IRequestListener, Vi
 
     private VideoAdapter mVideoAdapter;
 
-    private boolean isNew  = false;
-    private String  cta_id = "0";
-    private String  sort   = "new";
+    private boolean isNew = false;
+    private String cta_id = "0";
+    private String sort = "new";
 
 
-    private static final String GET_CATA_LIST  = "get_cata_list";
+    private static final String GET_CATA_LIST = "get_cata_list";
     private static final String GET_VIDEO_LIST = "get_video_list";
-    private static final String GET_AD_LIST    = "get_ad_list";
+    private static final String GET_AD_LIST = "get_ad_list";
 
     private static final int GET_VIDEO_LIST_SUCCESS = 0x01;
-    private static final int REQUEST_FAIL           = 0x02;
-    private static final int GET_AD_LIST_SUCCESS    = 0x04;
-    private static final int REQUEST_SUCCESS        = 0x05;
-    private static final int GET_CATA_LIST_SUCCESS  = 0x06;
+    private static final int REQUEST_FAIL = 0x02;
+    private static final int GET_AD_LIST_SUCCESS = 0x04;
+    private static final int REQUEST_SUCCESS = 0x05;
+    private static final int GET_CATA_LIST_SUCCESS = 0x06;
 
 
-    private static final int GET_CATA_LIST_CODE  = 0x10;
+    private static final int GET_CATA_LIST_CODE = 0x10;
     private static final int GET_VIDEO_LIST_CODE = 0X11;
-    private static final int GET_AD_lIST_CODE    = 0X13;
+    private static final int GET_AD_lIST_CODE = 0X13;
 
 
     @SuppressLint("HandlerLeak")
@@ -137,20 +149,20 @@ public class VideoFragment2 extends BaseFragment implements IRequestListener, Vi
 
                     break;
                 case GET_CATA_LIST_SUCCESS:
-                    CataInfoListHandler mCataInfoListHandler = (CataInfoListHandler) msg.obj;
-                    cataInfoList.clear();
-                    cataInfoList.addAll(mCataInfoListHandler.getCataInfoList());
+                    MenuListHandler mMenuListHandler = (MenuListHandler) msg.obj;
+                    mMenuInfoList.clear();
+                    mMenuInfoList.addAll(mMenuListHandler.getMenuInfoList());
 
-                    CataInfo mCataInfo = new CataInfo();
-                    mCataInfo.setSelected(true);
-                    mCataInfo.setId("0");
-                    mCataInfo.setName("全部");
-                    cataInfoList.add(0, mCataInfo);
-                    mCataAdapter.notifyDataSetChanged();
+                    MenuInfo mMenuInfo = new MenuInfo();
+                    mMenuInfo.setSelected(true);
+                    mMenuInfo.setId("0");
+                    mMenuInfo.setName("全部");
+                    mMenuInfoList.add(0, mMenuInfo);
+                    mMenuAdapter.notifyDataSetChanged();
 
-                    if (!cataInfoList.isEmpty())
+                    if (!mMenuInfoList.isEmpty())
                     {
-                        cta_id = cataInfoList.get(0).getId();
+                        cta_id = mMenuInfoList.get(0).getId();
                     }
 
                     break;
@@ -251,11 +263,12 @@ public class VideoFragment2 extends BaseFragment implements IRequestListener, Vi
             }
             else if (link.startsWith("http"))
             {
-                startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra(WebViewActivity.EXTRA_TITLE, "详情")
-                        .putExtra(WebViewActivity.IS_SETTITLE, true).putExtra(WebViewActivity.EXTRA_URL, link));
+                startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra(WebViewActivity.EXTRA_TITLE, "详情").putExtra(WebViewActivity
+                        .IS_SETTITLE, true).putExtra(WebViewActivity.EXTRA_URL, link));
             }
         }
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -293,11 +306,11 @@ public class VideoFragment2 extends BaseFragment implements IRequestListener, Vi
     protected void initEvent()
     {
         mSwipeRefreshLayout.setOnRefreshListener(this);
-        ivMore.setOnClickListener(this);
         mPullToRefreshRecyclerView.setOnRefreshListener(this);
         mPullToRefreshRecyclerView.setPullRefreshEnabled(true);
         tvNew.setOnClickListener(this);
         tvCollection.setOnClickListener(this);
+        ivMenu.setOnClickListener(this);
     }
 
     @Override
@@ -306,36 +319,35 @@ public class VideoFragment2 extends BaseFragment implements IRequestListener, Vi
         tvNew.setSelected(true);
         tvCollection.setSelected(false);
         isNew = true;
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        rvCata.setLayoutManager(linearLayoutManager);
+        rvCata.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager
+            .VERTICAL, false));
 
-        mCataAdapter = new CataAdapter(cataInfoList, getActivity(), new MyItemClickListener()
+        mMenuAdapter = new MenuAdapter(mMenuInfoList, getActivity(), new MyItemClickListener()
         {
             @Override
             public void onItemClick(View view, int position)
             {
-                for (int i = 0; i < cataInfoList.size(); i++)
+                for (int i = 0; i < mMenuInfoList.size(); i++)
                 {
                     if (i == position)
                     {
-                        cataInfoList.get(position).setSelected(true);
+                        mMenuInfoList.get(position).setSelected(true);
                     }
                     else
                     {
-                        cataInfoList.get(i).setSelected(false);
+                        mMenuInfoList.get(i).setSelected(false);
                     }
                 }
-                mCataAdapter.notifyDataSetChanged();
+                mMenuAdapter.notifyDataSetChanged();
 
-                cta_id = cataInfoList.get(position).getId();
+                cta_id = mMenuInfoList.get(position).getId();
                 pn = 1;
                 mHandler.sendEmptyMessage(GET_VIDEO_LIST_CODE);
 
 
             }
         });
-        rvCata.setAdapter(mCataAdapter);
+        rvCata.setAdapter(mMenuAdapter);
 
 
         mRecyclerView = mPullToRefreshRecyclerView.getRefreshableView();
@@ -368,8 +380,7 @@ public class VideoFragment2 extends BaseFragment implements IRequestListener, Vi
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy)
             {
-                int topRowVerticalPosition =
-                        (recyclerView == null || recyclerView.getChildCount() == 0) ? 0 : recyclerView.getChildAt(0).getTop();
+                int topRowVerticalPosition = (recyclerView == null || recyclerView.getChildCount() == 0) ? 0 : recyclerView.getChildAt(0).getTop();
                 mSwipeRefreshLayout.setEnabled(topRowVerticalPosition >= 0);
             }
 
@@ -396,8 +407,8 @@ public class VideoFragment2 extends BaseFragment implements IRequestListener, Vi
     private void getVideoCata()
     {
         Map<String, String> valuePairs = new HashMap<>();
-        DataRequest.instance().request(getActivity(), Urls.getVideoCataUrl(), this, HttpRequest.POST, GET_CATA_LIST, valuePairs,
-                new CataInfoListHandler());
+        DataRequest.instance().request(getActivity(), Urls.getVideoCataUrl(), this, HttpRequest.POST, GET_CATA_LIST, valuePairs, new
+                MenuListHandler());
     }
 
     private void getNewLive()
@@ -407,8 +418,8 @@ public class VideoFragment2 extends BaseFragment implements IRequestListener, Vi
         valuePairs.put("pn", pn + "");
         valuePairs.put("num", "20");
         valuePairs.put("cta_id", cta_id);
-        DataRequest.instance().request(getActivity(), Urls.getVideoListUrl(), this, HttpRequest.GET, GET_VIDEO_LIST, valuePairs,
-                new VideoInfoListHandler());
+        DataRequest.instance().request(getActivity(), Urls.getVideoListUrl(), this, HttpRequest.GET, GET_VIDEO_LIST, valuePairs, new
+                VideoInfoListHandler());
     }
 
 
@@ -416,8 +427,7 @@ public class VideoFragment2 extends BaseFragment implements IRequestListener, Vi
     {
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("pos_id", "2");
-        DataRequest.instance().request(getActivity(), Urls.getAdListUrl(), this, HttpRequest.GET, GET_AD_LIST, valuePairs,
-                new AdInfoListHandler());
+        DataRequest.instance().request(getActivity(), Urls.getAdListUrl(), this, HttpRequest.GET, GET_AD_LIST, valuePairs, new AdInfoListHandler());
     }
 
     private void initAd()
@@ -510,11 +520,8 @@ public class VideoFragment2 extends BaseFragment implements IRequestListener, Vi
                     }
                     else if (mAdInfo.getLink().startsWith("http"))
                     {
-                        startActivity(new Intent(getActivity(), WebViewActivity.class)
-                                .putExtra(WebViewActivity.EXTRA_TITLE, mAdInfo.getAname())
-                                .putExtra(WebViewActivity.IS_SETTITLE, true)
-                                .putExtra(WebViewActivity.EXTRA_URL, mAdInfo.getLink())
-                        );
+                        startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra(WebViewActivity.EXTRA_TITLE, mAdInfo.getAname())
+                                .putExtra(WebViewActivity.IS_SETTITLE, true).putExtra(WebViewActivity.EXTRA_URL, mAdInfo.getLink()));
                     }
                 }
             }
@@ -596,43 +603,11 @@ public class VideoFragment2 extends BaseFragment implements IRequestListener, Vi
         }
     }
 
-    private CataPopupWindow mCataPopupWindow;
 
     @Override
     public void onClick(View v)
     {
-        if (v == ivMore)
-        {
-
-            mCataPopupWindow = new CataPopupWindow(getActivity(), cataInfoList, new MyItemClickListener()
-            {
-                @Override
-                public void onItemClick(View view, int position)
-                {
-                    for (int i = 0; i < cataInfoList.size(); i++)
-                    {
-                        if (i == position)
-                        {
-                            cataInfoList.get(position).setSelected(true);
-                        }
-                        else
-                        {
-                            cataInfoList.get(i).setSelected(false);
-                        }
-                    }
-                    mCataAdapter.notifyDataSetChanged();
-                    cta_id = cataInfoList.get(position).getId();
-                    mHandler.sendEmptyMessage(GET_VIDEO_LIST_CODE);
-                }
-            });
-
-
-            if (!cataInfoList.isEmpty())
-            {
-                mCataPopupWindow.showAsDropDown(topView);
-            }
-        }
-        else if (v == tvNew)
+        if (v == tvNew)
         {
             mVideoAdapter.setNew(true);
             tvNew.setSelected(true);
@@ -653,6 +628,39 @@ public class VideoFragment2 extends BaseFragment implements IRequestListener, Vi
             sort = "fav";
             loadData();
 
+        }
+        else if (v == ivMenu)
+        {
+            if (isShowMenu)
+            {
+                isShowMenu = false;
+                ivMenu.setImageResource(R.drawable.ic_menu_left);
+                ObjectAnimator firstAnimator = ObjectAnimator.ofFloat(rvCata, "translationX", 0, rvCata.getMeasuredWidth());
+                ObjectAnimator secondAnimator = ObjectAnimator.ofFloat(ivMenu, "translationX", 0, rvCata.getMeasuredWidth());
+
+
+                AnimatorSet animatorSet = new AnimatorSet();
+                animatorSet.setDuration(500);//动画时长
+                animatorSet.setInterpolator(new OvershootInterpolator());
+                //设置动画一起播放
+                animatorSet.playTogether(firstAnimator, secondAnimator);
+                animatorSet.start();
+            }
+            else
+            {
+                LogUtil.e("TAG", "rvCata.getMeasuredWidth()--->" + rvCata.getMeasuredWidth());
+                isShowMenu = true;
+                ivMenu.setImageResource(R.drawable.ic_menu_right);
+                ObjectAnimator firstAnimator = ObjectAnimator.ofFloat(rvCata, "translationX", rvCata.getMeasuredWidth(), 0);
+                ObjectAnimator secondAnimator = ObjectAnimator.ofFloat(ivMenu, "translationX", rvCata.getMeasuredWidth(), 0);
+
+                AnimatorSet animatorSet = new AnimatorSet();
+                animatorSet.setDuration(500);//动画时长
+                animatorSet.setInterpolator(new OvershootInterpolator());
+                //设置动画一起播放
+                animatorSet.playTogether(firstAnimator, secondAnimator);
+                animatorSet.start();
+            }
         }
     }
 

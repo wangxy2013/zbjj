@@ -23,5 +23,9 @@
         android:textSize="@dimen/t16"
         android:textStyle="bold" />
 
-
+<View
+    android:layout_marginTop="@dimen/dm_5"
+    android:background="@color/line"
+    android:layout_width="match_parent"
+    android:layout_height="1dp"/>
 </LinearLayout>

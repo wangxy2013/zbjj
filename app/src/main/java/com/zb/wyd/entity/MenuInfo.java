@@ -3,6 +3,7 @@ package com.zb.wyd.entity;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ public class MenuInfo implements Serializable
     private boolean isSelected;
 
 
-    private List<CataInfo> childMenuList;
+    private List<CataInfo> childMenuList = new ArrayList<>();
 
 
     public MenuInfo()

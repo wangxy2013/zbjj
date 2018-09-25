@@ -207,8 +207,8 @@ public class LoginActivity extends BaseActivity implements IRequestListener
         }
         else if (v == tvRecoveryPwd)
         {
-           startActivity(new Intent(LoginActivity.this, RecoveryPwdActivity.class));
-            //startActivity(new Intent(LoginActivity.this, FindPwdActivity.class));
+          // startActivity(new Intent(LoginActivity.this, RecoveryPwdActivity.class));
+            startActivity(new Intent(LoginActivity.this, FindPwdActivity.class));
 
         }
         else  if(v == tvRecoveryPwdPhone)

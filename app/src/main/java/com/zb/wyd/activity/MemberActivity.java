@@ -1,9 +1,10 @@
 package com.zb.wyd.activity;
 
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -12,15 +13,26 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zb.wyd.R;
+import com.zb.wyd.entity.MemberPriceInfo;
+import com.zb.wyd.http.DataRequest;
+import com.zb.wyd.http.HttpRequest;
+import com.zb.wyd.http.IRequestListener;
+import com.zb.wyd.json.MemberPriceInfoHandler;
 import com.zb.wyd.utils.APPUtils;
 import com.zb.wyd.utils.ConfigManager;
+import com.zb.wyd.utils.ConstantUtil;
+import com.zb.wyd.utils.ToastUtil;
 import com.zb.wyd.utils.Urls;
 import com.zb.wyd.widget.CircleImageView;
 import com.zb.wyd.widget.statusbar.StatusBarUtil;
 
-import butterknife.BindView;
+import java.util.HashMap;
+import java.util.Map;
 
-public class MemberActivity extends BaseActivity
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public class MemberActivity extends BaseActivity implements IRequestListener
 {
     @BindView(R.id.iv_back)
     ImageView       ivBack;
@@ -38,8 +50,57 @@ public class MemberActivity extends BaseActivity
     LinearLayout    llYear;
     @BindView(R.id.btn_submit)
     Button          btnSubmit;
+    @BindView(R.id.tv_month)
+    TextView        tvMonth;
+    @BindView(R.id.tv_season)
+    TextView        tvSeason;
+    @BindView(R.id.tv_year)
+    TextView        tvYear;
 
-    private int buyStyle=0;
+    private int buyStyle = 0;
+
+
+    private int monthPrice,seasonPrice,yearPrice;
+
+
+    private static final String      GET_PRICE       = "get_price";
+    private static final int         REQUEST_SUCCESS = 0x01;
+    private static final int         REQUEST_FAIL    = 0x02;
+    @SuppressLint("HandlerLeak")
+    private              BaseHandler mHandler        = new BaseHandler(MemberActivity.this)
+    {
+        @Override
+        public void handleMessage(Message msg)
+        {
+            super.handleMessage(msg);
+            switch (msg.what)
+            {
+                case REQUEST_SUCCESS:
+                    MemberPriceInfoHandler mMemberPriceInfoHandler = (MemberPriceInfoHandler)msg.obj;
+                    MemberPriceInfo memberPriceInfo = mMemberPriceInfoHandler.getMemberPriceInfo();
+
+                    if(null != memberPriceInfo)
+                    {
+                        monthPrice = memberPriceInfo.getMonth();
+                        seasonPrice = memberPriceInfo.getSeason();
+                        yearPrice = memberPriceInfo.getYear();
+
+                        tvMonth.setText("¥"+monthPrice);
+                        tvSeason.setText("¥"+seasonPrice);
+                        tvYear.setText("¥"+yearPrice);
+                    }
+                    break;
+
+
+                case REQUEST_FAIL:
+                    ToastUtil.show(MemberActivity.this, msg.obj.toString());
+                    break;
+
+            }
+        }
+    };
+
+
     @Override
     protected void initData()
     {
@@ -71,66 +132,90 @@ public class MemberActivity extends BaseActivity
         llMonth.setSelected(true);
         llQuarter.setSelected(false);
         llYear.setSelected(false);
-        ImageLoader.getInstance().displayImage(ConfigManager.instance().getUserPic(),ivUserPic);
+        ImageLoader.getInstance().displayImage(ConfigManager.instance().getUserPic(), ivUserPic);
         tvUserName.setText(ConfigManager.instance().getUserName());
+
+
+        Map<String, String> valuePairs = new HashMap<>();
+        DataRequest.instance().request(MemberActivity.this, Urls.getPaypalPriceUrl(), this, HttpRequest.POST, GET_PRICE, valuePairs,
+                new MemberPriceInfoHandler());
+
     }
 
     @Override
     public void onClick(View v)
     {
         super.onClick(v);
-        if(v == ivBack)
+        if (v == ivBack)
         {
             finish();
         }
-        else if(v == llMonth)
+        else if (v == llMonth)
         {
             llMonth.setSelected(true);
             llQuarter.setSelected(false);
             llYear.setSelected(false);
-            buyStyle=0;
+            buyStyle = 0;
         }
-        else if(v == llQuarter)
+        else if (v == llQuarter)
         {
             llMonth.setSelected(false);
             llQuarter.setSelected(true);
             llYear.setSelected(false);
-            buyStyle=1;
+            buyStyle = 1;
         }
-        else if(v == llYear)
+        else if (v == llYear)
         {
             llMonth.setSelected(false);
             llQuarter.setSelected(false);
             llYear.setSelected(true);
-            buyStyle=2;
+            buyStyle = 2;
         }
-        else  if(v == btnSubmit)
+        else if (v == btnSubmit)
         {
-            int money = 60;
+            int money = 0;
             String product = "month";
             switch (buyStyle)
             {
                 case 0:
-                    money=60;
+                    money = monthPrice;
                     product = "month";
                     break;
                 case 1:
-                    money=156;
+                    money = seasonPrice;
                     product = "season";
                     break;
                 case 2:
-                    money=566;
+                    money = yearPrice;
                     product = "year";
                     break;
             }
-            String url = Urls.getPayUrl(money,product, APPUtils.getDeviceId(this));
-//            Uri uri = Uri.parse(url);
-//            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-//            startActivity(intent);
+            String url = Urls.getPayUrl(money, product, APPUtils.getDeviceId(this));
+            //            Uri uri = Uri.parse(url);
+            //            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            //            startActivity(intent);
 
             startActivity(new Intent(MemberActivity.this, WebViewActivity.class)
                     .putExtra(WebViewActivity.EXTRA_TITLE, "会员")
                     .putExtra(WebViewActivity.IS_SETTITLE, true).putExtra(WebViewActivity.EXTRA_URL, url));
         }
     }
+
+    @Override
+    public void notify(String action, String resultCode, String resultMsg, Object obj)
+    {
+        if (GET_PRICE.equals(action))
+        {
+            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_SUCCESS, obj));
+            }
+            else
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
+            }
+        }
+    }
+
+
 }

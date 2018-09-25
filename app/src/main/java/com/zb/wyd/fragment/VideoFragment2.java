@@ -48,6 +48,7 @@ import com.zb.wyd.json.CataInfoListHandler;
 import com.zb.wyd.json.MenuListHandler;
 import com.zb.wyd.json.VideoInfoListHandler;
 import com.zb.wyd.listener.MyItemClickListener;
+import com.zb.wyd.listener.MyOnClickListener;
 import com.zb.wyd.utils.APPUtils;
 import com.zb.wyd.utils.ConstantUtil;
 import com.zb.wyd.utils.LogUtil;
@@ -75,19 +76,17 @@ public class VideoFragment2 extends BaseFragment implements IRequestListener, Vi
         .OnRefreshListener<RecyclerView>, SwipeRefreshLayout.OnRefreshListener
 {
     @BindView(R.id.tv_notice)
-    MarqueeTextView tvNotice;
+    MarqueeTextView            tvNotice;
     @BindView(R.id.banner)
-    CustomBanner mBanner;
+    CustomBanner               mBanner;
     @BindView(R.id.rv_menu_cata)
-    RecyclerView rvCata;
-    @BindView(R.id.topView)
-    View topView;
+    RecyclerView               rvCata;
     @BindView(R.id.tv_new)
-    TextView tvNew;
+    TextView                   tvNew;
     @BindView(R.id.tv_collection)
-    TextView tvCollection;
+    TextView                   tvCollection;
     @BindView(R.id.pullToRefreshRecyclerView)
-    PullToRefreshRecyclerView mPullToRefreshRecyclerView;
+    PullToRefreshRecyclerView  mPullToRefreshRecyclerView;
     @BindView(R.id.swipeRefresh)
     VerticalSwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -102,7 +101,7 @@ public class VideoFragment2 extends BaseFragment implements IRequestListener, Vi
     private View rootView = null;
     private Unbinder unbinder;
 
-    private List<String> picList = new ArrayList<>();
+    private List<String> picList    = new ArrayList<>();
     private List<AdInfo> adInfoList = new ArrayList<>();
 
     private RecyclerView mRecyclerView; //
@@ -114,25 +113,25 @@ public class VideoFragment2 extends BaseFragment implements IRequestListener, Vi
 
     private VideoAdapter mVideoAdapter;
 
-    private boolean isNew = false;
-    private String cta_id = "0";
-    private String sort = "new";
+    private boolean isNew  = false;
+    private String  cta_id = "0";
+    private String  sort   = "new";
 
 
-    private static final String GET_CATA_LIST = "get_cata_list";
+    private static final String GET_CATA_LIST  = "get_cata_list";
     private static final String GET_VIDEO_LIST = "get_video_list";
-    private static final String GET_AD_LIST = "get_ad_list";
+    private static final String GET_AD_LIST    = "get_ad_list";
 
     private static final int GET_VIDEO_LIST_SUCCESS = 0x01;
-    private static final int REQUEST_FAIL = 0x02;
-    private static final int GET_AD_LIST_SUCCESS = 0x04;
-    private static final int REQUEST_SUCCESS = 0x05;
-    private static final int GET_CATA_LIST_SUCCESS = 0x06;
+    private static final int REQUEST_FAIL           = 0x02;
+    private static final int GET_AD_LIST_SUCCESS    = 0x04;
+    private static final int REQUEST_SUCCESS        = 0x05;
+    private static final int GET_CATA_LIST_SUCCESS  = 0x06;
 
 
-    private static final int GET_CATA_LIST_CODE = 0x10;
+    private static final int GET_CATA_LIST_CODE  = 0x10;
     private static final int GET_VIDEO_LIST_CODE = 0X11;
-    private static final int GET_AD_lIST_CODE = 0X13;
+    private static final int GET_AD_lIST_CODE    = 0X13;
 
 
     @SuppressLint("HandlerLeak")
@@ -320,7 +319,7 @@ public class VideoFragment2 extends BaseFragment implements IRequestListener, Vi
         tvCollection.setSelected(false);
         isNew = true;
         rvCata.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager
-            .VERTICAL, false));
+                .VERTICAL, false));
 
         mMenuAdapter = new MenuAdapter(mMenuInfoList, getActivity(), new MyItemClickListener()
         {
@@ -337,6 +336,15 @@ public class VideoFragment2 extends BaseFragment implements IRequestListener, Vi
                     {
                         mMenuInfoList.get(i).setSelected(false);
                     }
+                    List<CataInfo> childMenuList = mMenuInfoList.get(i).getChildMenuList();
+
+                    if (null != childMenuList)
+                    {
+                        for (int j = 0; j < childMenuList.size(); j++)
+                        {
+                            mMenuInfoList.get(i).getChildMenuList().get(j).setSelected(false);
+                        }
+                    }
                 }
                 mMenuAdapter.notifyDataSetChanged();
 
@@ -345,6 +353,52 @@ public class VideoFragment2 extends BaseFragment implements IRequestListener, Vi
                 mHandler.sendEmptyMessage(GET_VIDEO_LIST_CODE);
 
 
+            }
+        }, new MyOnClickListener.OnClickCallBackListener()
+        {
+            @Override
+            public void onSubmit(int p, int i)
+            {
+
+                for (int a = 0; a < mMenuInfoList.size(); a++)
+                {
+                    List<CataInfo> childMenuList = mMenuInfoList.get(a).getChildMenuList();
+
+                    if (null != childMenuList)
+                    {
+                        if (a == p)
+                        {
+                            for (int j = 0; j < childMenuList.size(); j++)
+                            {
+                                if (i == j)
+                                {
+                                    mMenuInfoList.get(a).getChildMenuList().get(i).setSelected(true);
+                                }
+                                else
+                                {
+                                    mMenuInfoList.get(a).getChildMenuList().get(j).setSelected(false);
+                                }
+
+                            }
+                        }
+                        else
+                        {
+                            for (int j = 0; j < childMenuList.size(); j++)
+                            {
+
+                                mMenuInfoList.get(a).getChildMenuList().get(j).setSelected(false);
+
+
+                            }
+                        }
+
+                    }
+                }
+                mMenuAdapter.notifyDataSetChanged();
+                closedMenu();
+                cta_id = mMenuInfoList.get(p).getChildMenuList().get(i).getId();
+                pn = 1;
+                mHandler.sendEmptyMessage(GET_VIDEO_LIST_CODE);
             }
         });
         rvCata.setAdapter(mMenuAdapter);
@@ -649,22 +703,26 @@ public class VideoFragment2 extends BaseFragment implements IRequestListener, Vi
             else
             {
                 LogUtil.e("TAG", "rvCata.getMeasuredWidth()--->" + rvCata.getMeasuredWidth());
-                isShowMenu = true;
-                ivMenu.setImageResource(R.drawable.ic_menu_right);
-                ObjectAnimator firstAnimator = ObjectAnimator.ofFloat(rvCata, "translationX", rvCata.getMeasuredWidth(), 0);
-                ObjectAnimator secondAnimator = ObjectAnimator.ofFloat(ivMenu, "translationX", rvCata.getMeasuredWidth(), 0);
-
-                AnimatorSet animatorSet = new AnimatorSet();
-                animatorSet.setDuration(500);//动画时长
-                animatorSet.setInterpolator(new OvershootInterpolator());
-                //设置动画一起播放
-                animatorSet.playTogether(firstAnimator, secondAnimator);
-                animatorSet.start();
+                closedMenu();
             }
         }
     }
 
 
+    private void closedMenu()
+    {
+        isShowMenu = true;
+        ivMenu.setImageResource(R.drawable.ic_menu_right);
+        ObjectAnimator firstAnimator = ObjectAnimator.ofFloat(rvCata, "translationX", rvCata.getMeasuredWidth(), 0);
+        ObjectAnimator secondAnimator = ObjectAnimator.ofFloat(ivMenu, "translationX", rvCata.getMeasuredWidth(), 0);
+
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.setDuration(500);//动画时长
+        animatorSet.setInterpolator(new OvershootInterpolator());
+        //设置动画一起播放
+        animatorSet.playTogether(firstAnimator, secondAnimator);
+        animatorSet.start();
+    }
     @Override
     public void onPullDownToRefresh(PullToRefreshBase<RecyclerView> refreshView)
     {

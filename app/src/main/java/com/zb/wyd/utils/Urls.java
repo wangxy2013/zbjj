@@ -303,7 +303,7 @@ public class Urls
 
     public static String getPayUrl(int amount, String product, String mobile_id)
     {
-        return ConfigManager.instance().getDomainName() + "/paypal?auth=" + ConfigManager.instance().getUniqueCode() + "&amount=" + amount + "&product=" + product + "&mobile_id=" + mobile_id + "&device=and";
+        return ConfigManager.instance().getDomainName() + "/paypal?amount=" + amount + "&product=" + product;
     }
 
 
@@ -338,5 +338,12 @@ public class Urls
     {
         return ConfigManager.instance().getDomainName() + "/paypal/withdraw";
     }
+
+    public static String getPaypalPriceUrl()
+    {
+        return ConfigManager.instance().getDomainName() + "/paypal/price";
+    }
+
+
 }
 

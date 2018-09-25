@@ -8,11 +8,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.gifloadlibrary.GifLoadUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zb.wyd.R;
 import com.zb.wyd.entity.VideoInfo;
 import com.zb.wyd.listener.MyItemClickListener;
 import com.zb.wyd.utils.APPUtils;
+import com.zb.wyd.utils.LogUtil;
 import com.zb.wyd.widget.RoundAngleImageView;
 
 
@@ -52,12 +54,23 @@ public class VideoHolder extends RecyclerView.ViewHolder
     public void setVideoInfo(VideoInfo mVideoInfo, final int p)
     {
 
-        ImageLoader.getInstance().displayImage(mVideoInfo.getCover(), mImgIv);
+
+        if (mVideoInfo.getCover().contains(".gif"))
+        {
+            LogUtil.e("TAG", "mVideoInfo.getCover()-->" + mVideoInfo.getCover());
+            GifLoadUtils.getInstance().getImageLoader(context).loadUrl(mVideoInfo.getCover()).into(mImgIv);
+        }
+        else
+        {
+            ImageLoader.getInstance().displayImage(mVideoInfo.getCover(), mImgIv);
+        }
+
+
         mFollowTv.setText(mVideoInfo.getFavour_count());
         mPopularityTv.setText(mVideoInfo.getCoupon());
         mNameTv.setText(mVideoInfo.getV_name());
 
-        if (mVideoInfo.isNew() && null !=mStatusTv)
+        if (mVideoInfo.isNew() && null != mStatusTv)
         {
             mStatusTv.setText(mVideoInfo.getAdd_time());
         }

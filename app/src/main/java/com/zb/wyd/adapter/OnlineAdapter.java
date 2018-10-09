@@ -1,17 +1,13 @@
 package com.zb.wyd.adapter;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.zb.wyd.R;
-import com.zb.wyd.entity.LiveInfo;
 import com.zb.wyd.entity.UserInfo;
-import com.zb.wyd.holder.NewHolder;
 import com.zb.wyd.holder.OnlinHolder;
-import com.zb.wyd.listener.MyItemClickListener;
 
 import java.util.List;
 

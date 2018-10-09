@@ -96,7 +96,7 @@ public class VidoeListActivity extends BaseActivity implements PullToRefreshBase
     protected void initViews(Bundle savedInstanceState)
     {
         setContentView(R.layout.activity_video_list);
-        StatusBarUtil.setStatusBarColor(this, getResources().getColor(R.color.yellow));
+        StatusBarUtil.setStatusBarColor(this, getResources().getColor(R.color.white));
         StatusBarUtil.StatusBarLightMode(VidoeListActivity.this, false);
     }
 

@@ -70,7 +70,7 @@ public class MyMasonryActivity extends BaseActivity
     protected void initViews(Bundle savedInstanceState)
     {
         setContentView(R.layout.activity_my_masonry);
-        StatusBarUtil.setStatusBarColor(this, getResources().getColor(R.color.yellow));
+        StatusBarUtil.setStatusBarColor(this, getResources().getColor(R.color.white));
         StatusBarUtil.StatusBarLightMode(MyMasonryActivity.this, false);
     }
 

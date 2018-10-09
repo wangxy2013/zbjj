@@ -111,7 +111,7 @@ public class MemberActivity extends BaseActivity implements IRequestListener
     protected void initViews(Bundle savedInstanceState)
     {
         setContentView(R.layout.activity_member);
-        StatusBarUtil.setStatusBarColor(this, getResources().getColor(R.color.yellow));
+        StatusBarUtil.setStatusBarColor(this, getResources().getColor(R.color.white));
         StatusBarUtil.StatusBarLightMode(MemberActivity.this, false);
     }
 

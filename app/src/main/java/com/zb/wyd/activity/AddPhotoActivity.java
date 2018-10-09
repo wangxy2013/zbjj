@@ -217,7 +217,7 @@ public class AddPhotoActivity extends BaseActivity implements IRequestListener
     {
 
         setContentView(R.layout.activity_add_photo);
-        StatusBarUtil.setStatusBarColor(this, getResources().getColor(R.color.yellow));
+        StatusBarUtil.setStatusBarColor(this, getResources().getColor(R.color.white));
         StatusBarUtil.StatusBarLightMode(AddPhotoActivity.this, false);
     }
 

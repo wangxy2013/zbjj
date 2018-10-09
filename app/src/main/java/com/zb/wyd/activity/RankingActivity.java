@@ -91,7 +91,7 @@ public class RankingActivity extends BaseActivity implements PullToRefreshBase.O
     protected void initViews(Bundle savedInstanceState)
     {
         setContentView(R.layout.activity_message);
-        StatusBarUtil.setStatusBarColor(this, getResources().getColor(R.color.yellow));
+        StatusBarUtil.setStatusBarColor(this, getResources().getColor(R.color.white));
         StatusBarUtil.StatusBarLightMode(RankingActivity.this, false);
     }
 

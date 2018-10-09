@@ -4,17 +4,10 @@ package com.zb.wyd.fragment;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Message;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.text.Html;
-import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.dalong.marqueeview.MarqueeView;
 import com.donkingliang.banner.CustomBanner;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zb.wyd.MyApplication;
@@ -33,7 +25,7 @@ import com.zb.wyd.activity.LoginActivity;
 import com.zb.wyd.activity.PhotoDetailActivity;
 import com.zb.wyd.activity.VideoPlayActivity;
 import com.zb.wyd.activity.WebViewActivity;
-import com.zb.wyd.adapter.NewAdapter;
+import com.zb.wyd.adapter.HotAdapter;
 import com.zb.wyd.adapter.RecommendAdapter;
 import com.zb.wyd.entity.AdInfo;
 import com.zb.wyd.entity.LiveInfo;
@@ -55,7 +47,6 @@ import com.zb.wyd.widget.MaxRecyclerView;
 import com.zb.wyd.widget.VerticalSwipeRefreshLayout;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,8 +54,6 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import cc.ibooker.ztextviewlib.AutoVerticalScrollTextView;
-import cc.ibooker.ztextviewlib.AutoVerticalScrollTextViewUtil;
 
 /**
  * 描述：一句话简单描述
@@ -77,46 +66,37 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
     MarqueeTextView tvNotice;
 
     @BindView(R.id.banner)
-    CustomBanner               mBanner;
-    @BindView(R.id.rl_all_recommend)
-    RelativeLayout             rlAllRecommend;
-    @BindView(R.id.rv_recommend)
-    MaxRecyclerView            rvRecommend;
+    CustomBanner mBanner;
+
     @BindView(R.id.rl_all_new)
-    RelativeLayout             rlAllHotLayout;
+    RelativeLayout rlAllHotLayout;
     @BindView(R.id.rv_new)
-    MaxRecyclerView            rvHot;
+    MaxRecyclerView rvHot;
     @BindView(R.id.swipeRefresh)
     VerticalSwipeRefreshLayout mSwipeRefreshLayout;
     private View rootView = null;
     private Unbinder unbinder;
 
 
-    private List<String>   picList      = new ArrayList<>();
-    private List<LiveInfo> freeLiveList = new ArrayList<>();
-    private List<LiveInfo> newLiveList  = new ArrayList<>();
-    private List<AdInfo>   adInfoList   = new ArrayList<>();
-    private RecommendAdapter mRecommendAdapter;
-    private NewAdapter       mHotAdapter;
-    private int              getFreeCount, getHotCount;
+    private List<String> picList = new ArrayList<>();
+    private List<LiveInfo> hotLiveList = new ArrayList<>();
+    private List<AdInfo> adInfoList = new ArrayList<>();
+    private HotAdapter mHotAdapter;
+    private int getHotCount;
 
 
-    private static final String GET_NOTICE            = "get_notice";
-    private static final String GET_LOCATION          = "get_location";
-    private static final String GET_FREE_LIVE         = "get_free_live";
-    private static final String GET_HOT_LIVE          = "get_hot_live";
-    private static final String GET_AD_LIST           = "get_ad_list";
-    private static final int    GET_FREE_LIVE_SUCCESS = 0x01;
-    private static final int    REQUEST_FAIL          = 0x02;
-    private static final int    GET_HOT_LIVE_SUCCESS  = 0x03;
+    private static final String GET_NOTICE = "get_notice";
+    private static final String GET_LOCATION = "get_location";
+    private static final String GET_HOT_LIVE = "get_hot_live";
+    private static final String GET_AD_LIST = "get_ad_list";
+    private static final int REQUEST_FAIL = 0x02;
+    private static final int GET_HOT_LIVE_SUCCESS = 0x03;
 
-    private static final int GET_AD_LIST_CODE     = 0X10;
-    private static final int GET_FREE_LIVE_CODE   = 0X11;
-    private static final int GET_HOT_LIVE_CODE    = 0X12;
+    private static final int GET_AD_LIST_CODE = 0X10;
+    private static final int GET_HOT_LIVE_CODE = 0X12;
     private static final int GET_NOTICE_LIST_CODE = 0X15;
 
-    private static final int GET_FREE_LIVE_FAIL  = 0X13;
-    private static final int GET_HOT_LIVE_FAIL   = 0X14;
+    private static final int GET_HOT_LIVE_FAIL = 0X14;
     private static final int GET_AD_LIST_SUCCESS = 0x04;
 
     private static final int GET_NOTICE_LIST_SUCCESS = 0x06;
@@ -131,37 +111,15 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
             super.handleMessage(msg);
             switch (msg.what)
             {
-                case GET_FREE_LIVE_SUCCESS:
-
-                    LiveInfoListHandler mLiveInfoListHandler = (LiveInfoListHandler) msg.obj;
-                    freeLiveList.clear();
-                    freeLiveList.addAll(mLiveInfoListHandler.getUserInfoList());
-                    mRecommendAdapter.notifyDataSetChanged();
-
-                    if (freeLiveList.isEmpty())
-                    {
-                        rlAllRecommend.setVisibility(View.GONE);
-                    }
-                    else
-                    {
-
-                        rlAllRecommend.setVisibility(View.VISIBLE);
-                    }
-                    break;
-
 
                 case GET_HOT_LIVE_SUCCESS:
                     LiveInfoListHandler mLiveInfoListHandler1 = (LiveInfoListHandler) msg.obj;
-                    newLiveList.clear();
-                    newLiveList.addAll(mLiveInfoListHandler1.getUserInfoList());
+                    hotLiveList.clear();
+                    hotLiveList.addAll(mLiveInfoListHandler1.getUserInfoList());
                     mHotAdapter.notifyDataSetChanged();
                     break;
 
                 case REQUEST_FAIL:
-                    break;
-
-                case GET_FREE_LIVE_CODE:
-                    getFreeLive();
                     break;
 
                 case GET_HOT_LIVE_CODE:
@@ -191,14 +149,6 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
                     break;
 
 
-                case GET_FREE_LIVE_FAIL:
-                    getFreeCount++;
-                    if (getFreeCount <= 30)
-                    {
-                        mHandler.sendEmptyMessage(GET_FREE_LIVE_CODE);
-                    }
-
-                    break;
                 case GET_HOT_LIVE_FAIL:
                     getHotCount++;
                     if (getHotCount <= 30)
@@ -298,44 +248,22 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
     @Override
     protected void initViewData()
     {
-        mRecommendAdapter = new RecommendAdapter(freeLiveList, getContext(), new MyItemClickListener()
+
+
+        mHotAdapter = new HotAdapter(hotLiveList, getActivity(), new MyItemClickListener()
         {
             @Override
             public void onItemClick(View view, int position)
             {
                 if (MyApplication.getInstance().isLogin())
                 {
-                    LiveInfo mLiveInfo = freeLiveList.get(position);
-                    //                    Bundle b = new Bundle();
-                    //                    b.putSerializable("LiveInfo", mLiveInfo);
-                    startActivity(new Intent(getActivity(), LiveActivity.class).putExtra("biz_id", mLiveInfo.getId()));
-
-                }
-                else
-                {
-                    startActivity(new Intent(getActivity(), LoginActivity.class));
-                }
-            }
-        });
-
-        rvRecommend.setLayoutManager(new FullyGridLayoutManager(getActivity(), 3));
-        rvRecommend.setAdapter(mRecommendAdapter);
-
-
-        mHotAdapter = new NewAdapter(newLiveList, getActivity(), new MyItemClickListener()
-        {
-            @Override
-            public void onItemClick(View view, int position)
-            {
-                if (MyApplication.getInstance().isLogin())
-                {
-                    LiveInfo mLiveInfo = newLiveList.get(position);
+                    LiveInfo mLiveInfo = hotLiveList.get(position);
 
                     //                    Bundle b = new Bundle();
                     //                    b.putSerializable("LiveInfo", mLiveInfo);
                     //                    startActivity(new Intent(getActivity(), LiveActivity.class).putExtras(b));
-                    startActivity(new Intent(getActivity(), LiveActivity.class).putExtra("biz_id", mLiveInfo.getId()).putExtra("location", mLiveInfo
-                            .getLocation()));
+                    startActivity(new Intent(getActivity(), LiveActivity.class).putExtra("biz_id", mLiveInfo.getId()).putExtra("location",
+                            mLiveInfo.getLocation()));
 
                 }
                 else
@@ -371,11 +299,9 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
 
     private void loadData()
     {
-        mHandler.sendEmptyMessage(GET_FREE_LIVE_CODE);
         mHandler.sendEmptyMessage(GET_HOT_LIVE_CODE);
         mHandler.sendEmptyMessage(GET_NOTICE_LIST_CODE);
-        if(null !=tvNotice)
-        tvNotice.requestFocus();
+        if (null != tvNotice) tvNotice.requestFocus();
 
     }
 
@@ -392,11 +318,6 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
         DataRequest.instance().request(getActivity(), Urls.getNoticeUrl(), this, HttpRequest.GET, GET_NOTICE, valuePairs, new NoticeListHandler());
     }
 
-    private void getFreeLive()
-    {
-        Map<String, String> valuePairs = new HashMap<>();
-        DataRequest.instance().request(getActivity(), Urls.getFreeLive(), this, HttpRequest.GET, GET_FREE_LIVE, valuePairs, new LiveInfoListHandler());
-    }
 
     private void getHotLive()
     {
@@ -511,8 +432,8 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
             }
             else if (link.startsWith("http"))
             {
-                startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra(WebViewActivity.EXTRA_TITLE, "详情")
-                        .putExtra(WebViewActivity.IS_SETTITLE, true).putExtra(WebViewActivity.EXTRA_URL, link));
+                startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra(WebViewActivity.EXTRA_TITLE, "详情").putExtra(WebViewActivity
+                        .IS_SETTITLE, true).putExtra(WebViewActivity.EXTRA_URL, link));
             }
         }
     }
@@ -538,18 +459,7 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
     @Override
     public void notify(String action, String resultCode, String resultMsg, Object obj)
     {
-        if (GET_FREE_LIVE.equals(action))
-        {
-            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
-            {
-                mHandler.sendMessage(mHandler.obtainMessage(GET_FREE_LIVE_SUCCESS, obj));
-            }
-            else
-            {
-                mHandler.sendMessage(mHandler.obtainMessage(GET_FREE_LIVE_CODE, resultMsg));
-            }
-        }
-        else if (GET_HOT_LIVE.equals(action))
+        if (GET_HOT_LIVE.equals(action))
         {
             if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
             {

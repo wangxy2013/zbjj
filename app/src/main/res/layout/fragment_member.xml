@@ -9,7 +9,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/yellow"
+        android:background="@color/white"
         android:paddingBottom="@dimen/dm_5"
         android:paddingTop="@dimen/dm_5">
 
@@ -50,12 +50,15 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/yellow">
+        android:background="@color/white">
 
         <LinearLayout
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dm_15"
+            android:layout_marginBottom="@dimen/dm_15"
+            android:layout_marginRight="@dimen/dm_15"
+            android:layout_marginLeft="@dimen/dm_15"
             android:background="@drawable/bg_member"
             android:orientation="vertical"
             android:padding="@dimen/dm_15">
@@ -521,7 +524,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/ic_qq_customer" />
+                    android:src="@drawable/ic_customer" />
 
 
                 <TextView
@@ -567,7 +570,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/ic_message" />
+                    android:src="@drawable/ic_setting" />
 
 
                 <TextView

@@ -19,40 +19,38 @@ import com.zb.wyd.widget.RoundAngleImageView;
 
 /**
  */
-public class NewHolder extends RecyclerView.ViewHolder
+public class HotHolder extends RecyclerView.ViewHolder
 {
-    private TextView            mFollowTv;
-    private TextView            mPopularityTv;
-    private TextView            mNameTv;
+    private TextView mFollowTv;
+    private TextView mNameTv;
     private RoundAngleImageView mImgIv;
-    private RelativeLayout      mItemLayout;
+    private RelativeLayout mItemLayout;
     private MyItemClickListener listener;
-    private Context             context;
-    private TextView            mStatusTv;
-    private RelativeLayout      rlLocationLayout;
-    private TextView            mLocationTv;
+    private Context context;
+    private TextView mLocationTv;
+    private ImageView mLocationIv;
 
-
-    public NewHolder(View rootView, Context context, MyItemClickListener listener)
+    public HotHolder(View rootView, Context context, MyItemClickListener listener)
     {
         super(rootView);
         this.listener = listener;
         this.context = context;
-        mStatusTv = (TextView) rootView.findViewById(R.id.tv_status);
         mFollowTv = (TextView) rootView.findViewById(R.id.tv_follow);
-        mPopularityTv = (TextView) rootView.findViewById(R.id.tv_popularity);
         mNameTv = (TextView) rootView.findViewById(R.id.tv_name);
         mImgIv = (RoundAngleImageView) rootView.findViewById(R.id.iv_user_pic);
         mItemLayout = (RelativeLayout) rootView.findViewById(R.id.rl_item);
-        rlLocationLayout = (RelativeLayout) rootView.findViewById(R.id.rl_location);
         mLocationTv = (TextView) rootView.findViewById(R.id.tv_location);
-
+        mLocationIv = (ImageView) rootView.findViewById(R.id.iv_location);
 
         int spacingInPixels = context.getResources().getDimensionPixelSize(R.dimen.dm_10) * 3;
         int width = (APPUtils.getScreenWidth(context) - spacingInPixels) / 2;
-        mItemLayout.setLayoutParams(new LinearLayout.LayoutParams(width, width * 13 / 20));
 
-        RelativeLayout.LayoutParams imgLayoutParams = new RelativeLayout.LayoutParams(width, width * 13 / 20);
+        LinearLayout.LayoutParams params=  new LinearLayout.LayoutParams(width, width);
+        params.bottomMargin=30;
+        params.leftMargin=12;
+        params.rightMargin=10;
+        mItemLayout.setLayoutParams(params);
+        RelativeLayout.LayoutParams imgLayoutParams = new RelativeLayout.LayoutParams(width, width);
         mImgIv.setLayoutParams(imgLayoutParams);
         mImgIv.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
@@ -65,27 +63,17 @@ public class NewHolder extends RecyclerView.ViewHolder
 
         ImageLoader.getInstance().displayImage(mLiveInfo.getFace(), mImgIv);
 
-        if ("1".equals(mLiveInfo.getIs_live()))
-        {
-            mStatusTv.setBackgroundResource(R.drawable.common_orange_3dp);
-        }
-        else
-        {
-            mStatusTv.setBackgroundResource(R.drawable.common_gray_3dp);
-        }
 
         if (StringUtils.stringIsEmpty(mLiveInfo.getLocation()))
         {
-            rlLocationLayout.setVisibility(View.GONE);
+            mLocationTv.setText("保密");
         }
         else
         {
-            rlLocationLayout.setVisibility(View.VISIBLE);
             mLocationTv.setText(mLiveInfo.getLocation());
         }
 
         mFollowTv.setText(mLiveInfo.getFavour_count());
-        mPopularityTv.setText(mLiveInfo.getOnline());
         mNameTv.setText(mLiveInfo.getNick());
         mItemLayout.setOnClickListener(new View.OnClickListener()
         {

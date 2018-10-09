@@ -18,6 +18,7 @@
     <color name="grayA">#999999</color>
     <color name="redA">#f35556</color>
     <color name="redB">#50f35556</color>
+    <color name="redC">#F643BF</color>
     <color name="blue">#273655</color>
     <color name="blueB">#2BAAA3</color>
     <color name="blueC">#4ab7e8</color>
@@ -59,4 +60,10 @@
     <color name="result_text">#ffffffff</color>
     <color name="status_text">#ffffffff</color>
     <color name="viewfinder_laser">#ffcc0000</color> <!-- Android standard ICS color -->
+
+
+
+
+
+
 </resources>

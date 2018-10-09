@@ -8,21 +8,21 @@ import android.view.ViewGroup;
 
 import com.zb.wyd.R;
 import com.zb.wyd.entity.LiveInfo;
-import com.zb.wyd.holder.NewHolder;
+import com.zb.wyd.holder.HotHolder;
 import com.zb.wyd.listener.MyItemClickListener;
 
 import java.util.List;
 
 /**
  */
-public class NewAdapter extends RecyclerView.Adapter<NewHolder>
+public class HotAdapter extends RecyclerView.Adapter<HotHolder>
 {
 
     private MyItemClickListener listener;
     private List<LiveInfo>      list;
     private Context             mContext;
 
-    public NewAdapter(List<LiveInfo> list, Context mContext, MyItemClickListener listener)
+    public HotAdapter(List<LiveInfo> list, Context mContext, MyItemClickListener listener)
     {
         this.list = list;
         this.mContext = mContext;
@@ -30,16 +30,16 @@ public class NewAdapter extends RecyclerView.Adapter<NewHolder>
     }
 
     @Override
-    public NewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    public HotHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_new, parent, false);
-        NewHolder mHolder = new NewHolder(itemView, parent.getContext(),listener);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_hot, parent, false);
+        HotHolder mHolder = new HotHolder(itemView, parent.getContext(),listener);
         return mHolder;
     }
 
 
     @Override
-    public void onBindViewHolder(NewHolder holder, int position)
+    public void onBindViewHolder(HotHolder holder, int position)
     {
         LiveInfo mLiveInfo = list.get(position);
         holder.setLiveInfo(mLiveInfo,position);

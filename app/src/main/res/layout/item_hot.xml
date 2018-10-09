@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_item"
+    android:layout_width="match_parent"
+    android:layout_margin="@dimen/dm_5"
+    android:layout_height="wrap_content"
+   >
+
+
+    <com.zb.wyd.widget.RoundAngleImageView
+        android:id="@+id/iv_user_pic"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/icon_photo_default"
+        android:scaleType="centerCrop"
+        android:src="@color/text_blue1" />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/rl_location"
+        android:layout_marginLeft="@dimen/dm_5"
+        android:text="宝宝"
+        android:textColor="@color/white"
+        android:textSize="@dimen/t14" />
+
+    <RelativeLayout
+        android:id="@+id/rl_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/dm_5"
+       >
+
+        <ImageView
+            android:id="@+id/iv_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_location" />
+
+        <TextView
+            android:id="@+id/tv_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dm_5"
+            android:layout_toRightOf="@+id/iv_location"
+            android:textColor="@color/white"
+            android:textSize="@dimen/t12" />
+
+
+        <TextView
+            android:id="@+id/tv_follow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="1111"
+            android:textColor="@color/white"
+            android:textSize="@dimen/t10" />
+
+    </RelativeLayout>
+
+
+    <ImageView
+        android:layout_marginTop="@dimen/dm_10"
+        android:id="@+id/iv_label"
+        android:src="@drawable/ic_top1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,6 +47,8 @@ import com.zb.wyd.widget.FullyGridLayoutManager;
 import com.zb.wyd.widget.MarqueeTextView;
 import com.zb.wyd.widget.MaxRecyclerView;
 import com.zb.wyd.widget.VerticalSwipeRefreshLayout;
+import com.zb.wyd.widget.list.refresh.PullToRefreshBase;
+import com.zb.wyd.widget.list.refresh.PullToRefreshRecyclerView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,7 +62,8 @@ import butterknife.Unbinder;
 /**
  * 描述：一句话简单描述
  */
-public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, IRequestListener, View.OnClickListener
+public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, IRequestListener, View.OnClickListener,
+        PullToRefreshBase.OnRefreshListener<RecyclerView>
 {
 
 
@@ -68,10 +73,14 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
     @BindView(R.id.banner)
     CustomBanner mBanner;
 
-    @BindView(R.id.rl_all_new)
-    RelativeLayout rlAllHotLayout;
-    @BindView(R.id.rv_new)
-    MaxRecyclerView rvHot;
+
+    @BindView(R.id.pullToRefreshRecyclerView)
+    PullToRefreshRecyclerView mPullToRefreshRecyclerView;
+
+
+    private RecyclerView rvHot;
+
+
     @BindView(R.id.swipeRefresh)
     VerticalSwipeRefreshLayout mSwipeRefreshLayout;
     private View rootView = null;
@@ -83,10 +92,11 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
     private List<AdInfo> adInfoList = new ArrayList<>();
     private HotAdapter mHotAdapter;
     private int getHotCount;
+    private int pn = 1;
+    private int mRefreshStatus;
 
 
     private static final String GET_NOTICE = "get_notice";
-    private static final String GET_LOCATION = "get_location";
     private static final String GET_HOT_LIVE = "get_hot_live";
     private static final String GET_AD_LIST = "get_ad_list";
     private static final int REQUEST_FAIL = 0x02;
@@ -114,7 +124,11 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
 
                 case GET_HOT_LIVE_SUCCESS:
                     LiveInfoListHandler mLiveInfoListHandler1 = (LiveInfoListHandler) msg.obj;
-                    hotLiveList.clear();
+
+                    if (pn == 1)
+                    {
+                        hotLiveList.clear();
+                    }
                     hotLiveList.addAll(mLiveInfoListHandler1.getUserInfoList());
                     mHotAdapter.notifyDataSetChanged();
                     break;
@@ -153,6 +167,7 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
                     getHotCount++;
                     if (getHotCount <= 30)
                     {
+                        hotLiveList.clear();
                         mHandler.sendEmptyMessage(GET_HOT_LIVE_CODE);
                     }
                     break;
@@ -236,13 +251,16 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
     @Override
     protected void initViews()
     {
+
     }
 
     @Override
     protected void initEvent()
     {
         mSwipeRefreshLayout.setOnRefreshListener(this);
-        rlAllHotLayout.setOnClickListener(this);
+
+        mPullToRefreshRecyclerView.setOnRefreshListener(this);
+        mPullToRefreshRecyclerView.setPullRefreshEnabled(true);
     }
 
     @Override
@@ -272,9 +290,28 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
                 }
             }
         });
-        rvHot.setLayoutManager(new FullyGridLayoutManager(getActivity(), 2));
-        rvHot.setAdapter(mHotAdapter);
+        rvHot = mPullToRefreshRecyclerView.getRefreshableView();
+        mPullToRefreshRecyclerView.setPullLoadEnabled(true);
+        rvHot.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 
+        rvHot.addOnScrollListener(new RecyclerView.OnScrollListener()
+        {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy)
+            {
+                int topRowVerticalPosition = (recyclerView == null || recyclerView.getChildCount() == 0) ? 0 : recyclerView.getChildAt(0).getTop();
+                mSwipeRefreshLayout.setEnabled(topRowVerticalPosition >= 0);
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState)
+            {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+        });
+
+        rvHot.setAdapter(mHotAdapter);
+        loadData();
 
     }
 
@@ -292,7 +329,9 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
         if (isVisibleToUser)
         {
             mHandler.sendEmptyMessage(GET_AD_LIST_CODE);
-            loadData();
+            mHandler.sendEmptyMessage(GET_NOTICE_LIST_CODE);
+            if (null != tvNotice) tvNotice.requestFocus();
+
         }
         super.setUserVisibleHint(isVisibleToUser);
     }
@@ -300,8 +339,7 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
     private void loadData()
     {
         mHandler.sendEmptyMessage(GET_HOT_LIVE_CODE);
-        mHandler.sendEmptyMessage(GET_NOTICE_LIST_CODE);
-        if (null != tvNotice) tvNotice.requestFocus();
+
 
     }
 
@@ -322,10 +360,10 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
     private void getHotLive()
     {
         Map<String, String> valuePairs = new HashMap<>();
-        valuePairs.put("pn", "1");
+        valuePairs.put("pn", pn + "");
         valuePairs.put("num", "20");
-        valuePairs.put("location", MyApplication.getInstance().getLocation());
         valuePairs.put("sort", "hot");
+        valuePairs.put("location", MyApplication.getInstance().getLocation());
         DataRequest.instance().request(getActivity(), Urls.getNewLive(), this, HttpRequest.GET, GET_HOT_LIVE, valuePairs, new LiveInfoListHandler());
     }
 
@@ -443,6 +481,7 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
     {
         if (mSwipeRefreshLayout != null)
         {
+            pn = 1;
             loadData();
             mSwipeRefreshLayout.post(new Runnable()
             {
@@ -459,8 +498,26 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
     @Override
     public void notify(String action, String resultCode, String resultMsg, Object obj)
     {
+
+        if (mRefreshStatus == 1)
+        {
+            mPullToRefreshRecyclerView.onPullUpRefreshComplete();
+        }
+        else
+        {
+            mPullToRefreshRecyclerView.onPullDownRefreshComplete();
+        }
+
         if (GET_HOT_LIVE.equals(action))
         {
+            mSwipeRefreshLayout.post(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+            });
             if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
             {
                 mHandler.sendMessage(mHandler.obtainMessage(GET_HOT_LIVE_SUCCESS, obj));
@@ -494,10 +551,10 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
     @Override
     public void onClick(View v)
     {
-        if (v == rlAllHotLayout)
-        {
-            ((LiveFragment) getParentFragment()).setTabIndex(1);
-        }
+        //        if (v == rlAllHotLayout)
+        //        {
+        //            ((LiveFragment) getParentFragment()).setTabIndex(1);
+        //        }
     }
 
     @Override
@@ -511,5 +568,23 @@ public class LiveIndexFragment extends BaseFragment implements SwipeRefreshLayou
         }
 
         mHandler.removeCallbacksAndMessages(null);
+    }
+
+
+    @Override
+    public void onPullDownToRefresh(PullToRefreshBase<RecyclerView> refreshView)
+    {
+        hotLiveList.clear();
+        pn = 1;
+        mRefreshStatus = 0;
+        loadData();
+    }
+
+    @Override
+    public void onPullUpToRefresh(PullToRefreshBase<RecyclerView> refreshView)
+    {
+        pn += 1;
+        mRefreshStatus = 1;
+        loadData();
     }
 }

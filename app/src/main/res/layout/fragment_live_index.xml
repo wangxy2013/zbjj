@@ -11,122 +11,66 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ScrollView
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <LinearLayout
+
+            <com.donkingliang.banner.CustomBanner xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/banner"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dm_5"
+                android:visibility="gone"
+                app:indicatorGravity="CENTER"
+                app:indicatorInterval="5dp"
+                app:indicatorSelectRes="@drawable/shape_point_unselect"
+                app:indicatorStyle="ORDINARY"
+                app:indicatorUnSelectRes="@drawable/shape_point_select" />
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white">
 
-                <com.donkingliang.banner.CustomBanner
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/banner"
+                <ImageView
+                    android:id="@+id/iv_notice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_notice" />
+
+                <com.zb.wyd.widget.MarqueeTextView
+                    android:id="@+id/tv_notice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dm_5"
-                    android:visibility="gone"
-                    app:indicatorGravity="CENTER"
-                    app:indicatorInterval="5dp"
-                    app:indicatorSelectRes="@drawable/shape_point_unselect"
-                    app:indicatorStyle="ORDINARY"
-                    app:indicatorUnSelectRes="@drawable/shape_point_select" />
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/iv_notice"
+                    android:ellipsize="marquee"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/t16"
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white">
+                    />
 
-                    <ImageView
-                        android:id="@+id/iv_notice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/ic_notice" />
-
-                    <com.zb.wyd.widget.MarqueeTextView
-                        android:id="@+id/tv_notice"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_toRightOf="@+id/iv_notice"
-                        android:ellipsize="marquee"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:marqueeRepeatLimit="marquee_forever"
-                        android:singleLine="true"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/t16"
-
-                        />
-
-                </RelativeLayout>
+            </RelativeLayout>
 
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dm_10"
-                    android:background="@color/grayE" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dm_10"
+                android:background="@color/grayE" />
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/dm_10">
+            <com.zb.wyd.widget.list.refresh.PullToRefreshRecyclerView
+                android:id="@+id/pullToRefreshRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
-                    <ImageView
-                        android:id="@+id/iv_new"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/ic_new" />
-
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="@dimen/dm_5"
-                        android:layout_toRightOf="@+id/iv_new"
-                        android:text="热门主播"
-                        android:textColor="@color/blackA"
-                        android:textSize="@dimen/t14" />
-
-                    <RelativeLayout
-                        android:id="@+id/rl_all_new"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true">
-
-
-                        <ImageView
-                            android:id="@+id/iv_new_right"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:src="@drawable/ic_arrow_right" />
-
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginRight="@dimen/dm_5"
-                            android:layout_toLeftOf="@+id/iv_new_right"
-                            android:text="全部"
-                            android:textColor="@color/grayA"
-                            android:textSize="@dimen/t14" />
-                    </RelativeLayout>
-                </RelativeLayout>
-
-                <com.zb.wyd.widget.MaxRecyclerView
-                    android:id="@+id/rv_new"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="@dimen/dm_5" />
-            </LinearLayout>
-        </ScrollView>
+        </LinearLayout>
     </com.zb.wyd.widget.VerticalSwipeRefreshLayout>
 </LinearLayout>

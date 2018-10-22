@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:src="@color/text_blue1"/>
+            android:background="@drawable/ic_photo_bg"/>
 
 
         <RelativeLayout

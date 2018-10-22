@@ -4,6 +4,7 @@ package com.zb.wyd.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.text.TextPaint;
 import android.view.LayoutInflater;
@@ -41,12 +42,13 @@ public class LiveFragment extends BaseFragment
     @BindView(R.id.iv_search)
     ImageView ivSearch;
     private View rootView = null;
-    private Unbinder   unbinder;
+    private Unbinder unbinder;
     private ViewHolder holder;
     private List<String> tabs = new ArrayList<>(); //标签名称
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
+            savedInstanceState)
     {
 
         if (rootView == null)
@@ -70,8 +72,8 @@ public class LiveFragment extends BaseFragment
     protected void initData()
     {
         tabs.add("直播首页");
-        tabs.add("主播列表");
-        tabs.add("成人抖音");
+        tabs.add("热门");
+      //  tabs.add("抖音");
     }
 
     @Override
@@ -98,14 +100,15 @@ public class LiveFragment extends BaseFragment
     {
         MyViewPagerAdapter viewPagerAdapter = new MyViewPagerAdapter(getChildFragmentManager());
         viewPagerAdapter.addFragment(LiveIndexFragment.newInstance(), "直播首页");//添加Fragment
-        viewPagerAdapter.addFragment(AnchorListFragment.newInstance(), "主播列表");
-        viewPagerAdapter.addFragment(DouyinFragment.newInstance(), "成人抖音");
+        viewPagerAdapter.addFragment(AnchorListFragment.newInstance(), "热门");
+       // viewPagerAdapter.addFragment(DouyinFragment.newInstance(), "抖音");
         mViewPager.setAdapter(viewPagerAdapter);//设置适配器
         mViewPager.setOffscreenPageLimit(1);
         mTabLayout.addTab(mTabLayout.newTab().setText("直播首页"));//给TabLayout添加Tab
-        mTabLayout.addTab(mTabLayout.newTab().setText("主播列表"));
-        mTabLayout.addTab(mTabLayout.newTab().setText("成人抖音"));
-        mTabLayout.setupWithViewPager(mViewPager);//给TabLayout设置关联ViewPager，如果设置了ViewPager，那么ViewPagerAdapter中的getPageTitle()方法返回的就是Tab上的标题
+        mTabLayout.addTab(mTabLayout.newTab().setText("热门"));
+       // mTabLayout.addTab(mTabLayout.newTab().setText("抖音"));
+        mTabLayout.setupWithViewPager(mViewPager);
+        //给TabLayout设置关联ViewPager，如果设置了ViewPager，那么ViewPagerAdapter中的getPageTitle()方法返回的就是Tab上的标题
         setTabView();
         reflex(mTabLayout);
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener()
@@ -150,7 +153,7 @@ public class LiveFragment extends BaseFragment
     private void setTabView()
     {
         holder = null;
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 2; i++)
         {
             //依次获取标签
             TabLayout.Tab tab = mTabLayout.getTabAt(i);
@@ -213,7 +216,6 @@ public class LiveFragment extends BaseFragment
                         TextView mTextView = (TextView) mTextViewField.get(tabView);
 
                         tabView.setPadding(0, 0, 0, 0);
-
                         //因为我想要的效果是   字多宽线就多宽，所以测量mTextView的宽度
                         int width = 0;
                         width = mTextView.getWidth();
@@ -224,7 +226,8 @@ public class LiveFragment extends BaseFragment
                         }
 
                         //设置tab左右间距为10dp  注意这里不能使用Padding 因为源码中线的宽度是根据 tabView的宽度来设置的
-                        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) tabView.getLayoutParams();
+                        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) tabView
+                                .getLayoutParams();
                         params.width = width;
                         params.leftMargin = dp10;
                         params.rightMargin = dp10;
@@ -233,10 +236,12 @@ public class LiveFragment extends BaseFragment
                         tabView.invalidate();
                     }
 
-                } catch (NoSuchFieldException e)
+                }
+                catch (NoSuchFieldException e)
                 {
                     e.printStackTrace();
-                } catch (IllegalAccessException e)
+                }
+                catch (IllegalAccessException e)
                 {
                     e.printStackTrace();
                 }
@@ -245,14 +250,14 @@ public class LiveFragment extends BaseFragment
 
     }
 
-//    @Override
-//    public void onDestroy()
-//    {
-//        super.onDestroy();
-//        if (null != unbinder)
-//        {
-//            unbinder.unbind();
-//            unbinder = null;
-//        }
-//    }
+    //    @Override
+    //    public void onDestroy()
+    //    {
+    //        super.onDestroy();
+    //        if (null != unbinder)
+    //        {
+    //            unbinder.unbind();
+    //            unbinder = null;
+    //        }
+    //    }
 }

@@ -12,6 +12,7 @@
     <ImageView
         android:id="@+id/iv_photo"
         android:minHeight="@dimen/dm_200"
+        android:background="@drawable/ic_photo_bg"
         android:scaleType="centerCrop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

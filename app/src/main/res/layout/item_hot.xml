@@ -11,9 +11,9 @@
         android:id="@+id/iv_user_pic"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/icon_photo_default"
+        android:background="@drawable/ic_live_bg"
         android:scaleType="centerCrop"
-        android:src="@color/text_blue1" />
+       />
 
     <TextView
         android:id="@+id/tv_name"

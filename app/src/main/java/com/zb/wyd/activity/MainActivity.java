@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.zb.wyd.MyApplication;
 import com.zb.wyd.R;
+import com.zb.wyd.fragment.DouyinFragment;
 import com.zb.wyd.fragment.LiveFragment;
 import com.zb.wyd.fragment.MemberFragment;
 import com.zb.wyd.fragment.SelfieFragment;
@@ -42,13 +43,13 @@ public class MainActivity extends BaseActivity
     public static final String TAB_LIVE = "tab_live";
     public static final String TAB_VIDEO = "tab_video";
     public static final String TAB_TASK = "tab_task";
-    private String texts[]       = {"直播", "视频", "自拍","任务", "会员"};
+    private String texts[]       = {"直播", "视频", "自拍","抖音", "会员"};
     private int    imageButton[] = {
             R.drawable.ic_live_selector, R.drawable.ic_video_selector,
             R.drawable.ic_photo_selector,  R.drawable.ic_task_selector,  R.drawable.ic_member_selector};
 
 
-    private Class fragmentArray[] = {LiveFragment.class, VideoFragment2.class, SelfieFragment.class,TaskFragment.class,  MemberFragment.class};
+    private Class fragmentArray[] = {LiveFragment.class, VideoFragment2.class, SelfieFragment.class,DouyinFragment.class,  MemberFragment.class};
 
     @Override
     protected void initData()

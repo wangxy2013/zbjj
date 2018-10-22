@@ -1,6 +1,7 @@
 package com.zb.wyd.holder;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -35,17 +36,17 @@ public class CataHolder extends RecyclerView.ViewHolder
     }
 
 
-    public void setCataInfo(CataInfo mCataInfo, final int p)
+    public void setCataInfo(CataInfo mCataInfo, final int p,Context context)
     {
         mNameTv.setText(mCataInfo.getName());
         if (mCataInfo.isSelected())
         {
-            mNameTv.setTextSize(18);
+            mNameTv.setTextColor(ContextCompat.getColor(context,R.color.redC));
             mLine.setVisibility(View.VISIBLE);
         }
         else
         {
-            mNameTv.setTextSize(16);
+            mNameTv.setTextColor(ContextCompat.getColor(context,R.color.blackA));
             mLine.setVisibility(View.INVISIBLE);
         }
         mItemLayout.setOnClickListener(new View.OnClickListener() {

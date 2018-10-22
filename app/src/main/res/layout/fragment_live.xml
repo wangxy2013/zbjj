@@ -17,7 +17,7 @@
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/iv_search"
             app:tabGravity="center"
-            app:tabIndicatorColor="@color/blackC"
+            app:tabIndicatorColor="@color/redC"
             app:tabMode="fixed"
             app:tabSelectedTextColor="@color/blackC"
             app:tabTextAppearance="@style/MyTabLayoutTextAppearance"

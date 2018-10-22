@@ -44,7 +44,7 @@ public class CataAdapter extends RecyclerView.Adapter<CataHolder>
     public void onBindViewHolder(CataHolder holder, int position)
     {
         CataInfo mCataInfo = list.get(position);
-        holder.setCataInfo(mCataInfo,position);
+        holder.setCataInfo(mCataInfo,position,mContext);
     }
 
     @Override

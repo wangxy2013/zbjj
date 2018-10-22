@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:scaleType="centerCrop"
             android:layout_height="match_parent"
-            android:src="@color/text_blue1"/>
+            android:background="@drawable/ic_video_bg"/>
 
         <TextView
             app:layout_constraintDimensionRatio="1:1"

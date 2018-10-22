@@ -8,6 +8,7 @@
 
 
     <LinearLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dm_10"
@@ -53,6 +54,7 @@
             android:textSize="@dimen/t14"/>
     </LinearLayout>
     <RelativeLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/dm_10">
@@ -80,6 +82,6 @@
         android:id="@+id/refreshRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/dm_5"/>
+      />
 
 </LinearLayout>

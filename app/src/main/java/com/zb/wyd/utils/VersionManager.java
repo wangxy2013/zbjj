@@ -25,6 +25,7 @@ import android.widget.ProgressBar;
 
 import com.zb.wyd.R;
 import com.zb.wyd.activity.DomainNameActivity;
+import com.zb.wyd.entity.UserInfo;
 import com.zb.wyd.entity.VersionInfo;
 import com.zb.wyd.http.DataRequest;
 import com.zb.wyd.http.HttpRequest;
@@ -52,7 +53,7 @@ public class VersionManager implements IRequestListener
 
     private Dialog downloadDialog;
     /* 下载包安装路径 */
-    private static final String savePath = "/sdcard/wyd/";
+    private static final String savePath = "/sdcard/yl/";
 
     private static final String saveFileName = savePath + "jlsp.apk";
 
@@ -104,6 +105,24 @@ public class VersionManager implements IRequestListener
 
                     if (null != mVersionInfo)
                     {
+
+                        UserInfo userInfo = mVersionInfo.getUserInfo();
+
+
+                        if (null != userInfo)
+                        {
+                            ConfigManager.instance().setUniqueCode(userInfo.getAuth());
+                            ConfigManager.instance().setUserId(userInfo.getId());
+                            ConfigManager.instance().setUserName(userInfo.getUname());
+                            ConfigManager.instance().setUserNickName(userInfo.getNick());
+                            ConfigManager.instance().setVipLevel(Integer.parseInt(userInfo
+                                    .getVip_level()));
+                            ConfigManager.instance().setVipType(userInfo.getVip_type());
+                            ConfigManager.instance().setUserRole(Integer.parseInt(userInfo
+                                    .getRole()));
+                            ConfigManager.instance().setUserPic(userInfo.getUface());
+                            ConfigManager.instance().setValid_vip(userInfo.isValid_vip());
+                        }
                         ConfigManager.instance().setSystemEmail(mVersionInfo.getEmai());
                         ConfigManager.instance().setSystemQq(mVersionInfo.getQq());
                         ConfigManager.instance().setBgLogin(mVersionInfo.getBg_login());
@@ -115,7 +134,8 @@ public class VersionManager implements IRequestListener
                         ConfigManager.instance().setChatUrl(mVersionInfo.getChat());
                         if (!StringUtils.stringIsEmpty(mVersionInfo.getText()))
                         {
-                            ClipboardManager cm = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                            ClipboardManager cm = (ClipboardManager) mContext.getSystemService
+                                    (Context.CLIPBOARD_SERVICE);
                             // 将文本内容放到系统剪贴板里。
                             cm.setText(mVersionInfo.getText());
                         }
@@ -127,7 +147,8 @@ public class VersionManager implements IRequestListener
 
                 case REQUEST_FAIL:
                     //                    Map<String, String> valuePairs = new HashMap<>();
-                    //                    DataRequest.instance().request(mContext, "https://www.baidu.com", VersionManager.this, HttpRequest.GET, GET_BAIDU, valuePairs,
+                    //                    DataRequest.instance().request(mContext, "https://www
+                    // .baidu.com", VersionManager.this, HttpRequest.GET, GET_BAIDU, valuePairs,
                     //                            new BaiduHandler());
                     break;
 
@@ -178,7 +199,8 @@ public class VersionManager implements IRequestListener
             p++;
 
             Map<String, String> valuePairs1 = new HashMap<>();
-            DataRequest.instance().request(mContext, Urls.getVersionUrl(), VersionManager.this, HttpRequest.GET, TEST_DOMAINNAME, valuePairs1, new VersionInfoHandler());
+            DataRequest.instance().request(mContext, Urls.getVersionUrl(), VersionManager.this,
+                    HttpRequest.GET, TEST_DOMAINNAME, valuePairs1, new VersionInfoHandler());
         }
         else
         {
@@ -189,7 +211,8 @@ public class VersionManager implements IRequestListener
     private void setDomainName()
     {
         ConfigManager.instance().setSystemEmail("xjshangmen@gmail.com");
-        DialogUtils.showToastDialog2Button(mContext, "不幸的告诉您，域名可能已被封，可发邮件到xjshangmen@gmail.com获取最新地址并进行设置操作。", new View.OnClickListener()
+        DialogUtils.showToastDialog2Button(mContext, "不幸的告诉您，域名可能已被封，可发邮件到xjshangmen@gmail" +
+                ".com获取最新地址并进行设置操作。", new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -208,7 +231,8 @@ public class VersionManager implements IRequestListener
     public void init()
     {
         Map<String, String> valuePairs = new HashMap<>();
-        DataRequest.instance().request(mContext, Urls.getVersionUrl(), this, HttpRequest.GET, GET_VERSION, valuePairs, new VersionInfoHandler());
+        DataRequest.instance().request(mContext, Urls.getVersionUrl(), this, HttpRequest.GET,
+                GET_VERSION, valuePairs, new VersionInfoHandler());
     }
 
     private void showNoticeDialog(final VersionInfo mVersionBean)
@@ -217,7 +241,8 @@ public class VersionManager implements IRequestListener
         if (mVersionBean.getVersion().compareTo(APPUtils.getVersionName(mContext)) > 0)
         {
             apkUrl = mVersionBean.getLink();
-            DialogUtils.showVersionUpdateDialog(mContext, mVersionBean.getVersion_desc(), new MyOnClickListener.OnSubmitListener()
+            DialogUtils.showVersionUpdateDialog(mContext, mVersionBean.getVersion_desc(), new
+                    MyOnClickListener.OnSubmitListener()
             {
 
                 @Override
@@ -227,7 +252,7 @@ public class VersionManager implements IRequestListener
                     {
                         showDownloadDialog();
                     }
-                    else if("3".equals(content))
+                    else if ("3".equals(content))
                     {
                         Uri uri = Uri.parse(apkUrl);
                         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
@@ -364,7 +389,8 @@ public class VersionManager implements IRequestListener
         else
         {
             Intent i = new Intent(Intent.ACTION_VIEW);
-            i.setDataAndType(Uri.parse("file://" + apkfile.toString()), "application/vnd.android.package-archive");
+            i.setDataAndType(Uri.parse("file://" + apkfile.toString()), "application/vnd.android" +
+                    ".package-archive");
             mContext.startActivity(i);
         }
 

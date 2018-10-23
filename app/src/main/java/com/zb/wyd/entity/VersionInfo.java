@@ -23,6 +23,8 @@ public class VersionInfo
     private String upload;
     private String chat;
 
+    private  UserInfo userInfo;
+
     public VersionInfo(JSONObject obj)
     {
 
@@ -226,5 +228,15 @@ public class VersionInfo
     public void setChat(String chat)
     {
         this.chat = chat;
+    }
+
+    public UserInfo getUserInfo()
+    {
+        return userInfo;
+    }
+
+    public void setUserInfo(UserInfo userInfo)
+    {
+        this.userInfo = userInfo;
     }
 }

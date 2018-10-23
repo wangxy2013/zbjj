@@ -2,6 +2,7 @@ package com.zb.wyd.widget;
 
 /**
  */
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -14,131 +15,71 @@ import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
+import android.os.Build;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.zb.wyd.R;
 
 
-@SuppressLint("AppCompatCustomView")
-public class RoundAngleImageView extends ImageView
+public class RoundAngleImageView extends AppCompatImageView
 {
+    float width, height;
 
-    private Paint paint;
-    private int roundWidth = 15;
-    private int roundHeight = 15;
-    private Paint paint2;
-
-    public RoundAngleImageView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-        init(context, attrs);
-    }
-
-    public RoundAngleImageView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init(context, attrs);
-    }
-
-    public RoundAngleImageView(Context context) {
-        super(context);
+    public RoundAngleImageView(Context context)
+    {
+        this(context, null);
         init(context, null);
     }
 
-    private void init(Context context, AttributeSet attrs) {
+    public RoundAngleImageView(Context context, AttributeSet attrs)
+    {
+        this(context, attrs, 0);
+        init(context, attrs);
+    }
 
-        if(attrs != null) {
-            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.RoundAngleImageView);
-            roundWidth= a.getDimensionPixelSize(R.styleable.RoundAngleImageView_roundWidth, roundWidth);
-            roundHeight= a.getDimensionPixelSize(R.styleable.RoundAngleImageView_roundHeight, roundHeight);
-        }else {
-            float density = context.getResources().getDisplayMetrics().density;
-            roundWidth = (int) (roundWidth*density);
-            roundHeight = (int) (roundHeight*density);
+    public RoundAngleImageView(Context context, AttributeSet attrs, int defStyleAttr)
+    {
+        super(context, attrs, defStyleAttr);
+        init(context, attrs);
+    }
+
+    private void init(Context context, AttributeSet attrs)
+    {
+        if (Build.VERSION.SDK_INT < 18)
+        {
+            setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
-
-        paint = new Paint();
-        paint.setColor(Color.WHITE);
-        paint.setAntiAlias(true);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
-
-        paint2 = new Paint();
-        paint2.setXfermode(null);
     }
 
     @Override
-    public void draw(Canvas canvas) {
-        Bitmap bitmap = Bitmap.createBitmap(getWidth(), getHeight(), Config.ARGB_8888);
-        Canvas canvas2 = new Canvas(bitmap);
-        super.draw(canvas2);
-        drawLiftUp(canvas2);
-        drawRightUp(canvas2);
-        drawLiftDown(canvas2);
-        drawRightDown(canvas2);
-        canvas.drawBitmap(bitmap, 0, 0, paint2);
-        bitmap.recycle();
-        System.gc();
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom)
+    {
+        super.onLayout(changed, left, top, right, bottom);
+        width = getWidth();
+        height = getHeight();
     }
 
-    private void drawLiftUp(Canvas canvas) {
-        Path path = new Path();
-        path.moveTo(0, roundHeight);
-        path.lineTo(0, 0);
-        path.lineTo(roundWidth, 0);
-        path.arcTo(new RectF(
-                        0,
-                        0,
-                        roundWidth*2,
-                        roundHeight*2),
-                -90,
-                -90);
-        path.close();
-        canvas.drawPath(path, paint);
+    @Override
+    protected void onDraw(Canvas canvas)
+    {
+        if (width >= 12 && height > 12)
+        {
+            Path path = new Path();
+            //四个圆角
+            path.moveTo(12, 0);
+            path.lineTo(width - 12, 0);
+            path.quadTo(width, 0, width, 12);
+            path.lineTo(width, height - 12);
+            path.quadTo(width, height, width - 12, height);
+            path.lineTo(12, height);
+            path.quadTo(0, height, 0, height - 12);
+            path.lineTo(0, 12);
+            path.quadTo(0, 0, 12, 0);
+            canvas.clipPath(path);
+        }
+        super.onDraw(canvas);
     }
-
-    private void drawLiftDown(Canvas canvas) {
-        Path path = new Path();
-        path.moveTo(0, getHeight()-roundHeight);
-        path.lineTo(0, getHeight());
-        path.lineTo(roundWidth, getHeight());
-        path.arcTo(new RectF(
-                        0,
-                        getHeight()-roundHeight*2,
-                        0+roundWidth*2,
-                        getHeight()),
-                90,
-                90);
-        path.close();
-        canvas.drawPath(path, paint);
-    }
-
-    private void drawRightDown(Canvas canvas) {
-        Path path = new Path();
-        path.moveTo(getWidth()-roundWidth, getHeight());
-        path.lineTo(getWidth(), getHeight());
-        path.lineTo(getWidth(), getHeight()-roundHeight);
-        path.arcTo(new RectF(
-                getWidth()-roundWidth*2,
-                getHeight()-roundHeight*2,
-                getWidth(),
-                getHeight()), 0, 90);
-        path.close();
-        canvas.drawPath(path, paint);
-    }
-
-    private void drawRightUp(Canvas canvas) {
-        Path path = new Path();
-        path.moveTo(getWidth(), roundHeight);
-        path.lineTo(getWidth(), 0);
-        path.lineTo(getWidth()-roundWidth, 0);
-        path.arcTo(new RectF(
-                        getWidth()-roundWidth*2,
-                        0,
-                        getWidth(),
-                        0+roundHeight*2),
-                -90,
-                90);
-        path.close();
-        canvas.drawPath(path, paint);
-    }
-
 }

@@ -141,7 +141,6 @@ public class LiveActivity extends BaseActivity implements IRequestListener
 
     private List<ChatInfo> mSystemChatInfoList = new ArrayList<>();
     private List<ChatInfo> mChatInfoList = new ArrayList<>();
-
     private ChatAdapter mSystemChatAdapter;
     private ChatAdapter mChatAdapter;
     private int mCashCount;//砖石

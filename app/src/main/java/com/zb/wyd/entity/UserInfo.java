@@ -42,6 +42,7 @@ public class UserInfo implements Serializable
     private FortuneInfo fortuneInfo;
 
     private boolean has_sign;
+    private String auth;//
 
     public UserInfo()
     {
@@ -49,6 +50,7 @@ public class UserInfo implements Serializable
 
     public UserInfo(JSONObject obj)
     {
+        this.auth = obj.optString("auth");
         this.unick = obj.optString("unick");
         this.uname = obj.optString("uname");
         this.email = obj.optString("email");
@@ -325,5 +327,15 @@ public class UserInfo implements Serializable
     public void setValid_vip(boolean valid_vip)
     {
         this.valid_vip = valid_vip;
+    }
+
+    public String getAuth()
+    {
+        return auth;
+    }
+
+    public void setAuth(String auth)
+    {
+        this.auth = auth;
     }
 }

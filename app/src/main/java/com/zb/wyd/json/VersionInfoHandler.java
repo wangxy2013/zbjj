@@ -3,6 +3,7 @@ package com.zb.wyd.json;
 
 
 
+import com.zb.wyd.entity.UserInfo;
 import com.zb.wyd.entity.VersionInfo;
 
 import org.json.JSONObject;
@@ -28,7 +29,15 @@ public class VersionInfoHandler extends JsonHandler
 
         try
         {
-            mVersionInfo = new VersionInfo(jsonObject);
+            if(null !=jsonObject)
+            {
+                mVersionInfo = new VersionInfo(jsonObject);
+
+                JSONObject userObj = jsonObject.optJSONObject("userinfo");
+
+                mVersionInfo.setUserInfo(new UserInfo(userObj));
+
+            }
 
         } catch (Exception e)
         {

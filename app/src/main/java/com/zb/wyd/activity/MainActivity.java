@@ -43,13 +43,13 @@ public class MainActivity extends BaseActivity
     public static final String TAB_LIVE = "tab_live";
     public static final String TAB_VIDEO = "tab_video";
     public static final String TAB_TASK = "tab_task";
-    private String texts[]       = {"直播", "视频", "自拍","抖音", "会员"};
+    private String texts[]       = {"直播", "视频", "抖音","自拍", "会员"};
     private int    imageButton[] = {
-            R.drawable.ic_live_selector, R.drawable.ic_video_selector,
-            R.drawable.ic_photo_selector,  R.drawable.ic_task_selector,  R.drawable.ic_member_selector};
+            R.drawable.ic_live_selector, R.drawable.ic_video_selector,  R.drawable.ic_dy_selector,
+            R.drawable.ic_photo_selector,  R.drawable.ic_member_selector};
 
 
-    private Class fragmentArray[] = {LiveFragment.class, VideoFragment2.class, SelfieFragment.class,DouyinFragment.class,  MemberFragment.class};
+    private Class fragmentArray[] = {LiveFragment.class, VideoFragment2.class,DouyinFragment.class, SelfieFragment.class,  MemberFragment.class};
 
     @Override
     protected void initData()

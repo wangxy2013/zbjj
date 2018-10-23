@@ -109,8 +109,8 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
     @BindView(R.id.tv_signIn)
     TextView tvSignIn;
 
-    @BindView(R.id.btn_logout)
-    Button btnLogout;
+    //    @BindView(R.id.btn_logout)
+    //    Button btnLogout;
 
     @BindView(R.id.rl_setting)
     RelativeLayout rlSetting;
@@ -181,7 +181,8 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
                         //                        }
 
 
-                        if (!TextUtils.isEmpty(userInfo.getEmail()) && userInfo.getEmail().length() != 11)
+                        if (!TextUtils.isEmpty(userInfo.getEmail()) && userInfo.getEmail().length
+                                () != 11)
                         {
                             ToastUtil.show(getActivity(), "请绑定手机保证账号安全");
                         }
@@ -289,7 +290,8 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
     };
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
+            savedInstanceState)
     {
 
         if (rootView == null)
@@ -324,7 +326,7 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
     @Override
     protected void initEvent()
     {
-        btnLogout.setOnClickListener(this);
+        //        btnLogout.setOnClickListener(this);
         ivEdit.setOnClickListener(this);
         rlEmail.setOnClickListener(this);
         rlMessage.setOnClickListener(this);
@@ -354,13 +356,13 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
         if (MyApplication.getInstance().isLogin())
         {
             Map<String, String> valuePairs = new HashMap<>();
-            DataRequest.instance().request(getActivity(), Urls.getUserInfoUrl(), this, HttpRequest.GET, GET_USER_DETAIL, valuePairs, new
-                    UserInfoHandler());
-            btnLogout.setVisibility(View.VISIBLE);
+            DataRequest.instance().request(getActivity(), Urls.getUserInfoUrl(), this,
+                    HttpRequest.GET, GET_USER_DETAIL, valuePairs, new UserInfoHandler());
+            //   btnLogout.setVisibility(View.VISIBLE);
         }
         else
         {
-            btnLogout.setVisibility(View.GONE);
+            // btnLogout.setVisibility(View.GONE);
         }
 
     }
@@ -408,13 +410,14 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
     @Override
     public void onClick(View v)
     {
-        if (v == btnLogout)
-        {
-            ConfigManager.instance().setUserId("");
-            ((MainActivity) getActivity()).setTab(0);
-            startActivity(new Intent(getActivity(), LoginActivity.class));
-        }
-        else if (v == ivEdit || v == ivUserPic)
+        //        if (v == btnLogout)
+        //        {
+        //            ConfigManager.instance().setUserId("");
+        //            ((MainActivity) getActivity()).setTab(0);
+        //            startActivity(new Intent(getActivity(), LoginActivity.class));
+        //        }
+        //        else
+        if (v == ivEdit || v == ivUserPic)
         {
             if (MyApplication.getInstance().isLogin())
             {
@@ -455,7 +458,8 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
         {
             if (MyApplication.getInstance().isLogin())
             {
-                startActivity(new Intent(getActivity(), WealthListActivity.class).putExtra("fortune", userInfo.getFortuneInfo()));
+                startActivity(new Intent(getActivity(), WealthListActivity.class).putExtra
+                        ("fortune", userInfo.getFortuneInfo()));
             }
             else
             {
@@ -481,7 +485,8 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
             //                if (isQQClientAvailable(getActivity()))
             //                {
             //                    // 跳转到客服的QQ
-            //                    String url = "mqqwpa://im/chat?chat_type=wpa&uin=" + ConfigManager.instance().getSystemQq();
+            //                    String url = "mqqwpa://im/chat?chat_type=wpa&uin=" +
+            // ConfigManager.instance().getSystemQq();
             //                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             //                    // 跳转前先判断Uri是否存在，如果打开一个不存在的Uri，App可能会崩溃
             //                    if (isValidIntent(getActivity(), intent))
@@ -495,14 +500,17 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
             //                }
             //            }
 
-            startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra(WebViewActivity.EXTRA_TITLE, "帮助中心").putExtra(WebViewActivity
-                    .IS_SETTITLE, true).putExtra("TYPE", "CUSTOMER").putExtra(WebViewActivity.EXTRA_URL, Urls.getSrviceUrl()));
+            startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra
+                    (WebViewActivity.EXTRA_TITLE, "帮助中心").putExtra(WebViewActivity.IS_SETTITLE,
+                    true).putExtra("TYPE", "CUSTOMER").putExtra(WebViewActivity.EXTRA_URL, Urls
+                    .getSrviceUrl()));
 
 
         }
         else if (v == rlUser)
         {
-            if (!MyApplication.getInstance().isLogin()) startActivity(new Intent(getActivity(), LoginActivity.class));
+            if (!MyApplication.getInstance().isLogin())
+                startActivity(new Intent(getActivity(), LoginActivity.class));
         }
         else if (v == rlSetting)
         {
@@ -512,8 +520,10 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
         {
             //            if (MyApplication.getInstance().isLogin())
             //            {
-            //                startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra(WebViewActivity.EXTRA_TITLE, "我的推广").putExtra
-            // (WebViewActivity.IS_SETTITLE, true).putExtra(WebViewActivity.EXTRA_URL, Urls.getInviteUrl()));
+            //                startActivity(new Intent(getActivity(), WebViewActivity.class)
+            // .putExtra(WebViewActivity.EXTRA_TITLE, "我的推广").putExtra
+            // (WebViewActivity.IS_SETTITLE, true).putExtra(WebViewActivity.EXTRA_URL, Urls
+            // .getInviteUrl()));
             //            }
             //            else
             //            {
@@ -521,8 +531,9 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
             //            }
 
             //
-            startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra(WebViewActivity.EXTRA_TITLE, "积分取现").putExtra(WebViewActivity
-                    .IS_SETTITLE, true).putExtra(WebViewActivity.EXTRA_URL, Urls.getWithdrawUrl()));
+            startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra
+                    (WebViewActivity.EXTRA_TITLE, "积分取现").putExtra(WebViewActivity.IS_SETTITLE,
+                    true).putExtra(WebViewActivity.EXTRA_URL, Urls.getWithdrawUrl()));
         }
         else if (v == rlTask)
         {
@@ -541,8 +552,8 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
             if (MyApplication.getInstance().isLogin())
             {
                 Map<String, String> valuePairs = new HashMap<>();
-                DataRequest.instance().request(getActivity(), Urls.getUserSignUrl(), this, HttpRequest.POST, USER_SIGN_REQUEST, valuePairs, new
-                        SignInfoHandler());
+                DataRequest.instance().request(getActivity(), Urls.getUserSignUrl(), this,
+                        HttpRequest.POST, USER_SIGN_REQUEST, valuePairs, new SignInfoHandler());
             }
             else
             {
@@ -575,7 +586,8 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
             for (int i = 0; i < pinfo.size(); i++)
             {
                 String pn = pinfo.get(i).packageName;
-                if (pn.equalsIgnoreCase("com.tencent.qqlite") || pn.equalsIgnoreCase("com.tencent.mobileqq"))
+                if (pn.equalsIgnoreCase("com.tencent.qqlite") || pn.equalsIgnoreCase("com.tencent" +
+                        ".mobileqq"))
                 {
                     return true;
                 }

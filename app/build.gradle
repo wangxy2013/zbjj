@@ -28,7 +28,7 @@ android {
     compileSdkVersion 26
     buildToolsVersion '26.0.2'
     defaultConfig {
-        applicationId "com.zb.zbjj"
+        applicationId "com.zb.yl"
         minSdkVersion 22
         targetSdkVersion 26
         versionCode 56600

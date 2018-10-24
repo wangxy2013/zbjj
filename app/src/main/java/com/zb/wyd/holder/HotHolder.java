@@ -29,6 +29,7 @@ public class HotHolder extends RecyclerView.ViewHolder
     private Context context;
     private TextView mLocationTv;
     private ImageView mLocationIv;
+    private ImageView iv_label;
 
     public HotHolder(View rootView, Context context, MyItemClickListener listener)
     {
@@ -41,14 +42,14 @@ public class HotHolder extends RecyclerView.ViewHolder
         mItemLayout = (RelativeLayout) rootView.findViewById(R.id.rl_item);
         mLocationTv = (TextView) rootView.findViewById(R.id.tv_location);
         mLocationIv = (ImageView) rootView.findViewById(R.id.iv_location);
-
+        iv_label = (ImageView) rootView.findViewById(R.id.iv_label);
         int spacingInPixels = context.getResources().getDimensionPixelSize(R.dimen.dm_10) * 3;
         int width = (APPUtils.getScreenWidth(context) - spacingInPixels) / 2;
 
-        LinearLayout.LayoutParams params=  new LinearLayout.LayoutParams(width, width);
-        params.bottomMargin=30;
-        params.leftMargin=12;
-        params.rightMargin=10;
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, width);
+        params.bottomMargin = 30;
+        params.leftMargin = 12;
+        params.rightMargin = 10;
         mItemLayout.setLayoutParams(params);
         RelativeLayout.LayoutParams imgLayoutParams = new RelativeLayout.LayoutParams(width, width);
         mImgIv.setLayoutParams(imgLayoutParams);
@@ -63,6 +64,22 @@ public class HotHolder extends RecyclerView.ViewHolder
 
         ImageLoader.getInstance().displayImage(mLiveInfo.getFace(), mImgIv);
 
+
+        if (p == 0)
+        {
+            iv_label.setVisibility(View.VISIBLE);
+            iv_label.setImageResource(R.drawable.ic_top1);
+        }
+        else if (p == 1)
+        {
+            iv_label.setVisibility(View.VISIBLE);
+            iv_label.setImageResource(R.drawable.ic_top2);
+        }
+        else
+        {
+            iv_label.setVisibility(View.GONE);
+
+        }
 
         if (StringUtils.stringIsEmpty(mLiveInfo.getLocation()))
         {

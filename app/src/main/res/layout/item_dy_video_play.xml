@@ -75,5 +75,10 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/dm_20"
         android:layout_marginLeft="@dimen/dm_10"
+        android:paddingLeft="@dimen/dm_10"
+        android:paddingRight="@dimen/dm_10"
+        android:paddingTop="@dimen/dm_3"
+        android:paddingBottom="@dimen/dm_3"
+        android:background="@drawable/green_frame1_5dp"
         android:textColor="@color/green"/>
 </RelativeLayout>

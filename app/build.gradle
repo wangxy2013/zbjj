@@ -2,10 +2,10 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         config {
-            keyAlias 'shyk'
-            keyPassword 'shyk2018'
-            storeFile file('shyk.jks')
-            storePassword 'shyk2018'
+            keyAlias 'yl'
+            keyPassword 'yl2018'
+            storeFile file('yl.jks')
+            storePassword 'yl2018'
         }
     }
     packagingOptions {

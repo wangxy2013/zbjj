@@ -4,7 +4,7 @@ android {
         config {
             keyAlias 'yl'
             keyPassword 'yl2018'
-            storeFile file('yl.jks')
+            storeFile file('yl2018.jks')
             storePassword 'yl2018'
         }
     }

@@ -254,8 +254,13 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                                 }
                                 else//去做任务
                                 {
+                                    startActivity(new Intent(LiveActivity.this,WebViewActivity.class)
+                                            .putExtra(WebViewActivity.EXTRA_TITLE, "邀请好友")
+                                            .putExtra(WebViewActivity.IS_SETTITLE, true)
+                                            .putExtra(WebViewActivity.EXTRA_URL,Urls.getPageInviteUrl())
+                                    );
 
-                                     sendBroadcast(new Intent(MainActivity.TAB_TASK));
+                                     //sendBroadcast(new Intent(MainActivity.TAB_TASK));
                                    // startActivity(new Intent(LiveActivity.this, TaskActivity
                                            // .class));
                                     finish();
@@ -391,7 +396,11 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                             @Override
                             public void onClick(View view)
                             {
-                                sendBroadcast(new Intent(MainActivity.TAB_TASK));
+                                startActivity(new Intent(LiveActivity.this,WebViewActivity.class)
+                                                .putExtra(WebViewActivity.EXTRA_TITLE, "邀请好友")
+                                                .putExtra(WebViewActivity.IS_SETTITLE, true)
+                                                .putExtra(WebViewActivity.EXTRA_URL,Urls.getPageInviteUrl()));
+                                //sendBroadcast(new Intent(MainActivity.TAB_TASK));
                                 //startActivity(new Intent(LiveActivity.this, TaskActivity.class));
                                 finish();
                             }

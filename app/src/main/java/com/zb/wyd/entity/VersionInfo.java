@@ -23,6 +23,7 @@ public class VersionInfo
     private String upload;
     private String chat;
 
+    private int  freetime;
     private  UserInfo userInfo;
 
     public VersionInfo(JSONObject obj)
@@ -47,6 +48,8 @@ public class VersionInfo
         this.reg_closed = obj.optBoolean("reg_close");
         this.chat = obj.optString("chat");
         forcedup = "1";
+        this.freetime = obj.optInt("freetime");
+
 
     }
 
@@ -238,5 +241,15 @@ public class VersionInfo
     public void setUserInfo(UserInfo userInfo)
     {
         this.userInfo = userInfo;
+    }
+
+    public int getFreetime()
+    {
+        return freetime;
+    }
+
+    public void setFreetime(int freetime)
+    {
+        this.freetime = freetime;
     }
 }

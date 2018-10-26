@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Paint;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -29,8 +30,7 @@ public class DialogUtils
 {
 
 
-    public static void showVersionUpdateDialog(Context mContext, String content, final
-    MyOnClickListener.OnSubmitListener listener)
+    public static void showVersionUpdateDialog(Context mContext, String content, final MyOnClickListener.OnSubmitListener listener)
     {
         final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
         dialog.setCancelable(false);
@@ -93,8 +93,7 @@ public class DialogUtils
      *
      * @return
      */
-    public static void showPromptDialog(Context mContext, String title, final MyItemClickListener
-            listener)
+    public static void showPromptDialog(Context mContext, String title, final MyItemClickListener listener)
     {
         if (!((Activity) mContext).isFinishing())
         {
@@ -124,6 +123,61 @@ public class DialogUtils
         }
     }
 
+    /**
+     * 提示框
+     *
+     * @return
+     */
+    public static void showNewUserDialog(Context mContext, String title, final MyItemClickListener listener)
+    {
+        if (!((Activity) mContext).isFinishing())
+        {
+            final Dialog dialog = new Dialog(mContext, R.style.MyDialogStyle);
+            dialog.setCancelable(true);
+            View v = LayoutInflater.from(mContext).inflate(R.layout.dialog_new_user, null);
+            dialog.setContentView(v);
+            ((TextView) v.findViewById(R.id.tv_content)).setText(Html.fromHtml(title));
+            v.findViewById(R.id.tv_vip).setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+
+                    dialog.dismiss();
+                    listener.onItemClick(v,0);
+                }
+            });
+
+            v.findViewById(R.id.tv_invite).setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+
+                    dialog.dismiss();
+                    listener.onItemClick(v,1);
+                }
+            });
+            v.findViewById(R.id.iv_closed).setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+
+                    dialog.dismiss();
+                }
+            });
+            //Dialog部分
+            Window mWindow = dialog.getWindow();
+            WindowManager.LayoutParams lp = mWindow.getAttributes();
+            lp.gravity = Gravity.CENTER;
+            lp.width = APPUtils.getScreenWidth(mContext) * 3 / 4;
+            mWindow.setAttributes(lp);
+            dialog.setCancelable(false);
+            dialog.show();
+        }
+    }
+
 
     public static Dialog createLoadingDialog(Context context, String msg)
     {
@@ -136,8 +190,8 @@ public class DialogUtils
         Dialog loadingDialog = new Dialog(context, R.style.MyDialogStyle);// 创建自定义样式dialog
         loadingDialog.setCancelable(true); // 是否可以按“返回键”消失
         loadingDialog.setCanceledOnTouchOutside(false); // 点击加载框以外的区域
-        loadingDialog.setContentView(layout, new LinearLayout.LayoutParams(LinearLayout
-                .LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        loadingDialog.setContentView(layout, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams
+                .MATCH_PARENT));
         // 设置布局
         /**
          *将显示Dialog的方法封装在这里面
@@ -157,8 +211,7 @@ public class DialogUtils
      *
      * @return
      */
-    public static void showToastDialog2Button(Context mContext, String str, final View
-            .OnClickListener onClickListener)
+    public static void showToastDialog2Button(Context mContext, String str, final View.OnClickListener onClickListener)
     {
         final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
         dialog.setCancelable(false);
@@ -166,8 +219,7 @@ public class DialogUtils
         dialog.setContentView(v);
         TextView mTitle = (TextView) v.findViewById(R.id.tv_title);
         mTitle.setText(str);
-        ((RelativeLayout) v.findViewById(R.id.rl_confirm)).setOnClickListener(new View
-                .OnClickListener()
+        ((RelativeLayout) v.findViewById(R.id.rl_confirm)).setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -199,9 +251,8 @@ public class DialogUtils
      *
      * @return
      */
-    public static Dialog showToastDialog2Button(Context mContext, String str, String buttonStr,
-                                                final View.OnClickListener onClickListener, final
-                                                View.OnClickListener onClickListener1)
+    public static Dialog showToastDialog2Button(Context mContext, String str, String buttonStr, final View.OnClickListener onClickListener, final
+    View.OnClickListener onClickListener1)
     {
         final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
         dialog.setCancelable(false);
@@ -212,8 +263,7 @@ public class DialogUtils
 
         TextView mSubmitTv = (TextView) v.findViewById(R.id.tv_submit);
         mSubmitTv.setText(buttonStr);
-        ((RelativeLayout) v.findViewById(R.id.rl_confirm)).setOnClickListener(new View
-                .OnClickListener()
+        ((RelativeLayout) v.findViewById(R.id.rl_confirm)).setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -247,8 +297,8 @@ public class DialogUtils
      *
      * @return
      */
-    public static Dialog showLivePriceDialog(Context mContext, PriceInfo mLivePriceInfo, final
-    View.OnClickListener cancelListener, final MyOnClickListener.OnSubmitListener listener)
+    public static Dialog showLivePriceDialog(Context mContext, PriceInfo mLivePriceInfo, final View.OnClickListener cancelListener, final
+    MyOnClickListener.OnSubmitListener listener)
     {
         final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
         dialog.setCancelable(false);
@@ -341,8 +391,8 @@ public class DialogUtils
      *
      * @return
      */
-    public static Dialog showVideoPriceDialog(Context mContext, PriceInfo mLivePriceInfo, final
-    View.OnClickListener cancelListener, final MyOnClickListener.OnSubmitListener listener)
+    public static Dialog showVideoPriceDialog(Context mContext, PriceInfo mLivePriceInfo, final View.OnClickListener cancelListener, final
+    MyOnClickListener.OnSubmitListener listener)
     {
         final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
         dialog.setCancelable(false);
@@ -544,8 +594,7 @@ public class DialogUtils
      *
      * @return
      */
-    public static void showReportDialog(Context mContext, MyOnClickListener.OnSubmitListener
-            listener)
+    public static void showReportDialog(Context mContext, MyOnClickListener.OnSubmitListener listener)
     {
         final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
         dialog.setCancelable(false);
@@ -612,9 +661,8 @@ public class DialogUtils
      *
      * @return
      */
-    public static Dialog showDyTipsDialog(Context mContext, final View.OnClickListener
-            buyListener, final View.OnClickListener memberListener, final View.OnClickListener
-            closedListener)
+    public static Dialog showDyTipsDialog(Context mContext, final View.OnClickListener buyListener, final View.OnClickListener memberListener,
+                                          final View.OnClickListener closedListener)
     {
         final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
         dialog.setCancelable(false);

@@ -14,7 +14,9 @@ public class UserInfo implements Serializable
     private String id;//12570;//
     private String nick;//晓宝宝;//
     private String face;//http:\/\/img2.inke.cn\/MTUxMzUxNTM3MDU2NSM1MjQjanBn.jpg;//
-    private String uri;//http:\/\/alsource.pull.inke.cn\/live\/1529036907860561.flv?ikDnsOp=1&ikHost=ali&ikOp=0&codecInfo=8192&ikLog=0&dpSrcG=-1&ikMinBuf
+    private String uri;//http:\/\/alsource.pull.inke
+    // .cn\/live\/1529036907860561.flv?ikDnsOp=1&ikHost=ali&ikOp=0&codecInfo=8192&ikLog=0&dpSrcG
+    // =-1&ikMinBuf
     // =3800&ikMaxBuf=4800&ikSlowRate=1.0&ikFastRate=1.0;//
     private String favour_count;//0;//
     private String update_time;//1529037601;//
@@ -31,18 +33,21 @@ public class UserInfo implements Serializable
     private String role;//
     private String vip_level;//
     private String vip_expire;//
-    private int    vip_type;
+    private int vip_type;
     private String login_time;//
     private String login_ip;//
     // private String fortune;//
     private String unick;//
     private String total_score;
 
-    private boolean     valid_vip;
+    private boolean valid_vip;
     private FortuneInfo fortuneInfo;
 
     private boolean has_sign;
     private String auth;//
+
+
+    private int new_user;
 
     public UserInfo()
     {
@@ -77,6 +82,7 @@ public class UserInfo implements Serializable
         this.valid_vip = obj.optBoolean("valid_vip");
         this.vip_type = obj.optInt("vip_type");
         this.has_sign = obj.optBoolean("has_sign");
+        this.new_user = obj.optInt("new_user");
     }
 
     public boolean isHas_sign()
@@ -337,5 +343,15 @@ public class UserInfo implements Serializable
     public void setAuth(String auth)
     {
         this.auth = auth;
+    }
+
+    public int getNew_user()
+    {
+        return new_user;
+    }
+
+    public void setNew_user(int new_user)
+    {
+        this.new_user = new_user;
     }
 }

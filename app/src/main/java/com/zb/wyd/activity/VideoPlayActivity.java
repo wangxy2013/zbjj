@@ -183,7 +183,11 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
                                 else//去做任务
                                 {
 
-                                    sendBroadcast(new Intent(MainActivity.TAB_TASK));
+                                    startActivity(new Intent(VideoPlayActivity.this,WebViewActivity.class)
+                                            .putExtra(WebViewActivity.EXTRA_TITLE, "邀请好友")
+                                            .putExtra(WebViewActivity.IS_SETTITLE, true)
+                                            .putExtra(WebViewActivity.EXTRA_URL,Urls.getPageInviteUrl()));
+                                    //sendBroadcast(new Intent(MainActivity.TAB_TASK));
 //                                    startActivity(new Intent(VideoPlayActivity.this, TaskActivity
 //                                            .class));
                                     finish();

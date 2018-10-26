@@ -345,5 +345,10 @@ public class Urls
     }
 
 
+    public static String getPageInviteUrl()
+    {
+        return ConfigManager.instance().getDomainName() + "/page/invite";
+    }
+
 }
 

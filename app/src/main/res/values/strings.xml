@@ -46,4 +46,7 @@
     <string name="chat_image_preview_load_err">图片加载失败</string>
     <string name="chat_image_preview_ori">原图发送</string>
     <string name="gift_tip">送出%1$s</string>
+
+
+    <string name="new_user_tip">注册成功获得免费<font color='#F643BF'>"%1$s</font>试看现在还剩<font color='#F643BF'>"%2$s</font></string>
 </resources>

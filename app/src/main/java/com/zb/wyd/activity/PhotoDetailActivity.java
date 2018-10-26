@@ -438,7 +438,11 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
                     else//去做任务
                     {
 
-                        sendBroadcast(new Intent(MainActivity.TAB_TASK));
+                        startActivity(new Intent(PhotoDetailActivity.this,WebViewActivity.class)
+                                .putExtra(WebViewActivity.EXTRA_TITLE, "邀请好友")
+                                .putExtra(WebViewActivity.IS_SETTITLE, true)
+                                .putExtra(WebViewActivity.EXTRA_URL,Urls.getPageInviteUrl()));
+                        //sendBroadcast(new Intent(MainActivity.TAB_TASK));
 //                        startActivity(new Intent(PhotoDetailActivity.this, TaskActivity
 //                                .class));
                         finish();

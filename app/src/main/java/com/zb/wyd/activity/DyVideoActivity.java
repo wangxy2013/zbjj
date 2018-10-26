@@ -212,9 +212,16 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
                                 }
                                 else//去做任务
                                 {
-                                    sendBroadcast(new Intent(MainActivity.TAB_TASK));
+                                   // sendBroadcast(new Intent(MainActivity.TAB_TASK));
 //                                    startActivity(new Intent(DyVideoActivity.this, TaskActivity
 //                                            .class));
+
+                                    startActivity(new Intent(DyVideoActivity.this,WebViewActivity.class)
+                                            .putExtra(WebViewActivity.EXTRA_TITLE, "邀请好友")
+                                            .putExtra(WebViewActivity.IS_SETTITLE, true)
+                                            .putExtra(WebViewActivity.EXTRA_URL,Urls.getPageInviteUrl())
+                                    );
+
                                     finish();
                                 }
                             }
@@ -273,13 +280,20 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
 
                 case GET_VIDEO_STREAM_FAIL:
                     DialogUtils.showToastDialog2Button(DyVideoActivity.this, msg.obj.toString(),
-                            "去做任务", new View.OnClickListener()
+                            "邀请好友", new View.OnClickListener()
                     {
                         @Override
                         public void onClick(View v)
                         {
-                            sendBroadcast(new Intent(MainActivity.TAB_TASK));
+                           // sendBroadcast(new Intent(MainActivity.TAB_TASK));
                           //  startActivity(new Intent(DyVideoActivity.this, TaskActivity.class));
+
+                           startActivity(new Intent(DyVideoActivity.this,WebViewActivity.class)
+                                    .putExtra(WebViewActivity.EXTRA_TITLE, "邀请好友")
+                                    .putExtra(WebViewActivity.IS_SETTITLE, true)
+                                    .putExtra(WebViewActivity.EXTRA_URL,Urls.getPageInviteUrl())
+                            );
+
                             finish();
                         }
                     }, new View.OnClickListener()

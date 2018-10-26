@@ -25,6 +25,9 @@ import android.widget.ProgressBar;
 
 import com.zb.wyd.R;
 import com.zb.wyd.activity.DomainNameActivity;
+import com.zb.wyd.activity.LoginActivity;
+import com.zb.wyd.activity.MemberActivity;
+import com.zb.wyd.activity.WebViewActivity;
 import com.zb.wyd.entity.UserInfo;
 import com.zb.wyd.entity.VersionInfo;
 import com.zb.wyd.http.DataRequest;
@@ -32,6 +35,7 @@ import com.zb.wyd.http.HttpRequest;
 import com.zb.wyd.http.IRequestListener;
 import com.zb.wyd.json.BaiduHandler;
 import com.zb.wyd.json.VersionInfoHandler;
+import com.zb.wyd.listener.MyItemClickListener;
 import com.zb.wyd.listener.MyOnClickListener;
 
 import java.io.File;
@@ -99,6 +103,7 @@ public class VersionManager implements IRequestListener
                     break;
                 case REQUEST_SUCCESS:
 
+
                     VersionInfoHandler mVersionInfoHandler = (VersionInfoHandler) msg.obj;
                     VersionInfo mVersionInfo = mVersionInfoHandler.getVersionInfo();
 
@@ -139,8 +144,53 @@ public class VersionManager implements IRequestListener
                             // 将文本内容放到系统剪贴板里。
                             cm.setText(mVersionInfo.getText());
                         }
+                        if (mVersionInfo.getVersion().compareTo(APPUtils.getVersionName(mContext)
+                        ) > 0)
+                        {
+                            showNoticeDialog(mVersionInfo);
+                        }
+                        else
+                        {
 
-                        showNoticeDialog(mVersionInfo);
+
+                            if (null != userInfo)
+                            {
+                                if (userInfo.isValid_vip() || userInfo.getNew_user() <= 0)
+                                {
+                                    return;
+                                }
+
+                                String freeTime = mVersionInfo.getFreetime()/60 +"分钟";
+
+                                String newUser = userInfo.getNew_user()/60  +"分钟";
+
+
+                                String content ="注册成功获得免费"+ "<font color='#F643BF'>"+freeTime+"</font>"+"试看现在还剩"+"<font color='#F643BF'>" +newUser;
+
+
+                                DialogUtils.showNewUserDialog(mContext, content, new MyItemClickListener()
+
+
+                                {
+                                    @Override
+                                    public void onItemClick(View view, int position)
+                                    {
+                                        if (position ==0)
+                                        {
+                                            mContext.startActivity(new Intent(mContext, MemberActivity.class));
+                                        }
+                                        else
+                                        {
+                                            mContext.startActivity(new Intent(mContext,WebViewActivity.class)
+                                                    .putExtra(WebViewActivity.EXTRA_TITLE, "邀请好友")
+                                                    .putExtra(WebViewActivity.IS_SETTITLE, true)
+                                                    .putExtra(WebViewActivity.EXTRA_URL,Urls.getPageInviteUrl())
+                                            );
+                                        }
+                                    }
+                                });
+                            }
+                        }
                     }
 
                     break;
@@ -211,7 +261,7 @@ public class VersionManager implements IRequestListener
     private void setDomainName()
     {
         ConfigManager.instance().setSystemEmail("xjshangmen@gmail.com");
-        DialogUtils.showToastDialog2Button(mContext, "不幸的告诉您，域名可能已被封，可发邮件到xjshangmen@gmail" +
+        DialogUtils.showToastDialog2Button(mContext, "不幸的告诉您，域名可能已被封，可发邮件到xjshangmen@gmail" + "" +
                 ".com获取最新地址并进行设置操作。", new View.OnClickListener()
         {
             @Override
@@ -389,8 +439,8 @@ public class VersionManager implements IRequestListener
         else
         {
             Intent i = new Intent(Intent.ACTION_VIEW);
-            i.setDataAndType(Uri.parse("file://" + apkfile.toString()), "application/vnd.android" +
-                    ".package-archive");
+            i.setDataAndType(Uri.parse("file://" + apkfile.toString()), "application/vnd.android"
+                    + ".package-archive");
             mContext.startActivity(i);
         }
 

@@ -36,26 +36,27 @@ public class BindPhoneActivity extends BaseActivity implements IRequestListener
     @BindView(R.id.iv_back)
     ImageView ivBack;
     @BindView(R.id.tv_title)
-    TextView  tvTitle;
+    TextView tvTitle;
     @BindView(R.id.et_phone)
-    EditText  etPhone;
-    @BindView(R.id.tv_code)
-    TextView  tvCode;
-    @BindView(R.id.et_code)
-    EditText  etCode;
+    EditText etPhone;
+    @BindView(R.id.et_pwd)
+    EditText etPwd;
+
+    @BindView(R.id.et_pwd1)
+    EditText etPwd1;
     @BindView(R.id.btn_submit)
-    Button    btnSubmit;
+    Button btnSubmit;
 
     private int time = 60;
-    private int    count;
+    private int count;
     private String token;
 
-    private static final String BIND_PHONE             = "bind_phone";
-    private static final String GET_PHONE_CODE         = "get_phone_code";
-    private static final int    REQUEST_SUCCESS        = 0x01;
-    private static final int    REQUEST_FAIL           = 0x02;
-    private static final int    UPDATE_CODE_VIEW       = 0X03;
-    private static final int    GET_EMAIL_CODE_SUCCESS = 0X04;
+    private static final String BIND_PHONE = "bind_phone";
+    private static final String GET_PHONE_CODE = "get_phone_code";
+    private static final int REQUEST_SUCCESS = 0x01;
+    private static final int REQUEST_FAIL = 0x02;
+    private static final int UPDATE_CODE_VIEW = 0X03;
+    private static final int GET_EMAIL_CODE_SUCCESS = 0X04;
 
     @SuppressLint("HandlerLeak")
     private BaseHandler mHandler = new BaseHandler(BindPhoneActivity.this)
@@ -69,8 +70,7 @@ public class BindPhoneActivity extends BaseActivity implements IRequestListener
                 case REQUEST_SUCCESS:
                     ToastUtil.show(BindPhoneActivity.this, "绑定成功");
 
-                    if (mHandler.hasMessages(UPDATE_CODE_VIEW))
-                        mHandler.removeMessages(UPDATE_CODE_VIEW);
+                   // if (mHandler.hasMessages(UPDATE_CODE_VIEW)) mHandler.removeMessages(UPDATE_CODE_VIEW);
                     finish();
                     break;
 
@@ -83,19 +83,19 @@ public class BindPhoneActivity extends BaseActivity implements IRequestListener
                 case UPDATE_CODE_VIEW:
                     count++;
 
-                    int result = time - count;
-
-                    if (result >= 0)
-                    {
-                        tvCode.setText(result + "S后发送");
-                        mHandler.sendEmptyMessageDelayed(UPDATE_CODE_VIEW, 1000);
-                    }
-                    else
-                    {
-                        etPhone.setEnabled(true);
-                        tvCode.setEnabled(true);
-                        tvCode.setText("发送验证码");
-                    }
+                    //                    int result = time - count;
+                    //
+                    //                    if (result >= 0)
+                    //                    {
+                    //                        tvCode.setText(result + "S后发送");
+                    //                        mHandler.sendEmptyMessageDelayed(UPDATE_CODE_VIEW, 1000);
+                    //                    }
+                    //                    else
+                    //                    {
+                    //                        etPhone.setEnabled(true);
+                    //                        tvCode.setEnabled(true);
+                    //                        tvCode.setText("发送验证码");
+                    //                    }
 
                     break;
 
@@ -130,7 +130,7 @@ public class BindPhoneActivity extends BaseActivity implements IRequestListener
     {
         btnSubmit.setOnClickListener(this);
         ivBack.setOnClickListener(this);
-        tvCode.setOnClickListener(this);
+        //tvCode.setOnClickListener(this);
     }
 
     @Override
@@ -151,58 +151,64 @@ public class BindPhoneActivity extends BaseActivity implements IRequestListener
         else if (v == btnSubmit)
         {
             String phone = etPhone.getText().toString();
-            String code = etCode.getText().toString();
-
-            if (TextUtils.isEmpty(phone)||phone.length()<11)
+            String pwd = etPwd.getText().toString();
+            String pwd1 = etPwd1.getText().toString();
+            if (TextUtils.isEmpty(phone) || phone.length() < 11)
             {
                 ToastUtil.show(this, "请输入正确的手机");
                 return;
             }
 
 
-            if (StringUtils.stringIsEmpty(phone))
+            if (StringUtils.stringIsEmpty(pwd) || pwd.length() < 6)
             {
-                ToastUtil.show(this, "请输入验证码");
+                ToastUtil.show(this, "请输入6-18位密码");
                 return;
             }
-
+            if (!pwd1.equals(pwd))
+            {
+                ToastUtil.show(this, "两次密码请保持一致");
+                return;
+            }
             showProgressDialog();
             Map<String, String> valuePairs = new HashMap<>();
             valuePairs.put("phone", phone);
-            valuePairs.put("scode", code);
+            valuePairs.put("passwd", pwd);
+            valuePairs.put("repasswd", pwd1);
+
             valuePairs.put("token", token);
-            DataRequest.instance().request(this, Urls.getTaskprofileUrl(), this, HttpRequest.POST, BIND_PHONE, valuePairs,
-                    new ResultHandler());
+            DataRequest.instance().request(this, Urls.getTaskprofileUrl(), this, HttpRequest.POST, BIND_PHONE, valuePairs, new ResultHandler());
         }
-        else if (v == tvCode)
-        {
-            String phone = etPhone.getText().toString();
-
-            if (TextUtils.isEmpty(phone)||phone.length()<11)
-            {
-                ToastUtil.show(this, "请输入正确的手机");
-                return;
-            }
-
-
-            DialogUtils.showToastDialog2Button(this, "绑定手机后，将只能使用手机号码和密码登录", new View.OnClickListener() {
-                @Override
-                public void onClick(View v)
-                {
-                    tvCode.setEnabled(false);
-
-                    showProgressDialog();
-                    Map<String, String> valuePairs = new HashMap<>();
-                    valuePairs.put("phone", phone);
-                    valuePairs.put("action", "bind");
-                    DataRequest.instance().request(BindPhoneActivity.this, Urls.getPhoneCodeUrl(), BindPhoneActivity.this, HttpRequest.POST, GET_PHONE_CODE, valuePairs,
-                            new ResultHandler());
-                }
-            });
-
-
-
-        }
+        //        else if (v == tvCode)
+        //        {
+        //            String phone = etPhone.getText().toString();
+        //
+        //            if (TextUtils.isEmpty(phone)||phone.length()<11)
+        //            {
+        //                ToastUtil.show(this, "请输入正确的手机");
+        //                return;
+        //            }
+        //
+        //
+        //            DialogUtils.showToastDialog2Button(this, "绑定手机后，将只能使用手机号码和密码登录", new View.OnClickListener() {
+        //                @Override
+        //                public void onClick(View v)
+        //                {
+        //                    tvCode.setEnabled(false);
+        //
+        //                    showProgressDialog();
+        //                    Map<String, String> valuePairs = new HashMap<>();
+        //                    valuePairs.put("phone", phone);
+        //                    valuePairs.put("action", "bind");
+        //                    DataRequest.instance().request(BindPhoneActivity.this, Urls.getPhoneCodeUrl(), BindPhoneActivity.this, HttpRequest
+        // .POST, GET_PHONE_CODE, valuePairs,
+        //                            new ResultHandler());
+        //                }
+        //            });
+        //
+        //
+        //
+        //        }
     }
 
     @Override
@@ -238,7 +244,6 @@ public class BindPhoneActivity extends BaseActivity implements IRequestListener
     protected void onDestroy()
     {
         super.onDestroy();
-        if (mHandler.hasMessages(UPDATE_CODE_VIEW))
-            mHandler.removeMessages(UPDATE_CODE_VIEW);
+        if (mHandler.hasMessages(UPDATE_CODE_VIEW)) mHandler.removeMessages(UPDATE_CODE_VIEW);
     }
 }

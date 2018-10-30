@@ -112,6 +112,8 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
     //    @BindView(R.id.btn_logout)
     //    Button btnLogout;
 
+        @BindView(R.id.btn_login)
+        Button btnLogint;
     @BindView(R.id.rl_setting)
     RelativeLayout rlSetting;
 
@@ -340,6 +342,7 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
         tvSignIn.setOnClickListener(this);
         tvUserStatus.setOnClickListener(this);
         ivUserPic.setOnClickListener(this);
+        btnLogint.setOnClickListener(this);
     }
 
     @Override
@@ -574,6 +577,10 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
 
             }
 
+        }
+        else if(v ==btnLogint)
+        {
+            startActivity(new Intent(getActivity(), LoginActivity.class));
         }
     }
 

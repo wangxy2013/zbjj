@@ -405,34 +405,57 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
         }
         else
         {
-            DialogUtils.showDyTipsDialog(this, new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-
-                    ivCover.animate().alpha(0).setDuration(1000).start();
-                    loadData();
-                }
-            }, new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-
-                    startActivity(new Intent(DyVideoActivity.this, MemberActivity.class));
-                    finish();
+            DialogUtils.showToastDialog2Button(DyVideoActivity.this, "免费福利已兑换，如需继续观看",
+                    "充值VIP", "推广获取VIP", new View.OnClickListener()
 
 
-                }
-            }, new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View view)
-                {
-                    finish();
-                }
-            }).show();
+                    {
+                        @Override
+                        public void onClick(View view)
+                        {
+                            startActivity(new Intent(DyVideoActivity.this, MemberActivity.class));
+                            finish();
+                        }
+                    }, new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View view)
+                        {
+                            startActivity(new Intent(DyVideoActivity.this, WebViewActivity.class)
+                                    .putExtra(WebViewActivity.EXTRA_TITLE, "推广获取VIP").putExtra
+                                            (WebViewActivity.IS_SETTITLE, true).putExtra
+                                            (WebViewActivity.EXTRA_URL, Urls.getPageInviteUrl()));
+                            finish();
+                        }
+                    });
+//            DialogUtils.showDyTipsDialog(this, new View.OnClickListener()
+//            {
+//                @Override
+//                public void onClick(View v)
+//                {
+//
+//                    ivCover.animate().alpha(0).setDuration(1000).start();
+//                    loadData();
+//                }
+//            }, new View.OnClickListener()
+//            {
+//                @Override
+//                public void onClick(View v)
+//                {
+//
+//                    startActivity(new Intent(DyVideoActivity.this, MemberActivity.class));
+//                    finish();
+//
+//
+//                }
+//            }, new View.OnClickListener()
+//            {
+//                @Override
+//                public void onClick(View view)
+//                {
+//                    finish();
+//                }
+//            }).show();
         }
 
     }

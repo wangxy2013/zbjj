@@ -179,6 +179,45 @@ public class DialogUtils
     }
 
 
+    /**
+     * 提示框
+     *
+     * @return
+     */
+    public static void showFristLoginDialog(Context mContext, String title, final MyItemClickListener listener)
+    {
+        if (!((Activity) mContext).isFinishing())
+        {
+            final Dialog dialog = new Dialog(mContext, R.style.MyDialogStyle);
+            dialog.setCancelable(true);
+            View v = LayoutInflater.from(mContext).inflate(R.layout.dialog_frist_login, null);
+            dialog.setContentView(v);
+            ((TextView) v.findViewById(R.id.tv_content)).setText(Html.fromHtml(title));
+
+
+            v.findViewById(R.id.tv_receive).setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+
+                    dialog.dismiss();
+                    listener.onItemClick(v,1);
+                }
+            });
+
+            //Dialog部分
+            Window mWindow = dialog.getWindow();
+            WindowManager.LayoutParams lp = mWindow.getAttributes();
+            lp.gravity = Gravity.CENTER;
+            lp.width = APPUtils.getScreenWidth(mContext) * 3 / 4;
+            mWindow.setAttributes(lp);
+            dialog.setCancelable(false);
+            dialog.show();
+        }
+    }
+
+
     public static Dialog createLoadingDialog(Context context, String msg)
     {
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -263,6 +302,54 @@ public class DialogUtils
 
         TextView mSubmitTv = (TextView) v.findViewById(R.id.tv_submit);
         mSubmitTv.setText(buttonStr);
+        ((RelativeLayout) v.findViewById(R.id.rl_confirm)).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+                onClickListener.onClick(v);
+            }
+        });
+
+        v.findViewById(R.id.rl_cancel).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+                onClickListener1.onClick(v);
+            }
+        });
+        //Dialog部分
+        Window mWindow = dialog.getWindow();
+        WindowManager.LayoutParams lp = mWindow.getAttributes();
+        lp.gravity = Gravity.CENTER;
+        lp.width = APPUtils.getScreenWidth(mContext) * 7 / 8;
+        mWindow.setAttributes(lp);
+        return dialog;
+    }
+
+    /**
+     * 温馨提示
+     *
+     * @return
+     */
+    public static Dialog showToastDialog2Button(Context mContext, String str, String buttonStr1,String buttonStr2,final View.OnClickListener onClickListener, final
+    View.OnClickListener onClickListener1)
+    {
+        final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
+        dialog.setCancelable(false);
+        View v = LayoutInflater.from(mContext).inflate(R.layout.dialog_toast_2_button, null);
+        dialog.setContentView(v);
+        TextView mTitle = (TextView) v.findViewById(R.id.tv_title);
+        mTitle.setText(str);
+
+        TextView mSubmitTv = (TextView) v.findViewById(R.id.tv_submit);
+        mSubmitTv.setText(buttonStr1);
+        TextView mCancelTv = (TextView) v.findViewById(R.id.tv_cancel);
+        mCancelTv.setText(buttonStr2);
+
         ((RelativeLayout) v.findViewById(R.id.rl_confirm)).setOnClickListener(new View.OnClickListener()
         {
             @Override

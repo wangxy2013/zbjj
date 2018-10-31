@@ -62,90 +62,89 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
 {
 
     @BindView(R.id.iv_back)
-    ImageView       ivBack;
+    ImageView ivBack;
     @BindView(R.id.tv_title)
-    TextView        tvTitle;
+    TextView tvTitle;
     @BindView(R.id.tv_name)
-    TextView        tvName;
+    TextView tvName;
     @BindView(R.id.tv_add_time)
-    TextView        tvAddTime;
+    TextView tvAddTime;
     @BindView(R.id.rv_photo)
     MaxRecyclerView rvPhoto;
     @BindView(R.id.btn_buy)
-    Button          btnBuy;
+    Button btnBuy;
     @BindView(R.id.iv_collection)
-    ImageView       ivCollection;
+    ImageView ivCollection;
     @BindView(R.id.rv_comment)
     MaxRecyclerView rvComment;
     @BindView(R.id.tv_send)
-    TextView        tvSend;
+    TextView tvSend;
     @BindView(R.id.tv_collection_num)
-    TextView        tvCollectionNum;
+    TextView tvCollectionNum;
     @BindView(R.id.tv_more)
-    TextView        tvMore;
+    TextView tvMore;
 
     @BindView(R.id.et_content)
-    EditText        etContent;
+    EditText etContent;
     @BindView(R.id.iv_share)
-    ImageView       ivShare;
+    ImageView ivShare;
     @BindView(R.id.tv_contact)
-    TextView        tvContact;
+    TextView tvContact;
     @BindView(R.id.tv_location)
-    TextView        tvLocation;
+    TextView tvLocation;
     @BindView(R.id.rl_head)
-    RelativeLayout  rlHead;
+    RelativeLayout rlHead;
     @BindView(R.id.ll_label)
-    LinearLayout    llLabel;
+    LinearLayout llLabel;
     @BindView(R.id.iv_user_pic)
     CircleImageView ivUserPic;
     @BindView(R.id.tv_user_name)
-    TextView        tvUserName;
+    TextView tvUserName;
     @BindView(R.id.tv_desc)
-    TextView        tvDesc;
-    private List<String>      freePic         = new ArrayList<>();
-    private List<String>      chargePic       = new ArrayList<>();
-    private List<String>      allPic          = new ArrayList<>();
+    TextView tvDesc;
+    private List<String> freePic = new ArrayList<>();
+    private List<String> chargePic = new ArrayList<>();
+    private List<String> allPic = new ArrayList<>();
     private List<CommentInfo> commentInfoList = new ArrayList<>();
-    private PhotoAdapter   mPhotoAdapter;
+    private PhotoAdapter mPhotoAdapter;
     private CommentAdapter mCommentAdapter;
 
-    private int labelBgArr[] = {
-            R.drawable.lable1_3dp, R.drawable.lable2_3dp, R.drawable.lable3_3dp, R.drawable.lable4_3dp, R.drawable.lable5_3dp, R.drawable
-            .lable6_3dp,};
+    private int labelBgArr[] = {R.drawable.lable1_3dp, R.drawable.lable2_3dp, R.drawable
+            .lable3_3dp, R.drawable.lable4_3dp, R.drawable.lable5_3dp, R.drawable.lable6_3dp,};
 
     private String biz_id;
     private int pn = 1;
     private PriceInfo priceInfo;
-    private String    shareCnontent;
+    private String shareCnontent;
 
     private String contact;
-    private              String has_favorite             = "0";
-    private static final String GET_TASK_SHARE           = "GET_TASK_SHARE";
-    private static final String GET_SHARE                = "GET_SHARE";
-    private static final String BUY_PHOTO                = "buy_photo";
-    private static final String FAVORITE_LIKE            = "favorite_like";
-    private static final String SEND_COMMENT             = "send_comment";
-    private static final String GET_PH0TO_DETAIL         = "get_photo_detail";
-    private static final String GET_COMMENT_LIST         = " get_comment_list";
-    private final        String UN_FAVORITE_LIKE         = "un_favorite_like";
-    private static final int    REQUEST_SUCCESS          = 0x01;
-    private static final int    REQUEST_FAIL             = 0x02;
-    private static final int    BUY_PHOTO_SUCCESS        = 0x05;
-    private static final int    GET_COMMENT_LIST_CODE    = 0x06;
-    private static final int    GET_COMMENT_LIST_SUCCESS = 0x07;
-    private static final int    GET_PHOTO_LIST_CODE      = 0x08;
-    private static final int    FAVORITE_LIKE_SUCCESS    = 0x09;
-    private final        int    UN_FAVORITE_LIKE_SUCCESS = 0x15;
-    private static final int    SEND_COMMENT_SUCCESS     = 0x10;
-    private static final int    GET_SHARE_CODE           = 0x11;
-    private static final int    GET_SHARE_SUCCESS        = 0x12;
-    private static final int    GET_TASK_SHARE_CODE      = 0x13;
-    private static final int    GET_TASK_SHARE_SUCCESS   = 0x14;
+    private String has_favorite = "0";
+    private static final String GET_TASK_SHARE = "GET_TASK_SHARE";
+    private static final String GET_SHARE = "GET_SHARE";
+    private static final String BUY_PHOTO = "buy_photo";
+    private static final String FAVORITE_LIKE = "favorite_like";
+    private static final String SEND_COMMENT = "send_comment";
+    private static final String GET_PH0TO_DETAIL = "get_photo_detail";
+    private static final String GET_COMMENT_LIST = " get_comment_list";
+    private final String UN_FAVORITE_LIKE = "un_favorite_like";
+    private static final int REQUEST_SUCCESS = 0x01;
+    private static final int REQUEST_FAIL = 0x02;
+    private static final int BUY_PHOTO_SUCCESS = 0x05;
+    private static final int GET_COMMENT_LIST_CODE = 0x06;
+    private static final int GET_COMMENT_LIST_SUCCESS = 0x07;
+    private static final int GET_PHOTO_LIST_CODE = 0x08;
+    private static final int FAVORITE_LIKE_SUCCESS = 0x09;
+    private final int UN_FAVORITE_LIKE_SUCCESS = 0x15;
+    private static final int SEND_COMMENT_SUCCESS = 0x10;
+    private static final int GET_SHARE_CODE = 0x11;
+    private static final int GET_SHARE_SUCCESS = 0x12;
+    private static final int GET_TASK_SHARE_CODE = 0x13;
+    private static final int GET_TASK_SHARE_SUCCESS = 0x14;
 
 
-    private static final int         SHARE_PHOTO_REQUEST_CODE = 0x91;
+    private static final int SHARE_PHOTO_REQUEST_CODE = 0x91;
     @SuppressLint("HandlerLeak")
-    private              BaseHandler mHandler                 = new BaseHandler(PhotoDetailActivity.this)
+    private BaseHandler mHandler = new BaseHandler(PhotoDetailActivity.this)
     {
         @Override
         public void handleMessage(Message msg)
@@ -183,13 +182,15 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
                             for (int i = 0; i < labeArr.length; i++)
                             {
                                 TextView tvLabel = new TextView(PhotoDetailActivity.this);
-                                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout
-                                        .LayoutParams.WRAP_CONTENT);
+                                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams
+                                        (LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout
+                                                .LayoutParams.WRAP_CONTENT);
                                 params.leftMargin = 10;
                                 tvLabel.setPadding(10, 3, 10, 3);
                                 tvLabel.setText(labeArr[i]);
                                 tvLabel.setTextSize(12);
-                                tvLabel.setTextColor(ContextCompat.getColor(PhotoDetailActivity.this, R.color.white));
+                                tvLabel.setTextColor(ContextCompat.getColor(PhotoDetailActivity
+                                        .this, R.color.white));
                                 tvLabel.setBackgroundResource(labelBgArr[i]);
                                 tvLabel.setLayoutParams(params);
                                 llLabel.addView(tvLabel);
@@ -246,7 +247,7 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
 
                         }
 
-                        if(chargePic.isEmpty())
+                        if (chargePic.isEmpty())
                         {
                             allPic.addAll(freePic);
                         }
@@ -272,17 +273,16 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
                     break;
 
                 case GET_COMMENT_LIST_SUCCESS:
-                    CommentInfoListHandler mCommentInfoListHandler = (CommentInfoListHandler) msg.obj;
+                    CommentInfoListHandler mCommentInfoListHandler = (CommentInfoListHandler) msg
+                            .obj;
 
                     if (mCommentInfoListHandler.getCommentInfoList().size() < 20)
                     {
-                        if(null !=tvMore)
-                        tvMore.setVisibility(View.GONE);
+                        if (null != tvMore) tvMore.setVisibility(View.GONE);
                     }
                     else
                     {
-                        if(null !=tvMore)
-                        tvMore.setVisibility(View.VISIBLE);
+                        if (null != tvMore) tvMore.setVisibility(View.VISIBLE);
                     }
                     commentInfoList.addAll(mCommentInfoListHandler.getCommentInfoList());
                     mCommentAdapter.notifyDataSetChanged();
@@ -323,7 +323,8 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
                         Intent intent1 = new Intent(Intent.ACTION_SEND);
                         intent1.putExtra(Intent.EXTRA_TEXT, shareCnontent);
                         intent1.setType("text/plain");
-                        startActivityForResult(Intent.createChooser(intent1, "分享"), SHARE_PHOTO_REQUEST_CODE);
+                        startActivityForResult(Intent.createChooser(intent1, "分享"),
+                                SHARE_PHOTO_REQUEST_CODE);
 
                     }
                     break;
@@ -378,7 +379,8 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
     protected void initViewData()
     {
         tvTitle.setText("照片详情");
-        rvPhoto.setLayoutManager(new LinearLayoutManager(PhotoDetailActivity.this, LinearLayoutManager.VERTICAL, false));
+        rvPhoto.setLayoutManager(new LinearLayoutManager(PhotoDetailActivity.this,
+                LinearLayoutManager.VERTICAL, false));
         rvPhoto.setNestedScrollingEnabled(false);
 
         mPhotoAdapter = new PhotoAdapter(allPic, new MyItemClickListener()
@@ -392,7 +394,8 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
 
         rvPhoto.setAdapter(mPhotoAdapter);
 
-        rvComment.setLayoutManager(new LinearLayoutManager(PhotoDetailActivity.this, LinearLayoutManager.VERTICAL, false));
+        rvComment.setLayoutManager(new LinearLayoutManager(PhotoDetailActivity.this,
+                LinearLayoutManager.VERTICAL, false));
         rvComment.addItemDecoration(new DividerDecoration(this));
         mCommentAdapter = new CommentAdapter(commentInfoList);
         rvComment.setAdapter(mCommentAdapter);
@@ -409,47 +412,78 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
     {
         if (null != priceInfo)
         {
-            DialogUtils.showLivePriceDialog(PhotoDetailActivity.this, priceInfo, new View.OnClickListener()
+
+            DialogUtils.showToastDialog2Button(PhotoDetailActivity.this, "免费福利已兑换，如需继续观看",
+                    "充值VIP", "推广获取VIP", new View.OnClickListener()
+
+
             {
                 @Override
-                public void onClick(View v)
+                public void onClick(View view)
                 {
-
+                    startActivity(new Intent(PhotoDetailActivity.this, MemberActivity.class));
+                    finish();
                 }
-            }, new MyOnClickListener.OnSubmitListener()
+            }, new View.OnClickListener()
             {
                 @Override
-                public void onSubmit(String content)
+                public void onClick(View view)
                 {
-
-                    if ("1".equals(content))//兑换
-                    {
-
-                        buyPhoto(priceInfo.getFinger());
-
-
-                    }
-                    //购买VIP
-                    else if ("3".equals(content))
-                    {
-                        startActivity(new Intent(PhotoDetailActivity.this, MemberActivity
-                                .class));
-                    }
-                    else//去做任务
-                    {
-
-                        startActivity(new Intent(PhotoDetailActivity.this,WebViewActivity.class)
-                                .putExtra(WebViewActivity.EXTRA_TITLE, "邀请好友")
-                                .putExtra(WebViewActivity.IS_SETTITLE, true)
-                                .putExtra(WebViewActivity.EXTRA_URL,Urls.getPageInviteUrl()));
-                        //sendBroadcast(new Intent(MainActivity.TAB_TASK));
-//                        startActivity(new Intent(PhotoDetailActivity.this, TaskActivity
-//                                .class));
-                        finish();
-                    }
+                    startActivity(new Intent(PhotoDetailActivity.this, WebViewActivity.class)
+                            .putExtra(WebViewActivity.EXTRA_TITLE, "推广获取VIP").putExtra
+                                    (WebViewActivity.IS_SETTITLE, true).putExtra(WebViewActivity
+                                    .EXTRA_URL, Urls.getPageInviteUrl()));
+                    finish();
 
                 }
-            }).show();
+            });
+
+            //            DialogUtils.showLivePriceDialog(PhotoDetailActivity.this, priceInfo,
+            // new View.OnClickListener()
+            //            {
+            //                @Override
+            //                public void onClick(View v)
+            //                {
+            //
+            //                }
+            //            }, new MyOnClickListener.OnSubmitListener()
+            //            {
+            //                @Override
+            //                public void onSubmit(String content)
+            //                {
+            //
+            //                    if ("1".equals(content))//兑换
+            //                    {
+            //
+            //                        buyPhoto(priceInfo.getFinger());
+            //
+            //
+            //                    }
+            //                    //购买VIP
+            //                    else if ("3".equals(content))
+            //                    {
+            //                        startActivity(new Intent(PhotoDetailActivity.this,
+            // MemberActivity
+            //                                .class));
+            //                    }
+            //                    else//去做任务
+            //                    {
+            //
+            //                        startActivity(new Intent(PhotoDetailActivity.this,
+            // WebViewActivity.class)
+            //                                .putExtra(WebViewActivity.EXTRA_TITLE, "邀请好友")
+            //                                .putExtra(WebViewActivity.IS_SETTITLE, true)
+            //                                .putExtra(WebViewActivity.EXTRA_URL,Urls
+            // .getPageInviteUrl()));
+            //                        //sendBroadcast(new Intent(MainActivity.TAB_TASK));
+            ////                        startActivity(new Intent(PhotoDetailActivity.this,
+            /// TaskActivity
+            ////                                .class));
+            //                        finish();
+            //                    }
+            //
+            //                }
+            //            }).show();
         }
     }
 
@@ -473,7 +507,7 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
         }
         else if (v == ivCollection)
         {
-            if("1".equals(has_favorite))
+            if ("1".equals(has_favorite))
             {
                 unFavoriteLike();
             }
@@ -516,8 +550,8 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
         showProgressDialog();
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
-        DataRequest.instance().request(PhotoDetailActivity.this, Urls.getPhotoDetailUrl(), this, HttpRequest.GET, GET_PH0TO_DETAIL, valuePairs,
-                new PhotoInfoHandler());
+        DataRequest.instance().request(PhotoDetailActivity.this, Urls.getPhotoDetailUrl(), this,
+                HttpRequest.GET, GET_PH0TO_DETAIL, valuePairs, new PhotoInfoHandler());
     }
 
     private void getCommentList()
@@ -526,8 +560,8 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
         valuePairs.put("pid", biz_id);
         valuePairs.put("pn", pn + "");
         valuePairs.put("num", "20");
-        DataRequest.instance().request(PhotoDetailActivity.this, Urls.getCommentlistUrl(), this, HttpRequest.GET, GET_COMMENT_LIST, valuePairs,
-                new CommentInfoListHandler());
+        DataRequest.instance().request(PhotoDetailActivity.this, Urls.getCommentlistUrl(), this,
+                HttpRequest.GET, GET_COMMENT_LIST, valuePairs, new CommentInfoListHandler());
     }
 
     //兑换
@@ -538,8 +572,8 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "photo");
         valuePairs.put("finger", finger);
-        DataRequest.instance().request(PhotoDetailActivity.this, Urls.getBuyLiveUrl(), this, HttpRequest.POST, BUY_PHOTO, valuePairs,
-                new ResultHandler());
+        DataRequest.instance().request(PhotoDetailActivity.this, Urls.getBuyLiveUrl(), this,
+                HttpRequest.POST, BUY_PHOTO, valuePairs, new ResultHandler());
     }
 
 
@@ -549,17 +583,18 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "photo");
-        DataRequest.instance().request(PhotoDetailActivity.this, Urls.getCollectionRequestUrl(), this, HttpRequest.POST, FAVORITE_LIKE, valuePairs,
-                new ResultHandler());
+        DataRequest.instance().request(PhotoDetailActivity.this, Urls.getCollectionRequestUrl(),
+                this, HttpRequest.POST, FAVORITE_LIKE, valuePairs, new ResultHandler());
     }
+
     private void unFavoriteLike()
     {
         showProgressDialog();
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "photo");
-        DataRequest.instance().request(PhotoDetailActivity.this, Urls.getFavoriteUnLikeUrl(), this, HttpRequest.POST, UN_FAVORITE_LIKE, valuePairs,
-                new ResultHandler());
+        DataRequest.instance().request(PhotoDetailActivity.this, Urls.getFavoriteUnLikeUrl(),
+                this, HttpRequest.POST, UN_FAVORITE_LIKE, valuePairs, new ResultHandler());
     }
 
 
@@ -568,8 +603,8 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "photo");
-        DataRequest.instance().request(PhotoDetailActivity.this, Urls.getShareUrl(), this, HttpRequest.GET, GET_SHARE, valuePairs,
-                new ShareInfoHandler());
+        DataRequest.instance().request(PhotoDetailActivity.this, Urls.getShareUrl(), this,
+                HttpRequest.GET, GET_SHARE, valuePairs, new ShareInfoHandler());
     }
 
     private void getTaskShareUrl()
@@ -577,8 +612,8 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "photo");
-        DataRequest.instance().request(PhotoDetailActivity.this, Urls.getTaskShareUrl(), this, HttpRequest.GET, GET_TASK_SHARE, valuePairs,
-                new SignInfoHandler());
+        DataRequest.instance().request(PhotoDetailActivity.this, Urls.getTaskShareUrl(), this,
+                HttpRequest.GET, GET_TASK_SHARE, valuePairs, new SignInfoHandler());
     }
 
     private void sendComment()
@@ -594,8 +629,8 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("pid", biz_id);
         valuePairs.put("text", text);
-        DataRequest.instance().request(PhotoDetailActivity.this, Urls.getSendCommentUrl(), this, HttpRequest.POST, SEND_COMMENT, valuePairs,
-                new ResultHandler());
+        DataRequest.instance().request(PhotoDetailActivity.this, Urls.getSendCommentUrl(), this,
+                HttpRequest.POST, SEND_COMMENT, valuePairs, new ResultHandler());
     }
 
     @Override
@@ -700,8 +735,7 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
     {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d("DemoActivity", "requestCode=" + requestCode + " resultCode=" + resultCode);
-        if ((int) (Math.random() * 100) <= 80)
-            mHandler.sendEmptyMessage(GET_TASK_SHARE_CODE);
+        if ((int) (Math.random() * 100) <= 80) mHandler.sendEmptyMessage(GET_TASK_SHARE_CODE);
 
     }
 

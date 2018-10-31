@@ -24,6 +24,7 @@ import com.zb.wyd.R;
 import com.zb.wyd.activity.BaseHandler;
 import com.zb.wyd.activity.BindEmailActivity;
 import com.zb.wyd.activity.DomainNameActivity;
+import com.zb.wyd.activity.DyVideoActivity;
 import com.zb.wyd.activity.LoginActivity;
 import com.zb.wyd.activity.MainActivity;
 import com.zb.wyd.activity.MemberActivity;
@@ -112,8 +113,10 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
     //    @BindView(R.id.btn_logout)
     //    Button btnLogout;
 
-        @BindView(R.id.btn_login)
-        Button btnLogint;
+    @BindView(R.id.rl_login)
+    RelativeLayout rlLoginLayout;
+    @BindView(R.id.rl_tgzx)
+    RelativeLayout rlTgzxLayout;
     @BindView(R.id.rl_setting)
     RelativeLayout rlSetting;
 
@@ -183,8 +186,7 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
                         //                        }
 
 
-                        if (!TextUtils.isEmpty(userInfo.getEmail()) && userInfo.getEmail().length
-                                () != 11)
+                        if (!TextUtils.isEmpty(userInfo.getEmail()) && userInfo.getEmail().length() != 11)
                         {
                             ToastUtil.show(getActivity(), "请绑定手机保证账号安全");
                         }
@@ -292,8 +294,7 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
     };
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
-            savedInstanceState)
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
 
         if (rootView == null)
@@ -342,7 +343,8 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
         tvSignIn.setOnClickListener(this);
         tvUserStatus.setOnClickListener(this);
         ivUserPic.setOnClickListener(this);
-        btnLogint.setOnClickListener(this);
+        rlLoginLayout.setOnClickListener(this);
+        rlTgzxLayout.setOnClickListener(this);
     }
 
     @Override
@@ -359,8 +361,8 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
         if (MyApplication.getInstance().isLogin())
         {
             Map<String, String> valuePairs = new HashMap<>();
-            DataRequest.instance().request(getActivity(), Urls.getUserInfoUrl(), this,
-                    HttpRequest.GET, GET_USER_DETAIL, valuePairs, new UserInfoHandler());
+            DataRequest.instance().request(getActivity(), Urls.getUserInfoUrl(), this, HttpRequest.GET, GET_USER_DETAIL, valuePairs, new
+                    UserInfoHandler());
             //   btnLogout.setVisibility(View.VISIBLE);
         }
         else
@@ -461,8 +463,7 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
         {
             if (MyApplication.getInstance().isLogin())
             {
-                startActivity(new Intent(getActivity(), WealthListActivity.class).putExtra
-                        ("fortune", userInfo.getFortuneInfo()));
+                startActivity(new Intent(getActivity(), WealthListActivity.class).putExtra("fortune", userInfo.getFortuneInfo()));
             }
             else
             {
@@ -503,17 +504,14 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
             //                }
             //            }
 
-            startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra
-                    (WebViewActivity.EXTRA_TITLE, "帮助中心").putExtra(WebViewActivity.IS_SETTITLE,
-                    true).putExtra("TYPE", "CUSTOMER").putExtra(WebViewActivity.EXTRA_URL, Urls
-                    .getSrviceUrl()));
+            startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra(WebViewActivity.EXTRA_TITLE, "帮助中心").putExtra(WebViewActivity
+                    .IS_SETTITLE, true).putExtra("TYPE", "CUSTOMER").putExtra(WebViewActivity.EXTRA_URL, Urls.getSrviceUrl()));
 
 
         }
         else if (v == rlUser)
         {
-            if (!MyApplication.getInstance().isLogin())
-                startActivity(new Intent(getActivity(), LoginActivity.class));
+            if (!MyApplication.getInstance().isLogin()) startActivity(new Intent(getActivity(), LoginActivity.class));
         }
         else if (v == rlSetting)
         {
@@ -534,9 +532,8 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
             //            }
 
             //
-            startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra
-                    (WebViewActivity.EXTRA_TITLE, "积分取现").putExtra(WebViewActivity.IS_SETTITLE,
-                    true).putExtra(WebViewActivity.EXTRA_URL, Urls.getWithdrawUrl()));
+            startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra(WebViewActivity.EXTRA_TITLE, "积分取现").putExtra(WebViewActivity
+                    .IS_SETTITLE, true).putExtra(WebViewActivity.EXTRA_URL, Urls.getWithdrawUrl()));
         }
         else if (v == rlTask)
         {
@@ -555,8 +552,8 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
             if (MyApplication.getInstance().isLogin())
             {
                 Map<String, String> valuePairs = new HashMap<>();
-                DataRequest.instance().request(getActivity(), Urls.getUserSignUrl(), this,
-                        HttpRequest.POST, USER_SIGN_REQUEST, valuePairs, new SignInfoHandler());
+                DataRequest.instance().request(getActivity(), Urls.getUserSignUrl(), this, HttpRequest.POST, USER_SIGN_REQUEST, valuePairs, new
+                        SignInfoHandler());
             }
             else
             {
@@ -578,9 +575,17 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
             }
 
         }
-        else if(v ==btnLogint)
+        else if (v == rlLoginLayout)
         {
             startActivity(new Intent(getActivity(), LoginActivity.class));
+        }
+        else if (v == rlTgzxLayout)
+        {
+            startActivity(new Intent(getActivity(),WebViewActivity.class)
+                    .putExtra(WebViewActivity.EXTRA_TITLE, "推广中心")
+                    .putExtra(WebViewActivity.IS_SETTITLE, true)
+                    .putExtra(WebViewActivity.EXTRA_URL,Urls.getPageInviteUrl())
+            );
         }
     }
 
@@ -593,8 +598,7 @@ public class MemberFragment extends BaseFragment implements IRequestListener, Vi
             for (int i = 0; i < pinfo.size(); i++)
             {
                 String pn = pinfo.get(i).packageName;
-                if (pn.equalsIgnoreCase("com.tencent.qqlite") || pn.equalsIgnoreCase("com.tencent" +
-                        ".mobileqq"))
+                if (pn.equalsIgnoreCase("com.tencent.qqlite") || pn.equalsIgnoreCase("com.tencent" + ".mobileqq"))
                 {
                     return true;
                 }

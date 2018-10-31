@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_index_dialog" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dm_15"
+        android:layout_marginTop="@dimen/dm_20"
+        android:padding="@dimen/dm_15"
+        android:text="新用户福利"
+        android:textColor="@color/white"
+        android:textSize="@dimen/t20" />
+
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="130dp"
+        android:background="@color/white"
+        android:gravity="center"
+        android:paddingBottom="@dimen/dm_15"
+        android:paddingLeft="@dimen/dm_15"
+        android:paddingRight="@dimen/dm_15"
+        android:textColor="@color/blackB"
+        android:textSize="@dimen/t14" />
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dm_1"
+        android:layout_below="@+id/tv_content"
+        android:background="@color/line" />
+
+    <LinearLayout
+        android:id="@+id/ll_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/line"
+        android:background="@drawable/dialog_index_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+
+
+
+        <TextView
+            android:id="@+id/tv_receive"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/dm_15"
+            android:gravity="center"
+            android:text="领取"
+            android:textColor="@color/redC"
+            android:textSize="@dimen/t18" />
+
+    </LinearLayout>
+
+
+
+
+</RelativeLayout>

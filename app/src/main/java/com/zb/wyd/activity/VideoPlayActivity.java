@@ -782,13 +782,41 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
                 mHandler.sendMessage(mHandler.obtainMessage(REQUEST_SUCCESS, obj));
             }
 
-            else if ("1101".equals(resultCode))
-            {
-                getLivePrice();
-            }
+//            else if ("1101".equals(resultCode))
+//            {
+//                getLivePrice();
+//            }
+//            else
+//            {
+//                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
+//            }
             else
             {
-                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
+
+                DialogUtils.showToastDialog2Button(VideoPlayActivity.this, "免费福利已兑换，如需继续观看", "充值VIP",
+                        "推广获取VIP", new View.OnClickListener()
+
+
+                        {
+                            @Override
+                            public void onClick(View view)
+                            {
+                                startActivity(new Intent(VideoPlayActivity.this, MemberActivity.class));
+                                finish();
+                            }
+                        }, new View.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(View view)
+                            {
+                                startActivity(new Intent(VideoPlayActivity.this, WebViewActivity.class)
+                                        .putExtra(WebViewActivity.EXTRA_TITLE, "推广获取VIP").putExtra
+                                                (WebViewActivity.IS_SETTITLE, true).putExtra
+                                                (WebViewActivity.EXTRA_URL, Urls.getPageInviteUrl()));
+                                finish();
+
+                            }
+                        });
             }
         }
         else if (GET_VIDEO_PRICE.equals(action))

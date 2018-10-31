@@ -160,35 +160,64 @@ public class VersionManager implements IRequestListener
                                     return;
                                 }
 
-                                String freeTime = mVersionInfo.getFreetime()/60 +"分钟";
+                                String freeTime = mVersionInfo.getFreetime() / 60 + "分钟";
 
-                                String newUser = userInfo.getNew_user()/60  +"分钟";
-
-
-                                String content ="注册成功获得免费"+ "<font color='#F643BF'>"+freeTime+"</font>"+"试看现在还剩"+"<font color='#F643BF'>" +newUser;
+                                String newUser = userInfo.getNew_user() / 60 + "分钟";
 
 
-                                DialogUtils.showNewUserDialog(mContext, content, new MyItemClickListener()
+                                String content = "注册成功获得免费" + "<font color='#F643BF'>" + freeTime
+                                        + "</font>" + "试看现在还剩" + "<font color='#F643BF'>" + newUser;
 
 
+                                String content1 = "免费使用" + "<font color='#F643BF'>" + freeTime
+                                        + "</font>" ;
+
+
+                                if (ConfigManager.instance().getIsFristLogin())
                                 {
-                                    @Override
-                                    public void onItemClick(View view, int position)
+                                    DialogUtils.showFristLoginDialog(mContext, content1, new
+                                            MyItemClickListener()
+
+
                                     {
-                                        if (position ==0)
+                                        @Override
+                                        public void onItemClick(View view, int position)
                                         {
-                                            mContext.startActivity(new Intent(mContext, MemberActivity.class));
+                                            ConfigManager.instance().setIsFristLogin(false);
+                                            ToastUtil.show(mContext, "领取成功");
                                         }
-                                        else
-                                        {
-                                            mContext.startActivity(new Intent(mContext,WebViewActivity.class)
-                                                    .putExtra(WebViewActivity.EXTRA_TITLE, "邀请好友")
-                                                    .putExtra(WebViewActivity.IS_SETTITLE, true)
-                                                    .putExtra(WebViewActivity.EXTRA_URL,Urls.getPageInviteUrl())
-                                            );
-                                        }
-                                    }
-                                });
+                                    });
+                                }
+//
+//                                else
+//                                {
+//                                    DialogUtils.showNewUserDialog(mContext, content, new
+//                                            MyItemClickListener()
+//
+//
+//                                    {
+//                                        @Override
+//                                        public void onItemClick(View view, int position)
+//                                        {
+//                                            if (position == 0)
+//                                            {
+//                                                mContext.startActivity(new Intent(mContext,
+//                                                        MemberActivity.class));
+//                                            }
+//                                            else
+//                                            {
+//                                                mContext.startActivity(new Intent(mContext,
+//                                                        WebViewActivity.class).putExtra
+//                                                        (WebViewActivity.EXTRA_TITLE, "邀请好友")
+//                                                        .putExtra(WebViewActivity.IS_SETTITLE,
+//                                                                true).putExtra(WebViewActivity
+//                                                                .EXTRA_URL, Urls.getPageInviteUrl
+//                                                                ()));
+//                                            }
+//                                        }
+//                                    });
+//                                }
+
                             }
                         }
                     }
@@ -261,8 +290,8 @@ public class VersionManager implements IRequestListener
     private void setDomainName()
     {
         ConfigManager.instance().setSystemEmail("xjshangmen@gmail.com");
-        DialogUtils.showToastDialog2Button(mContext, "不幸的告诉您，域名可能已被封，可发邮件到xjshangmen@gmail" + "" +
-                ".com获取最新地址并进行设置操作。", new View.OnClickListener()
+        DialogUtils.showToastDialog2Button(mContext, "不幸的告诉您，域名可能已被封，可发邮件到xjshangmen@gmail" + ""
+                + ".com获取最新地址并进行设置操作。", new View.OnClickListener()
         {
             @Override
             public void onClick(View v)

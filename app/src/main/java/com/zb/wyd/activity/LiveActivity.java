@@ -210,13 +210,13 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                 case REQUEST_FAIL:
                     DialogUtils.showPromptDialog(LiveActivity.this, msg.obj.toString(), new
                             MyItemClickListener()
-                            {
-                                @Override
-                                public void onItemClick(View view, int position)
-                                {
-                                    finish();
-                                }
-                            });
+                    {
+                        @Override
+                        public void onItemClick(View view, int position)
+                        {
+                            finish();
+                        }
+                    });
                     break;
 
                 case GET_LIVE_PRICE_SUCCESS:
@@ -228,13 +228,13 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                     {
                         DialogUtils.showLivePriceDialog(LiveActivity.this, mLivePriceInfo, new
                                 View.OnClickListener()
-                                {
-                                    @Override
-                                    public void onClick(View v)
-                                    {
-                                        finish();
-                                    }
-                                }, new MyOnClickListener.OnSubmitListener()
+                        {
+                            @Override
+                            public void onClick(View v)
+                            {
+                                finish();
+                            }
+                        }, new MyOnClickListener.OnSubmitListener()
                         {
                             @Override
                             public void onSubmit(String content)
@@ -254,15 +254,15 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                                 }
                                 else//去做任务
                                 {
-                                    startActivity(new Intent(LiveActivity.this,WebViewActivity.class)
-                                            .putExtra(WebViewActivity.EXTRA_TITLE, "邀请好友")
-                                            .putExtra(WebViewActivity.IS_SETTITLE, true)
-                                            .putExtra(WebViewActivity.EXTRA_URL,Urls.getPageInviteUrl())
-                                    );
+                                    startActivity(new Intent(LiveActivity.this, WebViewActivity
+                                            .class).putExtra(WebViewActivity.EXTRA_TITLE, "邀请好友")
+                                            .putExtra(WebViewActivity.IS_SETTITLE, true).putExtra
+                                                    (WebViewActivity.EXTRA_URL, Urls
+                                                            .getPageInviteUrl()));
 
-                                     //sendBroadcast(new Intent(MainActivity.TAB_TASK));
-                                   // startActivity(new Intent(LiveActivity.this, TaskActivity
-                                           // .class));
+                                    //sendBroadcast(new Intent(MainActivity.TAB_TASK));
+                                    // startActivity(new Intent(LiveActivity.this, TaskActivity
+                                    // .class));
                                     finish();
                                 }
                             }
@@ -396,10 +396,11 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                             @Override
                             public void onClick(View view)
                             {
-                                startActivity(new Intent(LiveActivity.this,WebViewActivity.class)
-                                                .putExtra(WebViewActivity.EXTRA_TITLE, "邀请好友")
-                                                .putExtra(WebViewActivity.IS_SETTITLE, true)
-                                                .putExtra(WebViewActivity.EXTRA_URL,Urls.getPageInviteUrl()));
+                                startActivity(new Intent(LiveActivity.this, WebViewActivity
+                                        .class).putExtra(WebViewActivity.EXTRA_TITLE, "邀请好友")
+                                        .putExtra(WebViewActivity.IS_SETTITLE, true).putExtra
+                                                (WebViewActivity.EXTRA_URL, Urls.getPageInviteUrl
+                                                        ()));
                                 //sendBroadcast(new Intent(MainActivity.TAB_TASK));
                                 //startActivity(new Intent(LiveActivity.this, TaskActivity.class));
                                 finish();
@@ -423,13 +424,13 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                     if (webSocketConnentCount < 4)
                     {
                         webSocketConnentCount++;
-                        initWebSocket();
+                       // initWebSocket();
                     }
                     break;
 
                 case SHOW_TOAST:
                     ToastUtil.show(LiveActivity.this, msg.obj.toString());
-                    initWebSocket();
+                    //initWebSocket();
                     break;
 
                 case GET_USER_DETAIL_REQUEST:
@@ -515,44 +516,54 @@ public class LiveActivity extends BaseActivity implements IRequestListener
             {
                 if (actionId == EditorInfo.IME_ACTION_SEND)
                 {
-                    InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService
-                            (Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
-
-                    String sendMsg = etSay.getText().toString();
-
-                    if (!TextUtils.isEmpty(sendMsg) && null != mMySocketConnection &&
-                            mMySocketConnection.isConnected())
+                    if(ConfigManager.instance().getValid_vip())
                     {
-                        String sendContent = "{\"type\":\"say\",\"data\":\"" + sendMsg + "\"," +
-                                "\"action\":\"\"}";
-                        LogUtil.e("TAG", "sendContent-->" + sendContent);
-                        mMySocketConnection.sendTextMessage(sendContent);
-                        etSay.setText("");
-
-                        try
-                        {
-                            ChatInfo chatInfo = new ChatInfo(new JSONObject(sendContent));
-                            UserInfo userInfo = new UserInfo();
-                            userInfo.setUface(ConfigManager.instance().getUserPic());
-                            String userName = ConfigManager.instance().getUserNickName();
-                            userInfo.setUnick(TextUtils.isEmpty(userName) ? ConfigManager
-                                    .instance().getUserName() : userName);
-                            userInfo.setVip_level(ConfigManager.instance().getVipLevelVIE() + "");
-                            chatInfo.setUserInfo(userInfo);
-                            mChatInfoList.add(chatInfo);
-                            mChatAdapter.notifyItemChanged(mChatInfoList.size());
-                            mChatRecyclerView.scrollToPosition(mChatInfoList.size() - 1);
-                            //                                    }
-                        }
-                        catch (JSONException e)
-                        {
-                            e.printStackTrace();
-                        }
-
+                        ToastUtil.show(LiveActivity.this,"该功能测试中");
                     }
-                    return true;
+                    else
+                    {
+                        ToastUtil.show(LiveActivity.this,"该功能为VIP专享");
+                    }
+
+//                    InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService
+//                            (Context.INPUT_METHOD_SERVICE);
+//                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+//
+//
+//                    String sendMsg = etSay.getText().toString();
+//
+//                    if (!TextUtils.isEmpty(sendMsg) && null != mMySocketConnection &&
+//                            mMySocketConnection.isConnected())
+//                    {
+//                        String sendContent = "{\"type\":\"say\",\"data\":\"" + sendMsg + "\"," +
+//                                "\"action\":\"\"}";
+//                        LogUtil.e("TAG", "sendContent-->" + sendContent);
+//                        mMySocketConnection.sendTextMessage(sendContent);
+//                        etSay.setText("");
+//
+//                        try
+//                        {
+//                            ChatInfo chatInfo = new ChatInfo(new JSONObject(sendContent));
+//                            UserInfo userInfo = new UserInfo();
+//                            userInfo.setUface(ConfigManager.instance().getUserPic());
+//                            String userName = ConfigManager.instance().getUserNickName();
+//                            userInfo.setUnick(TextUtils.isEmpty(userName) ? ConfigManager
+//                                    .instance().getUserName() : userName);
+//                            userInfo.setVip_level(ConfigManager.instance().getVipLevelVIE() + "");
+//                            chatInfo.setUserInfo(userInfo);
+//                            mChatInfoList.add(chatInfo);
+//                            mChatAdapter.notifyItemChanged(mChatInfoList.size());
+//                            mChatRecyclerView.scrollToPosition(mChatInfoList.size() - 1);
+//                            //                                    }
+//                        }
+//                        catch (JSONException e)
+//                        {
+//                            e.printStackTrace();
+//                        }
+//
+//                    }
+//                    return true;
                 }
                 return false;
             }
@@ -1020,11 +1031,11 @@ public class LiveActivity extends BaseActivity implements IRequestListener
 
         mHandler.removeCallbacksAndMessages(null);
         mHandler = null;
-        if (mMySocketConnection != null)
-        {
-            mMySocketConnection.setForced(true);
-            mMySocketConnection.disconnect();
-        }
+//        if (mMySocketConnection != null)
+//        {
+//            mMySocketConnection.setForced(true);
+//            mMySocketConnection.disconnect();
+//        }
         LPAnimationManager.release();
     }
 
@@ -1144,9 +1155,9 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                                                 mChatAdapter.notifyItemChanged(mChatInfoList.size
                                                         ());
 
-                                                if(null !=mChatRecyclerView)
-                                                mChatRecyclerView.scrollToPosition(mChatInfoList
-                                                        .size() - 1);
+                                                if (null != mChatRecyclerView)
+                                                    mChatRecyclerView.scrollToPosition
+                                                            (mChatInfoList.size() - 1);
                                             }
 
                                         }
@@ -1179,8 +1190,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                         .instance().getUniqueCode() + "?biz_id=" + biz_id;
 
 
-                if(null !=mMySocketConnection)
-                    mMySocketConnection.startConnection(wsUri);
+                if (null != mMySocketConnection) mMySocketConnection.startConnection(wsUri);
 
             }
         }).start();
@@ -1208,7 +1218,32 @@ public class LiveActivity extends BaseActivity implements IRequestListener
             }
             else if ("1502".endsWith(resultCode))
             {
-                getLivePrice();
+
+                DialogUtils.showToastDialog2Button(LiveActivity.this, "免费福利已兑换，如需继续观看", "充值VIP",
+                        "推广获取VIP", new View.OnClickListener()
+
+
+                {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        startActivity(new Intent(LiveActivity.this, MemberActivity.class));
+                        finish();
+                    }
+                }, new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        startActivity(new Intent(LiveActivity.this, WebViewActivity.class)
+                                .putExtra(WebViewActivity.EXTRA_TITLE, "推广获取VIP").putExtra
+                                        (WebViewActivity.IS_SETTITLE, true).putExtra
+                                        (WebViewActivity.EXTRA_URL, Urls.getPageInviteUrl()));
+                        finish();
+
+                    }
+                });
+                //getLivePrice();
             }
             else
             {

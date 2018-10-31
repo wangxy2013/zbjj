@@ -46,6 +46,7 @@
             android:layout_height="@dimen/dm_60"
             android:layout_weight="1">
             <TextView
+                android:id="@+id/tv_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"

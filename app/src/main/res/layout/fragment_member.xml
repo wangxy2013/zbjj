@@ -223,6 +223,7 @@
             android:orientation="vertical">
 
             <RelativeLayout
+                android:visibility="gone"
                 android:id="@+id/rl_extension"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -322,6 +323,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:visibility="gone"
                 android:id="@+id/rl_wealth"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -413,7 +415,41 @@
             </RelativeLayout>
 
 
+            <RelativeLayout
+                android:id="@+id/rl_tgzx"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dm_1"
+                android:background="@color/white"
+                android:padding="@dimen/dm_10">
 
+                <ImageView
+                    android:id="@+id/iv_tuiguang"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_tuiguang" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dm_15"
+                    android:layout_toRightOf="@+id/iv_tuiguang"
+                    android:text="推广中心"
+                    android:textColor="@color/blackE"
+                    android:textSize="@dimen/t14" />
+
+
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_arrow_right_48" />
+            </RelativeLayout>
 
 
             <RelativeLayout
@@ -593,6 +629,42 @@
 
             </RelativeLayout>
 
+            <RelativeLayout
+                android:id="@+id/rl_login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dm_1"
+                android:background="@color/white"
+                android:padding="@dimen/dm_10">
+
+                <ImageView
+                    android:id="@+id/iv_login"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_msg" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dm_15"
+                    android:layout_toRightOf="@+id/iv_login"
+                    android:text="账号登录"
+                    android:textColor="@color/blackB"
+                    android:textSize="@dimen/t14" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_arrow_right_48" />
+
+
+            </RelativeLayout>
+
             <Button
                 android:visibility="gone"
                 android:id="@+id/btn_logout"
@@ -615,17 +687,7 @@
                 android:gravity="center"
                 android:textColor="@color/blackB" />
 
-            <Button
-                android:id="@+id/btn_login"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dm_15"
-                android:layout_marginRight="@dimen/dm_15"
-                android:layout_marginTop="@dimen/dm_20"
-                android:background="@drawable/common_yellow_3dp"
-                android:text="账号登录"
-                android:textColor="@color/blackB"
-                android:textSize="@dimen/t16" />
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

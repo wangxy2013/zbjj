@@ -71,8 +71,8 @@ public class LiveFragment extends BaseFragment
     @Override
     protected void initData()
     {
-        tabs.add("直播首页");
-        tabs.add("热门");
+        tabs.add("热门直播");
+        tabs.add("附近美女");
       //  tabs.add("抖音");
     }
 
@@ -99,13 +99,13 @@ public class LiveFragment extends BaseFragment
     protected void initViewData()
     {
         MyViewPagerAdapter viewPagerAdapter = new MyViewPagerAdapter(getChildFragmentManager());
-        viewPagerAdapter.addFragment(LiveIndexFragment.newInstance(), "直播首页");//添加Fragment
-        viewPagerAdapter.addFragment(AnchorListFragment.newInstance(), "热门");
+        viewPagerAdapter.addFragment(LiveIndexFragment.newInstance(), "热门直播");//添加Fragment
+        viewPagerAdapter.addFragment(AnchorListFragment.newInstance(), "附近美女");
        // viewPagerAdapter.addFragment(DouyinFragment.newInstance(), "抖音");
         mViewPager.setAdapter(viewPagerAdapter);//设置适配器
         mViewPager.setOffscreenPageLimit(1);
-        mTabLayout.addTab(mTabLayout.newTab().setText("直播首页"));//给TabLayout添加Tab
-        mTabLayout.addTab(mTabLayout.newTab().setText("热门"));
+        mTabLayout.addTab(mTabLayout.newTab().setText("热门直播"));//给TabLayout添加Tab
+        mTabLayout.addTab(mTabLayout.newTab().setText("附近美女"));
        // mTabLayout.addTab(mTabLayout.newTab().setText("抖音"));
         mTabLayout.setupWithViewPager(mViewPager);
         //给TabLayout设置关联ViewPager，如果设置了ViewPager，那么ViewPagerAdapter中的getPageTitle()方法返回的就是Tab上的标题

@@ -142,7 +142,8 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
 
                     if (pn == 1)
                     {
-                        VideoInfo mVideoInfo = (VideoInfo) getIntent().getSerializableExtra("VideoInfo");
+                        VideoInfo mVideoInfo = (VideoInfo) getIntent().getSerializableExtra
+                                ("VideoInfo");
                         if (null != mVideoInfo)
                         {
                             videoInfoList.add(mVideoInfo);
@@ -212,15 +213,16 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
                                 }
                                 else//去做任务
                                 {
-                                   // sendBroadcast(new Intent(MainActivity.TAB_TASK));
-//                                    startActivity(new Intent(DyVideoActivity.this, TaskActivity
-//                                            .class));
+                                    // sendBroadcast(new Intent(MainActivity.TAB_TASK));
+                                    //                                    startActivity(new
+                                    // Intent(DyVideoActivity.this, TaskActivity
+                                    //                                            .class));
 
-                                    startActivity(new Intent(DyVideoActivity.this,WebViewActivity.class)
-                                            .putExtra(WebViewActivity.EXTRA_TITLE, "邀请好友")
-                                            .putExtra(WebViewActivity.IS_SETTITLE, true)
-                                            .putExtra(WebViewActivity.EXTRA_URL,Urls.getPageInviteUrl())
-                                    );
+                                    startActivity(new Intent(DyVideoActivity.this,
+                                            WebViewActivity.class).putExtra(WebViewActivity
+                                            .EXTRA_TITLE, "邀请好友").putExtra(WebViewActivity
+                                            .IS_SETTITLE, true).putExtra(WebViewActivity
+                                            .EXTRA_URL, Urls.getPageInviteUrl()));
 
                                     finish();
                                 }
@@ -285,14 +287,13 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
                         @Override
                         public void onClick(View v)
                         {
-                           // sendBroadcast(new Intent(MainActivity.TAB_TASK));
-                          //  startActivity(new Intent(DyVideoActivity.this, TaskActivity.class));
+                            // sendBroadcast(new Intent(MainActivity.TAB_TASK));
+                            //  startActivity(new Intent(DyVideoActivity.this, TaskActivity.class));
 
-                           startActivity(new Intent(DyVideoActivity.this,WebViewActivity.class)
-                                    .putExtra(WebViewActivity.EXTRA_TITLE, "邀请好友")
-                                    .putExtra(WebViewActivity.IS_SETTITLE, true)
-                                    .putExtra(WebViewActivity.EXTRA_URL,Urls.getPageInviteUrl())
-                            );
+                            startActivity(new Intent(DyVideoActivity.this, WebViewActivity.class)
+                                    .putExtra(WebViewActivity.EXTRA_TITLE, "邀请好友").putExtra
+                                            (WebViewActivity.IS_SETTITLE, true).putExtra
+                                            (WebViewActivity.EXTRA_URL, Urls.getPageInviteUrl()));
 
                             finish();
                         }
@@ -397,7 +398,7 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
 
         }
 
-        if(ConfigManager.instance().getValid_vip())
+        if (ConfigManager.instance().getValid_vip())
         {
             ivCover.animate().alpha(0).setDuration(1000).start();
             loadData();
@@ -611,14 +612,41 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
                 mHandler.sendMessage(mHandler.obtainMessage(REQUEST_SUCCESS, obj));
             }
 
-            else if ("1101".equals(resultCode))
+            //            else if ("1101".equals(resultCode))
+            //            {
+            //                getLivePrice();
+            //            }
+            //            else if ("1102".equals(resultCode))
+            //            {
+            //                hideProgressDialog();
+            //                mHandler.sendMessage(mHandler.obtainMessage(GET_VIDEO_STREAM_FAIL,
+            // resultMsg));
+            //            }
+            else
             {
-                getLivePrice();
-            }
-            else if ("1102".equals(resultCode))
-            {
-                hideProgressDialog();
-                mHandler.sendMessage(mHandler.obtainMessage(GET_VIDEO_STREAM_FAIL, resultMsg));
+                DialogUtils.showToastDialog2Button(DyVideoActivity.this, "免费福利已兑换，如需继续观看",
+                        "充值VIP", "推广获取VIP", new View.OnClickListener()
+
+
+                {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        startActivity(new Intent(DyVideoActivity.this, MemberActivity.class));
+                        finish();
+                    }
+                }, new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        startActivity(new Intent(DyVideoActivity.this, WebViewActivity.class)
+                                .putExtra(WebViewActivity.EXTRA_TITLE, "推广获取VIP").putExtra
+                                        (WebViewActivity.IS_SETTITLE, true).putExtra
+                                        (WebViewActivity.EXTRA_URL, Urls.getPageInviteUrl()));
+                        finish();
+                    }
+                });
             }
         }
         if (GET_VIDEO_LIST.equals(action))
@@ -772,7 +800,7 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
             holder.tv_title.setText(videoInfo.getV_name());
             holder.love_count.setText(videoInfo.getFavour_count());
 
-            if(!videoInfo.isPay_for())
+            if (!videoInfo.isPay_for())
             {
                 holder.tv_tips.setText("本次观看免费");
             }

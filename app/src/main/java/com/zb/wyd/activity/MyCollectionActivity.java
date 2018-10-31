@@ -62,7 +62,7 @@ public class MyCollectionActivity extends BaseActivity
     protected void initViews(Bundle savedInstanceState)
     {
         setContentView(R.layout.activity_collection);
-        StatusBarUtil.setStatusBarColor(this, getResources().getColor(R.color.white));
+        StatusBarUtil.setStatusBarColor(this, getResources().getColor(R.color.redC));
         StatusBarUtil.StatusBarLightMode(MyCollectionActivity.this, false);
     }
 

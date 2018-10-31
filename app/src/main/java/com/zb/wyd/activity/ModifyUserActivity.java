@@ -81,7 +81,7 @@ public class ModifyUserActivity extends BaseActivity implements IRequestListener
     protected void initViews(Bundle savedInstanceState)
     {
         setContentView(R.layout.activity_modify_user);
-        StatusBarUtil.setStatusBarColor(this, getResources().getColor(R.color.white));
+        StatusBarUtil.setStatusBarColor(this, getResources().getColor(R.color.redC));
         StatusBarUtil.StatusBarLightMode(ModifyUserActivity.this, false);
     }
 

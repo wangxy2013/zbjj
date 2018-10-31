@@ -78,7 +78,7 @@ public class QuestionActivity extends BaseActivity implements IRequestListener
     protected void initViews(Bundle savedInstanceState)
     {
         setContentView(R.layout.activity_question);
-        StatusBarUtil.setStatusBarColor(this, getResources().getColor(R.color.white));
+        StatusBarUtil.setStatusBarColor(this, getResources().getColor(R.color.redC));
         StatusBarUtil.StatusBarLightMode(QuestionActivity.this, false);
     }
 

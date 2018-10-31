@@ -101,7 +101,7 @@ public class LabelActivity extends BaseActivity implements IRequestListener
     protected void initViews(Bundle savedInstanceState)
     {
         setContentView(R.layout.activity_label);
-        StatusBarUtil.setStatusBarColor(this, getResources().getColor(R.color.white));
+        StatusBarUtil.setStatusBarColor(this, getResources().getColor(R.color.redC));
         StatusBarUtil.StatusBarLightMode(LabelActivity.this, false);
 
     }

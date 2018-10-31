@@ -40,6 +40,7 @@
             android:paddingBottom="@dimen/dm_8"
             android:paddingLeft="@dimen/dm_20"
             android:paddingRight="@dimen/dm_20"
+            android:visibility="gone"
             android:paddingTop="@dimen/dm_8"
             android:text="签到"
             android:textColor="@color/blackC"

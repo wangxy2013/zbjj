@@ -70,7 +70,7 @@ public class WebViewActivity extends Activity
     {
 
 
-        StatusBarUtil.setStatusBarColor(this, getResources().getColor(R.color.white));
+        StatusBarUtil.setStatusBarColor(this, getResources().getColor(R.color.redC));
         StatusBarUtil.StatusBarLightMode(WebViewActivity.this, false);
         mBackIv = (ImageView) findViewById(R.id.iv_back);
         mSubmitTv = (TextView) findViewById(R.id.tv_submit);

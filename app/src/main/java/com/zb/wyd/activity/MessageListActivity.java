@@ -92,7 +92,7 @@ public class MessageListActivity extends BaseActivity implements PullToRefreshBa
     protected void initViews(Bundle savedInstanceState)
     {
         setContentView(R.layout.activity_message);
-        StatusBarUtil.setStatusBarColor(this, getResources().getColor(R.color.white));
+        StatusBarUtil.setStatusBarColor(this, getResources().getColor(R.color.redC));
         StatusBarUtil.StatusBarLightMode(MessageListActivity.this, false);
     }
 

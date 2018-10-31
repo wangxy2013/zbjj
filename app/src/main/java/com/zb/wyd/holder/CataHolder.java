@@ -46,7 +46,7 @@ public class CataHolder extends RecyclerView.ViewHolder
         }
         else
         {
-            mNameTv.setTextColor(ContextCompat.getColor(context,R.color.blackA));
+            mNameTv.setTextColor(ContextCompat.getColor(context,R.color.blackC));
             mLine.setVisibility(View.INVISIBLE);
         }
         mItemLayout.setOnClickListener(new View.OnClickListener() {

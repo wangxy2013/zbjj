@@ -5,7 +5,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/yellow"
+    android:background="@color/redC"
     android:orientation="vertical"
     >
 
@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:padding="@dimen/dm_8"
-            android:src="@drawable/ic_black_back"
+            android:src="@drawable/ic_back"
             />
 
         <TextView
@@ -33,7 +33,7 @@
             android:layout_marginRight="@dimen/dm_30"
             android:gravity="center"
             android:padding="@dimen/dm_8"
-            android:textColor="@color/blackC"
+            android:textColor="@color/white"
             android:textSize="@dimen/t16"
             />
 

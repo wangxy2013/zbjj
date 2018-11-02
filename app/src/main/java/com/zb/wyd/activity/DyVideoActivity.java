@@ -398,71 +398,13 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
 
         }
 
-        if (ConfigManager.instance().getValid_vip())
-        {
-            ivCover.animate().alpha(0).setDuration(1000).start();
-            loadData();
-        }
-        else
-        {
-            DialogUtils.showToastDialog2Button(DyVideoActivity.this, "免费福利已兑换，如需继续观看",
-                    "充值VIP", "推广获取VIP", new View.OnClickListener()
-
-
-                    {
-                        @Override
-                        public void onClick(View view)
-                        {
-                            startActivity(new Intent(DyVideoActivity.this, MemberActivity.class));
-                            finish();
-                        }
-                    }, new View.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(View view)
-                        {
-                            startActivity(new Intent(DyVideoActivity.this, WebViewActivity.class)
-                                    .putExtra(WebViewActivity.EXTRA_TITLE, "推广获取VIP").putExtra
-                                            (WebViewActivity.IS_SETTITLE, true).putExtra
-                                            (WebViewActivity.EXTRA_URL, Urls.getPageInviteUrl()));
-                            finish();
-                        }
-                    }).show();
-//            DialogUtils.showDyTipsDialog(this, new View.OnClickListener()
-//            {
-//                @Override
-//                public void onClick(View v)
-//                {
-//
-//                    ivCover.animate().alpha(0).setDuration(1000).start();
-//                    loadData();
-//                }
-//            }, new View.OnClickListener()
-//            {
-//                @Override
-//                public void onClick(View v)
-//                {
-//
-//                    startActivity(new Intent(DyVideoActivity.this, MemberActivity.class));
-//                    finish();
-//
-//
-//                }
-//            }, new View.OnClickListener()
-//            {
-//                @Override
-//                public void onClick(View view)
-//                {
-//                    finish();
-//                }
-//            }).show();
-        }
+        ivCover.animate().alpha(0).setDuration(1000).start();
+        loadData();
 
     }
 
     private void loadData()
     {
-        mSwipeRefreshLayout.setRefreshing(true);
         getDouyin();
     }
 
@@ -951,6 +893,7 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
                 @Override
                 public void onAutoComplete(String s, Object... objects)
                 {
+                    holder.img_thumb.animate().alpha(1).setDuration(100).start();
                     holder.videoView.startPlayLogic();
                 }
 

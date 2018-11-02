@@ -339,7 +339,7 @@ public class DialogUtils
     View.OnClickListener onClickListener1)
     {
         final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
-        dialog.setCancelable(false);
+        dialog.setCancelable(true);
         View v = LayoutInflater.from(mContext).inflate(R.layout.dialog_toast_2_button, null);
         dialog.setContentView(v);
         TextView mTitle = (TextView) v.findViewById(R.id.tv_title);

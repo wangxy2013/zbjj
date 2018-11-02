@@ -155,18 +155,18 @@ public class VersionManager implements IRequestListener
 
                             if (null != userInfo)
                             {
-                                if (userInfo.isValid_vip() || userInfo.getNew_user() <= 0)
+                                if (userInfo.isValid_vip() || !userInfo.isNew_user())
                                 {
                                     return;
                                 }
 
                                 String freeTime = mVersionInfo.getFreetime() / 60 + "分钟";
-
-                                String newUser = userInfo.getNew_user() / 60 + "分钟";
-
-
-                                String content = "注册成功获得免费" + "<font color='#F643BF'>" + freeTime
-                                        + "</font>" + "试看现在还剩" + "<font color='#F643BF'>" + newUser;
+//
+//                                String newUser = userInfo.getNew_user() / 60 + "分钟";
+//
+//
+//                                String content = "注册成功获得免费" + "<font color='#F643BF'>" + freeTime
+//                                        + "</font>" + "试看现在还剩" + "<font color='#F643BF'>" + newUser;
 
 
                                 String content1 = "免费使用" + "<font color='#F643BF'>" + freeTime

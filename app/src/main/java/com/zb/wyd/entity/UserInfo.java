@@ -47,7 +47,7 @@ public class UserInfo implements Serializable
     private String auth;//
 
 
-    private int new_user;
+    private boolean new_user;
 
     public UserInfo()
     {
@@ -82,7 +82,7 @@ public class UserInfo implements Serializable
         this.valid_vip = obj.optBoolean("valid_vip");
         this.vip_type = obj.optInt("vip_type");
         this.has_sign = obj.optBoolean("has_sign");
-        this.new_user = obj.optInt("new_user");
+        this.new_user = obj.optBoolean("new_user");
     }
 
     public boolean isHas_sign()
@@ -345,12 +345,12 @@ public class UserInfo implements Serializable
         this.auth = auth;
     }
 
-    public int getNew_user()
+    public boolean isNew_user()
     {
         return new_user;
     }
 
-    public void setNew_user(int new_user)
+    public void setNew_user(boolean new_user)
     {
         this.new_user = new_user;
     }

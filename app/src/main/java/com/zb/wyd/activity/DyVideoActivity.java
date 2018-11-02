@@ -427,7 +427,7 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
                                             (WebViewActivity.EXTRA_URL, Urls.getPageInviteUrl()));
                             finish();
                         }
-                    });
+                    }).show();
 //            DialogUtils.showDyTipsDialog(this, new View.OnClickListener()
 //            {
 //                @Override

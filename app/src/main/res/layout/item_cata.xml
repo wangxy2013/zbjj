@@ -6,10 +6,10 @@
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/dm_2"
+    android:paddingBottom="@dimen/dm_10"
     android:paddingLeft="@dimen/dm_8"
     android:paddingRight="@dimen/dm_8"
-    android:paddingTop="@dimen/dm_5">
+    android:paddingTop="@dimen/dm_10">
 
 
     <TextView
@@ -22,6 +22,7 @@
 
     <View
         android:id="@+id/line"
+        android:visibility="gone"
         android:layout_width="30dp"
         android:layout_height="3dp"
         android:layout_marginTop="@dimen/dm_5"

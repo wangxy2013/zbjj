@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/yellow"
+    android:background="@color/redC"
     android:padding="@dimen/dm_10"
     android:orientation="vertical">
 
@@ -15,7 +15,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="自拍分类"
-                android:textColor="@color/blackC"
+                android:textColor="@color/white"
                 android:textSize="@dimen/t14"/>
             <TextView
                 android:id="@+id/tv_closed"
@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:text="收起"
-                android:textColor="@color/blackC"
+                android:textColor="@color/white"
                 android:textSize="@dimen/t14"/>
 
         </RelativeLayout>

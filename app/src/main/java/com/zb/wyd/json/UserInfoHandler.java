@@ -29,8 +29,11 @@ public class UserInfoHandler extends JsonHandler
             {
                 userInfo = new UserInfo(obj);
 
+                if(null != obj.optJSONObject("fortune"))
+                {
                 FortuneInfo mFortuneInfo = new FortuneInfo(obj.optJSONObject("fortune"));
                 userInfo.setFortuneInfo(mFortuneInfo);
+                }
 
             }
 

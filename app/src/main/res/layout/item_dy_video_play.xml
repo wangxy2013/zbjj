@@ -75,6 +75,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/dm_20"
         android:layout_marginLeft="@dimen/dm_10"
+        android:visibility="gone"
         android:paddingLeft="@dimen/dm_10"
         android:paddingRight="@dimen/dm_10"
         android:paddingTop="@dimen/dm_3"

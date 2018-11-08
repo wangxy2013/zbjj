@@ -335,7 +335,7 @@ public class DialogUtils
      *
      * @return
      */
-    public static Dialog showToastDialog2Button(Context mContext, String str, String buttonStr1,String buttonStr2,final View.OnClickListener onClickListener, final
+    public static void showToastDialog2Button(Context mContext, String str, String buttonStr1,String buttonStr2,final View.OnClickListener onClickListener, final
     View.OnClickListener onClickListener1)
     {
         final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
@@ -375,7 +375,7 @@ public class DialogUtils
         lp.gravity = Gravity.CENTER;
         lp.width = APPUtils.getScreenWidth(mContext) * 7 / 8;
         mWindow.setAttributes(lp);
-        return dialog;
+        dialog.show();
     }
 
 
@@ -800,5 +800,59 @@ public class DialogUtils
         return dialog;
     }
 
+
+
+
+    /**
+     * 温馨提示
+     *
+     * @return
+     */
+    public static void show1520Dialog(Context mContext, final View.OnClickListener onClickListener, final
+    View.OnClickListener onClickListener1)
+    {
+        final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
+        dialog.setCancelable(true);
+        View v = LayoutInflater.from(mContext).inflate(R.layout.dialog_1502, null);
+        dialog.setContentView(v);
+
+
+        v.findViewById(R.id.rl_friend).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+                onClickListener1.onClick(v);
+            }
+        });
+
+        v.findViewById(R.id.rl_buy).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+                onClickListener.onClick(v);
+            }
+        });
+
+        v.findViewById(R.id.iv_closed).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+            }
+        });
+
+        //Dialog部分
+        Window mWindow = dialog.getWindow();
+        WindowManager.LayoutParams lp = mWindow.getAttributes();
+        lp.gravity = Gravity.CENTER;
+        lp.width = APPUtils.getScreenWidth(mContext) * 7 / 8;
+        mWindow.setAttributes(lp);
+        dialog.show();
+    }
 
 }

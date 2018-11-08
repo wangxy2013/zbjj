@@ -58,47 +58,48 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
     MyVideoPlayer videoPlayer;
 
     private OrientationUtils orientationUtils;
-    private ImageView        mCollectionIv;
-    private ImageView        mShareIv;
-    private ImageView        mReportIv;
-    private ImageView        mSettingIv;
-    private LinearLayout     mSeekLayout;
+    private ImageView mCollectionIv;
+    private ImageView mShareIv;
+    private ImageView mReportIv;
+    private ImageView mSettingIv;
+    private LinearLayout mSeekLayout;
 
     private String has_favorite = "0";
     private VideoInfo mVideoInfo;
-    private String    videoName, biz_id;
-    private String      videoUri;
+    private String videoName, biz_id;
+    private String videoUri;
     private ChannelInfo mChannelInfo;
-    private String      shareCnontent;
-    private long        startTime, endTime;
+    private String shareCnontent;
+    private long startTime, endTime;
     private String errorMsg = "网络异常";
 
     private ChannelPopupWindow mChannelPopupWindow;
 
-    private static final String      MSG_REPORT               = "msg_report";
-    private static final String      GET_SHARE                = "GET_SHARE";
-    private static final String      FAVORITE_LIKE            = "favorite_like";
-    private static final String      UN_FAVORITE_LIKE         = "un_favorite_like";
-    private static final String      GET_VIDEO_PRICE          = "get_live_price";
-    private static final String      GET_VIDEO_STREAM         = "get_video_stream";
-    private static final String      BUY_VIDEO                = "buy_live";
-    private static final String      GET_TASK_SHARE           = "GET_TASK_SHARE";
-    private static final int         REQUEST_SUCCESS          = 0x01;
-    private static final int         REQUEST_FAIL             = 0x02;
-    private static final int         GET_VIDEO_PRICE_SUCCESS  = 0x03;
-    private static final int         BUY_VIDEO_SUCCESS        = 0x05;
-    private static final int         SET_STATISTICS           = 0x06;
-    private static final int         GET_STREAM_REQUEST       = 0x09;
-    private static final int         FAVORITE_LIKE_SUCCESS    = 0x08;
-    private static final int         UN_FAVORITE_LIKE_SUCCESS = 0x10;
-    private static final int         GET_SHARE_CODE           = 0x11;
-    private static final int         GET_SHARE_SUCCESS        = 0x12;
-    private static final int         GET_TASK_SHARE_CODE      = 0x13;
-    private static final int         GET_TASK_SHARE_SUCCESS   = 0x14;
-    private static final int         SHARE_PHOTO_REQUEST_CODE = 0x91;
-    private static final int         MSG_REPORT_SUCCESS       = 0x21;
+    private static final String MSG_REPORT = "msg_report";
+    private static final String GET_SHARE = "GET_SHARE";
+    private static final String FAVORITE_LIKE = "favorite_like";
+    private static final String UN_FAVORITE_LIKE = "un_favorite_like";
+    private static final String GET_VIDEO_PRICE = "get_live_price";
+    private static final String GET_VIDEO_STREAM = "get_video_stream";
+    private static final String BUY_VIDEO = "buy_live";
+    private static final String GET_TASK_SHARE = "GET_TASK_SHARE";
+    private static final int REQUEST_SUCCESS = 0x01;
+    private static final int REQUEST_FAIL = 0x02;
+    private static final int GET_VIDEO_PRICE_SUCCESS = 0x03;
+    private static final int BUY_VIDEO_SUCCESS = 0x05;
+    private static final int SET_STATISTICS = 0x06;
+    private static final int GET_STREAM_REQUEST = 0x09;
+    private static final int FAVORITE_LIKE_SUCCESS = 0x08;
+    private static final int UN_FAVORITE_LIKE_SUCCESS = 0x10;
+    private static final int GET_SHARE_CODE = 0x11;
+    private static final int GET_SHARE_SUCCESS = 0x12;
+    private static final int GET_TASK_SHARE_CODE = 0x13;
+    private static final int GET_TASK_SHARE_SUCCESS = 0x14;
+    private static final int SHARE_PHOTO_REQUEST_CODE = 0x91;
+    private static final int MSG_REPORT_SUCCESS = 0x21;
+    private static final int REQUEST_FAIL_1502 = 0X1502;
     @SuppressLint("HandlerLeak")
-    private              BaseHandler mHandler                 = new BaseHandler(VideoPlayActivity.this)
+    private BaseHandler mHandler = new BaseHandler(VideoPlayActivity.this)
     {
         @Override
         public void handleMessage(Message msg)
@@ -178,18 +179,17 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
                                 //购买VIP
                                 else if ("3".equals(content))
                                 {
-                                    startActivity(new Intent(VideoPlayActivity.this, MemberActivity .class));
+                                    startActivity(new Intent(VideoPlayActivity.this, MemberActivity.class));
                                 }
                                 else//去做任务
                                 {
 
-                                    startActivity(new Intent(VideoPlayActivity.this,WebViewActivity.class)
-                                            .putExtra(WebViewActivity.EXTRA_TITLE, "邀请好友")
-                                            .putExtra(WebViewActivity.IS_SETTITLE, true)
-                                            .putExtra(WebViewActivity.EXTRA_URL,Urls.getPageInviteUrl()));
+                                    startActivity(new Intent(VideoPlayActivity.this, WebViewActivity.class).putExtra(WebViewActivity.EXTRA_TITLE,
+                                            "邀请好友").putExtra(WebViewActivity.IS_SETTITLE, true).putExtra(WebViewActivity.EXTRA_URL, Urls
+                                            .getPageInviteUrl()));
                                     //sendBroadcast(new Intent(MainActivity.TAB_TASK));
-//                                    startActivity(new Intent(VideoPlayActivity.this, TaskActivity
-//                                            .class));
+                                    //                                    startActivity(new Intent(VideoPlayActivity.this, TaskActivity
+                                    //                                            .class));
                                     finish();
                                 }
 
@@ -257,6 +257,31 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
 
                 case MSG_REPORT_SUCCESS:
                     ToastUtil.show(VideoPlayActivity.this, "信息上报成功");
+                    break;
+
+                case REQUEST_FAIL_1502:
+                    DialogUtils.show1520Dialog(VideoPlayActivity.this,  new View.OnClickListener()
+
+
+                    {
+                        @Override
+                        public void onClick(View view)
+                        {
+                            startActivity(new Intent(VideoPlayActivity.this, MemberActivity.class));
+                            finish();
+                        }
+                    }, new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View view)
+                        {
+                            startActivity(new Intent(VideoPlayActivity.this, WebViewActivity.class).putExtra(WebViewActivity.EXTRA_TITLE,
+                                    "推广获取VIP").putExtra(WebViewActivity.IS_SETTITLE, true).putExtra(WebViewActivity.EXTRA_URL, Urls
+                                    .getPageInviteUrl()));
+                            finish();
+
+                        }
+                    });
                     break;
             }
         }
@@ -740,7 +765,7 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
     {
         super.onResume();
         mHandler.sendEmptyMessage(GET_STREAM_REQUEST);
-       // videoPlayer.onVideoResume();
+        // videoPlayer.onVideoResume();
 
     }
 
@@ -782,42 +807,16 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
                 mHandler.sendMessage(mHandler.obtainMessage(REQUEST_SUCCESS, obj));
             }
 
-//            else if ("1101".equals(resultCode))
-//            {
-//                getLivePrice();
-//            }
-//            else
-//            {
-//                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
-//            }
+            else if ("1502".equals(resultCode)||"1101".equals(resultCode))
+            {
+                mHandler.sendEmptyMessage(REQUEST_FAIL_1502);
+            }
             else
             {
 
-                DialogUtils.showToastDialog2Button(VideoPlayActivity.this, "免费福利已兑换，如需继续观看", "充值VIP",
-                        "推广获取VIP", new View.OnClickListener()
-
-
-                        {
-                            @Override
-                            public void onClick(View view)
-                            {
-                                startActivity(new Intent(VideoPlayActivity.this, MemberActivity.class));
-                                finish();
-                            }
-                        }, new View.OnClickListener()
-                        {
-                            @Override
-                            public void onClick(View view)
-                            {
-                                startActivity(new Intent(VideoPlayActivity.this, WebViewActivity.class)
-                                        .putExtra(WebViewActivity.EXTRA_TITLE, "推广获取VIP").putExtra
-                                                (WebViewActivity.IS_SETTITLE, true).putExtra
-                                                (WebViewActivity.EXTRA_URL, Urls.getPageInviteUrl()));
-                                finish();
-
-                            }
-                        });
+                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
             }
+
         }
         else if (GET_VIDEO_PRICE.equals(action))
         {

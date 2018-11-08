@@ -413,10 +413,7 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
         if (null != priceInfo)
         {
 
-            DialogUtils.showToastDialog2Button(PhotoDetailActivity.this, "免费福利已兑换，如需继续观看",
-                    "充值VIP", "推广获取VIP", new View.OnClickListener()
-
-
+            DialogUtils.show1520Dialog(PhotoDetailActivity.this,  new View.OnClickListener()
             {
                 @Override
                 public void onClick(View view)

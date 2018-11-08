@@ -27,7 +27,11 @@ public class LiveInfoHandler extends JsonHandler
         {
 
 
-            liveInfo = new LiveInfo(jsonObj.optJSONObject("data"));
+            if(null != jsonObj.optJSONObject("data"))
+            {
+
+                liveInfo = new LiveInfo(jsonObj.optJSONObject("data"));
+            }
 
 
         } catch (Exception e)

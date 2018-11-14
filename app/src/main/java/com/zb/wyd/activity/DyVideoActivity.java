@@ -297,7 +297,7 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
                     break;
 
                 case REQUEST_FAIL_1502:
-                    DialogUtils.show1520Dialog(DyVideoActivity.this,new View.OnClickListener()
+                    DialogUtils.show1520Dialog(DyVideoActivity.this, new View.OnClickListener()
 
 
                     {
@@ -312,8 +312,14 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
                         @Override
                         public void onClick(View view)
                         {
-                            startActivity(new Intent(DyVideoActivity.this, WebViewActivity.class).putExtra(WebViewActivity.EXTRA_TITLE, "推广获取VIP")
-                                    .putExtra(WebViewActivity.IS_SETTITLE, true).putExtra(WebViewActivity.EXTRA_URL, Urls.getPageInviteUrl()));
+                            startActivity(new Intent(DyVideoActivity.this, WebViewActivity.class).putExtra(WebViewActivity.EXTRA_TITLE, "推广获取VIP").putExtra(WebViewActivity.IS_SETTITLE, true).putExtra(WebViewActivity.EXTRA_URL, Urls.getPageInviteUrl()));
+                            finish();
+                        }
+                    }, new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View view)
+                        {
                             finish();
                         }
                     });

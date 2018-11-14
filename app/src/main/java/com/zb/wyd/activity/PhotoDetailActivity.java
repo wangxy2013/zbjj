@@ -433,6 +433,12 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
                     finish();
 
                 }
+            }, new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                }
             });
 
             //            DialogUtils.showLivePriceDialog(PhotoDetailActivity.this, priceInfo,

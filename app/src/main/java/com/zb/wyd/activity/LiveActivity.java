@@ -469,7 +469,14 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                                     finish();
 
                                 }
-                            });
+                            }, new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View view)
+                        {
+                            finish();
+                        }
+                    });
                     break;
             }
         }

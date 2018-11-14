@@ -144,7 +144,7 @@ public class DialogUtils
                 {
 
                     dialog.dismiss();
-                    listener.onItemClick(v,0);
+                    listener.onItemClick(v, 0);
                 }
             });
 
@@ -155,7 +155,7 @@ public class DialogUtils
                 {
 
                     dialog.dismiss();
-                    listener.onItemClick(v,1);
+                    listener.onItemClick(v, 1);
                 }
             });
             v.findViewById(R.id.iv_closed).setOnClickListener(new View.OnClickListener()
@@ -202,7 +202,7 @@ public class DialogUtils
                 {
 
                     dialog.dismiss();
-                    listener.onItemClick(v,1);
+                    listener.onItemClick(v, 1);
                 }
             });
 
@@ -335,8 +335,8 @@ public class DialogUtils
      *
      * @return
      */
-    public static void showToastDialog2Button(Context mContext, String str, String buttonStr1,String buttonStr2,final View.OnClickListener onClickListener, final
-    View.OnClickListener onClickListener1)
+    public static void showToastDialog2Button(Context mContext, String str, String buttonStr1, String buttonStr2, final View.OnClickListener
+            onClickListener, final View.OnClickListener onClickListener1)
     {
         final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
         dialog.setCancelable(true);
@@ -801,15 +801,13 @@ public class DialogUtils
     }
 
 
-
-
     /**
      * 温馨提示
      *
      * @return
      */
-    public static void show1520Dialog(Context mContext, final View.OnClickListener onClickListener, final
-    View.OnClickListener onClickListener1)
+    public static void show1520Dialog(Context mContext, final View.OnClickListener onClickListener, final View.OnClickListener onClickListener1,
+                                      final View.OnClickListener onClickListener2)
     {
         final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
         dialog.setCancelable(true);
@@ -843,6 +841,7 @@ public class DialogUtils
             public void onClick(View v)
             {
                 dialog.dismiss();
+                onClickListener2.onClick(v);
             }
         });
 

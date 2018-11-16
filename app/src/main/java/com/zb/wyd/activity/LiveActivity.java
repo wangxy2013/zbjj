@@ -1,13 +1,18 @@
 package com.zb.wyd.activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -26,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
@@ -47,13 +53,17 @@ import com.zb.wyd.json.LiveInfoHandler;
 import com.zb.wyd.json.LivePriceInfoHandler;
 import com.zb.wyd.json.OnlinerListHandler;
 import com.zb.wyd.json.ResultHandler;
+import com.zb.wyd.json.ShareInfoHandler;
+import com.zb.wyd.json.SignInfoHandler;
 import com.zb.wyd.json.UserInfoHandler;
+import com.zb.wyd.listener.FileDownloadListener;
 import com.zb.wyd.listener.MyItemClickListener;
 import com.zb.wyd.listener.MyOnClickListener;
 import com.zb.wyd.listener.SocketListener;
 import com.zb.wyd.utils.ConfigManager;
 import com.zb.wyd.utils.ConstantUtil;
 import com.zb.wyd.utils.DialogUtils;
+import com.zb.wyd.utils.ImgDownloadUtils;
 import com.zb.wyd.utils.LogUtil;
 import com.zb.wyd.utils.MySocketConnection;
 import com.zb.wyd.utils.StringUtils;
@@ -69,6 +79,7 @@ import com.zb.wyd.widget.gift.LPAnimationManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.lang.ref.WeakReference;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -146,6 +157,9 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     private int mCashCount;//砖石
     private int mGiftCount;//积分点
     private int mGiftPrice;
+    private int shareCount = 0;
+    private String shareCnontent="";
+
 
     private static final String GET_USER_DETAIL = "get_user_detail";
     private static final String GET_ANCHOR_INFO = "get_anchor_info";
@@ -157,7 +171,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     private final String UN_FAVORITE_LIKE = "un_favorite_like";
     private final String GET_FORTUNE_GIFT = "get_fortune_gift";
     private final String FORTUNE_BUY = "fortune_buy";
-
+    private static final String GET_TASK_SHARE = "GET_TASK_SHARE";
 
     private static final int REQUEST_SUCCESS = 0x01;
     private static final int REQUEST_FAIL = 0x02;
@@ -172,7 +186,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     private static final int UN_FAVORITE_LIKE_SUCCESS = 0x15;
     private static final int FAVORITE_LIKE_FAIL = 0x14;
     private static final int GET_ANCHOR_SUCCESS = 0x12;
-    //    private static final int SHOW_SYSTEM_TV = 0x13;
+    private static final int GET_TASK_SHARE_CODE = 0x13;
     private static final int GET_FORTUNE_GIFT_SUCCESS = 0x16;
     private static final int FORTUNE_BUY_SUCCESS = 0x17;
     private static final int GET_FORTUNE_GIFT_FAIL = 0x18;
@@ -183,6 +197,12 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     private static final int GET_USER_DETAIL_SUCCESS = 0X023;
 
     private static final int REQUEST_FAIL_1502 = 0x1502;
+
+    private static final int GET_TASK_SHARE_SUCCESS = 0x34;
+    private static final String GET_SHARE_1502 = "GET_SHARE_1502";
+    private static final int GET_SHARE_CODE_1502 = 0x31;
+    private static final int GET_SHARE_SUCCESS_1502 = 0x32;
+
 
     @SuppressLint("HandlerLeak")
     private NoLeakHandler mHandler = new NoLeakHandler(LiveActivity.this)
@@ -444,7 +464,33 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                     }
                     break;
 
+                case GET_TASK_SHARE_CODE:
+                    getTaskShareUrl();
+                    break;
 
+                case GET_SHARE_CODE_1502:
+                    getShareUrl1502();
+                    break;
+
+                case GET_SHARE_SUCCESS_1502:
+                    ShareInfoHandler mShareInfoHandler1 = (ShareInfoHandler) msg.obj;
+                    shareCnontent = mShareInfoHandler1.getSharePicUrl();
+
+
+                    DialogUtils.showShareDialog(LiveActivity.this, shareCount, new
+                            MyItemClickListener()
+
+                            {
+                                @Override
+                                public void onItemClick(View view, int position)
+                                {
+                                    checkPermission(shareCnontent);
+
+
+                                }
+                            });
+
+                    break;
                 case REQUEST_FAIL_1502:
 
                     DialogUtils.show1520Dialog(LiveActivity.this, new View.OnClickListener()
@@ -462,11 +508,10 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                                 @Override
                                 public void onClick(View view)
                                 {
-                                    startActivity(new Intent(LiveActivity.this, WebViewActivity.class)
-                                            .putExtra(WebViewActivity.EXTRA_TITLE, "推广获取VIP").putExtra
-                                                    (WebViewActivity.IS_SETTITLE, true).putExtra
-                                                    (WebViewActivity.EXTRA_URL, Urls.getPageInviteUrl()));
-                                    finish();
+
+
+                                    mHandler.sendEmptyMessage(GET_SHARE_CODE_1502);
+
 
                                 }
                             }, new View.OnClickListener()
@@ -784,7 +829,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         //tvWelcomeName.setText("欢迎 " + ConfigManager.instance().getUserNickName() + " 进入直播间");
 
         tvDm.setSelected(true);
-        initChat();
+        //initChat();
         startTime = System.currentTimeMillis();
 
         mHandler.sendEmptyMessage(GET_ONLINER_REQUEST);
@@ -792,7 +837,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         LPAnimationManager.init(this);
         LPAnimationManager.addGiftContainer(llGiftContainer);
 
-
+        mHandler.sendEmptyMessage(GET_STREAM_REQUEST);
     }
 
 
@@ -840,7 +885,24 @@ public class LiveActivity extends BaseActivity implements IRequestListener
 
         mChatRecyclerView.setAdapter(mChatAdapter);
     }
+    private void getTaskShareUrl()
+    {
+        Map<String, String> valuePairs = new HashMap<>();
+        valuePairs.put("biz_id", biz_id);
+        valuePairs.put("co_biz", "video");
+        DataRequest.instance().request(LiveActivity.this, Urls.getTaskShareUrl(), this,
+                HttpRequest.GET, GET_TASK_SHARE, valuePairs, new SignInfoHandler());
+    }
 
+
+    private void getShareUrl1502()
+    {
+        Map<String, String> valuePairs = new HashMap<>();
+        valuePairs.put("biz_id", biz_id);
+        valuePairs.put("co_biz", "live");
+        DataRequest.instance().request(LiveActivity.this, Urls.getShareUrl(), this,
+                HttpRequest.GET, GET_SHARE_1502, valuePairs, new ShareInfoHandler());
+    }
 
     private void getUserDetail()
     {
@@ -989,19 +1051,29 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         }
         else if (v == ivGift)
         {
-            mGiftDialog = showGiftDialog(LiveActivity.this, giftInfoList);
+//            mGiftDialog = showGiftDialog(LiveActivity.this, giftInfoList);
+//
+//            mGiftDialog.setOnDismissListener(new DialogInterface.OnDismissListener()
+//            {
+//                @Override
+//                public void onDismiss(DialogInterface dialogInterface)
+//                {
+//                    mLiveBottomLayout.setVisibility(View.VISIBLE);
+//                }
+//            });
+//
+//            mLiveBottomLayout.setVisibility(View.GONE);
+//            mGiftDialog.show();
 
-            mGiftDialog.setOnDismissListener(new DialogInterface.OnDismissListener()
+
+            if (ConfigManager.instance().getValid_vip())
             {
-                @Override
-                public void onDismiss(DialogInterface dialogInterface)
-                {
-                    mLiveBottomLayout.setVisibility(View.VISIBLE);
-                }
-            });
-
-            mLiveBottomLayout.setVisibility(View.GONE);
-            mGiftDialog.show();
+                ToastUtil.show(LiveActivity.this, "该功能测试中");
+            }
+            else
+            {
+                ToastUtil.show(LiveActivity.this, "该功能为VIP专享");
+            }
 
         }
         //WS sendMsg
@@ -1020,7 +1092,7 @@ public class LiveActivity extends BaseActivity implements IRequestListener
     {
         super.onResume();
         //videoPlayer.onVideoResume();
-        mHandler.sendEmptyMessage(GET_STREAM_REQUEST);
+
     }
 
     @Override
@@ -1341,7 +1413,28 @@ public class LiveActivity extends BaseActivity implements IRequestListener
             //                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
             //            }
         }
-
+        else if (GET_SHARE_1502.equals(action))
+        {
+            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(GET_SHARE_SUCCESS_1502, obj));
+            }
+            else
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
+            }
+        }
+        else if (GET_TASK_SHARE.equals(action))
+        {
+            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(GET_TASK_SHARE_SUCCESS, obj));
+            }
+            else
+            {
+                //mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
+            }
+        }
 
     }
 
@@ -1560,5 +1653,110 @@ public class LiveActivity extends BaseActivity implements IRequestListener
         }
 
         return mDrawableId;
+    }
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, final Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d("DemoActivity", "requestCode=" + requestCode + " resultCode=" + resultCode);
+        mHandler.sendEmptyMessage(GET_TASK_SHARE_CODE);
+        shareCount++;
+        if (shareCount < 6)
+        {
+            DialogUtils.showShareDialog(LiveActivity.this, shareCount, new
+                    MyItemClickListener()
+
+                    {
+                        @Override
+                        public void onItemClick(View view, int position)
+                        {
+                            if (shareCount < 5)
+                            {
+                                checkPermission(shareCnontent);
+
+                            }
+                            else
+                            {
+                                mHandler.sendEmptyMessage(GET_STREAM_REQUEST);
+                            }
+                        }
+                    });
+        }
+
+
+    }
+
+
+    private int REQUEST_WRITE_EXTERNAL_STORAGE = 0x01;
+    private static final int SHARE_PHOTO_REQUEST_CODE = 0x91;
+    private void checkPermission(String filePath)
+    { //检查权限（NEED_PERMISSION）是否被授权 PackageManager.PERMISSION_GRANTED表示同意授权
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED)
+        { //用户已经拒绝过一次，再次弹出权限申请对话框需要给用户一个解释
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission
+                    .WRITE_EXTERNAL_STORAGE))
+            {
+                Toast.makeText(this, "请开通相关权限，否则无法正常使用本应用！", Toast.LENGTH_SHORT).show();
+            }
+            // 申请权限
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission
+                    .WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
+        }
+        else
+        {
+            //Toast.makeText(this, "授权成功！", Toast.LENGTH_SHORT).show();
+            if (!TextUtils.isEmpty(filePath))
+            {
+
+
+                String fileName = filePath.substring(filePath.lastIndexOf("/"));
+                String savefilePath = Environment.getExternalStorageDirectory().getPath() +
+                        "/yl/" + fileName;
+                if (new File(savefilePath).exists())
+                {
+
+
+                        Intent imageIntent = new Intent(Intent.ACTION_SEND);
+                        imageIntent.setType("image/*");
+                        imageIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File
+                                (savefilePath)));
+                        startActivityForResult(Intent.createChooser(imageIntent, "分享"),
+                                SHARE_PHOTO_REQUEST_CODE);
+
+                }
+                else
+                {
+                    new ImgDownloadUtils(LiveActivity.this, filePath, new
+                            FileDownloadListener()
+
+
+                            {
+                                @Override
+                                public void onSuccess(String filePath)
+                                {
+                                    Intent imageIntent = new Intent(Intent.ACTION_SEND);
+                                    imageIntent.setType("image/*");
+                                    imageIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File
+                                            (filePath)));
+                                    //startActivity(Intent.createChooser(imageIntent, "分享"));
+                                    startActivityForResult(Intent.createChooser(imageIntent, "分享"),
+                                            SHARE_PHOTO_REQUEST_CODE);
+                                }
+
+                                @Override
+                                public void onFail()
+                                {
+
+                                }
+                            }).donwloadImg();
+                }
+
+
+            }
+        }
     }
 }

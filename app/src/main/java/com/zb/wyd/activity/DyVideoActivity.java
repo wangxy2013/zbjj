@@ -272,17 +272,13 @@ public class DyVideoActivity extends BaseActivity implements IRequestListener, P
 
                 case GET_SHARE_SUCCESS:
                     ShareInfoHandler mShareInfoHandler = (ShareInfoHandler) msg.obj;
-                    ShareInfo shareInfo = mShareInfoHandler.getShareInfo();
-                    if (null != shareInfo)
-                    {
-                        shareCnontent = shareInfo.getTitle() + ":" + shareInfo.getUrl();
 
-                        Intent intent1 = new Intent(Intent.ACTION_SEND);
-                        intent1.putExtra(Intent.EXTRA_TEXT, shareCnontent);
-                        intent1.setType("text/plain");
-                        startActivityForResult(Intent.createChooser(intent1, "分享"),
-                                SHARE_PHOTO_REQUEST_CODE);
-                    }
+                    checkPermission(mShareInfoHandler.getSharePicUrl());
+
+
+
+
+
                     break;
 
                 case GET_TASK_SHARE_CODE:

@@ -17,14 +17,23 @@ public class ShareInfoHandler extends JsonHandler
         return shareInfo;
     }
 
+
+    private String sharePicUrl;
+
+    public String getSharePicUrl()
+    {
+        return sharePicUrl;
+    }
+
     @Override
     protected void parseJson(JSONObject jsonObj) throws Exception
     {
         try
         {
 
+            sharePicUrl = jsonObj.optString("data");
 
-            shareInfo = new ShareInfo(jsonObj.optJSONObject("data"));
+            //shareInfo = new ShareInfo(jsonObj.optJSONObject("data"));
 
 
         } catch (Exception e)

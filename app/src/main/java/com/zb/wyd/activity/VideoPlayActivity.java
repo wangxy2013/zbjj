@@ -1,10 +1,15 @@
 package com.zb.wyd.activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Message;
+import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +18,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.VideoAllCallBack;
@@ -32,11 +38,13 @@ import com.zb.wyd.json.ResultHandler;
 import com.zb.wyd.json.ShareInfoHandler;
 import com.zb.wyd.json.SignInfoHandler;
 import com.zb.wyd.json.VideoStreamHandler;
+import com.zb.wyd.listener.FileDownloadListener;
 import com.zb.wyd.listener.MyItemClickListener;
 import com.zb.wyd.listener.MyOnClickListener;
 import com.zb.wyd.utils.APPUtils;
 import com.zb.wyd.utils.ConstantUtil;
 import com.zb.wyd.utils.DialogUtils;
+import com.zb.wyd.utils.ImgDownloadUtils;
 import com.zb.wyd.utils.LogUtil;
 import com.zb.wyd.utils.SystemUtil;
 import com.zb.wyd.utils.ToastUtil;
@@ -44,6 +52,7 @@ import com.zb.wyd.utils.Urls;
 import com.zb.wyd.widget.ChannelPopupWindow;
 import com.zb.wyd.widget.MyVideoPlayer;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -75,6 +84,9 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
 
     private ChannelPopupWindow mChannelPopupWindow;
 
+
+    private boolean isClickShare;
+
     private static final String MSG_REPORT = "msg_report";
     private static final String GET_SHARE = "GET_SHARE";
     private static final String FAVORITE_LIKE = "favorite_like";
@@ -98,6 +110,11 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
     private static final int SHARE_PHOTO_REQUEST_CODE = 0x91;
     private static final int MSG_REPORT_SUCCESS = 0x21;
     private static final int REQUEST_FAIL_1502 = 0X1502;
+
+    private static final String GET_SHARE_1502 = "GET_SHARE_1502";
+    private static final int GET_SHARE_CODE_1502 = 0x31;
+    private static final int GET_SHARE_SUCCESS_1502 = 0x32;
+
     @SuppressLint("HandlerLeak")
     private BaseHandler mHandler = new BaseHandler(VideoPlayActivity.this)
     {
@@ -126,15 +143,18 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
                             mCollectionIv.setSelected(false);
                         }
 
-                        //                        videoPlayer.setIS_SCREEN_ORIENTATION_LANDSCAPE(mVideoStreamHandler.getStand());
+                        //                        videoPlayer.setIS_SCREEN_ORIENTATION_LANDSCAPE
+                        // (mVideoStreamHandler.getStand());
                         //                      if(mVideoStreamHandler.getStand())
                         //                      {
                         //                          mSeekLayout.setVisibility(View.INVISIBLE);
-                        //                          orientationUtils.setScreenType( ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                        //                          orientationUtils.setScreenType( ActivityInfo
+                        // .SCREEN_ORIENTATION_LANDSCAPE);
                         //                      }
                         //                      else
                         //                      {
-                        //                          orientationUtils.setScreenType( ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                        //                          orientationUtils.setScreenType( ActivityInfo
+                        // .SCREEN_ORIENTATION_PORTRAIT);
                         //                          orientationUtils .resolveByClick();
                         //                      }
 
@@ -156,7 +176,8 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
                     {
 
 
-                        DialogUtils.showVideoPriceDialog(VideoPlayActivity.this, mLivePriceInfo, new View.OnClickListener()
+                        DialogUtils.showVideoPriceDialog(VideoPlayActivity.this, mLivePriceInfo,
+                                new View.OnClickListener()
                         {
                             @Override
                             public void onClick(View v)
@@ -179,16 +200,20 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
                                 //购买VIP
                                 else if ("3".equals(content))
                                 {
-                                    startActivity(new Intent(VideoPlayActivity.this, MemberActivity.class));
+                                    startActivity(new Intent(VideoPlayActivity.this,
+                                            MemberActivity.class));
                                 }
                                 else//去做任务
                                 {
 
-                                    startActivity(new Intent(VideoPlayActivity.this, WebViewActivity.class).putExtra(WebViewActivity.EXTRA_TITLE,
-                                            "邀请好友").putExtra(WebViewActivity.IS_SETTITLE, true).putExtra(WebViewActivity.EXTRA_URL, Urls
-                                            .getPageInviteUrl()));
+                                    startActivity(new Intent(VideoPlayActivity.this,
+                                            WebViewActivity.class).putExtra(WebViewActivity
+                                            .EXTRA_TITLE, "邀请好友").putExtra(WebViewActivity
+                                            .IS_SETTITLE, true).putExtra(WebViewActivity
+                                            .EXTRA_URL, Urls.getPageInviteUrl()));
                                     //sendBroadcast(new Intent(MainActivity.TAB_TASK));
-                                    //                                    startActivity(new Intent(VideoPlayActivity.this, TaskActivity
+                                    //                                    startActivity(new
+                                    // Intent(VideoPlayActivity.this, TaskActivity
                                     //                                            .class));
                                     finish();
                                 }
@@ -224,18 +249,14 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
                     getShareUrl();
                     break;
 
+                case GET_SHARE_CODE_1502:
+                    getShareUrl1502();
+                    break;
+
                 case GET_SHARE_SUCCESS:
                     ShareInfoHandler mShareInfoHandler = (ShareInfoHandler) msg.obj;
-                    ShareInfo shareInfo = mShareInfoHandler.getShareInfo();
-                    if (null != shareInfo)
-                    {
-                        shareCnontent = shareInfo.getTitle() + ":" + shareInfo.getUrl();
+                    checkPermission(mShareInfoHandler.getSharePicUrl());
 
-                        Intent intent1 = new Intent(Intent.ACTION_SEND);
-                        intent1.putExtra(Intent.EXTRA_TEXT, shareCnontent);
-                        intent1.setType("text/plain");
-                        startActivityForResult(Intent.createChooser(intent1, "分享"), SHARE_PHOTO_REQUEST_CODE);
-                    }
                     break;
 
                 case GET_TASK_SHARE_CODE:
@@ -246,21 +267,44 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
                     SignInfoHandler mSignInfoHandler = (SignInfoHandler) msg.obj;
                     SignInfo signInfo = mSignInfoHandler.getSignInfo();
 
-                    if (null != signInfo)
-                    {
-                        String title = "分享成功";
-                        String desc = signInfo.getVal() + "积分";
-                        String task = "连续分享" + signInfo.getSeries() + "天";
-                        DialogUtils.showTaskDialog(VideoPlayActivity.this, title, desc, task);
-                    }
+                    //                    if (null != signInfo)
+                    //                    {
+                    //                        String title = "分享成功";
+                    //                        String desc = signInfo.getVal() + "积分";
+                    //                        String task = "连续分享" + signInfo.getSeries() + "天";
+                    //                        DialogUtils.showTaskDialog(VideoPlayActivity.this,
+                    // title, desc, task);
+                    //                    }
                     break;
 
                 case MSG_REPORT_SUCCESS:
                     ToastUtil.show(VideoPlayActivity.this, "信息上报成功");
                     break;
 
+                case GET_SHARE_SUCCESS_1502:
+                    ShareInfoHandler mShareInfoHandler1 = (ShareInfoHandler) msg.obj;
+                    shareCnontent = mShareInfoHandler1.getSharePicUrl();
+
+
+                    DialogUtils.showShareDialog(VideoPlayActivity.this, shareCount, new
+                            MyItemClickListener()
+
+                    {
+                        @Override
+                        public void onItemClick(View view, int position)
+                        {
+                            isClickShare = false;
+                            checkPermission(shareCnontent);
+
+
+                        }
+                    });
+
+                    break;
+
+
                 case REQUEST_FAIL_1502:
-                    DialogUtils.show1520Dialog(VideoPlayActivity.this,  new View.OnClickListener()
+                    DialogUtils.show1520Dialog(VideoPlayActivity.this, new View.OnClickListener()
 
 
                     {
@@ -275,10 +319,7 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
                         @Override
                         public void onClick(View view)
                         {
-                            startActivity(new Intent(VideoPlayActivity.this, WebViewActivity.class).putExtra(WebViewActivity.EXTRA_TITLE,
-                                    "推广获取VIP").putExtra(WebViewActivity.IS_SETTITLE, true).putExtra(WebViewActivity.EXTRA_URL, Urls
-                                    .getPageInviteUrl()));
-                            finish();
+                            mHandler.sendEmptyMessage(GET_SHARE_CODE_1502);
 
                         }
                     }, new View.OnClickListener()
@@ -310,7 +351,8 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
     protected void initViews(Bundle savedInstanceState)
     {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager
+                .LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_video_play);
     }
 
@@ -328,11 +370,13 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         mSettingIv = (ImageView) videoPlayer.findViewById(R.id.iv_setting);
         mReportIv = (ImageView) videoPlayer.findViewById(R.id.iv_report);
         mSeekLayout = (LinearLayout) videoPlayer.findViewById(R.id.sp_layout);
-
         mCollectionIv.setOnClickListener(this);
         mShareIv.setOnClickListener(this);
         mSettingIv.setOnClickListener(this);
         mReportIv.setOnClickListener(this);
+        mHandler.sendEmptyMessage(GET_STREAM_REQUEST);
+
+
 
         //  videoPlayer.setUp(source1, true, "测试视频");
         //增加封面
@@ -517,7 +561,8 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
                 showChannelPop();
 
                 videoPlayer.showSettingWidget();
-                //                DialogUtils.showChannelDialog(VideoPlayActivity.this, new MyItemClickListener()
+                //                DialogUtils.showChannelDialog(VideoPlayActivity.this, new
+                // MyItemClickListener()
                 //                {
                 //                    @Override
                 //                    public void onItemClick(View view, int position)
@@ -575,8 +620,8 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         showProgressDialog();
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
-        DataRequest.instance().request(VideoPlayActivity.this, Urls.getVideoStreamUrl(), this, HttpRequest.GET, GET_VIDEO_STREAM, valuePairs, new
-                VideoStreamHandler());
+        DataRequest.instance().request(VideoPlayActivity.this, Urls.getVideoStreamUrl(), this,
+                HttpRequest.GET, GET_VIDEO_STREAM, valuePairs, new VideoStreamHandler());
     }
 
 
@@ -585,8 +630,8 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "video");
-        DataRequest.instance().request(VideoPlayActivity.this, Urls.getVideoPriceUrl(), this, HttpRequest.POST, GET_VIDEO_PRICE, valuePairs, new
-                LivePriceInfoHandler());
+        DataRequest.instance().request(VideoPlayActivity.this, Urls.getVideoPriceUrl(), this,
+                HttpRequest.POST, GET_VIDEO_PRICE, valuePairs, new LivePriceInfoHandler());
 
     }
 
@@ -597,8 +642,8 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "video");
         valuePairs.put("duration", String.valueOf(duration));
-        DataRequest.instance().request(VideoPlayActivity.this, Urls.getStatisticsUrl(), this, HttpRequest.POST, "SET_STATISTICS", valuePairs, new
-                ResultHandler());
+        DataRequest.instance().request(VideoPlayActivity.this, Urls.getStatisticsUrl(), this,
+                HttpRequest.POST, "SET_STATISTICS", valuePairs, new ResultHandler());
     }
 
     private void playVideo(String uri)
@@ -620,8 +665,8 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "video");
         valuePairs.put("finger", finger);
-        DataRequest.instance().request(VideoPlayActivity.this, Urls.getBuyLiveUrl(), this, HttpRequest.POST, BUY_VIDEO, valuePairs, new
-                ResultHandler());
+        DataRequest.instance().request(VideoPlayActivity.this, Urls.getBuyLiveUrl(), this,
+                HttpRequest.POST, BUY_VIDEO, valuePairs, new ResultHandler());
     }
 
     private void getTaskShareUrl()
@@ -629,8 +674,8 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "video");
-        DataRequest.instance().request(VideoPlayActivity.this, Urls.getTaskShareUrl(), this, HttpRequest.GET, GET_TASK_SHARE, valuePairs, new
-                SignInfoHandler());
+        DataRequest.instance().request(VideoPlayActivity.this, Urls.getTaskShareUrl(), this,
+                HttpRequest.GET, GET_TASK_SHARE, valuePairs, new SignInfoHandler());
     }
 
     private void getShareUrl()
@@ -638,15 +683,25 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "video");
-        DataRequest.instance().request(VideoPlayActivity.this, Urls.getShareUrl(), this, HttpRequest.GET, GET_SHARE, valuePairs, new
-                ShareInfoHandler());
+        DataRequest.instance().request(VideoPlayActivity.this, Urls.getShareUrl(), this,
+                HttpRequest.GET, GET_SHARE, valuePairs, new ShareInfoHandler());
+    }
+
+    private void getShareUrl1502()
+    {
+        Map<String, String> valuePairs = new HashMap<>();
+        valuePairs.put("biz_id", biz_id);
+        valuePairs.put("co_biz", "video");
+        DataRequest.instance().request(VideoPlayActivity.this, Urls.getShareUrl(), this,
+                HttpRequest.GET, GET_SHARE_1502, valuePairs, new ShareInfoHandler());
     }
 
     private void showChannelPop()
     {
         if (null == mChannelPopupWindow)
         {
-            mChannelPopupWindow = new ChannelPopupWindow(VideoPlayActivity.this, new MyItemClickListener()
+            mChannelPopupWindow = new ChannelPopupWindow(VideoPlayActivity.this, new
+                    MyItemClickListener()
             {
                 @Override
                 public void onItemClick(View view, int position)
@@ -689,6 +744,7 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         else if (v == mShareIv)
         {
             showProgressDialog();
+            isClickShare = true;
             mHandler.sendEmptyMessage(GET_SHARE_CODE);
 
         }
@@ -728,14 +784,15 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
     private void reportMsg(String msg)
     {
         showProgressDialog();
-        String content = "{\"model\":\"" + SystemUtil.getSystemModel() + "\",\"error\":\"" + msg + "\",\"sys\":\"" + SystemUtil.getSystemVersion()
-                + "\",\"video_id\":\"" + biz_id + "\"}";
+        String content = "{\"model\":\"" + SystemUtil.getSystemModel() + "\",\"error\":\"" + msg
+                + "\",\"sys\":\"" + SystemUtil.getSystemVersion() + "\",\"video_id\":\"" + biz_id
+                + "\"}";
         LogUtil.e("TAG", "error-->" + content);
 
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("content", content);
-        DataRequest.instance().request(VideoPlayActivity.this, Urls.getMsgReportUrl(), this, HttpRequest.POST, MSG_REPORT, valuePairs, new
-                ResultHandler());
+        DataRequest.instance().request(VideoPlayActivity.this, Urls.getMsgReportUrl(), this,
+                HttpRequest.POST, MSG_REPORT, valuePairs, new ResultHandler());
 
     }
 
@@ -746,8 +803,8 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "video");
-        DataRequest.instance().request(VideoPlayActivity.this, Urls.getCollectionRequestUrl(), this, HttpRequest.POST, FAVORITE_LIKE, valuePairs,
-                new ResultHandler());
+        DataRequest.instance().request(VideoPlayActivity.this, Urls.getCollectionRequestUrl(),
+                this, HttpRequest.POST, FAVORITE_LIKE, valuePairs, new ResultHandler());
     }
 
     private void unFavoriteLike()
@@ -756,8 +813,8 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
         Map<String, String> valuePairs = new HashMap<>();
         valuePairs.put("biz_id", biz_id);
         valuePairs.put("co_biz", "video");
-        DataRequest.instance().request(VideoPlayActivity.this, Urls.getFavoriteUnLikeUrl(), this, HttpRequest.POST, UN_FAVORITE_LIKE, valuePairs,
-                new ResultHandler());
+        DataRequest.instance().request(VideoPlayActivity.this, Urls.getFavoriteUnLikeUrl(), this,
+                HttpRequest.POST, UN_FAVORITE_LIKE, valuePairs, new ResultHandler());
     }
 
     @Override
@@ -771,7 +828,7 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
     protected void onResume()
     {
         super.onResume();
-        mHandler.sendEmptyMessage(GET_STREAM_REQUEST);
+        //mHandler.sendEmptyMessage(GET_STREAM_REQUEST);
         // videoPlayer.onVideoResume();
 
     }
@@ -814,7 +871,7 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
                 mHandler.sendMessage(mHandler.obtainMessage(REQUEST_SUCCESS, obj));
             }
 
-            else if ("1502".equals(resultCode)||"1101".equals(resultCode))
+            else if ("1502".equals(resultCode) || "1101".equals(resultCode))
             {
                 mHandler.sendEmptyMessage(REQUEST_FAIL_1502);
             }
@@ -890,7 +947,7 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
             }
             else
             {
-                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
+                //mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
             }
         }
         else if (MSG_REPORT.equals(action))
@@ -904,14 +961,134 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
                 mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
             }
         }
+
+
+        else if (GET_SHARE_1502.equals(action))
+        {
+            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(GET_SHARE_SUCCESS_1502, obj));
+            }
+            else
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
+            }
+        }
+
     }
+
+    private int shareCount = 0;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d("DemoActivity", "requestCode=" + requestCode + " resultCode=" + resultCode);
-        if ((int) (Math.random() * 100) <= 80) mHandler.sendEmptyMessage(GET_TASK_SHARE_CODE);
+        mHandler.sendEmptyMessage(GET_TASK_SHARE_CODE);
+        shareCount++;
+        if (shareCount < 6)
+        {
+            DialogUtils.showShareDialog(VideoPlayActivity.this, shareCount, new
+                    MyItemClickListener()
+
+            {
+                @Override
+                public void onItemClick(View view, int position)
+                {
+                    if (shareCount < 5)
+                    {
+                        checkPermission(shareCnontent);
+
+                    }
+                    else
+                    {
+                        mHandler.sendEmptyMessage(GET_STREAM_REQUEST);
+                    }
+                }
+            });
+        }
+
 
     }
+
+
+    private int REQUEST_WRITE_EXTERNAL_STORAGE = 0x01;
+
+    private void checkPermission(String filePath)
+    { //检查权限（NEED_PERMISSION）是否被授权 PackageManager.PERMISSION_GRANTED表示同意授权
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED)
+        { //用户已经拒绝过一次，再次弹出权限申请对话框需要给用户一个解释
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission
+                    .WRITE_EXTERNAL_STORAGE))
+            {
+                Toast.makeText(this, "请开通相关权限，否则无法正常使用本应用！", Toast.LENGTH_SHORT).show();
+            }
+            // 申请权限
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission
+                    .WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
+        }
+        else
+        {
+            //Toast.makeText(this, "授权成功！", Toast.LENGTH_SHORT).show();
+            if (!TextUtils.isEmpty(filePath))
+            {
+
+
+                String fileName = filePath.substring(filePath.lastIndexOf("/"));
+                String savefilePath = Environment.getExternalStorageDirectory().getPath() +
+                        "/yl/" + fileName;
+                if (new File(savefilePath).exists())
+                {
+
+                    if (isClickShare)
+                    {
+                        Intent imageIntent = new Intent(Intent.ACTION_SEND);
+                        imageIntent.setType("image/*");
+                        imageIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File
+                                (savefilePath)));
+                        startActivity(Intent.createChooser(imageIntent, "分享"));
+                    }
+                    else
+                    {
+                        Intent imageIntent = new Intent(Intent.ACTION_SEND);
+                        imageIntent.setType("image/*");
+                        imageIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File
+                                (savefilePath)));
+                        startActivityForResult(Intent.createChooser(imageIntent, "分享"),
+                                SHARE_PHOTO_REQUEST_CODE);
+                    }
+                }
+                else
+                {
+                    new ImgDownloadUtils(VideoPlayActivity.this, filePath, new
+                            FileDownloadListener()
+
+
+                    {
+                        @Override
+                        public void onSuccess(String filePath)
+                        {
+                            Intent imageIntent = new Intent(Intent.ACTION_SEND);
+                            imageIntent.setType("image/*");
+                            imageIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File
+                                    (filePath)));
+                            //startActivity(Intent.createChooser(imageIntent, "分享"));
+                            startActivityForResult(Intent.createChooser(imageIntent, "分享"),
+                                    SHARE_PHOTO_REQUEST_CODE);
+                        }
+
+                        @Override
+                        public void onFail()
+                        {
+
+                        }
+                    }).donwloadImg();
+                }
+
+
+            }
+        }
+    }
+
 }

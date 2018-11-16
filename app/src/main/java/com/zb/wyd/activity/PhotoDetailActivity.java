@@ -1,21 +1,26 @@
 package com.zb.wyd.activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Message;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zb.wyd.R;
@@ -24,7 +29,6 @@ import com.zb.wyd.adapter.PhotoAdapter;
 import com.zb.wyd.entity.CommentInfo;
 import com.zb.wyd.entity.PhotoInfo;
 import com.zb.wyd.entity.PriceInfo;
-import com.zb.wyd.entity.ShareInfo;
 import com.zb.wyd.entity.SignInfo;
 import com.zb.wyd.entity.UserInfo;
 import com.zb.wyd.http.DataRequest;
@@ -35,10 +39,11 @@ import com.zb.wyd.json.PhotoInfoHandler;
 import com.zb.wyd.json.ResultHandler;
 import com.zb.wyd.json.ShareInfoHandler;
 import com.zb.wyd.json.SignInfoHandler;
+import com.zb.wyd.listener.FileDownloadListener;
 import com.zb.wyd.listener.MyItemClickListener;
-import com.zb.wyd.listener.MyOnClickListener;
 import com.zb.wyd.utils.ConstantUtil;
 import com.zb.wyd.utils.DialogUtils;
+import com.zb.wyd.utils.ImgDownloadUtils;
 import com.zb.wyd.utils.StringUtils;
 import com.zb.wyd.utils.ToastUtil;
 import com.zb.wyd.utils.Urls;
@@ -47,13 +52,13 @@ import com.zb.wyd.widget.DividerDecoration;
 import com.zb.wyd.widget.MaxRecyclerView;
 import com.zb.wyd.widget.statusbar.StatusBarUtil;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * 描述：自拍详情
@@ -116,9 +121,11 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
     private int pn = 1;
     private PriceInfo priceInfo;
     private String shareCnontent;
-
     private String contact;
     private String has_favorite = "0";
+    private int shareCount;
+
+    private boolean isClickShare;
     private static final String GET_TASK_SHARE = "GET_TASK_SHARE";
     private static final String GET_SHARE = "GET_SHARE";
     private static final String BUY_PHOTO = "buy_photo";
@@ -143,6 +150,12 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
 
 
     private static final int SHARE_PHOTO_REQUEST_CODE = 0x91;
+
+
+    private static final String GET_SHARE_1502 = "GET_SHARE_1502";
+    private static final int GET_SHARE_CODE_1502 = 0x31;
+    private static final int GET_SHARE_SUCCESS_1502 = 0x32;
+
     @SuppressLint("HandlerLeak")
     private BaseHandler mHandler = new BaseHandler(PhotoDetailActivity.this)
     {
@@ -212,7 +225,6 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
                         tvCollectionNum.setText(photoInfo.getFavour_count());
                         chargePic.clear();
                         chargePic.addAll(photoInfo.getChargePic());
-
 
                         if (null != priceInfo)
                         {
@@ -316,17 +328,9 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
 
                 case GET_SHARE_SUCCESS:
                     ShareInfoHandler mShareInfoHandler = (ShareInfoHandler) msg.obj;
-                    ShareInfo shareInfo = mShareInfoHandler.getShareInfo();
-                    if (null != shareInfo)
-                    {
-                        shareCnontent = shareInfo.getTitle() + ":" + shareInfo.getUrl();
-                        Intent intent1 = new Intent(Intent.ACTION_SEND);
-                        intent1.putExtra(Intent.EXTRA_TEXT, shareCnontent);
-                        intent1.setType("text/plain");
-                        startActivityForResult(Intent.createChooser(intent1, "分享"),
-                                SHARE_PHOTO_REQUEST_CODE);
+                    shareCnontent = mShareInfoHandler.getSharePicUrl();
+                    checkPermission(shareCnontent);
 
-                    }
                     break;
 
                 case GET_TASK_SHARE_CODE:
@@ -334,17 +338,47 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
                     break;
 
                 case GET_TASK_SHARE_SUCCESS:
-                    SignInfoHandler mSignInfoHandler = (SignInfoHandler) msg.obj;
-                    SignInfo signInfo = mSignInfoHandler.getSignInfo();
+                    //                    SignInfoHandler mSignInfoHandler = (SignInfoHandler)
+                    // msg.obj;
+                    //                    SignInfo signInfo = mSignInfoHandler.getSignInfo();
+                    //
+                    //                    if (null != signInfo)
+                    //                    {
+                    //                        String title = "分享成功";
+                    //                        String desc = signInfo.getVal() + "积分";
+                    //                        String task = "连续分享" + signInfo.getSeries() + "天";
+                    //                        DialogUtils.showTaskDialog(PhotoDetailActivity
+                    // .this, title, desc, task);
+                    //                    }
 
-                    if (null != signInfo)
-                    {
-                        String title = "分享成功";
-                        String desc = signInfo.getVal() + "积分";
-                        String task = "连续分享" + signInfo.getSeries() + "天";
-                        DialogUtils.showTaskDialog(PhotoDetailActivity.this, title, desc, task);
-                    }
+
                     break;
+
+                case GET_SHARE_CODE_1502:
+                    getShareUrl1502();
+                    break;
+
+                case GET_SHARE_SUCCESS_1502:
+                    ShareInfoHandler mShareInfoHandler1 = (ShareInfoHandler) msg.obj;
+                    shareCnontent = mShareInfoHandler1.getSharePicUrl();
+
+
+                    DialogUtils.showShareDialog(PhotoDetailActivity.this, shareCount, new
+                            MyItemClickListener()
+
+                    {
+                        @Override
+                        public void onItemClick(View view, int position)
+                        {
+                            isClickShare = false;
+                            checkPermission(shareCnontent);
+
+
+                        }
+                    });
+
+                    break;
+
             }
         }
     };
@@ -408,86 +442,90 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
         mHandler.sendEmptyMessage(GET_COMMENT_LIST_CODE);
     }
 
+    private void getShareUrl1502()
+    {
+        Map<String, String> valuePairs = new HashMap<>();
+        valuePairs.put("biz_id", biz_id);
+        valuePairs.put("co_biz", "photo");
+        DataRequest.instance().request(PhotoDetailActivity.this, Urls.getShareUrl(), this,
+                HttpRequest.GET, GET_SHARE_1502, valuePairs, new ShareInfoHandler());
+    }
+
     private void showBuyDialog()
     {
-        if (null != priceInfo)
+
+
+        DialogUtils.show1520Dialog(PhotoDetailActivity.this, new View.OnClickListener()
         {
-
-            DialogUtils.show1520Dialog(PhotoDetailActivity.this,  new View.OnClickListener()
+            @Override
+            public void onClick(View view)
             {
-                @Override
-                public void onClick(View view)
-                {
-                    startActivity(new Intent(PhotoDetailActivity.this, MemberActivity.class));
-                    finish();
-                }
-            }, new View.OnClickListener()
+                startActivity(new Intent(PhotoDetailActivity.this, MemberActivity.class));
+                finish();
+            }
+        }, new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
             {
-                @Override
-                public void onClick(View view)
-                {
-                    startActivity(new Intent(PhotoDetailActivity.this, WebViewActivity.class)
-                            .putExtra(WebViewActivity.EXTRA_TITLE, "推广获取VIP").putExtra
-                                    (WebViewActivity.IS_SETTITLE, true).putExtra(WebViewActivity
-                                    .EXTRA_URL, Urls.getPageInviteUrl()));
-                    finish();
+                mHandler.sendEmptyMessage(GET_SHARE_CODE_1502);
 
-                }
-            }, new View.OnClickListener()
+            }
+        }, new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
             {
-                @Override
-                public void onClick(View view)
-                {
-                }
-            });
+            }
+        });
 
-            //            DialogUtils.showLivePriceDialog(PhotoDetailActivity.this, priceInfo,
-            // new View.OnClickListener()
-            //            {
-            //                @Override
-            //                public void onClick(View v)
-            //                {
-            //
-            //                }
-            //            }, new MyOnClickListener.OnSubmitListener()
-            //            {
-            //                @Override
-            //                public void onSubmit(String content)
-            //                {
-            //
-            //                    if ("1".equals(content))//兑换
-            //                    {
-            //
-            //                        buyPhoto(priceInfo.getFinger());
-            //
-            //
-            //                    }
-            //                    //购买VIP
-            //                    else if ("3".equals(content))
-            //                    {
-            //                        startActivity(new Intent(PhotoDetailActivity.this,
-            // MemberActivity
-            //                                .class));
-            //                    }
-            //                    else//去做任务
-            //                    {
-            //
-            //                        startActivity(new Intent(PhotoDetailActivity.this,
-            // WebViewActivity.class)
-            //                                .putExtra(WebViewActivity.EXTRA_TITLE, "邀请好友")
-            //                                .putExtra(WebViewActivity.IS_SETTITLE, true)
-            //                                .putExtra(WebViewActivity.EXTRA_URL,Urls
-            // .getPageInviteUrl()));
-            //                        //sendBroadcast(new Intent(MainActivity.TAB_TASK));
-            ////                        startActivity(new Intent(PhotoDetailActivity.this,
-            /// TaskActivity
-            ////                                .class));
-            //                        finish();
-            //                    }
-            //
-            //                }
-            //            }).show();
-        }
+        //            DialogUtils.showLivePriceDialog(PhotoDetailActivity.this, priceInfo,
+        // new View.OnClickListener()
+        //            {
+        //                @Override
+        //                public void onClick(View v)
+        //                {
+        //
+        //                }
+        //            }, new MyOnClickListener.OnSubmitListener()
+        //            {
+        //                @Override
+        //                public void onSubmit(String content)
+        //                {
+        //
+        //                    if ("1".equals(content))//兑换
+        //                    {
+        //
+        //                        buyPhoto(priceInfo.getFinger());
+        //
+        //
+        //                    }
+        //                    //购买VIP
+        //                    else if ("3".equals(content))
+        //                    {
+        //                        startActivity(new Intent(PhotoDetailActivity.this,
+        // MemberActivity
+        //                                .class));
+        //                    }
+        //                    else//去做任务
+        //                    {
+        //
+        //                        startActivity(new Intent(PhotoDetailActivity.this,
+        // WebViewActivity.class)
+        //                                .putExtra(WebViewActivity.EXTRA_TITLE, "邀请好友")
+        //                                .putExtra(WebViewActivity.IS_SETTITLE, true)
+        //                                .putExtra(WebViewActivity.EXTRA_URL,Urls
+        // .getPageInviteUrl()));
+        //                        //sendBroadcast(new Intent(MainActivity.TAB_TASK));
+        ////                        startActivity(new Intent(PhotoDetailActivity.this,
+        /// TaskActivity
+        ////                                .class));
+        //                        finish();
+        //                    }
+        //
+        //                }
+        //            }).show();
+
     }
 
     @Override
@@ -527,6 +565,7 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
         else if (v == ivShare)
         {
             showProgressDialog();
+            isClickShare = true;
             mHandler.sendEmptyMessage(GET_SHARE_CODE);
         }
         else if (v == tvMore)
@@ -715,7 +754,7 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
             }
             else
             {
-                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
+                //mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
             }
         }
         else if (UN_FAVORITE_LIKE.equals(action))
@@ -730,6 +769,17 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
                 mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
             }
         }
+        else if (GET_SHARE_1502.equals(action))
+        {
+            if (ConstantUtil.RESULT_SUCCESS.equals(resultCode))
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(GET_SHARE_SUCCESS_1502, obj));
+            }
+            else
+            {
+                mHandler.sendMessage(mHandler.obtainMessage(REQUEST_FAIL, resultMsg));
+            }
+        }
     }
 
 
@@ -738,9 +788,109 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
     {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d("DemoActivity", "requestCode=" + requestCode + " resultCode=" + resultCode);
-        if ((int) (Math.random() * 100) <= 80) mHandler.sendEmptyMessage(GET_TASK_SHARE_CODE);
+        mHandler.sendEmptyMessage(GET_TASK_SHARE_CODE);
+        shareCount++;
+        if (shareCount < 6)
+        {
+            DialogUtils.showShareDialog(PhotoDetailActivity.this, shareCount, new
+                    MyItemClickListener()
+
+            {
+                @Override
+                public void onItemClick(View view, int position)
+                {
+                    if (shareCount < 5)
+                    {
+                        checkPermission(shareCnontent);
+
+                    }
+                    else
+                    {
+                        loadData();
+                    }
+                }
+            });
+        }
 
     }
 
+    private int REQUEST_WRITE_EXTERNAL_STORAGE = 0x01;
+
+    private void checkPermission(String filePath)
+    { //检查权限（NEED_PERMISSION）是否被授权 PackageManager.PERMISSION_GRANTED表示同意授权
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED)
+        { //用户已经拒绝过一次，再次弹出权限申请对话框需要给用户一个解释
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission
+                    .WRITE_EXTERNAL_STORAGE))
+            {
+                Toast.makeText(this, "请开通相关权限，否则无法正常使用本应用！", Toast.LENGTH_SHORT).show();
+            }
+            // 申请权限
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission
+                    .WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
+        }
+        else
+        {
+            //Toast.makeText(this, "授权成功！", Toast.LENGTH_SHORT).show();
+            if (!TextUtils.isEmpty(filePath))
+            {
+
+
+                String fileName = filePath.substring(filePath.lastIndexOf("/"));
+                String savefilePath = Environment.getExternalStorageDirectory().getPath() +
+                        "/yl/" + fileName;
+                if (new File(savefilePath).exists())
+                {
+                    if (isClickShare)
+                    {
+                        Intent imageIntent = new Intent(Intent.ACTION_SEND);
+                        imageIntent.setType("image/*");
+                        imageIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File
+                                (savefilePath)));
+                        startActivity(Intent.createChooser(imageIntent, "分享"));
+                    }
+                    else
+                    {
+                        Intent imageIntent = new Intent(Intent.ACTION_SEND);
+                        imageIntent.setType("image/*");
+                        imageIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File
+                                (savefilePath)));
+                        startActivityForResult(Intent.createChooser(imageIntent, "分享"),
+                                SHARE_PHOTO_REQUEST_CODE);
+                    }
+
+                }
+                else
+                {
+                    new ImgDownloadUtils(PhotoDetailActivity.this, filePath, new
+                            FileDownloadListener()
+
+
+                    {
+                        @Override
+                        public void onSuccess(String filePath)
+                        {
+                            Intent imageIntent = new Intent(Intent.ACTION_SEND);
+                            imageIntent.setType("image/*");
+                            imageIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File
+                                    (filePath)));
+                            //startActivity(Intent.createChooser(imageIntent, "分享"));
+                            startActivityForResult(Intent.createChooser(imageIntent, "分享"),
+                                    SHARE_PHOTO_REQUEST_CODE);
+                        }
+
+                        @Override
+                        public void onFail()
+                        {
+
+                        }
+                    }).donwloadImg();
+                }
+
+
+            }
+        }
+    }
 
 }

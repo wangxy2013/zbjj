@@ -926,8 +926,8 @@ public class DialogUtils
         Window mWindow = dialog.getWindow();
         WindowManager.LayoutParams lp = mWindow.getAttributes();
         lp.gravity = Gravity.CENTER;
-        lp.width = 600;
-        lp.height = 780;
+        lp.width = 800;
+        lp.height = 1052;
         mWindow.setAttributes(lp);
         dialog.show();
     }

@@ -329,8 +329,29 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
                 case GET_SHARE_SUCCESS:
                     ShareInfoHandler mShareInfoHandler = (ShareInfoHandler) msg.obj;
                     shareCnontent = mShareInfoHandler.getSharePicUrl();
-                    checkPermission(shareCnontent);
+                   // checkPermission(shareCnontent);
+                    DialogUtils.showShareDialog(PhotoDetailActivity.this, shareCount, new
+                            MyItemClickListener()
 
+                            {
+                                @Override
+                                public void onItemClick(View view, int position)
+                                {
+                                    if (shareCount < 2)
+                                    {
+                                        //checkPermission(shareCnontent);
+                                        Intent intent1 = new Intent(Intent.ACTION_SEND);
+                                        intent1.putExtra(Intent.EXTRA_TEXT, shareCnontent);
+                                        intent1.setType("text/plain");
+                                        startActivityForResult(Intent.createChooser(intent1, "分享"),
+                                                SHARE_PHOTO_REQUEST_CODE);
+                                    }
+                                    else
+                                    {
+                                        loadData();
+                                    }
+                                }
+                            });
                     break;
 
                 case GET_TASK_SHARE_CODE:
@@ -371,9 +392,13 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
                         public void onItemClick(View view, int position)
                         {
                             isClickShare = false;
-                            checkPermission(shareCnontent);
+                           // checkPermission(shareCnontent);
 
-
+                            Intent intent1 = new Intent(Intent.ACTION_SEND);
+                            intent1.putExtra(Intent.EXTRA_TEXT, shareCnontent);
+                            intent1.setType("text/plain");
+                            startActivityForResult(Intent.createChooser(intent1, "分享"),
+                                    SHARE_PHOTO_REQUEST_CODE);
                         }
                     });
 
@@ -790,7 +815,7 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
         Log.d("DemoActivity", "requestCode=" + requestCode + " resultCode=" + resultCode);
         mHandler.sendEmptyMessage(GET_TASK_SHARE_CODE);
         shareCount++;
-        if (shareCount < 6)
+        if (shareCount < 3)
         {
             DialogUtils.showShareDialog(PhotoDetailActivity.this, shareCount, new
                     MyItemClickListener()
@@ -799,10 +824,14 @@ public class PhotoDetailActivity extends BaseActivity implements IRequestListene
                 @Override
                 public void onItemClick(View view, int position)
                 {
-                    if (shareCount < 5)
+                    if (shareCount < 2)
                     {
-                        checkPermission(shareCnontent);
-
+                        //checkPermission(shareCnontent);
+                        Intent intent1 = new Intent(Intent.ACTION_SEND);
+                        intent1.putExtra(Intent.EXTRA_TEXT, shareCnontent);
+                        intent1.setType("text/plain");
+                        startActivityForResult(Intent.createChooser(intent1, "分享"),
+                                SHARE_PHOTO_REQUEST_CODE);
                     }
                     else
                     {

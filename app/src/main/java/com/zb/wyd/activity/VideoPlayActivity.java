@@ -255,8 +255,25 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
 
                 case GET_SHARE_SUCCESS:
                     ShareInfoHandler mShareInfoHandler = (ShareInfoHandler) msg.obj;
-                    checkPermission(mShareInfoHandler.getSharePicUrl());
+                    //checkPermission(mShareInfoHandler.getSharePicUrl());
+                    shareCnontent= mShareInfoHandler.getSharePicUrl();
+                    DialogUtils.showShareDialog(VideoPlayActivity.this, shareCount, new
+                            MyItemClickListener()
 
+                            {
+                                @Override
+                                public void onItemClick(View view, int position)
+                                {
+
+                                        //checkPermission(shareCnontent);
+                                        Intent intent1 = new Intent(Intent.ACTION_SEND);
+                                        intent1.putExtra(Intent.EXTRA_TEXT, shareCnontent);
+                                        intent1.setType("text/plain");
+                                        startActivityForResult(Intent.createChooser(intent1, "分享"),
+                                                SHARE_PHOTO_REQUEST_CODE);
+
+                                }
+                            });
                     break;
 
                 case GET_TASK_SHARE_CODE:
@@ -294,9 +311,13 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
                         public void onItemClick(View view, int position)
                         {
                             isClickShare = false;
-                            checkPermission(shareCnontent);
+                            //checkPermission(shareCnontent);
 
-
+                            Intent intent1 = new Intent(Intent.ACTION_SEND);
+                            intent1.putExtra(Intent.EXTRA_TEXT, shareCnontent);
+                            intent1.setType("text/plain");
+                            startActivityForResult(Intent.createChooser(intent1, "分享"),
+                                    SHARE_PHOTO_REQUEST_CODE);
                         }
                     });
 
@@ -995,10 +1016,14 @@ public class VideoPlayActivity extends BaseActivity implements IRequestListener
                 @Override
                 public void onItemClick(View view, int position)
                 {
-                    if (shareCount < 5)
+                    if (shareCount < 2)
                     {
-                        checkPermission(shareCnontent);
-
+                        //checkPermission(shareCnontent);
+                        Intent intent1 = new Intent(Intent.ACTION_SEND);
+                        intent1.putExtra(Intent.EXTRA_TEXT, shareCnontent);
+                        intent1.setType("text/plain");
+                        startActivityForResult(Intent.createChooser(intent1, "分享"),
+                                SHARE_PHOTO_REQUEST_CODE);
                     }
                     else
                     {

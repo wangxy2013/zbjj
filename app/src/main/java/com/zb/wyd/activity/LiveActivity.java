@@ -484,8 +484,12 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                                 @Override
                                 public void onItemClick(View view, int position)
                                 {
-                                    checkPermission(shareCnontent);
-
+                                    //checkPermission(shareCnontent);
+                                    Intent intent1 = new Intent(Intent.ACTION_SEND);
+                                    intent1.putExtra(Intent.EXTRA_TEXT, shareCnontent);
+                                    intent1.setType("text/plain");
+                                    startActivityForResult(Intent.createChooser(intent1, "分享"),
+                                            SHARE_PHOTO_REQUEST_CODE);
 
                                 }
                             });
@@ -1673,10 +1677,14 @@ public class LiveActivity extends BaseActivity implements IRequestListener
                         @Override
                         public void onItemClick(View view, int position)
                         {
-                            if (shareCount < 5)
+                            if (shareCount < 2)
                             {
-                                checkPermission(shareCnontent);
-
+                                //checkPermission(shareCnontent);
+                                Intent intent1 = new Intent(Intent.ACTION_SEND);
+                                intent1.putExtra(Intent.EXTRA_TEXT, shareCnontent);
+                                intent1.setType("text/plain");
+                                startActivityForResult(Intent.createChooser(intent1, "分享"),
+                                        SHARE_PHOTO_REQUEST_CODE);
                             }
                             else
                             {

@@ -888,9 +888,6 @@ public class DialogUtils
         mImgList.add(R.drawable.pic_share1);
         mImgList.add(R.drawable.pic_share2);
         mImgList.add(R.drawable.pic_share3);
-        mImgList.add(R.drawable.pic_share4);
-        mImgList.add(R.drawable.pic_share5);
-        mImgList.add(R.drawable.pic_share6);
 
 
         ImageView ivShare = (ImageView) v.findViewById(R.id.iv_share_bg);
@@ -899,7 +896,7 @@ public class DialogUtils
 
         ImageView btn_submit = (ImageView) v.findViewById(R.id.btn_submit);
 
-        if (index == 5)
+        if (index == 2)
         {
             btn_submit.setImageResource(R.drawable.btn_back);
         }

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/dm_15">
+
+
+    <TextView
+        android:id="@+id/tv_wxts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:text="温馨提示"
+        android:textColor="@color/redC"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:src="@drawable/ic_red_closed"
+        android:id="@+id/iv_closed"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_wxts"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dm_20"
+        android:gravity="center"
+        android:text="免费福利已兑换，如需继续观看"
+        android:textColor="@color/blackC"
+        android:textSize="14sp" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dm_40"
+        android:layout_below="@+id/tv_title"
+        android:layout_marginTop="@dimen/dm_20"
+        android:orientation="horizontal"
+       >
+
+        <RelativeLayout
+            android:layout_marginRight="@dimen/dm_15"
+            android:id="@+id/rl_friend"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/common_gray1_5dp"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="免费获取VIP"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rl_buy"
+            android:gravity="center"
+            android:layout_marginLeft="@dimen/dm_15"
+            android:background="@drawable/common_redc_5dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/iv_member"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_1502_member"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_toRightOf="@+id/iv_member"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="购买VIP"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+</RelativeLayout>

@@ -22,9 +22,9 @@ public class VersionInfo
     private String crossfire;
     private String upload;
     private String chat;
-
-    private int  freetime;
-    private  UserInfo userInfo;
+    private boolean showbuy;
+    private int freetime;
+    private UserInfo userInfo;
 
     public VersionInfo(JSONObject obj)
     {
@@ -49,8 +49,18 @@ public class VersionInfo
         this.chat = obj.optString("chat");
         forcedup = "1";
         this.freetime = obj.optInt("freetime");
+        this.showbuy = obj.optBoolean("showbuy");
 
+    }
 
+    public boolean isShowbuy()
+    {
+        return showbuy;
+    }
+
+    public void setShowbuy(boolean showbuy)
+    {
+        this.showbuy = showbuy;
     }
 
     public String getUpload()

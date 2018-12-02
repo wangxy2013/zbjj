@@ -826,13 +826,20 @@ public class DialogUtils
             onClickListener, final View.OnClickListener onClickListener1, final View
             .OnClickListener onClickListener2)
     {
-        final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
+        final Dialog dialog = new Dialog(mContext, R.style.shareDialog);
         dialog.setCancelable(true);
         View v = LayoutInflater.from(mContext).inflate(R.layout.dialog_1502, null);
         dialog.setContentView(v);
 
+        ImageView ivFree = (ImageView) v.findViewById(R.id.iv_free);
+        ImageView ivVip = (ImageView) v.findViewById(R.id.iv_vip);
 
-        v.findViewById(R.id.rl_friend).setOnClickListener(new View.OnClickListener()
+
+        if (!ConfigManager.instance().getShow_vip())
+        {
+            ivVip.setVisibility(View.GONE);
+        }
+        ivFree.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -842,7 +849,8 @@ public class DialogUtils
             }
         });
 
-        v.findViewById(R.id.rl_buy).setOnClickListener(new View.OnClickListener()
+
+        ivVip.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -852,21 +860,22 @@ public class DialogUtils
             }
         });
 
-        v.findViewById(R.id.iv_closed).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                dialog.dismiss();
-                onClickListener2.onClick(v);
-            }
-        });
+        //        v.findViewById(R.id.iv_closed).setOnClickListener(new View.OnClickListener()
+        //        {
+        //            @Override
+        //            public void onClick(View v)
+        //            {
+        //                dialog.dismiss();
+        //                onClickListener2.onClick(v);
+        //            }
+        //        });
 
         //Dialog部分
         Window mWindow = dialog.getWindow();
         WindowManager.LayoutParams lp = mWindow.getAttributes();
         lp.gravity = Gravity.CENTER;
-        lp.width = APPUtils.getScreenWidth(mContext) * 7 / 8;
+        lp.width = 800;
+        lp.height = 1052;
         mWindow.setAttributes(lp);
         dialog.show();
     }
@@ -927,6 +936,43 @@ public class DialogUtils
         lp.height = 1052;
         mWindow.setAttributes(lp);
         dialog.show();
+    }
+
+    /**
+     * 提示框
+     *
+     * @return
+     */
+    public static void showFirstLoginDialog(Context mContext, String title, final
+    MyItemClickListener listener)
+    {
+        if (!((Activity) mContext).isFinishing())
+        {
+            final Dialog dialog = new Dialog(mContext, R.style.shareDialog);
+            dialog.setCancelable(true);
+            View v = LayoutInflater.from(mContext).inflate(R.layout.dialog_first_login, null);
+            dialog.setContentView(v);
+            v.findViewById(R.id.iv_get).setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+
+                    dialog.dismiss();
+                    listener.onItemClick(v, 1);
+                }
+            });
+
+            //Dialog部分
+            Window mWindow = dialog.getWindow();
+            WindowManager.LayoutParams lp = mWindow.getAttributes();
+            lp.gravity = Gravity.CENTER;
+            lp.width = 800;
+            lp.height = 1052;
+            mWindow.setAttributes(lp);
+            dialog.setCancelable(false);
+            dialog.show();
+        }
     }
 
 }

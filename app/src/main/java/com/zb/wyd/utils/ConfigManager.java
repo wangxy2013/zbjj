@@ -64,6 +64,8 @@ public class ConfigManager
 
     private static final String VALID_VIP = "valid_vip";
 
+    private static final String SHOW_VIP = "showvip";
+
     /**
      * 返回实例
      *
@@ -404,6 +406,17 @@ public class ConfigManager
     public boolean getValid_vip()
     {
         return mSharedPreferences.getBoolean(VALID_VIP, false);
+    }
+
+
+    public void setShow_vip(boolean str)
+    {
+        mSharedPreferences.edit().putBoolean(SHOW_VIP, str).commit();
+    }
+
+    public boolean getShow_vip()
+    {
+        return mSharedPreferences.getBoolean(SHOW_VIP, false);
     }
 }
 

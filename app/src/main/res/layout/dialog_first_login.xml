@@ -9,27 +9,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/pic_1502_bg" />
+        android:src="@drawable/pic_first_loing" />
+
 
     <ImageView
-        android:id="@+id/iv_vip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/iv_free"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/ic_btn_buy_vip" />
-
-    <ImageView
-        android:id="@+id/iv_free"
+        android:id="@+id/iv_get"
         android:layout_above="@+id/iv_free1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/ic_btn_free_vip" />
+        android:src="@drawable/ic_btn_get" />
     <ImageView
         android:id="@+id/iv_free1"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="100dp"
         android:layout_alignParentBottom="true"
         android:visibility="invisible"
         android:layout_centerHorizontal="true"

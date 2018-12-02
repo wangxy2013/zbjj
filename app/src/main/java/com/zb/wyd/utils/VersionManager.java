@@ -137,6 +137,7 @@ public class VersionManager implements IRequestListener
                         ConfigManager.instance().setIpLookUp(mVersionInfo.getIplookup());
                         ConfigManager.instance().setUploadUrl(mVersionInfo.getUpload());
                         ConfigManager.instance().setChatUrl(mVersionInfo.getChat());
+                        ConfigManager.instance().setShow_vip(mVersionInfo.isShowbuy());
                         if (!StringUtils.stringIsEmpty(mVersionInfo.getText()))
                         {
                             ClipboardManager cm = (ClipboardManager) mContext.getSystemService
@@ -175,7 +176,7 @@ public class VersionManager implements IRequestListener
 
                                 if (ConfigManager.instance().getIsFristLogin())
                                 {
-                                    DialogUtils.showFristLoginDialog(mContext, content1, new
+                                    DialogUtils.showFirstLoginDialog(mContext, content1, new
                                             MyItemClickListener()
 
 

@@ -10,9 +10,11 @@ import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -33,8 +35,7 @@ public class DialogUtils
 {
 
 
-    public static void showVersionUpdateDialog(Context mContext, String content, final
-    MyOnClickListener.OnSubmitListener listener)
+    public static void showVersionUpdateDialog(Context mContext, String content, final MyOnClickListener.OnSubmitListener listener)
     {
         final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
         dialog.setCancelable(false);
@@ -97,8 +98,7 @@ public class DialogUtils
      *
      * @return
      */
-    public static void showPromptDialog(Context mContext, String title, final MyItemClickListener
-            listener)
+    public static void showPromptDialog(Context mContext, String title, final MyItemClickListener listener)
     {
         if (!((Activity) mContext).isFinishing())
         {
@@ -133,8 +133,7 @@ public class DialogUtils
      *
      * @return
      */
-    public static void showNewUserDialog(Context mContext, String title, final
-    MyItemClickListener listener)
+    public static void showNewUserDialog(Context mContext, String title, final MyItemClickListener listener)
     {
         if (!((Activity) mContext).isFinishing())
         {
@@ -190,8 +189,7 @@ public class DialogUtils
      *
      * @return
      */
-    public static void showFristLoginDialog(Context mContext, String title, final
-    MyItemClickListener listener)
+    public static void showFristLoginDialog(Context mContext, String title, final MyItemClickListener listener)
     {
         if (!((Activity) mContext).isFinishing())
         {
@@ -236,8 +234,7 @@ public class DialogUtils
         Dialog loadingDialog = new Dialog(context, R.style.MyDialogStyle);// 创建自定义样式dialog
         loadingDialog.setCancelable(true); // 是否可以按“返回键”消失
         loadingDialog.setCanceledOnTouchOutside(false); // 点击加载框以外的区域
-        loadingDialog.setContentView(layout, new LinearLayout.LayoutParams(LinearLayout
-                .LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        loadingDialog.setContentView(layout, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
         // 设置布局
         /**
          *将显示Dialog的方法封装在这里面
@@ -257,8 +254,7 @@ public class DialogUtils
      *
      * @return
      */
-    public static void showToastDialog2Button(Context mContext, String str, final View
-            .OnClickListener onClickListener)
+    public static void showToastDialog2Button(Context mContext, String str, final View.OnClickListener onClickListener)
     {
         final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
         dialog.setCancelable(false);
@@ -266,8 +262,7 @@ public class DialogUtils
         dialog.setContentView(v);
         TextView mTitle = (TextView) v.findViewById(R.id.tv_title);
         mTitle.setText(str);
-        ((RelativeLayout) v.findViewById(R.id.rl_confirm)).setOnClickListener(new View
-                .OnClickListener()
+        ((RelativeLayout) v.findViewById(R.id.rl_confirm)).setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -299,9 +294,8 @@ public class DialogUtils
      *
      * @return
      */
-    public static Dialog showToastDialog2Button(Context mContext, String str, String buttonStr,
-                                                final View.OnClickListener onClickListener, final
-                                                View.OnClickListener onClickListener1)
+    public static Dialog showToastDialog2Button(Context mContext, String str, String buttonStr, final View.OnClickListener onClickListener, final View
+            .OnClickListener onClickListener1)
     {
         final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
         dialog.setCancelable(false);
@@ -312,8 +306,7 @@ public class DialogUtils
 
         TextView mSubmitTv = (TextView) v.findViewById(R.id.tv_submit);
         mSubmitTv.setText(buttonStr);
-        ((RelativeLayout) v.findViewById(R.id.rl_confirm)).setOnClickListener(new View
-                .OnClickListener()
+        ((RelativeLayout) v.findViewById(R.id.rl_confirm)).setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -346,10 +339,8 @@ public class DialogUtils
      *
      * @return
      */
-    public static void showToastDialog2Button(Context mContext, String str, String buttonStr1,
-                                              String buttonStr2, final View.OnClickListener
-                                                      onClickListener, final View.OnClickListener
-                                                      onClickListener1)
+    public static void showToastDialog2Button(Context mContext, String str, String buttonStr1, String buttonStr2, final View.OnClickListener onClickListener,
+                                              final View.OnClickListener onClickListener1)
     {
         final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
         dialog.setCancelable(true);
@@ -363,8 +354,7 @@ public class DialogUtils
         TextView mCancelTv = (TextView) v.findViewById(R.id.tv_cancel);
         mCancelTv.setText(buttonStr2);
 
-        ((RelativeLayout) v.findViewById(R.id.rl_confirm)).setOnClickListener(new View
-                .OnClickListener()
+        ((RelativeLayout) v.findViewById(R.id.rl_confirm)).setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -398,8 +388,8 @@ public class DialogUtils
      *
      * @return
      */
-    public static Dialog showLivePriceDialog(Context mContext, PriceInfo mLivePriceInfo, final
-    View.OnClickListener cancelListener, final MyOnClickListener.OnSubmitListener listener)
+    public static Dialog showLivePriceDialog(Context mContext, PriceInfo mLivePriceInfo, final View.OnClickListener cancelListener, final MyOnClickListener
+            .OnSubmitListener listener)
     {
         final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
         dialog.setCancelable(false);
@@ -492,8 +482,8 @@ public class DialogUtils
      *
      * @return
      */
-    public static Dialog showVideoPriceDialog(Context mContext, PriceInfo mLivePriceInfo, final
-    View.OnClickListener cancelListener, final MyOnClickListener.OnSubmitListener listener)
+    public static Dialog showVideoPriceDialog(Context mContext, PriceInfo mLivePriceInfo, final View.OnClickListener cancelListener, final MyOnClickListener
+            .OnSubmitListener listener)
     {
         final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
         dialog.setCancelable(false);
@@ -695,8 +685,7 @@ public class DialogUtils
      *
      * @return
      */
-    public static void showReportDialog(Context mContext, MyOnClickListener.OnSubmitListener
-            listener)
+    public static void showReportDialog(Context mContext, MyOnClickListener.OnSubmitListener listener)
     {
         final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
         dialog.setCancelable(false);
@@ -763,9 +752,8 @@ public class DialogUtils
      *
      * @return
      */
-    public static Dialog showDyTipsDialog(Context mContext, final View.OnClickListener
-            buyListener, final View.OnClickListener memberListener, final View.OnClickListener
-            closedListener)
+    public static Dialog showDyTipsDialog(Context mContext, final View.OnClickListener buyListener, final View.OnClickListener memberListener, final View
+            .OnClickListener closedListener)
     {
         final Dialog dialog = new Dialog(mContext, R.style.dialogNoAnimation);
         dialog.setCancelable(false);
@@ -822,15 +810,15 @@ public class DialogUtils
      *
      * @return
      */
-    public static void show1520Dialog(Context mContext, final View.OnClickListener
-            onClickListener, final View.OnClickListener onClickListener1, final View
+    public static void show1520Dialog(Context mContext, final View.OnClickListener onClickListener, final View.OnClickListener onClickListener1, final View
             .OnClickListener onClickListener2)
     {
         final Dialog dialog = new Dialog(mContext, R.style.shareDialog);
         dialog.setCancelable(true);
         View v = LayoutInflater.from(mContext).inflate(R.layout.dialog_1502, null);
         dialog.setContentView(v);
-
+        RelativeLayout layout = (RelativeLayout) v.findViewById(R.id.rl_content);
+        ImageView ivShare = (ImageView) v.findViewById(R.id.iv_share_bg);
         ImageView ivFree = (ImageView) v.findViewById(R.id.iv_free);
         ImageView ivVip = (ImageView) v.findViewById(R.id.iv_vip);
 
@@ -860,23 +848,43 @@ public class DialogUtils
             }
         });
 
-        //        v.findViewById(R.id.iv_closed).setOnClickListener(new View.OnClickListener()
-        //        {
-        //            @Override
-        //            public void onClick(View v)
-        //            {
-        //                dialog.dismiss();
-        //                onClickListener2.onClick(v);
-        //            }
-        //        });
-
         //Dialog部分
+        int width = APPUtils.getScreenWidth(mContext);
+        int height = APPUtils.getScreenHeight(mContext);
+
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(width < height ? width * 3 / 5 : height * 3 / 5, height > width ? height * 8 /
+                15 : width * 8 / 15);
+        layout.setLayoutParams(params);
+
+        RelativeLayout.LayoutParams mImgParams = new RelativeLayout.LayoutParams(width < height ? width * 3 / 5 : height * 3 / 5, height > width ? height * 8
+                / 15 : width * 8 / 15);
+        mImgParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        mImgParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        ivShare.setLayoutParams(mImgParams);
+
+        RelativeLayout.LayoutParams mBtnParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams
+                .WRAP_CONTENT);
+        mBtnParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        mBtnParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        mBtnParams.bottomMargin=80;
+        ivFree.setLayoutParams(mBtnParams);
+
+        RelativeLayout.LayoutParams mBtnParams1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams
+                .WRAP_CONTENT);
+        mBtnParams1.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        mBtnParams1.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        mBtnParams1.bottomMargin=200;
+        ivVip.setLayoutParams(mBtnParams1);
+
+
+
         Window mWindow = dialog.getWindow();
         WindowManager.LayoutParams lp = mWindow.getAttributes();
         lp.gravity = Gravity.CENTER;
-        lp.width = 800;
-        lp.height = 1052;
+        lp.width = width < height ? width * 3 / 5 : height * 3 / 5;
+        lp.height = height > width ? height * 8 / 15 : width * 8 / 15;
         mWindow.setAttributes(lp);
+        dialog.setCancelable(false);
         dialog.show();
     }
 
@@ -885,8 +893,7 @@ public class DialogUtils
      *
      * @return
      */
-    public static void showShareDialog(Context mContext, final int index, final
-    MyItemClickListener listener)
+    public static void showShareDialog(Context mContext, final int index, final MyItemClickListener listener)
     {
         final Dialog dialog = new Dialog(mContext, R.style.shareDialog);
         dialog.setCancelable(false);
@@ -898,7 +905,7 @@ public class DialogUtils
         mImgList.add(R.drawable.pic_share2);
         mImgList.add(R.drawable.pic_share3);
 
-
+        RelativeLayout layout = (RelativeLayout) v.findViewById(R.id.rl_content);
         ImageView ivShare = (ImageView) v.findViewById(R.id.iv_share_bg);
         ivShare.setImageResource(mImgList.get(index));
 
@@ -928,13 +935,36 @@ public class DialogUtils
         });
 
 
+        int width = APPUtils.getScreenWidth(mContext);
+        int height = APPUtils.getScreenHeight(mContext);
+
+
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(width < height ? width * 3 / 5 : height * 3 / 5, height > width ? height * 8 /
+                15 : width * 8 / 15);
+        layout.setLayoutParams(params);
+
+        RelativeLayout.LayoutParams mImgParams = new RelativeLayout.LayoutParams(width < height ? width * 3 / 5 : height * 3 / 5, height > width ? height * 8
+                / 15 : width * 8 / 15);
+        mImgParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        mImgParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        ivShare.setLayoutParams(mImgParams);
+
+        RelativeLayout.LayoutParams mBtnParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams
+                .WRAP_CONTENT);
+        mBtnParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        mBtnParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        mBtnParams.bottomMargin=200;
+        btn_submit.setLayoutParams(mBtnParams);
+
+
         //Dialog部分
         Window mWindow = dialog.getWindow();
         WindowManager.LayoutParams lp = mWindow.getAttributes();
         lp.gravity = Gravity.CENTER;
-        lp.width = 800;
-        lp.height = 1052;
+        lp.width = width < height ? width * 3 / 5 : height * 3 / 5;
+        lp.height = height > width ? height * 8 / 15 : width * 8 / 15;
         mWindow.setAttributes(lp);
+        dialog.setCancelable(false);
         dialog.show();
     }
 
@@ -943,16 +973,18 @@ public class DialogUtils
      *
      * @return
      */
-    public static void showFirstLoginDialog(Context mContext, String title, final
-    MyItemClickListener listener)
+    public static void showFirstLoginDialog(Context mContext, String title, final MyItemClickListener listener)
     {
         if (!((Activity) mContext).isFinishing())
         {
             final Dialog dialog = new Dialog(mContext, R.style.shareDialog);
             dialog.setCancelable(true);
             View v = LayoutInflater.from(mContext).inflate(R.layout.dialog_first_login, null);
+            RelativeLayout layout = (RelativeLayout) v.findViewById(R.id.rl_content);
+            ImageView ivShare = (ImageView) v.findViewById(R.id.iv_share_bg);
+            ImageView ivGet = (ImageView) v.findViewById(R.id.iv_get);
             dialog.setContentView(v);
-            v.findViewById(R.id.iv_get).setOnClickListener(new View.OnClickListener()
+            ivGet.setOnClickListener(new View.OnClickListener()
             {
                 @Override
                 public void onClick(View v)
@@ -963,12 +995,31 @@ public class DialogUtils
                 }
             });
 
+            int width = APPUtils.getScreenWidth(mContext);
+            int height = APPUtils.getScreenHeight(mContext);
+
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(width < height ? width * 3 / 5 : height * 3 / 5, height > width ? height * 8 /
+                    15 : width * 8 / 15);
+            layout.setLayoutParams(params);
+
+            RelativeLayout.LayoutParams mImgParams = new RelativeLayout.LayoutParams(width < height ? width * 3 / 5 : height * 3 / 5, height > width ? height * 8
+                    / 15 : width * 8 / 15);
+            mImgParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+            mImgParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+            ivShare.setLayoutParams(mImgParams);
+
+            RelativeLayout.LayoutParams mBtnParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams
+                    .WRAP_CONTENT);
+            mBtnParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+            mBtnParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+            mBtnParams.bottomMargin=180;
+            ivGet.setLayoutParams(mBtnParams);
             //Dialog部分
             Window mWindow = dialog.getWindow();
             WindowManager.LayoutParams lp = mWindow.getAttributes();
             lp.gravity = Gravity.CENTER;
-            lp.width = 800;
-            lp.height = 1052;
+            lp.width = width < height ? width * 3 / 5 : height * 3 / 5;
+            lp.height = height > width ? height * 8 / 15 : width * 8 / 15;
             mWindow.setAttributes(lp);
             dialog.setCancelable(false);
             dialog.show();
